@@ -46,7 +46,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Core\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            /*\App\Acl\Http\Middleware\Acl::class,*/
+            \App\Acl\Http\Middleware\Acl::class,
         ],
         'acl_group' => [
             \App\Core\Http\Middleware\EncryptCookies::class,
