@@ -184,6 +184,7 @@ return [
          * API
          */
         App\Api\V1\Providers\RouteServiceProvider::class,
+        App\Api\V1\Providers\ApiServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
          /**
           * Backend
