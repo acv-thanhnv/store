@@ -15,6 +15,6 @@
 /**
  * frontend module
  */
-    Route::get('/company/home', 'HomeController@index')->name('home');
+    Route::get('/frontend/home', 'HomeController@index')->name('home');
     Route::get('/company/login', 'HomeController@apilogin')->name('apiloginform');
 
