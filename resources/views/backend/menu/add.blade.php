@@ -51,7 +51,7 @@
 			<form id="form_add" class="form-horizontal input_mask" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="_token" value="{{csrf_token('')}}">
 				<!--Should use session here to get idStore-->
-				<input type="hidden" name="idStore" value="1">
+				<input type="hidden" id="idStore" name="idStore" value="1">
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Name </label>
@@ -71,7 +71,7 @@
 				<div class="form-group">
 					<div>
 						<button class="btn btn-primary" type="reset">Reset</button>
-						<button type="button" class="btn btn-success add">Submit</button>
+						<button type="button" class="btn btn-success add">Add</button>
 					</div>
 				</div>
 
@@ -93,15 +93,15 @@
         		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         	},
         	url: "{{route('postAddMenu')}}",
-        	data:{name:name,description:description,idStore:idStore},
+        	data:{name:name,description:description,store_id:idStore},
         	success: function (result) {
-        		console.log(result);
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
         			//call parent and close modal
         			parent.$('#modal-add').iziModal('close');
-        			parent.alert("Add");
+        			localStorage.setItem("Message","Add new menu successful!");
+        			parent.location.reload();
         		}else{
-        			_commonShowError(result.data[0]);
+        			_commonShowError(result.data);
         		}
 			}
 		});

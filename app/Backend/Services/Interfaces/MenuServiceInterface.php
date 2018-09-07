@@ -10,4 +10,9 @@ namespace App\Backend\Services\Interfaces;
 interface MenuServiceInterface
 {
 	public function getMenu($idStore);
+	public function addMenu($obj);
+	public function getById($id);
+	public function editMenu($obj);
+	public function deleteMenu($id);
+	public function deleteAllMenu($arrId);
 }

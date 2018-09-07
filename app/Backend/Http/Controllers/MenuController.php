@@ -34,6 +34,55 @@ class MenuController
     }
     public function postAddMenu(Request $request)
     {
-        
+        $result    = new DataResultCollection();
+        $rule      = ["name" => "required|min:3"];
+        $validator = Validator::make($request->all(),$rule);
+        if(!$validator->fails()){
+            $this->service->addMenu($request->all());
+            $result->status   = SDBStatusCode::OK;
+            $result->message  = 'Success';
+        }else {
+            $error           = $validator->errors();
+            $result->status  = SDBStatusCode::ValidateError;
+            $result->message = 'An error occured when validate!';
+            $result->data    = $error;
+        }
+        return ResponseHelper::JsonDataResult($result);
+    }
+
+    public function getEditMenu(Request $request)
+    {
+        $obj = $this->service->getById($request->id);
+        return view("backend.menu.edit",["obj" => $obj]);
+    }
+
+    public function postEditMenu(Request $request)
+    {
+        $result    = new DataResultCollection();
+        $rule      = ["name" => "required|min:3"];
+        $validator = Validator::make($request->all(),$rule);
+        if(!$validator->fails()){
+            $obj              = new \stdClass();
+            $obj->id          = $request->id;
+            $obj->name        = $request->name;
+            $obj->description = $request->description;
+            $this->service->editMenu($obj);
+            $result->status   = SDBStatusCode::OK;
+            $result->message  = 'Success';
+        }else {
+            $error           = $validator->errors();
+            $result->status  = SDBStatusCode::ValidateError;
+            $result->message = 'An error occured when validate!';
+            $result->data    = $error;
+        }
+        return ResponseHelper::JsonDataResult($result);
+    }
+    public function deleteMenu(Request $request)
+    {
+        $this->service->deleteMenu($request->id);
+    }
+    public function deleteAllMenu(Request $request)
+    {
+        $this->service->deleteAllMenu($request->arrId);
     }
 }

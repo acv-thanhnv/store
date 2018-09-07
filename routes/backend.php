@@ -78,8 +78,15 @@
         //Menu
         Route::group(["prefix" => "menu"],function(){
             Route::get("list","MenuController@getMenu")->name("getMenu");
+            //add 
             Route::get("addMenu","MenuController@getAddMenu")->name("addMenu");
             Route::post("addMenu","MenuController@postAddMenu")->name("postAddMenu");
+            //Edit
+            Route::get("editMenu","MenuController@getEditMenu")->name("editMenu");
+            Route::post("editMenu","MenuController@postEditMenu")->name("postEditMenu");
+            //Delete
+            Route::get("deleteMenu","MenuController@deleteMenu")->name("deleteMenu");
+            Route::get("deleteAllMenu","MenuController@deleteAllMenu")->name("deleteAllMenu");
         });
     });
     

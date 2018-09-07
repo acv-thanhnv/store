@@ -27,6 +27,10 @@
 	table.dataTable thead .sorting_desc{
 		background: none;
 	}
+	.dataTables_paginate a.current{
+		background: #172D44 !important;
+		color: white !important;
+	}
 </style>
 @endpush
 @extends("layouts.backend")
@@ -73,18 +77,18 @@
                     <tbody id="tbody">
                     	@foreach($arrMenu as $obj)
 						<tr>
-							<td style="text-align: center">
-								<input type="checkbox" id="check-all" class="flat" data-id="{{$obj->id}}">
+							<td style="text-align: center" class="check-delete">
+								<input type="checkbox" value="{{$obj->id}}">
 							</td>
 							<td>{{$obj->name}}</td>
 							<td>{{$obj->description}}</td>
 							<td>
-								<button type="button" class="btn btn-primary edit round">
+								<button type="button" class="btn btn-primary edit round" data-id="{{$obj->id}}">
 									<i class="fa fa-pencil-square-o"></i>
 								</button>
 							</td>
 							<td>
-								<button class="btn btn-danger round delete">
+								<button class="btn btn-danger round delete" data-id="{{$obj->id}}">
 									<i class="fa fa-trash-o"></i>
 								</button>
 							</td>
@@ -101,18 +105,19 @@
 @push("js")
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("#dataTable").DataTable({
-			"columnDefs": [
-                { 
-                    "orderable": false ,
-                    "targets": [0,3,4]
-                }
-            ],
-            order: [],
-		});
+		dataTable();
 		//drag modal
 		$( "#modal-add" ).draggable();
-		$( "#modal-edit" ).draggable();
+		$( "#modal-edit" ).draggable(); 
+	    if(localStorage.getItem("Message"))
+	    {
+	    	if(localStorage.getItem("page")){
+	    		var page = parseInt(localStorage.getItem("page"));
+	    		$("#dataTable").DataTable().page(page).draw('page');
+	    	}
+	    	Alert(localStorage.getItem("Message"));
+	    	localStorage.clear();
+	    }
 	});
 	//function add
 	$(document).on('click', '#add', function(event) {
@@ -124,7 +129,7 @@
 			$(".iziModal-iframe").attr("src","");
 		},
 		focusInput	   : true,
-		title          : 'User',
+		title          : 'Menu',
 		subtitle       :'Add',
 		width          : 700,
 		iframeHeight   : 300,
@@ -148,22 +153,26 @@
 	//function edit
 	$(document).on('click', '.edit', function(event) {
 	  	$('#modal-edit').iziModal('open',event);
-	  	$('#modal-profile').iziModal('resetProgress');
 	});
 	$('#modal-edit').iziModal(
 	{
 		onOpening: function(modal){
 			var id =$(event.target).closest("button").data("id");//get Id, get button then get id
-			$(".iziModal-iframe").attr("src","{{route('edit')}}?id="+id);
+			$(".iziModal-iframe").attr("src","{{route('editMenu')}}?id="+id);
 			//set url iframe
 		},
 		onClosed: function(modal){
+			if (localStorage.getItem("Message")) {
+				var page = $("#dataTable").DataTable().page();
+				localStorage.setItem("page",page);
+				location.reload();
+			}
 			$(".iziModal-iframe").attr("src","");
 		},
-		title          : 'User',
+		title          : 'Menu',
 		subtitle       :'Edit',
 		width          : 700,
-		iframeHeight   : 600,
+		iframeHeight   : 300,
 		headerColor    :"#405467",
 		icon           :"fa fa-user",
 		iconColor      :"#ECF0F1",
@@ -183,7 +192,7 @@
 	//Delete User
 	$("body").on("click",".delete",function(e){
 		var id = $(this).data("id");
-		var tr = $(this).parent().parent();
+		var tr = $(this).parents('tr');
 		$.confirm({
 			title         : '<p class="text-warning">Warning</p>',
 			icon          : 'fa fa-exclamation-circle',
@@ -192,16 +201,15 @@
 			type          :"orange",
 			closeIcon     : true,
 			closeIconClass: 'fa fa-close',
-			content       : "Are You Sure? This User Will Be Deleted!",
+			content       : "Are You Sure? This Menu Item Will Be Deleted!",
 			buttons       : {
 				Save: {
 					text    : 'OK',
 					btnClass: 'btn btn-primary',
 					action  : function (){
-						$.get("{{route('delete')}}",{id:id},function(data){
-							alert("Delete");
-							$('#pagination-demo').twbsPagination('destroy');
-							getList();
+						$("#dataTable").DataTable().row(tr).remove().draw(false);
+						$.get("{{route('deleteMenu')}}",{id:id},function(data){
+							Alert("Menu Item Have Been Deleted Successful!");
 						});
 					}
 				},
@@ -214,10 +222,87 @@
 			}
 		});
 	});
+	//delete-all
+	$("body").on("click","#delete_all",function(e){
+		var checked = $("input:checked").length;
+		if(checked===0){
+			$.alert({
+				title: '<p class="text-warning">Notice!</p>',
+				icon          : 'fa fa-exclamation-circle',
+				type          :"orange",
+				boxWidth: '20%',
+				content: '<span style="font-size: 16px">Nothing To Delete</span>'
+			});
+		}else{
+			$.confirm({
+			title         : '<p class="text-warning">Warning</p>',
+			icon          : 'fa fa-exclamation-circle',
+			boxWidth      : '30%',
+			useBootstrap  : false,
+			type          :"orange",
+			closeIcon     : true,
+			closeIconClass: 'fa fa-close',
+			content       : "Are You Sure? All of these menus will be deleted!",
+			buttons       : {
+				Save: {
+					text    : 'OK',
+					btnClass: 'btn btn-primary',
+					action  : function (){
+						var arrId = [];
+						$(".check-delete input:checked").each(function(){
+							var tr = $(this).parents("tr");
+							$("#dataTable").DataTable().row(tr).remove().draw(false);
+							arrId.push($(this).val());
+						});
+						$.get("{{route('deleteAllMenu')}}",{arrId:arrId},function(data){
+								Alert("Menus have been deleted!");
+						});
+					}
+				},
+				cancel: {
+					text    : ' Cancel',
+					btnClass: 'btn btn-default',
+					action  : function () {
+					}
+				}
+			}
+			});
+		}
+	});
 	//check all
 	$('body').on("change","#check-all",function(e){
 	    var checkboxes = $(this).closest('table').find(':checkbox');
 	    checkboxes.prop('checked', $(this).is(':checked'));
 	});
+	//function alert 
+	function Alert(text)
+	{
+		$.toast({
+		    text: text,
+		    heading: 'Successful',
+		    icon: 'success',
+		    showHideTransition: 'slide',
+		    allowToastClose: true,
+		    hideAfter: 1500,
+		    stack: 5,
+		    position: 'top-right',
+		    textAlign: 'left', 
+		    loader : true,
+		    loaderBg: '#9EC600'
+		});
+	}
+	//function dataTable
+	function dataTable()
+	{
+		$("#dataTable").DataTable({
+			"columnDefs": [
+                { 
+                    "orderable": false ,
+                    "targets": [0,3,4]
+                }
+            ],
+            order: []
+		});
+	}
 </script>
 @endpush
