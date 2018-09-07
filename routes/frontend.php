@@ -17,4 +17,5 @@
  */
     Route::get('/company/home', 'HomeController@index')->name('home');
     Route::get('/company/login', 'HomeController@apilogin')->name('apiloginform');
+    Route::get('/listorder', 'OrderController@index')->name('listorder');
 
