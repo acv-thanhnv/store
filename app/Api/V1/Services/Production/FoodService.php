@@ -9,6 +9,9 @@
 namespace App\Api\V1\Services\Production;
 use App\Api\V1\Services\Interfaces\FoodServiceInterface;
 use App\Core\Dao\SDB;
+use App\Core\Events\OrderPusherEvent;
+use Illuminate\Http\Request;
+
 class FoodService extends BaseService implements FoodServiceInterface
 {
     public function getFoodByStoreId($storeId = null)
@@ -37,6 +40,12 @@ class FoodService extends BaseService implements FoodServiceInterface
         return $list;
     }
 
+    public function orderToWaiter(Request $request){
+        //event to
+        $response = $request->all();
+        event(new OrderPusherEvent(json_encode($response)));
+        //insert into Database
+    }
     protected function buildFoodListByStoreId($foodList,$storeId){
         $listEntity = SDB::table("store_entities")
             ->leftJoin("store_menu","store_menu.id","=","store_entities.menu_id")
@@ -104,6 +113,5 @@ class FoodService extends BaseService implements FoodServiceInterface
             }
         }
         return $result;
-
     }
 }

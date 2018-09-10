@@ -33,4 +33,7 @@ class User extends Authenticatable
     public function details() {
         return SDB::table('users_detail')->where(array('id',$this->getKey())) ;
     }
+    public function storeId(){
+        return SDB::table('store_user_store')->where(array('user_id',$this->getKey()))->first() ;
+    }
 }

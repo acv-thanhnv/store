@@ -58,4 +58,7 @@ class LoggingConst
 {
     const SQL_LOG_channel = 'sql_query';
 }
-
+class OrderConst{
+    const OrderChannelToWaiter = "to-waiter";
+    const OrderEventName = "order.waiter";
+}
