@@ -97,6 +97,19 @@ class FoodService extends BaseService implements FoodServiceInterface
         $newOrderId = SDB::table('store_order')->where('id',$orderId)->update($dataOrder);
         event(new OrderPusherEvent($storeId, $orderId,$locationId, $entity));
     }
+    public function closeOrder(Request $request){
+        //event to
+        $response = $request->all();
+        $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
+        $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
+        $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
+        $entity = json_decode($response['entity']);
+        //Update Database
+        $dataOrder = array(
+            "status" => 4,
+        );
+        $newOrderId = SDB::table('store_order')->where('id',$orderId)->update($dataOrder);
+    }
 
     protected function buildFoodListByStoreId($foodList, $storeId)
     {

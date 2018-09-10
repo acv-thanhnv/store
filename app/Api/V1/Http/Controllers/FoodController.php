@@ -42,4 +42,14 @@ class FoodController extends Controller
         $result  = new DataResultCollection ();
         $result->status =  SDBStatusCode::OK;
     }
+    public function orderToChef(Request $request){
+        $this->service->orderToChef($request);
+        $result  = new DataResultCollection ();
+        $result->status =  SDBStatusCode::OK;
+    }
+    public function closeOrder(Request $request){
+        $this->service->closeOrder($request);
+        $result  = new DataResultCollection ();
+        $result->status =  SDBStatusCode::OK;
+    }
 }

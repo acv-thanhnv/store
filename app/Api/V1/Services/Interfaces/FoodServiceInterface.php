@@ -21,4 +21,6 @@ interface FoodServiceInterface
     public function orderToWaiter(Request $request);
 
     public function orderToChef(Request $request);
+
+    public function closeOrder(Request $request);
 }
