@@ -19,4 +19,6 @@ interface FoodServiceInterface
     public function getMenuList($storeId);
 
     public function orderToWaiter(Request $request);
+
+    public function orderToChef(Request $request);
 }

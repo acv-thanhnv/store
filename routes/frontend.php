@@ -17,4 +17,5 @@
  */
     Route::get('/frontend/home', 'HomeController@index')->name('home');
     Route::get('/company/login', 'HomeController@apilogin')->name('apiloginform');
+    Route::get('/frontend/test', 'HomeController@test')->name('test');
 
