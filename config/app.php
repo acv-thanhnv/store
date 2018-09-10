@@ -192,6 +192,8 @@ return [
         App\Backend\Providers\RouteServiceProvider::class,
         App\Backend\Providers\BackendServiceProvider::class,
         App\Backend\Providers\MenuServiceProvider::class,
+        App\Backend\Providers\TypeServiceProvider::class,
+        App\Backend\Providers\PropServiceProvider::class,
         /**
          * FrontEnd
          */

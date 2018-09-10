@@ -88,5 +88,31 @@
             Route::get("deleteMenu","MenuController@deleteMenu")->name("deleteMenu");
             Route::get("deleteAllMenu","MenuController@deleteAllMenu")->name("deleteAllMenu");
         });
+        //Group type
+        Route::group(["prefix" => "Type"],function(){
+            Route::get("list","TypeController@getType")->name("getType");
+            //add 
+            Route::get("addType","TypeController@getAddType")->name("addType");
+            Route::post("addType","TypeController@postAddType")->name("postAddType");
+            //Edit
+            Route::get("editType","TypeController@getEditType")->name("editType");
+            Route::post("editType","TypeController@postEditType")->name("postEditType");
+            //Delete
+            Route::get("deleteType","TypeController@deleteType")->name("deleteType");
+            Route::get("deleteAllType","TypeController@deleteAllType")->name("deleteAllType");
+        });
+        //Group properties
+        Route::group(["prefix" => "Properties"],function(){
+            Route::get("list","PropController@getProp")->name("getProp");
+            //add 
+            Route::get("addProp","PropController@getAddProp")->name("addProp");
+            Route::post("addProp","PropController@postAddProp");
+            //Edit
+            Route::get("editProp","PropController@getEditProp")->name("editProp");
+            Route::post("editProp","PropController@postEditProp")->name("postEditProp");
+            //Delete
+            Route::get("deleteProp","PropController@deleteProp")->name("deleteProp");
+            Route::get("deleteAllProp","PropController@deleteAllProp")->name("deleteAllProp");
+        });
     });
     

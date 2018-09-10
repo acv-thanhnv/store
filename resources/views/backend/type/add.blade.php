@@ -41,6 +41,10 @@
 		.help-block{
 			font-size: 14px;
 		}
+		.footer{
+			border-top: 1px solid #D7CBCB;
+			padding-top: 5px;
+		}
     </style>
 @endpush
 @section("content")
@@ -54,21 +58,34 @@
 				<input type="hidden" id="idStore" name="idStore" value="1">
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-						<label>Menu Name </label>
+						<label>Type Name </label>
 						<input type="text" autofocus="" name="name" class="form-control has-feedback-left" id="name"
-						placeholder="Add Menu Name...">
+						placeholder="Input Name...">
 						<span class="fa fa-linux form-control-feedback left" aria-hidden="true"></span>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-						<label>Menu Description </label>
+						<label>Type Description </label>
 						<input type="text" autofocus="" name="description" class="form-control has-feedback-left" id="description"
-						placeholder="Add Menu Description...">
+						placeholder="Input Type Description...">
 						<span class="fa fa-pencil form-control-feedback left" aria-hidden="true"></span>
 					</div>
 				</div>
 				<div class="form-group">
+					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
+						<button type="button" title="Add Property" class="btn btn-info btn-sm add_prop" data-toggle="tooltip" data-placement="right"><i class="fa fa-plus-square"></i></button>
+					</div>
+				</div>
+				<div class="form-group property">
+					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
+						<label>abc</label>
+						<input type="text" autofocus="" name="description" class="form-control has-feedback-left" id="description"
+						placeholder="Input Type Description...">
+						<span class="fa fa-pencil form-control-feedback left" aria-hidden="true"></span>
+					</div>
+				</div>
+				<div class="form-group footer">
 					<div>
 						<button class="btn btn-primary" type="reset">Reset</button>
 						<button type="button" class="btn btn-success add">Add</button>
@@ -82,6 +99,10 @@
 @endsection
 @push("js")
 <script type="text/javascript">
+	var max_fields = 10;
+	$(document).on("click",".add_prop",function(event){
+
+	});
 	//submit add 
 	$(".add").click(function(){
 		var name        = $("#name").val();
@@ -92,13 +113,13 @@
         	headers: {
         		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         	},
-        	url: "{{route('postAddMenu')}}",
+        	url: "{{route('postAddType')}}",
         	data:{name:name,description:description,store_id:idStore},
         	success: function (result) {
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
         			//call parent and close modal
         			parent.$('#modal-add').iziModal('close');
-        			localStorage.setItem("Message","Add new menu successful!");
+        			localStorage.setItem("Message","Add new type successful!");
         			parent.location.reload();
         		}else{
         			_commonShowError(result.data);

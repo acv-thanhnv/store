@@ -51,17 +51,17 @@
 				<input type="hidden" id="idStore" name="idStore" value="{{$obj->store_id}}">
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-						<label>Menu Name </label>
+						<label>Type Name </label>
 						<input type="text" value="{{$obj->name}}" name="name" class="form-control has-feedback-left" id="name"
-						placeholder="Type Name...">
+						placeholder="Input type name...">
 						<span class="fa fa-linux form-control-feedback left" aria-hidden="true"></span>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-						<label>Menu Description </label>
+						<label>Type Description </label>
 						<input type="text" name="description" class="form-control has-feedback-left" value="{{$obj->description}}" id="description"
-						placeholder="Type Menu Description...">
+						placeholder="Input type description...">
 						<span class="fa fa-pencil form-control-feedback left" aria-hidden="true"></span>
 					</div>
 				</div>
@@ -94,7 +94,7 @@
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
         			//call parent and close modal
         			parent.$('#modal-edit').iziModal('close');
-        			localStorage.setItem("Message","Menu have been edit successful!");
+        			localStorage.setItem("Message","Type have been edit successful!");
         		}else{
         			_commonShowError(result.data);
         		}

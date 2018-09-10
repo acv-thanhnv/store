@@ -54,24 +54,43 @@
 				<input type="hidden" id="idStore" name="idStore" value="1">
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-						<label>Menu Name </label>
-						<input type="text" autofocus="" name="name" class="form-control has-feedback-left" id="name"
-						placeholder="Add Menu Name...">
-						<span class="fa fa-linux form-control-feedback left" aria-hidden="true"></span>
+						<label>Type </label>
+						<select class="form-control type" name="type">
+							<option value="">--Select Type--</option>
+							@foreach($arrType as $obj)
+							<option value="{{$obj->id}}">
+								{{$obj->name}}
+							</option>
+							@endforeach
+						</select>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-						<label>Menu Description </label>
-						<input type="text" autofocus="" name="description" class="form-control has-feedback-left" id="description"
-						placeholder="Add Menu Description...">
-						<span class="fa fa-pencil form-control-feedback left" aria-hidden="true"></span>
+						<label>Data Property </label>
+						<select class="form-control data" name="dataProp">
+							<option value="">--Select Data Property--</option>
+							@foreach($arrData as $obj)
+							<option value="{{$obj->code_value}}">
+								{{$obj->name}}
+							</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
+						<label>Property Label </label>
+						<input type="text" autofocus="" name="label" class="form-control has-feedback-left" id="label"
+						placeholder="Add Property Label...">
+						<span class="fa fa-linux form-control-feedback left" aria-hidden="true"></span>
 					</div>
 				</div>
 				<div class="form-group">
 					<div>
 						<button class="btn btn-primary" type="reset">Reset</button>
-						<button type="button" class="btn btn-success add">Add</button>
+						<button type="button" class="btn btn-success add">Save</button>
+						<button type="button" class="btn btn-success">Save and Add New</button>
 					</div>
 				</div>
 
@@ -82,23 +101,28 @@
 @endsection
 @push("js")
 <script type="text/javascript">
+	//select
+	$(document).ready(function() {
+		$('.type').select2();
+		$('.data').select2();
+	});
 	//submit add 
 	$(".add").click(function(){
-		var name        = $("#name").val();
-		var description = $("#description").val();
-		var idStore     = $("#idStore").val();
+		var label    = $("#label").val();
+		var type     = $(".type").val();
+		var dataProp = $(".data").val();
         $.ajax({
         	type: 'POST',
         	headers: {
         		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         	},
-        	url: "{{route('postAddMenu')}}",
-        	data:{name:name,description:description,store_id:idStore},
+        	url: "",
+        	data:{label:label,type:type,dataProp:dataProp},
         	success: function (result) {
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
         			//call parent and close modal
         			parent.$('#modal-add').iziModal('close');
-        			localStorage.setItem("Message","Add new menu successful!");
+        			localStorage.setItem("Message","Add new property successful!");
         			parent.location.reload();
         		}else{
         			_commonShowError(result.data);
