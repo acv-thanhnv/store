@@ -65,3 +65,21 @@
 </kv-cashier-product-list>
 </div>
 </kv-cashier-menu-container>
+
+<script type="text/javascript">
+    $( document ).ready(function(event) {
+    event.preventDefault();
+    $.ajax({
+        url         : {{route('food/list-by-menu')}},
+        data        : {storeId:storeId},
+        dataType    : 'JSON',
+        type        : 'GET',
+        success: function(response){
+            console.log(response);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log('Error '+xhr.status+' | '+thrownError);
+        },
+    });
+});
+</script>

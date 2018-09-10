@@ -127,41 +127,7 @@
                      </span>
                  </a>
              </li>
-             <li _ngcontent-c15="" class="menu-bar">
-                <a _ngcontent-c15="" class="list-bar" skip-disable=""><i _ngcontent-c15="" class="fa fa-navicon"></i></a>
-                <ul _ngcontent-c15="">
-                    <!----><li _ngcontent-c15="">
-                        <a _ngcontent-c15="" skip-disable="" href="https://fnb.kiotviet.vn/acvtest/pos/#/kitchen">
-                            <i _ngcontent-c15="" class="fa fa-bell"></i> <span _ngcontent-c15="" translate="">Nhà bếp</span>
-                        </a>
-                    </li>
-                    <!----><li _ngcontent-c15="">
-                        <a _ngcontent-c15="" skip-disable="">
-                            <i _ngcontent-c15="" class="fa fa-align-left"></i> <span _ngcontent-c15="" translate="">Xem báo cáo cuối ngày</span>
-                        </a>
-                    </li>
-                    <!----><li _ngcontent-c15="">
-                        <a _ngcontent-c15="" href="#" skip-disable="">
-                            <i _ngcontent-c15="" class="fa fa-mail-reply-all"></i> <span _ngcontent-c15="">Chọn hóa đơn trả hàng</span>
-                        </a>
-                    </li>
-                    <!----><li _ngcontent-c15="">
-                        <a _ngcontent-c15="" skip-disable="">
-                            <i _ngcontent-c15="" class="fa fa-file-text-o"></i> <span _ngcontent-c15="" translate="">Lập phiếu thu</span>
-                        </a>
-                    </li>
-                    <li _ngcontent-c15="">
-                        <a _ngcontent-c15="" skip-disable="" href="https://fnb.kiotviet.vn/acvtest/#/Invoices">
-                            <i _ngcontent-c15="" class="fa fa-list-alt"></i> <span _ngcontent-c15="" translate="">Quản lý</span>
-                        </a>
-                    </li>
-                    <li _ngcontent-c15="">
-                        <a _ngcontent-c15="" href="#" skip-disable="">
-                            <i _ngcontent-c15="" class="fa fa-external-link"></i> <span _ngcontent-c15="" translate="">Đăng xuất</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+             
         </ul>
 
         <!---->
@@ -185,15 +151,7 @@
 
 @include('frontend.order.payment')
 </div>
-<div _ngcontent-c4="" class="download-app">
-    <img _ngcontent-c4="" class="app-logo" src="./frontend/img/order/app-logo.png">
-    <h1 _ngcontent-c4="" class="title">Sử dụng<span _ngcontent-c4=""> màn hình ngang hoặc<br _ngcontent-c4=""></span> App Bán hàng</h1>
-    <p _ngcontent-c4="">Để thực hiện thao tác bán hàng linh hoạt<br _ngcontent-c4="">
-        và dễ dàng hơn trên thiết bị này
-    </p>
-    <!---->
-    <!---->
-</div>
+
 </kv-cashier-page>
 </kv-root>
 
