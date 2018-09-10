@@ -155,7 +155,7 @@ return [
          * Application Services Providers...
          */
         App\Core\Providers\AppServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Core\Providers\BroadcastServiceProvider::class,
         App\Core\Providers\EventServiceProvider::class,
         App\Core\Providers\RouteServiceProvider::class,
         //Excecl : add at 20180718
@@ -184,6 +184,7 @@ return [
          * API
          */
         App\Api\V1\Providers\RouteServiceProvider::class,
+        App\Api\V1\Providers\ApiServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
          /**
           * Backend
