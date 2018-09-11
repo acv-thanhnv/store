@@ -23,7 +23,7 @@ class OrderController extends Controller
 
     public function index()
     {  
-        return view('layouts.order');
+        return view('frontend.order.index');
     }
 
 }

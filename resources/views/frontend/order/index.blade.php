@@ -236,7 +236,7 @@
     }
 
     $("item-temp").dblclick(function(event) {
-        var id $(this).
+        //var id $(this).
         var order_item = $('.item-order').contents().clone();
 
     });
