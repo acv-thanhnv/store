@@ -60,7 +60,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
-            "acl",
+            //"acl",
         ],
         'dev' => [
             //Not use middleware, pass all filter

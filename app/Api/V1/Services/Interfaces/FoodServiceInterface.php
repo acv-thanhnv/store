@@ -8,6 +8,8 @@
 
 namespace App\Api\V1\Services\Interfaces;
 
+use Illuminate\Http\Request;
+
 interface FoodServiceInterface
 {
     public function getFoodByStoreId($storeId);
@@ -15,4 +17,10 @@ interface FoodServiceInterface
     public function getFoodByMenuId($menuId);
 
     public function getMenuList($storeId);
+
+    public function orderToWaiter(Request $request);
+
+    public function orderToChef(Request $request);
+
+    public function closeOrder(Request $request);
 }

@@ -1,5 +1,5 @@
 
-<div _ngcontent-c7="" class="product-cart-list">
+<div _ngcontent-c7="" class="item-order">
             <div _ngcontent-c7="" class="row-list" id="153622183440520">
             <div _ngcontent-c7="" class="cell-order">
                 1

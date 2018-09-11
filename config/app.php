@@ -155,7 +155,7 @@ return [
          * Application Services Providers...
          */
         App\Core\Providers\AppServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Core\Providers\BroadcastServiceProvider::class,
         App\Core\Providers\EventServiceProvider::class,
         App\Core\Providers\RouteServiceProvider::class,
         //Excecl : add at 20180718
