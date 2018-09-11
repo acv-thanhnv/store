@@ -293,9 +293,9 @@
         });
     }
 
-    $(dblclick(function(event) {
-        /* Act on the event */
-    });)
+    $("item-temp").dblclick(function(event) {
+        
+    });
 </script>
 
 @yield('javascript')
