@@ -15,7 +15,6 @@ class FoodController extends Controller
     {
         $this->service = $foodService;
     }
-
     public function listByStore($storeId = null){
         $list = $this->service->getFoodByStoreId($storeId);
         $result  = new DataResultCollection ();
