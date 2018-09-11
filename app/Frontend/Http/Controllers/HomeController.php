@@ -28,4 +28,8 @@ class HomeController extends Controller
     public function apilogin(){
         return view('frontend.api_login');
     }
+    public function test(Request $request)
+    {
+        return view('frontend.testorder');
+    }
 }

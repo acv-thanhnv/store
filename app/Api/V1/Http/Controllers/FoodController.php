@@ -15,7 +15,6 @@ class FoodController extends Controller
     {
         $this->service = $foodService;
     }
-
     public function listByStore($storeId = null){
         $list = $this->service->getFoodByStoreId($storeId);
         $result  = new DataResultCollection ();
@@ -39,6 +38,16 @@ class FoodController extends Controller
     }
     public function order(Request $request){
         $this->service->orderToWaiter($request);
+        $result  = new DataResultCollection ();
+        $result->status =  SDBStatusCode::OK;
+    }
+    public function orderToChef(Request $request){
+        $this->service->orderToChef($request);
+        $result  = new DataResultCollection ();
+        $result->status =  SDBStatusCode::OK;
+    }
+    public function closeOrder(Request $request){
+        $this->service->closeOrder($request);
         $result  = new DataResultCollection ();
         $result->status =  SDBStatusCode::OK;
     }

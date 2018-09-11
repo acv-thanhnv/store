@@ -61,6 +61,9 @@ class LoggingConst
 class OrderConst{
     const OrderChannelToWaiter = "to-waiter";
     const OrderEventName = "order.waiter";
+
+    const OrderChannelToChef = "to-chef";
+    const OrderChefEventName = "order.chef";
 }
 class EntityProperty{
     const maxField = 10;

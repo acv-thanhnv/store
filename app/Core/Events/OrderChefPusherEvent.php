@@ -12,7 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class OrderPusherEvent implements ShouldBroadcast
+class OrderChefPusherEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -39,7 +39,7 @@ class OrderPusherEvent implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::OrderEventName;
+        return OrderConst::OrderChefEventName;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -48,6 +48,6 @@ class OrderPusherEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(OrderConst::OrderChannelToWaiter);
+        return new Channel(OrderConst::OrderChannelToChef);
     }
 }
