@@ -16,7 +16,6 @@
     <!-- END TRACKJS -->
 
     <link href="{{ asset('frontend/css/styles_order.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/fontawesome/css/all.min.css') }}" rel="stylesheet"> 
 
     @yield('css')
     
@@ -127,33 +126,176 @@
                      </span>
                  </a>
              </li>
-             
-        </ul>
 
-        <!---->
+         </ul>
 
-        <!---->
+         <!---->
 
-        <!---->
-    </kv-cashier-menu>          
-</div>
+         <!---->
+
+         <!---->
+     </kv-cashier-menu>          
+ </div>
 </div>
 </kv-cashier-header>
 <div _ngcontent-c4="" class="wrap-content">
     <div _ngcontent-c4="" class="col-right">
-        @include('frontend.order.list-order')
-    </div>
-    <div _ngcontent-c4="" class="col-left">
-        <!---->
-        @include('frontend.order.menu')
-    </div>
+        <div _ngcontent-c4="" class="col-right-content has-alert">
+
+            <kv-cashier-cart-list-item _ngcontent-c4="" _nghost-c7="">
+                <div _ngcontent-c7="" class="col-right-container">
+                    @yield('list-order')
+
+                </div>
+
+            </kv-cashier-cart-list-item>
+
+            <kv-cashier-payment-info-bottom _ngcontent-c4="" _nghost-c8=""><div _ngcontent-c8="" class="form-actions form-payment">
+                <div _ngcontent-c8="" class="form-actions-left">
+
+                   <div _ngcontent-c8="" class="form-group pull-right">
+
+                   </div>
+
+                   <div _ngcontent-c8="">
+
+                   </div>
+               </div>
+
+           </div>
+
+
+       </kv-cashier-payment-info-bottom>
+   </div>
+
+   <!----><div _ngcontent-c4="" class="wrap-button three-buttons">
+    <!---->
+    <button _ngcontent-c4="" class="btn btn-success" skip-disable="" type="button">
+        Chuyển Nhà Bếp
+    </button>
+    
 </div>
 
-@include('frontend.order.payment')
+<!---->
+
+<!---->
+<div _ngcontent-c4="" class="support">
+    <ul _ngcontent-c4="">
+        <li _ngcontent-c4=""><i _ngcontent-c4="" class="fa fa-phone"></i> Hỗ trợ khách hàng 1800 6162</li>
+        <li _ngcontent-c4=""><i _ngcontent-c4="" class="fa fa-map-marker"></i> Chi nhánh trung tâm</li>
+    </ul>
+</div>
+</div>
+
+
+<div _ngcontent-c4="" class="col-left">
+    <!-- categories product list -->
+    <!----><kv-cashier-menu-container _ngcontent-c4="" _nghost-c10="">
+        <div _ngcontent-c10="" class="list-filter">
+            <div _ngcontent-c10="" class="wrap-show-buttons">
+                <div _ngcontent-c10="" class="show-buttons" id="menu-item">
+                    <!-- content list menu-type -->
+                    <!---->        
+                </div>
+                <!---->
+            </div>
+        </div>
+        <!-- product list -->
+        <div _ngcontent-c10="" class="product-list product-list-menu">
+            <kv-cashier-product-list _ngcontent-c10="" _nghost-c28="">
+                <ks-swiper-container _ngcontent-c28=""><div class="swiper-container swiper-container-horizontal">
+                    <div class="swiper-wrapper" style="transition-duration: 0ms;">
+
+                        <!----><ks-swiper-slide _ngcontent-c28="" class="swiper-slide swiper-slide-active" style="width: 744px;"><div>
+                            <ul id='list-item'>
+                                <!-- content list menu -->
+                            </ul>
+                        </div></ks-swiper-slide>
+
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </ks-swiper-container>
+            <div _ngcontent-c28="" class="hidden-item"></div>
+            <div _ngcontent-c28="" class="swiper-paging"><strong _ngcontent-c28="">1</strong>/2</div>
+            <!----><button _ngcontent-c28="" class="move-prev" disabled=""><i _ngcontent-c28="" class="fa fa-chevron-circle-left"></i></button>
+            <!----><button _ngcontent-c28="" class="move-next"><i _ngcontent-c28="" class="fa fa-chevron-circle-right"></i></button>
+        </kv-cashier-product-list>
+    </div>
+</kv-cashier-menu-container>
+
+<!---->
+@include('frontend.order.item-list')
+@include('frontend.order.menu-item')
+</div>
+</div>
+
+<!-- @include('frontend.order.payment') -->
 </div>
 
 </kv-cashier-page>
 </kv-root>
+
+<script src="{{ asset('js/lib/jquery-3.3.1.min.js')}}"></script>
+
+<script type="text/javascript">
+    $( document ).ready(function(event) {
+        $.ajax({
+            url         : '{{route("food/list-by-store")}}'+"/1",
+            dataType    : 'JSON',
+            type        : 'GET', 
+            success: function(data){
+            //console.log(data);
+            genFoodByStoreId(data);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log('Error '+xhr.status+' | '+thrownError);
+        },
+    });
+
+
+        $.ajax({
+            url         : '{{route("food/list-menu-by-store")}}'+'/1',
+            dataType    : 'JSON',
+            type        : 'GET',
+            success: function(data){
+            console.log(data);
+            genFoodByMenuId(data);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log('Error '+xhr.status+' | '+thrownError);
+        },
+    });
+    });
+
+
+    function genFoodByStoreId(data)
+    {
+        var ul = $("#list-item");
+        $(ul).empty();
+        data.data.forEach(function(obj) {
+            var item = $("#list-item-temp").contents().clone();
+            $(item).find('.product-title').attr('title', obj.name);
+            $(item).find('.img').attr('src', obj.image);
+            $(item).find('.product-name').html(obj.name);
+            $(item).find('.product-price').html(obj.price);
+            
+            $(ul).append($(item));
+        });
+    }
+
+    function genFoodByMenuId(data) {
+        var div = $("#menu-item");
+        $(div).empty();
+        data.data.forEach(function(obj) {
+            var item = $(".menu-item-temp").clone();
+            //console.log($(".type").contents());
+            $(item).find('.product-type').text(obj.name);  
+            //console.log($(type).find('.product-type'));         
+            $(div).append($(item));
+        });
+    }
+</script>
 
 @yield('javascript')
 </body>
