@@ -144,7 +144,7 @@
 
             <kv-cashier-cart-list-item _ngcontent-c4="" _nghost-c7="">
                 <div _ngcontent-c7="" class="col-right-container">
-                    @yield('list-order')
+                    @include('frontend.order.list-order')
 
                 </div>
 
@@ -246,7 +246,6 @@
             dataType    : 'JSON',
             type        : 'GET', 
             success: function(data){
-            //console.log(data);
             genFoodByStoreId(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -260,7 +259,6 @@
             dataType    : 'JSON',
             type        : 'GET',
             success: function(data){
-            console.log(data);
             genFoodByMenuId(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -290,11 +288,14 @@
         $(div).empty();
         data.data.forEach(function(obj) {
             var item = $(".menu-item-temp").contents().clone();
-            console.log(item);
             $(item).text(obj.name);        
             $(div).append($(item));
         });
     }
+
+    $(dblclick(function(event) {
+        /* Act on the event */
+    });)
 </script>
 
 @yield('javascript')
