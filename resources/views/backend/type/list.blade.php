@@ -142,8 +142,8 @@
 		focusInput	   : true,
 		title          : 'Type',
 		subtitle       :'Add',
-		width          : 700,
-		iframeHeight   : 300,
+		width          : 750,
+		iframeHeight   : 400,
 		headerColor    :"#405467",
 		icon           :"fa fa-user",
 		iconColor      :"#ECF0F1",
@@ -182,7 +182,7 @@
 		},
 		title          : 'Type',
 		subtitle       :'Edit',
-		width          : 700,
+		width          : 750,
 		iframeHeight   : 300,
 		headerColor    :"#405467",
 		icon           :"fa fa-user",
@@ -197,7 +197,7 @@
 		transitionOut  :"bounceOutUp",
 		arrowKeys      :true,
 		iframe         : true,
-		iframeWidth    :400,
+		iframeWidth    :500,
 		iframeURL      :""
 	});
 	//Delete User
@@ -212,7 +212,7 @@
 			type          :"orange",
 			closeIcon     : true,
 			closeIconClass: 'fa fa-close',
-			content       : "Are You Sure? This Type Will Be Deleted!",
+			content       : "Are You Sure? This Type and Related Data Will Be Deleted!",
 			buttons       : {
 				Save: {
 					text    : 'OK',
@@ -253,7 +253,7 @@
 			type          :"orange",
 			closeIcon     : true,
 			closeIconClass: 'fa fa-close',
-			content       : "Are You Sure? All of these types will be deleted!",
+			content       : "Are You Sure? All of these types and related data will be deleted!",
 			buttons       : {
 				Save: {
 					text    : 'OK',
@@ -286,12 +286,12 @@
 	    checkboxes.prop('checked', $(this).is(':checked'));
 	});
 	//function alert 
-	function Alert(text)
+	function Alert(content)
 	{
 		$.toast({
-		    text: text,
+		    text: content,
 		    heading: 'Successful',
-		    icon: 'success',
+		    icon: "success",
 		    showHideTransition: 'slide',
 		    allowToastClose: true,
 		    hideAfter: 1500,

@@ -100,6 +100,9 @@
             //Delete
             Route::get("deleteType","TypeController@deleteType")->name("deleteType");
             Route::get("deleteAllType","TypeController@deleteAllType")->name("deleteAllType");
+            //Delete Prop
+            Route::get("deleteProp","TypeController@deleteProp")->name("deleteTypeProp");
+            
         });
         //Group properties
         Route::group(["prefix" => "Properties"],function(){

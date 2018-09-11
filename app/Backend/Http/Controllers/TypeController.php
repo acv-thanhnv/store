@@ -39,7 +39,8 @@ class TypeController
     }
     public function getAddType()
     {
-        return view("backend.type.add");
+        $arrData = $this->service->getDataType();
+        return view("backend.type.add",["arrData" => $arrData]);
     }
     public function postAddType(Request $request)
     {
@@ -47,7 +48,26 @@ class TypeController
         $rule      = ["name" => "required|min:3"];
         $validator = Validator::make($request->all(),$rule);
         if(!$validator->fails()){
-            $this->service->addType($request->all());
+            $type              = Array();
+            $prop              = Array();
+            //adType
+            $type["name"]        = $request->name;
+            $type["store_id"]    = $request->store_id;
+            $type["description"] = $request->description;
+            $idType = $this->service->addType($type);
+            //add Property
+            if($request->arrProp!=NULL){
+                foreach ($request->arrProp as $obj) {
+                    if($obj["label"]!=NULL){
+                        $prop["entity_type_id"] = $idType;
+                        $prop["property_name"] = changeTitle($obj["label"]);
+                        $prop["data_type_code"] = $obj["data"];
+                        $prop["property_label"] = $obj["label"];
+                        $prop["sort"] = $obj["sort"];
+                        $this->service->addProp($prop);
+                    }
+                }
+            }
             $result->status   = SDBStatusCode::OK;
             $result->message  = 'Success';
         }else {
@@ -61,8 +81,14 @@ class TypeController
 
     public function getEditType(Request $request)
     {
-        $obj = $this->service->getById($request->id);
-        return view("backend.type.edit",["obj" => $obj]);
+        $obj  = $this->service->getById($request->id);
+        $prop =  $this->service->getProp($obj->id);
+        $obj->arrProp = $prop; 
+        $arrData      = $this->service->getDataType();
+        return view("backend.type.edit",[
+            "obj"     => $obj, 
+            "arrData" => $arrData
+        ]);
     }
 
     public function postEditType(Request $request)
@@ -71,11 +97,33 @@ class TypeController
         $rule      = ["name" => "required|min:3"];
         $validator = Validator::make($request->all(),$rule);
         if(!$validator->fails()){
-            $obj              = new \stdClass();
-            $obj->id          = $request->id;
-            $obj->name        = $request->name;
-            $obj->description = $request->description;
-            $this->service->editType($obj);
+            $type              = Array();
+            $prop              = Array();
+            //adType
+            $type["id"]          = $request->id;
+            $type["name"]        = $request->name;
+            $type["store_id"]    = $request->store_id;
+            $type["description"] = $request->description;
+            $idType = $this->service->editType($type);
+            //add Property
+            if($request->arrProp!=NULL){
+                foreach ($request->arrProp as $obj) {
+                    if($obj["label"]!=NULL){
+                        $prop["entity_type_id"] = $request->id;
+                        $prop["property_name"] = changeTitle($obj["label"]);
+                        $prop["data_type_code"] = $obj["data"];
+                        $prop["property_label"] = $obj["label"];
+                        $prop["sort"] = $obj["sort"];
+                        if(isset($obj["id"])){
+                            $prop["id"] = $obj["id"];
+                            $this->service->editProp($prop);
+                        }else{
+                            unset($prop["id"]);
+                            $this->service->addProp($prop);
+                        }
+                    }
+                }
+            }
             $result->status   = SDBStatusCode::OK;
             $result->message  = 'Success';
         }else {
@@ -94,4 +142,9 @@ class TypeController
     {
         $this->service->deleteAllType($request->arrId);
     }
+    public function deleteProp(Request $request)
+    {
+        $this->service->deleteProp($request->id);
+    }
+    
 }

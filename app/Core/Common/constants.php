@@ -62,3 +62,6 @@ class OrderConst{
     const OrderChannelToWaiter = "to-waiter";
     const OrderEventName = "order.waiter";
 }
+class EntityProperty{
+    const maxField = 10;
+}

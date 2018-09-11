@@ -32,14 +32,26 @@ class TypeService extends BaseService implements TypeServiceInterface
     {
         $arrProp = SDB::table("store_entity_properties as prop")
                     ->join("store_prop_data_types as data","prop.data_type_code","=","data.code_value")
+                    ->select("prop.*","data.name","data.code_value")
                     ->where("prop.entity_type_id",$idType)
+                    ->orderby("prop.sort","desc")
                     ->orderby("prop.id","desc")
                     ->get();
         return $arrProp;
     }
+    public function getDataType()
+    {
+        $arrData = SDB::table("store_prop_data_types")->get();
+        return $arrData;
+    }
     public function addType($obj)
     {
-        SDB::table("store_entity_types")->insert($obj);
+        $id = SDB::table("store_entity_types")->insertGetId($obj);
+        return $id;
+    }
+    public function addProp($obj)
+    {
+        SDB::table("store_entity_properties")->insert($obj);
     }
     public function getById($id)
     {
@@ -48,16 +60,33 @@ class TypeService extends BaseService implements TypeServiceInterface
     }
     public function editType($obj)
     {
-        SDB::table("store_entity_types")->where("id",$obj->id)->update(["name" => $obj->name,"description"=> $obj->description]);
+        $type = SDB::table("store_entity_types")->where("id",$obj["id"])
+                    ->update(["name" => $obj["name"],"description"=> $obj["description"]]);
+    }
+    public function editProp($obj)
+    {
+        SDB::table("store_entity_properties")->where("id",$obj["id"])
+                    ->update([
+                        "property_name"  => $obj["property_name"],
+                        "property_label" => $obj["property_label"],
+                        "data_type_code" => $obj["data_type_code"],
+                        "sort"           => $obj["sort"]
+                    ]);
     }
     public function deleteType($id)
     {
         SDB::table("store_entity_types")->where("id",$id)->delete();
+        SDB::table("store_entity_properties")->where("entity_type_id",$id)->delete();
     } 
     public function deleteAllType($arrId)
     {
         foreach($arrId as $obj){
             SDB::table("store_entity_types")->where("id",$obj)->delete();
+            SDB::table("store_entity_properties")->where("entity_type_id",$id)->delete();
         }
+    }
+    public function deleteProp($id)
+    {
+        SDB::table("store_entity_properties")->where("id",$id)->delete();
     }
 }
