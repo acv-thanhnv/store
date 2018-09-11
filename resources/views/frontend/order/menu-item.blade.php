@@ -1,7 +1,7 @@
 <style type="text/css">
-	.product-type{
+	/*.product-type{
 		float: left;
-	}
+	}*/
 </style>
 <div id="template-item-type" style="display: none">
 	<div class="menu-item-temp">

@@ -203,7 +203,8 @@
         <!-- product list -->
         <div _ngcontent-c10="" class="product-list product-list-menu">
             <kv-cashier-product-list _ngcontent-c10="" _nghost-c28="">
-                <ks-swiper-container _ngcontent-c28=""><div class="swiper-container swiper-container-horizontal">
+                <ks-swiper-container _ngcontent-c28="">
+                    <div class="swiper-container swiper-container-horizontal">
                     <div class="swiper-wrapper" style="transition-duration: 0ms;">
 
                         <!----><ks-swiper-slide _ngcontent-c28="" class="swiper-slide swiper-slide-active" style="width: 744px;"><div>
@@ -288,10 +289,9 @@
         var div = $("#menu-item");
         $(div).empty();
         data.data.forEach(function(obj) {
-            var item = $(".menu-item-temp").clone();
-            //console.log($(".type").contents());
-            $(item).find('.product-type').text(obj.name);  
-            //console.log($(type).find('.product-type'));         
+            var item = $(".menu-item-temp").contents().clone();
+            console.log(item);
+            $(item).text(obj.name);        
             $(div).append($(item));
         });
     }
