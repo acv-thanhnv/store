@@ -1,6 +1,7 @@
 
-<div _ngcontent-c7="" class="item-order">
-            <div _ngcontent-c7="" class="row-list" id="153622183440520">
+<div id="list-order">
+    <div _ngcontent-c7="" class="item-order">
+        <div _ngcontent-c7="" class="row-list" id="153622183440520">
             <div _ngcontent-c7="" class="cell-order">
                 1
             </div>
@@ -9,12 +10,14 @@
                     <i _ngcontent-c7=""></i>
                 </a>
             </div>
+
             <div _ngcontent-c7="" class="row-product">
+                <div _ngcontent-c7="" class="cell-image">
+                    <img _ngcontent-c28="" class="image-item2" src="">
+                </div>
                 <div _ngcontent-c7="" class="cell-name full">
-                    <h4 _ngcontent-c7="">
-                        Bia Hà Nội
-                        <!---->
-                        <!---->
+                    <h4 _ngcontent-c7="" class="name-item2">
+
                     </h4>
                     <div _ngcontent-c7="" class="wrap-note" href="#">
                         <label _ngcontent-c7="">
@@ -51,8 +54,8 @@
                 </div>
                 <div _ngcontent-c7="" class="cell-change-price">
                     <div _ngcontent-c7="" class="popup-anchor">
-                        <button _ngcontent-c7="" class="form-control in-table">
-                            30,000
+                        <button _ngcontent-c7="" class="product-price2">
+
                         </button>
                         <!---->
                     </div>
@@ -63,5 +66,8 @@
                 <!---->
             </div>
         </div>
-        
+
     </div>
+
+</div>
+

@@ -3,11 +3,11 @@
 @section('content')
 
 <kv-root _nghost-c0="" ng-version="4.4.7" class=""><!---->
-        <!---->
-        <!---->
-        <router-outlet _ngcontent-c0=""></router-outlet>
-        <kv-cashier-page _nghost-c4=""><!---->
-<div _ngcontent-c4="" class="introduce-app">
+    <!---->
+    <!---->
+    <router-outlet _ngcontent-c0=""></router-outlet>
+    <kv-cashier-page _nghost-c4=""><!---->
+        <div _ngcontent-c4="" class="introduce-app">
             <button _ngcontent-c4="" class="btn-del"><i _ngcontent-c4="" class="fal fa-trash-alt"></i></button>
             <div _ngcontent-c4="" class="banner-introduce-app">
                 <!---->
@@ -76,8 +76,8 @@
                 <!---->
             </kv-group-tabs>
         </kv-cashier-cart-tabs>
-                 
-</div>
+
+    </div>
 </div>
 </kv-cashier-header>
 <div _ngcontent-c4="" class="wrap-content">
@@ -170,14 +170,15 @@
     <!---->
     @include('frontend.order.item-list')
     @include('frontend.order.menu-item')
+    
 </div>
 </div>
 
 <!-- @include('frontend.order.payment') -->
 </div>
 
-        </kv-cashier-page>
-    </kv-root>
+</kv-cashier-page>
+</kv-root>
 @endsection
 
 @section('javascript')
@@ -217,10 +218,10 @@
         data.data.forEach(function(obj) {
             var item = $("#list-item-temp").contents().clone();
             $(item).find('.product-title').attr('title', obj.name);
-            $(item).find('.img').attr('src', obj.image);
+            $(item).find('.image-item').attr('src', obj.image);
             $(item).find('.product-name').html(obj.name);
-            $(item).find('.product-price').html(obj.price);
-            
+            $(item).find('.product-price').html(obj.price);            
+
             $(ul).append($(item));
         });
     }
@@ -234,12 +235,26 @@
             $(div).append($(item));
         });
     }
+    $(document).on("click","li.item-temp1",function(){
+        var i;
+        var image = $(this).find('.image-item').attr('src');
+        var name = $(this).find("span.product-name").text();
+        var price = $(this).find("span.product-price").text();
+//////////////
+var order = $('#order');
+$(order).empty();
+{
+    var item= $('#list-order').contents().clone();
+    $(item).find('.image-item2').attr('src',image);
+    $(item).find('.name-item2').html(name);
+    $(order).append($(item));
+}
 
-    $("item-temp").dblclick(function(event) {
-        //var id $(this).
-        var order_item = $('.item-order').contents().clone();
+});
 
-    });
+    // var order= $('#list-order').contents().clone();
+    // $(order).find('.image-item2').attr('src');
+    // console.log($(order).find('.image-item2'));
 </script>
 
 @endsection
