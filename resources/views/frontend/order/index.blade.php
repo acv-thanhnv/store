@@ -255,20 +255,20 @@
     $(document).on("click",".btn-order",function(){
         
         var storeId = 1;
-        var orderId = 1;
+        var orderId = 0;
         var locationId = 1;
         var description = 'aaajl';
         var totalPrice = 10000;
-        var rows= $('.col-right-container.item-order');
-        //console.log(rows);
+        var rows= $('.item-order');
         var entity =[];
-        for(var i=0; i<10; i++){
-            var id = 'abc';
-            var name = "aaaa";
-            var avatar = "http";
-            var price = '5000';
+        for(var i=0; i<rows.length-1; i++){
+            var id = $(rows[i]).attr('order-id');
+            var name = $(rows[i]).attr('order-name');
+            var avatar = $(rows[i]).find('.image-item2').attr('src');
+            var price = $(rows[i]).attr('order-price');
             var quantity = 1;
-            
+
+            // console.log(avatar);    
             // var name $(rows[i]).attr('order-name');
             // var  $(rows[i]).find().attr('order-');
             // var $(rows[i]).attr('order-price');
