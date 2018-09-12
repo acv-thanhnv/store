@@ -116,6 +116,8 @@
             //Delete
             Route::get("deleteFood","FoodController@deleteFood")->name("deleteFood");
             Route::get("deleteAllFood","FoodController@deleteAllFood")->name("deleteAllFood");
+            //Other
+            Route::get("Prop","FoodController@getProp")->name("getProp");
         });
     });
     

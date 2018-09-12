@@ -58,6 +58,11 @@ class FoodService extends BaseService implements FoodServiceInterface
         $arrType = SDB::table("store_entity_types")->where("store_id",$idStore)->get();
         return $arrType;
     }
+    public function getProp($idType)
+    {
+        $arrType = SDB::table("store_entity_properties")->where("entity_type_id",$idType)->get();
+        return $arrType;
+    }
     public function getMenu($idStore)
     {
         $arrType = SDB::table("store_menu")->where("store_id",$idStore)->get();

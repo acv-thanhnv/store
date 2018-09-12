@@ -87,6 +87,11 @@ class FoodController
         }
         return ResponseHelper::JsonDataResult($result);
     }
+    public function getProp(Request $request)
+    {
+        $arrProp = $this->foodService->getProp($request->idType);
+        return $arrProp;
+    }
     public function deleteFood(Request $request)
     {
         $this->service->deleteFood($request->id);

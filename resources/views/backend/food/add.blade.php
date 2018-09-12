@@ -62,6 +62,16 @@
 		.fa.fa-plus-square{
 			margin-right: 5px;
 		}
+		.show-errors{
+			float       : none;
+			margin-left : 10px;
+		}
+		.close{
+			right:2px !important;
+			color: white;
+			opacity: 0.7;
+			top: -10px !important;
+		}
     </style>
 @endpush
 @section("content")
@@ -114,7 +124,7 @@
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Type </label>
-						<select class="form-control">
+						<select class="form-control" id="type">
 							<option>--Chose Type--</option>
 							@foreach($arrType as $obj)
 							<option value="{{$obj->id}}">
@@ -138,6 +148,8 @@
 					<div class="col-md-3 col-sm-3 col-xs-3">
 						<label>Sort by</label>
 					</div>
+				</div>
+				<div class="form-group property_by_type">
 				</div>
 				<div class="form-group property">
 				</div>
@@ -175,12 +187,19 @@
 	</div>
 </span>
 </div>
+<!--Template errors-->
+<div id="error" style="display:none">
+	<div class="col-md-10 alert alert-warning alert-dismissible show-errors">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<span class="content-errors"></span>
+	</div>
+</div>
 @endsection
 @push("js")
 <script type="text/javascript">
 	var max_fields = "{{\App\Core\Common\EntityProperty::maxField}}";
 	var wrapper    = $(".property"); //Fields wrapper
-	var x          = 1;
+	var x          = 0;
 	//upload image 
 	function handleFileSelect(event) {
 		var input = this;
@@ -198,11 +217,37 @@
 		$("#preview").empty()
 		$("#file").val("");
 	});
+	//show property
+	$(document).on("change","#type",function(event){
+		var idType = $(this).val();
+		var prop_by_type = $(".property_by_type");
+		var row = $("#template").contents().clone();
+		var y =0;
+		$(prop_by_type).empty();
+		$.get("{{route('getProp')}}",{idType:idType},function(data){
+			y+= data.length;
+			console.log(x+y);
+			label(x+y);
+			if(data.length>0){
+				data.forEach(function(obj){
+					var row = $("#template").contents().clone();
+					$(row).find("input[name='label']").val(obj.property_label).prop("readonly",true);
+					$(row).find("input[name='sort']").val(obj.sort).prop("readonly",true);
+					$(prop_by_type).append(row); 
+				});
+			}else{
+				var errors = $("#error").contents().clone();
+				$(errors).find("span.content-errors").html("Sorry but this type doen't have property, pleas add property in type option or bellow!");
+				$(errors).find("div.show-errors").css("display","block");
+				$(prop_by_type).append(errors); 
+			}
+		});
+	});
 	//insert prop
 	$(document).on("click",".add_prop",function(event){
 		var row = $("#template").contents().clone();
 		x++;
-		if(x < max_fields&& x>1){
+		if(x < max_fields&& x>=1){
 			$(".label_name").css("display","block");
 			$(wrapper).append(row);
 		}else{
@@ -222,9 +267,7 @@
 	$(document).on("click",".remove",function(event){
 		$(this).parents("span").remove();
 		x--;
-		if(x===1){
-			$(".label_name").css("display","none");
-		}
+		label(x);
 	});
 	//submit add 
 	$(".add").click(function(){
@@ -258,5 +301,15 @@
 			}
 		});
 	})
+	//function show label
+	function label(x) {
+		$(document).ready(function(){
+			if(x===0){
+				$(".label_name").css("display","none");
+			}else{
+				$(".label_name").css("display","block");
+			}
+		});
+	}
 </script>
 @endpush
