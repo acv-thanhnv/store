@@ -30,7 +30,10 @@
     <!--Modal CSS-->
     <link href="{{ asset('backend/template1/modal/css/modal.css')}}" rel="stylesheet">
     <!--Toast CSS-->
-    <link href="{{ asset('css/toast.css')}}" rel="stylesheet"">
+    <link href="{{ asset('css/toast.css')}}" rel="stylesheet">
+    <!--dataTable CSS-->
+    <link href="{{ asset('css/lib/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/lib/jquery.dataTables.min.css') }}" rel="stylesheet">
     <title>{{ config('app.name', 'Laravel') }}</title>
     @stack("css")
 
@@ -69,6 +72,13 @@
                             <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li><a href="{{route('backend_template')}}">Dashboard</a></li>
+                                </ul>
+                            </li>
+                            <li><a><i class="fa fa-book"></i> Menu   <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a href="{{route('getMenu')}}">List</a></li>
+                                    <li><a href="{{route('getType')}}">Type</a></li>
+                                    <li><a href="{{route('getFood')}}">Foods</a></li>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
@@ -208,6 +218,7 @@
 </body>
 <!-- jQuery -->
 <script src="{{ asset('backend/template1/js/jquery.min.js')}}"></script>
+<script src="{{ asset('js/lib/jquery-ui-1.9.2.custom.min.js')}}"></script>
 <!-- Bootstrap -->
 <script src="{{ asset('backend/template1/js/bootstrap.min.js')}}"></script>
 <script src="{{ asset('backend/template1/js/jquery.autocomplete.min.js')}}"></script>
@@ -225,6 +236,8 @@
 <script src="{{ asset('backend/template1/modal/js/modal.js')}}"></script>
 <!--Toast JS-->
 <script src="{{ asset('js/toast.js')}}"></script>
+<!--dataTable-->
+<script src="{{ asset('js/lib/jquery.dataTables.min.js')}}"></script>
 <!-- Custom Theme Scripts -->
 @yield('lib_scripts')
 <script src="{{ asset('backend/template1/js/custom.js')}}"></script>
