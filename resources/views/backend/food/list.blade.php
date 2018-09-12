@@ -180,7 +180,7 @@
 	{
 		onOpening: function(modal){
 			var id =$(event.target).closest("button").data("id");//get Id, get button then get id
-			$(".iziModal-iframe").attr("src","{{route('editType')}}?id="+id);
+			$(".iziModal-iframe").attr("src","{{route('editFood')}}?id="+id);
 			//set url iframe
 		},
 		onClosed: function(modal){
@@ -191,10 +191,10 @@
 			}
 			$(".iziModal-iframe").attr("src","");
 		},
-		title          : 'Type',
+		title          : 'Food',
 		subtitle       :'Edit',
-		width          : 750,
-		iframeHeight   : 300,
+		width          : 850,
+		iframeHeight   : 500,
 		headerColor    :"#405467",
 		icon           :"fa fa-user",
 		iconColor      :"#ECF0F1",

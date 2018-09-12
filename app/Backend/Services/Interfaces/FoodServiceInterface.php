@@ -20,6 +20,7 @@ interface FoodServiceInterface
 	public function deleteAllFood($arrId);
 	public function getType($idStore);
 	public function getProp($idType);
+	public function getPropByFood($idFood);
 	public function getMenu($idStore);
 	public function getDataType();
 }

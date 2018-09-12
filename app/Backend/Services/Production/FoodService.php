@@ -46,7 +46,11 @@ class FoodService extends BaseService implements FoodServiceInterface
     }
     public function getById($id)
     {
-        $obj = SDB::table("store_entity_Foods")->where("id",$id)->get();
+        $obj = SDB::table("store_entities as en")
+                    ->join("store_menu as menu","menu.id","=","en.menu_id")
+                    ->where("en.id",$id)
+                    ->select("en.*","menu.name as menuName")
+                    ->get();
         return $obj[0];
     }
     public function editFood($obj)
@@ -72,6 +76,13 @@ class FoodService extends BaseService implements FoodServiceInterface
     {
         $arrType = SDB::table("store_entity_properties")->where("entity_type_id",$idType)->get();
         return $arrType;
+    }
+    public function getPropByFood($idFood)
+    {
+        $arrProp = SDB::table("store_entity_property_values as value")
+                    ->join("store_entity_properties as prop","value.property_id","=","prop.id")
+                    ->where("value.entity_id",$idFood)->get();
+        return $arrProp;
     }
     public function getMenu($idStore)
     {

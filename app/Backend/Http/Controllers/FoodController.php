@@ -121,10 +121,25 @@ class FoodController
 
     public function getEditFood(Request $request)
     {
-        $obj = $this->service->getById($request->id);
-        return view("backend.Food.edit",["obj" => $obj]);
+        $diskLocalName = "public";
+        $arrType = $this->foodService->getType(1);
+        $arrMenu = $this->foodService->getMenu(1);
+        $arrData = $this->foodService->getDataType();
+        $food = $this->foodService->getById($request->id);
+        if($food->image==NULL){
+           $food->src = url('/')."/common_images/no-image.png"; 
+        }else{
+            $food->src = Storage::disk($diskLocalName)->url($food->image);
+        }
+        $food->arrProp = $this->foodService->getPropByFood($food->id);
+        // dd($food);
+        return view("backend.food.edit",[
+            "food" => $food,
+            "arrType" => $arrType,
+            "arrMenu" => $arrMenu,
+            "arrData" => $arrData
+        ]);
     }
-
     public function postEditFood(Request $request)
     {
         $result    = new DataResultCollection();
