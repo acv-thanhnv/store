@@ -78,7 +78,7 @@
                                 <ul class="nav child_menu">
                                     <li><a href="{{route('getMenu')}}">List</a></li>
                                     <li><a href="{{route('getType')}}">Type</a></li>
-                                    <li><a href="{{route('getProp')}}">Properties</a></li>
+                                    <li><a href="{{route('getFood')}}">Foods</a></li>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>

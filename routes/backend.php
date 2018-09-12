@@ -104,18 +104,18 @@
             Route::get("deleteProp","TypeController@deleteProp")->name("deleteTypeProp");
             
         });
-        //Group properties
-        Route::group(["prefix" => "Properties"],function(){
-            Route::get("list","PropController@getProp")->name("getProp");
+        //Group Food
+        Route::group(["prefix" => "Food"],function(){
+            Route::get("list","FoodController@getFood")->name("getFood");
             //add 
-            Route::get("addProp","PropController@getAddProp")->name("addProp");
-            Route::post("addProp","PropController@postAddProp");
+            Route::get("addFood","FoodController@getAddFood")->name("addFood");
+            Route::post("addFood","FoodController@postAddFood");
             //Edit
-            Route::get("editProp","PropController@getEditProp")->name("editProp");
-            Route::post("editProp","PropController@postEditProp")->name("postEditProp");
+            Route::get("editFood","FoodController@getEditFood")->name("editFood");
+            Route::post("editFood","FoodController@postEditFood")->name("postEditFood");
             //Delete
-            Route::get("deleteProp","PropController@deleteProp")->name("deleteProp");
-            Route::get("deleteAllProp","PropController@deleteAllProp")->name("deleteAllProp");
+            Route::get("deleteFood","FoodController@deleteFood")->name("deleteFood");
+            Route::get("deleteAllFood","FoodController@deleteAllFood")->name("deleteAllFood");
         });
     });
     

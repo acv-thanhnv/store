@@ -194,7 +194,7 @@ return [
         App\Backend\Providers\BackendServiceProvider::class,
         App\Backend\Providers\MenuServiceProvider::class,
         App\Backend\Providers\TypeServiceProvider::class,
-        App\Backend\Providers\PropServiceProvider::class,
+        App\Backend\Providers\FoodServiceProvider::class,
         /**
          * FrontEnd
          */

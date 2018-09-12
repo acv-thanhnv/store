@@ -4,7 +4,7 @@ namespace App\Backend\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Services\Interfaces\UploadServiceInterface;
-use App\Backend\Services\Interfaces\PropServiceInterface;
+use App\Backend\Services\Interfaces\FoodServiceInterface;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Common\UploadConst;
 use Illuminate\Support\Facades\Storage;
@@ -14,41 +14,41 @@ use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use DateTime;
 
-class PropController
+class FoodController
 {
-    protected $service;
+    protected $foodService;
     protected $uploadService;
-    public function __construct(PropServiceInterface $propService,UploadServiceInterface $uploadService)
+    public function __construct(FoodServiceInterface $foodService,UploadServiceInterface $uploadService)
     {
-        $this->service       = $propService;
+        $this->foodService   = $foodService;
         $this->uploadService = $uploadService;
     }
-    //Prop
-    public function getProp()
+    //Foods
+    public function getFood()
     {
-        $arrProp = $this->service->getProp(1);
-        return view("backend.prop.list",["arrProp" => $arrProp]);
+        $arrFood = $this->foodService->getFood(1);
+        return view("backend.food.list",["arrFood" => $arrFood]);
     }
-    public function getAddProp()
+    public function getAddFood(Request $request)
     {
-        $arrType = $this->service->getType(1);
-        $arrData = $this->service->getDataType();
-        return view("backend.prop.add",[
-            "arrType" => $arrType, 
-            "arrData" => $arrData
+        $arrType = $this->foodService->getType(1);
+        $arrMenu = $this->foodService->getMenu(1);
+        return view("backend.food.add",[
+            "arrType" => $arrType,
+            "arrMenu" => $arrMenu
         ]);
     }
-    public function postAddProp(Request $request)
+    public function postAddFood(Request $request)
     {
         $result    = new DataResultCollection();
         $rule      = [
             "label"    => "required|min:3",
             "type"     => "required",
-            "dataProp" => "required"
+            "dataFood" => "required"
         ];
         $validator = Validator::make($request->all(),$rule);
         if(!$validator->fails()){
-            $this->service->addProp($request->all());
+            $this->service->addFood($request->all());
             $result->status   = SDBStatusCode::OK;
             $result->message  = 'Success';
         }else {
@@ -60,13 +60,13 @@ class PropController
         return ResponseHelper::JsonDataResult($result);
     }
 
-    public function getEditProp(Request $request)
+    public function getEditFood(Request $request)
     {
         $obj = $this->service->getById($request->id);
-        return view("backend.Prop.edit",["obj" => $obj]);
+        return view("backend.Food.edit",["obj" => $obj]);
     }
 
-    public function postEditProp(Request $request)
+    public function postEditFood(Request $request)
     {
         $result    = new DataResultCollection();
         $rule      = ["name" => "required|min:3"];
@@ -76,7 +76,7 @@ class PropController
             $obj->id          = $request->id;
             $obj->name        = $request->name;
             $obj->description = $request->description;
-            $this->service->editProp($obj);
+            $this->service->editFood($obj);
             $result->status   = SDBStatusCode::OK;
             $result->message  = 'Success';
         }else {
@@ -87,12 +87,12 @@ class PropController
         }
         return ResponseHelper::JsonDataResult($result);
     }
-    public function deleteProp(Request $request)
+    public function deleteFood(Request $request)
     {
-        $this->service->deleteProp($request->id);
+        $this->service->deleteFood($request->id);
     }
-    public function deleteAllProp(Request $request)
+    public function deleteAllFood(Request $request)
     {
-        $this->service->deleteAllProp($request->arrId);
+        $this->service->deleteAllFood($request->arrId);
     }
 }

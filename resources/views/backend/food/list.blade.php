@@ -38,14 +38,14 @@
 <!--Title-->
 <div class="page-title">
 	<div class="title_left">
-		<h2 class="text-primary">Properties <small>List</small></h2>
+		<h2 class="text-primary">Type <small>List</small></h2>
 	</div>
 </div>
 <!--Table-->
 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
     <div class="x_panel">
         <div class="x_title">
-        	<button class="btn btn-primary" id="add" title="Add New Property" data-toggle="tooltip">
+        	<button class="btn btn-primary" id="add" title="Add New Type" data-toggle="tooltip">
         		<i class="fa fa-plus"></i>
         	</button>
             <button class="btn btn-danger" id="delete_all" title="Delete All" data-toggle="tooltip">Delete All</button>
@@ -67,25 +67,32 @@
                         <th style="text-align: center">
                             <input type="checkbox" id="check-all" class="flat">
                         </th>
-                        <th class="column-title">Type </th>
-                        <th class="column-title">Property Name </th>
-                        <th class="column-title">Data </th>
-                        <th class="column-title">Label </th>
+                        <th class="column-title">Name </th>
+                        <th class="column-title">Description </th>
+                        <th class="column-title">Properties</th>
                         <th class="column-title">Edit </th>
                         <th class="column-title">Delete </th>
                     </tr>
                     </thead>
                     <!--Tbody-->
                     <tbody id="tbody">
-                    	@foreach($arrProp as $obj)
+                    	@foreach($arrType as $obj)
 						<tr>
 							<td style="text-align: center" class="check-delete">
 								<input type="checkbox" value="{{$obj->id}}">
 							</td>
-							<td>{{$obj->typeName}}</td>
-							<td>{{$obj->property_name}}</td>
 							<td>{{$obj->name}}</td>
-							<td>{{$obj->property_label}}</td>
+							<td>{{$obj->description}}</td>
+							<td>
+								@if($obj->prop == NULL)
+									{{"None"}}
+								@else 
+									@foreach($obj->prop as $prop)
+										- {{$prop->property_label}}
+										<br>
+									@endforeach
+								@endif
+							</td>
 							<td>
 								<button type="button" class="btn btn-primary edit round" data-id="{{$obj->id}}">
 									<i class="fa fa-pencil-square-o"></i>
@@ -133,9 +140,9 @@
 			$(".iziModal-iframe").attr("src","");
 		},
 		focusInput	   : true,
-		title          : 'Property',
+		title          : 'Type',
 		subtitle       :'Add',
-		width          : 700,
+		width          : 750,
 		iframeHeight   : 400,
 		headerColor    :"#405467",
 		icon           :"fa fa-user",
@@ -152,7 +159,7 @@
 		arrowKeys      :true,
 		iframe         : true,
 		iframeWidth    :400,
-		iframeURL      :"{{route('addProp')}}"
+		iframeURL      :"{{route('addType')}}"
 	});
 	//function edit
 	$(document).on('click', '.edit', function(event) {
@@ -162,7 +169,7 @@
 	{
 		onOpening: function(modal){
 			var id =$(event.target).closest("button").data("id");//get Id, get button then get id
-			$(".iziModal-iframe").attr("src","{{route('editMenu')}}?id="+id);
+			$(".iziModal-iframe").attr("src","{{route('editType')}}?id="+id);
 			//set url iframe
 		},
 		onClosed: function(modal){
@@ -173,9 +180,9 @@
 			}
 			$(".iziModal-iframe").attr("src","");
 		},
-		title          : 'Property',
+		title          : 'Type',
 		subtitle       :'Edit',
-		width          : 700,
+		width          : 750,
 		iframeHeight   : 300,
 		headerColor    :"#405467",
 		icon           :"fa fa-user",
@@ -190,7 +197,7 @@
 		transitionOut  :"bounceOutUp",
 		arrowKeys      :true,
 		iframe         : true,
-		iframeWidth    :400,
+		iframeWidth    :500,
 		iframeURL      :""
 	});
 	//Delete User
@@ -205,15 +212,15 @@
 			type          :"orange",
 			closeIcon     : true,
 			closeIconClass: 'fa fa-close',
-			content       : "Are You Sure? This Menu Item Will Be Deleted!",
+			content       : "Are You Sure? This Type and Related Data Will Be Deleted!",
 			buttons       : {
 				Save: {
 					text    : 'OK',
 					btnClass: 'btn btn-primary',
 					action  : function (){
 						$("#dataTable").DataTable().row(tr).remove().draw(false);
-						$.get("{{route('deleteMenu')}}",{id:id},function(data){
-							Alert("Menu Item Have Been Deleted Successful!");
+						$.get("{{route('deleteType')}}",{id:id},function(data){
+							Alert("Type Have Been Deleted Successful!");
 						});
 					}
 				},
@@ -246,7 +253,7 @@
 			type          :"orange",
 			closeIcon     : true,
 			closeIconClass: 'fa fa-close',
-			content       : "Are You Sure? All of these menus will be deleted!",
+			content       : "Are You Sure? All of these types and related data will be deleted!",
 			buttons       : {
 				Save: {
 					text    : 'OK',
@@ -258,8 +265,8 @@
 							$("#dataTable").DataTable().row(tr).remove().draw(false);
 							arrId.push($(this).val());
 						});
-						$.get("{{route('deleteAllMenu')}}",{arrId:arrId},function(data){
-								Alert("Menus have been deleted!");
+						$.get("{{route('deleteAllType')}}",{arrId:arrId},function(data){
+								Alert("Types have been deleted!");
 						});
 					}
 				},
@@ -279,12 +286,12 @@
 	    checkboxes.prop('checked', $(this).is(':checked'));
 	});
 	//function alert 
-	function Alert(text)
+	function Alert(content)
 	{
 		$.toast({
-		    text: text,
+		    text: content,
 		    heading: 'Successful',
-		    icon: 'success',
+		    icon: "success",
 		    showHideTransition: 'slide',
 		    allowToastClose: true,
 		    hideAfter: 1500,
@@ -302,7 +309,7 @@
 			"columnDefs": [
                 { 
                     "orderable": false ,
-                    "targets": [0,5,6]
+                    "targets": [0,3,4]
                 }
             ],
             order: []

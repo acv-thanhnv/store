@@ -7,10 +7,10 @@ namespace App\Backend\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Backend\Services\Interfaces;
 use App\Backend\Services\Production;
-class PropServiceProvider extends ServiceProvider
+class FoodServiceProvider extends ServiceProvider
 {
     protected $services = [
-        Interfaces\PropServiceInterface::class=>Production\PropService::class,
+        Interfaces\FoodServiceInterface::class=>Production\FoodService::class,
     ];
     /**
      * Bootstrap services.
