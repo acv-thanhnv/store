@@ -7,8 +7,7 @@
 <div id="list-order">
     <div _ngcontent-c7="" class="item-order">
         <div _ngcontent-c7="" class="row-list" id="153622183440520">
-            <div _ngcontent-c7="" class="cell-order">
-                1
+            <div _ngcontent-c7="" class="cell-count">
             </div>
             <div _ngcontent-c7="" class="cell-action">
                 <!----><a _ngcontent-c7="" class="fas fa-times-circle" href="#" title="Xóa hàng hóa">

@@ -82,98 +82,76 @@
 </kv-cashier-header>
 <div _ngcontent-c4="" class="wrap-content">
     <div _ngcontent-c4="" class="col-right">
-        <div _ngcontent-c4="" class="col-right-content has-alert">
+        <div _ngcontent-c7="" class="col-right-container">
+            <div id="order">
 
-            <kv-cashier-cart-list-item _ngcontent-c4="" _nghost-c7="">
-                <div _ngcontent-c7="" class="col-right-container">
-                    <div id="order">
-
-                    </div>
-
-                </div>
-
-            </kv-cashier-cart-list-item>
-
-            <kv-cashier-payment-info-bottom _ngcontent-c4="" _nghost-c8=""><div _ngcontent-c8="" class="form-actions form-payment">
-                <div _ngcontent-c8="" class="form-actions-left">
-
-                 <div _ngcontent-c8="" class="form-group pull-right">
-
-                 </div>
-
-                 <div _ngcontent-c8="">
-
-                 </div>
-             </div>
-
-         </div>
-
-
-     </kv-cashier-payment-info-bottom>
- </div>
-
- <!----><div _ngcontent-c4="" class="wrap-button three-buttons">
-    <!---->
-    <button _ngcontent-c4="" class="btn btn-success" skip-disable="" type="button">
-        Chuyển Nhà Bếp
-    </button>
-    
-</div>
-
-<!---->
-
-<!---->
-<div _ngcontent-c4="" class="support">
-    <ul _ngcontent-c4="">
-        <li _ngcontent-c4=""><i _ngcontent-c4="" class="fa fa-phone"></i> Hỗ trợ khách hàng 1800 6162</li>
-        <li _ngcontent-c4=""><i _ngcontent-c4="" class="fa fa-map-marker"></i> Chi nhánh trung tâm</li>
-    </ul>
-</div>
-</div>
-
-
-<div _ngcontent-c4="" class="col-left">
-    <!-- categories product list -->
-    <!----><kv-cashier-menu-container _ngcontent-c4="" _nghost-c10="">
-        <div _ngcontent-c10="" class="list-filter">
-            <div _ngcontent-c10="" class="wrap-show-buttons">
-                <div _ngcontent-c10="" class="show-buttons" id="menu-item">
-                    <!-- content list menu-type -->
-                    <!---->        
-                </div>
-                <!---->
             </div>
+
         </div>
-        <!-- product list -->
-        <div _ngcontent-c10="" class="product-list product-list-menu">
-            <kv-cashier-product-list _ngcontent-c10="" _nghost-c28="">
-                <ks-swiper-container _ngcontent-c28="">
-                    <div class="swiper-container swiper-container-horizontal">
-                        <div class="swiper-wrapper" style="transition-duration: 0ms;">
+        
 
-                            <!----><ks-swiper-slide _ngcontent-c28="" class="swiper-slide swiper-slide-active" style="width: 744px;"><div>
-                                <ul id='list-item'>
-                                    <!-- content list menu -->
-                                </ul>
-                            </div></ks-swiper-slide>
+        <!----><div _ngcontent-c4="" class="wrap-button three-buttons">
+            <!---->
+            <button _ngcontent-c4="" class="btn btn-success" skip-disable="" type="button">
+                Chuyển Nhà Bếp
+            </button>
 
-                        </div>
-                        <div class="swiper-pagination"></div>
+        </div>
+
+        <!---->
+
+        <!---->
+        <div _ngcontent-c4="" class="support">
+            <ul _ngcontent-c4="">
+                <li _ngcontent-c4=""><i _ngcontent-c4="" class="fa fa-phone"></i> Hỗ trợ khách hàng 1800 6162</li>
+                <li _ngcontent-c4=""><i _ngcontent-c4="" class="fa fa-map-marker"></i> Chi nhánh trung tâm</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div _ngcontent-c4="" class="col-left">
+        <!-- categories product list -->
+        <!----><kv-cashier-menu-container _ngcontent-c4="" _nghost-c10="">
+            <div _ngcontent-c10="" class="list-filter">
+                <div _ngcontent-c10="" class="wrap-show-buttons">
+                    <div _ngcontent-c10="" class="show-buttons" id="menu-item">
+                        <!-- content list menu-type -->
+                        <!---->        
                     </div>
-                </ks-swiper-container>
-                <div _ngcontent-c28="" class="hidden-item"></div>
-                <div _ngcontent-c28="" class="swiper-paging"><strong _ngcontent-c28="">1</strong>/2</div>
-                <!----><button _ngcontent-c28="" class="move-prev" disabled=""><i _ngcontent-c28="" class="fa fa-chevron-circle-left"></i></button>
-                <!----><button _ngcontent-c28="" class="move-next"><i _ngcontent-c28="" class="fa fa-chevron-circle-right"></i></button>
-            </kv-cashier-product-list>
-        </div>
-    </kv-cashier-menu-container>
+                    <!---->
+                </div>
+            </div>
+            <!-- product list -->
+            <div _ngcontent-c10="" class="product-list product-list-menu">
+                <kv-cashier-product-list _ngcontent-c10="" _nghost-c28="">
+                    <ks-swiper-container _ngcontent-c28="">
+                        <div class="swiper-container swiper-container-horizontal">
+                            <div class="swiper-wrapper" style="transition-duration: 0ms;">
 
-    <!---->
-    @include('frontend.order.item-list')
-    @include('frontend.order.menu-item')
-    @include('frontend.order.list-order')
-</div>
+                                <!----><ks-swiper-slide _ngcontent-c28="" class="swiper-slide swiper-slide-active" style="width: 744px;"><div>
+                                    <ul id='list-item'>
+                                        <!-- content list menu -->
+                                    </ul>
+                                </div></ks-swiper-slide>
+
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </ks-swiper-container>
+                    <div _ngcontent-c28="" class="hidden-item"></div>
+                    <div _ngcontent-c28="" class="swiper-paging"><strong _ngcontent-c28="">1</strong>/2</div>
+                    <!----><button _ngcontent-c28="" class="move-prev" disabled=""><i _ngcontent-c28="" class="fa fa-chevron-circle-left"></i></button>
+                    <!----><button _ngcontent-c28="" class="move-next"><i _ngcontent-c28="" class="fa fa-chevron-circle-right"></i></button>
+                </kv-cashier-product-list>
+            </div>
+        </kv-cashier-menu-container>
+
+        <!---->
+        @include('frontend.order.item-list')
+        @include('frontend.order.menu-item')
+        @include('frontend.order.list-order')
+    </div>
 </div>
 
 <!-- @include('frontend.order.payment') -->
@@ -239,7 +217,7 @@
     }
 
     //
-    var max_fields = 10;
+    var max_fields = 100;
     var wrapper    = $("#order"); //Fields wrapper
     $(wrapper).empty();
     var x          = 1;
@@ -253,34 +231,32 @@
         var row = $("#list-order").contents().clone();
         $(row).find('.image-item2').attr('src',image);
         $(row).find('.name-item2').html(name);
+        $(row).find('.product-price2').text(price);
         x++;
         if(x < max_fields&& x>1){
-            
+
             $(wrapper).append(row);
         }
     });
-    //
 
-//     $(document).on("click","li.item-temp1",function(){
-//         var i;
-//         var image = $(this).find('.image-item').attr('src');
-//         var name = $(this).find("span.product-name").text();
-//         var price = $(this).find("span.product-price").text();
-// //////////////
-// var order = $('#order');
-// $(order).empty();
-// {
-//     var item= $('#list-order').contents().clone();
-//     $(item).find('.image-item2').attr('src',image);
-//     $(item).find('.name-item2').html(name);
-//     $(order).append($(item));
-// }
+    // $(document).on("click","btn-success",function(){
+    //     $.ajax({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         url         : '{{route("food/order")}}',
+    //         dataType    : 'JSON',
+    //         type        : 'POST', 
+    //         data: {}
+    //         success: function(data){
+                
+    //         },
+    //         error: function (xhr, ajaxOptions, thrownError) {
+    //             console.log('Error '+xhr.status+' | '+thrownError);
+    //         },
+    //     });
+    // });
 
-// });
-
-    // var order= $('#list-order').contents().clone();
-    // $(order).find('.image-item2').attr('src');
-    // console.log($(order).find('.image-item2'));
 </script>
 
 @endsection
