@@ -82,7 +82,6 @@
 		'App\Frontend\Http\Controllers\homecontroller\apilogin'=>'1',
 		'App\Frontend\Http\Controllers\homecontroller\test'=>'1',
 		'App\Frontend\Http\Controllers\ordercontroller\index'=>'1',
-		'App\Frontend\Http\Controllers\ordercontroller\getfoodbystoreid'=>'1',
 	],
 	'1'=>[ //System Administrator 
 		'\broadcastcontroller\authenticate'=>'1',
@@ -165,7 +164,6 @@
 		'App\Frontend\Http\Controllers\homecontroller\apilogin'=>'1',
 		'App\Frontend\Http\Controllers\homecontroller\test'=>'1',
 		'App\Frontend\Http\Controllers\ordercontroller\index'=>'1',
-		'App\Frontend\Http\Controllers\ordercontroller\getfoodbystoreid'=>'1',
 	],
 	'2'=>[ //Mananger 
 		'\broadcastcontroller\authenticate'=>'1',
@@ -248,7 +246,6 @@
 		'App\Frontend\Http\Controllers\homecontroller\apilogin'=>'1',
 		'App\Frontend\Http\Controllers\homecontroller\test'=>'1',
 		'App\Frontend\Http\Controllers\ordercontroller\index'=>'1',
-		'App\Frontend\Http\Controllers\ordercontroller\getfoodbystoreid'=>'1',
 	],
 	'3'=>[ //User 
 		'\broadcastcontroller\authenticate'=>'1',
@@ -331,7 +328,6 @@
 		'App\Frontend\Http\Controllers\homecontroller\apilogin'=>'1',
 		'App\Frontend\Http\Controllers\homecontroller\test'=>'1',
 		'App\Frontend\Http\Controllers\ordercontroller\index'=>'1',
-		'App\Frontend\Http\Controllers\ordercontroller\getfoodbystoreid'=>'1',
 	],
 	'4'=>[ //Nhân viên approve 
 		'\broadcastcontroller\authenticate'=>'1',
@@ -414,7 +410,6 @@
 		'App\Frontend\Http\Controllers\homecontroller\apilogin'=>'1',
 		'App\Frontend\Http\Controllers\homecontroller\test'=>'1',
 		'App\Frontend\Http\Controllers\ordercontroller\index'=>'1',
-		'App\Frontend\Http\Controllers\ordercontroller\getfoodbystoreid'=>'1',
 	],
 	'5'=>[ //Nhân viên bếp 
 		'\broadcastcontroller\authenticate'=>'1',
@@ -497,7 +492,6 @@
 		'App\Frontend\Http\Controllers\homecontroller\apilogin'=>'1',
 		'App\Frontend\Http\Controllers\homecontroller\test'=>'1',
 		'App\Frontend\Http\Controllers\ordercontroller\index'=>'1',
-		'App\Frontend\Http\Controllers\ordercontroller\getfoodbystoreid'=>'1',
 	],
 	'6'=>[ //Nhân viên thu ngân 
 		'\broadcastcontroller\authenticate'=>'1',
@@ -580,7 +574,6 @@
 		'App\Frontend\Http\Controllers\homecontroller\apilogin'=>'1',
 		'App\Frontend\Http\Controllers\homecontroller\test'=>'1',
 		'App\Frontend\Http\Controllers\ordercontroller\index'=>'1',
-		'App\Frontend\Http\Controllers\ordercontroller\getfoodbystoreid'=>'1',
 	],
 	'10'=>[ //OtherParty 
 		'\broadcastcontroller\authenticate'=>'1',
@@ -663,6 +656,5 @@
 		'App\Frontend\Http\Controllers\homecontroller\apilogin'=>'1',
 		'App\Frontend\Http\Controllers\homecontroller\test'=>'1',
 		'App\Frontend\Http\Controllers\ordercontroller\index'=>'1',
-		'App\Frontend\Http\Controllers\ordercontroller\getfoodbystoreid'=>'1',
 	],
 ];

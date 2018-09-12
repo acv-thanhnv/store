@@ -1,12 +1,12 @@
 <style type="text/css">
     .image-item2{
-        width: 20px;
-        height: 20px;
+        width: 40px;
+        height: 40px;
     }
 </style>
 <div id="list-order">
-    <div _ngcontent-c7="" class="item-order">
-        <div _ngcontent-c7="" class="row-list" id="153622183440520">
+    <div _ngcontent-c7="" class="item-order" order-id="" order-name="" order-image="" order-price="">
+        <div _ngcontent-c7="" class="row-list" id="">
             <div _ngcontent-c7="" class="cell-count">
             </div>
             <div _ngcontent-c7="" class="cell-action">
@@ -20,7 +20,7 @@
                     <img _ngcontent-c28="" class="image-item2" src="">
                 </div>
                 <div _ngcontent-c7="" class="cell-name full">
-                    <h4 _ngcontent-c7="" class="name-item2">
+                    <h4 _ngcontent-c7="" class="name-item2" order-name="">
 
                     </h4>
                     <div _ngcontent-c7="" class="wrap-note" href="#">
@@ -58,7 +58,7 @@
                 </div>
                 <div _ngcontent-c7="" class="cell-change-price">
                     <div _ngcontent-c7="" class="popup-anchor">
-                        <button _ngcontent-c7="" class="product-price2">
+                        <button _ngcontent-c7="" class="product-price2" order-price="">
 
                         </button>
                         <!---->

@@ -92,7 +92,7 @@
 
         <!----><div _ngcontent-c4="" class="wrap-button three-buttons">
             <!---->
-            <button _ngcontent-c4="" class="btn btn-success" skip-disable="" type="button">
+            <button _ngcontent-c4="" class="btn btn-success btn-order" skip-disable="" type="button">
                 Chuyển Nhà Bếp
             </button>
 
@@ -198,9 +198,16 @@
         data.data.forEach(function(obj) {
             var item = $("#list-item-temp").contents().clone();
             $(item).find('.product-title').attr('title', obj.name);
+            $(item).find('.id-item1').attr('id', obj.id);
             $(item).find('.image-item').attr('src', obj.image);
             $(item).find('.product-name').html(obj.name);
-            $(item).find('.product-price').html(obj.price);            
+            $(item).find('.product-price').html(obj.price);        
+            
+            $(".menulist").find('.item-temp1').attr('item-id', obj.id);
+            $(".menulist").find('.item-temp1').attr('item-name', obj.name);
+            $(".menulist").find('.item-temp1').attr('item-image', obj.image);
+            $(".menulist").find('.item-temp1').attr('item-price', obj.price);    
+        
 
             $(ul).append($(item));
         });
@@ -223,15 +230,21 @@
     var x          = 1;
     //insert prop
     $(document).on("click","li.item-temp1",function(event){
-
+        var id = $(".menulist").find('.item-temp1').attr('item-id');
         var image = $(this).find('.image-item').attr('src');
         var name = $(this).find("span.product-name").text();
         var price = $(this).find("span.product-price").text();
 
         var row = $("#list-order").contents().clone();
+        $(row).find('.row-list').attr('id', id);
         $(row).find('.image-item2').attr('src',image);
         $(row).find('.name-item2').html(name);
         $(row).find('.product-price2').text(price);
+           
+        $(row).attr('order-id', id);
+        $(row).attr('order-name', name);
+        $(row).attr('order-price', price);  
+
         x++;
         if(x < max_fields&& x>1){
 
@@ -239,23 +252,51 @@
         }
     });
 
-    // $(document).on("click","btn-success",function(){
-    //     $.ajax({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //         url         : '{{route("food/order")}}',
-    //         dataType    : 'JSON',
-    //         type        : 'POST', 
-    //         data: {}
-    //         success: function(data){
+    $(document).on("click",".btn-order",function(){
+        
+        var storeId = 1;
+        var orderId = 1;
+        var locationId = 1;
+        var description = 'aaajl';
+        var totalPrice = 10000;
+        var rows= $('.col-right-container.item-order');
+        //console.log(rows);
+        var entity =[];
+        for(var i=0; i<10; i++){
+            var id = 'abc';
+            var name = "aaaa";
+            var avatar = "http";
+            var price = '5000';
+            var quantity = 1;
+            
+            // var name $(rows[i]).attr('order-name');
+            // var  $(rows[i]).find().attr('order-');
+            // var $(rows[i]).attr('order-price');
+            // 
+            // 
+            var a = {id:id, name:name, avatar:avatar, price:price, quantity:quantity};
+            entity.push( a);
+
+
+        }
+        entity = JSON.stringify(entity);
+
+        $.ajax({
+            // headers: {
+            //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            // },
+            url         : '{{route("food/order")}}',
+            dataType    : 'JSON',
+            type        : 'GET', 
+            data: {storeId:storeId, orderId:orderId, locationId:locationId, description:description, entity:entity, totalPrice:totalPrice},
+            success: function(data){
                 
-    //         },
-    //         error: function (xhr, ajaxOptions, thrownError) {
-    //             console.log('Error '+xhr.status+' | '+thrownError);
-    //         },
-    //     });
-    // });
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Error '+xhr.status+' | '+thrownError);
+            },
+        });
+    });
 
 </script>
 

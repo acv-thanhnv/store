@@ -2,8 +2,9 @@
 <div id="template-meulist" style="display: none">
     <div class="menulist">
         <ul _ngcontent-c28="" id="list-item-temp">
-
-            <li _ngcontent-c28="" class="item-temp1" item-name="" item-price="">
+            
+            <li _ngcontent-c28="" class="item-temp1" item-id="" item-name="" item-image="" item-price="">
+                <input type="hidden" class="id-item1" id="">
                 <a _ngcontent-c28="" title="" class="product-title">
                     <div _ngcontent-c28="" class="product-img">
                         <img _ngcontent-c28="" kvfallbackimg="" class="image-item" src="">
