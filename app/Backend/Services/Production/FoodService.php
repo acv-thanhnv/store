@@ -32,7 +32,17 @@ class FoodService extends BaseService implements FoodServiceInterface
     }
     public function addFood($obj)
     {
-        SDB::table("store_entity_Foods")->insert($obj);
+        $idFood = SDB::table("store_entities")->insertGetId($obj);
+        return $idFood;
+    }
+    public function addProp($obj)
+    {
+        $idProp = SDB::table("store_entity_properties")->insertGetId($obj);
+        return $idProp;
+    }
+    public function addPropValue($obj)
+    {
+        SDB::table("store_entity_property_values")->insert($obj);
     }
     public function getById($id)
     {
@@ -70,7 +80,7 @@ class FoodService extends BaseService implements FoodServiceInterface
     }
     public function getDataType()
     {
-        $arrData = SDB::table("store_Food_data_types")->get();
+        $arrData = SDB::table("store_prop_data_types")->get();
         return $arrData;
     }
 }

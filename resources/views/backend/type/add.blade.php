@@ -159,24 +159,25 @@
 			var sort = $(rows[i]).find('input[name=sort]').val();
 			arrProp[i] = {label : label,data:data,sort:sort};
 		}
-        $.ajax({
-        	type: 'POST',
-        	headers: {
-        		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        	},
-        	url: "{{route('postAddType')}}",
-        	data:{name:name,description:description,store_id:idStore,arrProp:arrProp},
-        	success: function (result) {
-        		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
-        			//call parent and close modal
-        			parent.$('#modal-add').iziModal('close');
-        			localStorage.setItem("Message","Add new type successful!");
-        			parent.location.reload();
-        		}else{
-        			_commonShowError(result.data);
-        		}
-			}
-		});
+		console.log(arrProp);
+  //       $.ajax({
+  //       	type: 'POST',
+  //       	headers: {
+  //       		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //       	},
+  //       	url: "{{route('postAddType')}}",
+  //       	data:{name:name,description:description,store_id:idStore,arrProp:arrProp},
+  //       	success: function (result) {
+  //       		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
+  //       			//call parent and close modal
+  //       			parent.$('#modal-add').iziModal('close');
+  //       			localStorage.setItem("Message","Add new type successful!");
+  //       			parent.location.reload();
+  //       		}else{
+  //       			_commonShowError(result.data);
+  //       		}
+		// 	}
+		// });
 	})
 </script>
 @endpush

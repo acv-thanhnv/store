@@ -12,6 +12,8 @@ interface FoodServiceInterface
 	//Food
 	public function getFood($idStore);
 	public function addFood($obj);
+	public function addProp($obj);
+	public function addPropValue($obj);
 	public function getById($id);
 	public function editFood($obj);
 	public function deleteFood($id);

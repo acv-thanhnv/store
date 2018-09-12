@@ -31,6 +31,18 @@
 		background: #172D44 !important;
 		color: white !important;
 	}
+	.img-food{
+		width: 100px;
+		height: 70px;
+	}
+	td.details-control {
+		background: url('backend/template1/img/details_open.png') no-repeat center center;
+		width: 40px;
+		cursor: pointer;
+	}
+	tr.shown td.details-control {
+		background: url('backend/template1/img/details_close.png') no-repeat center center;
+	}
 </style>
 @endpush
 @extends("layouts.backend")
@@ -60,39 +72,38 @@
         <!--Content-->
 
         <div class="x_content">
-            <div class="table-responsive">
+            <div class="">
                 <table class="table table-striped jambo_table table-hover table-user" id="dataTable">
                     <thead>
                     <tr class="headings">
                         <th style="text-align: center">
                             <input type="checkbox" id="check-all" class="flat">
                         </th>
+                        <th>Properties</th>
                         <th class="column-title">Name </th>
-                        <th class="column-title">Description </th>
-                        <th class="column-title">Properties</th>
+                        <th class="column-title">Image </th>
+                        <th class="column-title">Price</th>
+                        <th class="column-title">Menu</th>
                         <th class="column-title">Edit </th>
                         <th class="column-title">Delete </th>
                     </tr>
                     </thead>
                     <!--Tbody-->
                     <tbody id="tbody">
-                    	@foreach($arrType as $obj)
+                    	@foreach($arrFood as $obj)
 						<tr>
 							<td style="text-align: center" class="check-delete">
 								<input type="checkbox" value="{{$obj->id}}">
 							</td>
+							<td></td>
 							<td>{{$obj->name}}</td>
-							<td>{{$obj->description}}</td>
 							<td>
-								@if($obj->prop == NULL)
-									{{"None"}}
-								@else 
-									@foreach($obj->prop as $prop)
-										- {{$prop->property_label}}
-										<br>
-									@endforeach
-								@endif
+								<img class="img-food" src="{{$obj->image}}">
 							</td>
+							<td>
+								{{$obj->price}}
+							</td>
+							<td>Menu: {{$obj->menuName}}</td>
 							<td>
 								<button type="button" class="btn btn-primary edit round" data-id="{{$obj->id}}">
 									<i class="fa fa-pencil-square-o"></i>
@@ -142,8 +153,8 @@
 		focusInput	   : true,
 		title          : 'Type',
 		subtitle       :'Add',
-		width          : 750,
-		iframeHeight   : 400,
+		width          : 850,
+		iframeHeight   : 500,
 		headerColor    :"#405467",
 		icon           :"fa fa-user",
 		iconColor      :"#ECF0F1",
@@ -159,7 +170,7 @@
 		arrowKeys      :true,
 		iframe         : true,
 		iframeWidth    :400,
-		iframeURL      :"{{route('addType')}}"
+		iframeURL      :"{{route('addFood')}}"
 	});
 	//function edit
 	$(document).on('click', '.edit', function(event) {
@@ -305,15 +316,84 @@
 	//function dataTable
 	function dataTable()
 	{
-		$("#dataTable").DataTable({
+		//hiển thị bảng infor nhỏ
+        function format ( d ) {
+            // `d` is the original data object for the row
+            return '<table class="table table-hover" cellspacing="5px" border="0" style="padding-left:50px; width:50%">'+
+                '<tr>'+
+                    '<td><b>Property 1:</b></td>'+
+                    '<td>'+d.date+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td><b>Property 2:</b></td>'+
+                    '<td>'+d.gt+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td><b>Property 3:</b></td>'+
+                    '<td>'+d.dc+'</td>'+
+                '</tr>'+
+            '</table>';
+        }
+		var groupColumn = 5;
+		var table = $('#dataTable').DataTable({
 			"columnDefs": [
-                { 
+				{ 
+					"visible": false, 
+					"targets": groupColumn 
+				},
+				{ 
                     "orderable": false ,
-                    "targets": [0,3,4]
+                    "targets": [0,1,5,6,7]
                 }
-            ],
-            order: []
-		});
+			],
+			order: [],
+			"columns": [
+				{ "data": "check" },
+				{
+					"className":      'details-control',
+					"orderable":      false,
+					"data":           null,
+					"defaultContent": ''
+				},
+				{ "data": "name" },
+				{ "data": "image" },
+				{ "data": "price" },
+				{ "data": "menu" },
+				{ "data": "edit" },
+				{ "data": "delete" }
+			],
+			"drawCallback": function ( settings ) {
+				var api = this.api();
+				var rows = api.rows( {page:'current'} ).nodes();
+				var last=null;
+
+				api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
+					if ( last !== group ) {
+						$(rows).eq( i ).before(
+							'<tr class="group"><td colspan="5">'+group+'</td></tr>'
+							);
+
+						last = group;
+					}
+				} );
+			}
+		} );
+		// Add event listener for opening and closing details
+		$('#dataTable tbody').on('click', 'td.details-control', function () {
+			var tr = $(this).closest('tr');
+			var row = table.row( tr );
+
+			if ( row.child.isShown() ) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child( format(row.data()) ).show();
+                    tr.addClass('shown');
+                }
+        } );
 	}
 </script>
 @endpush
