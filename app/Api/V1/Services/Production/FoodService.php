@@ -77,6 +77,7 @@ class FoodService extends BaseService implements FoodServiceInterface
             if (!empty($data)) {
                 SDB::table('store_order_detail')->insert($data);
             }
+            echo 'dsds';die;
             event(new OrderPusherEvent($storeId, $newOrderId,$locationId, $totalPrice,$now,$entity));
             SDB::commit();
         } catch (\Exception $e) {
