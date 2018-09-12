@@ -16,7 +16,7 @@
         <div _ngcontent-c7="" class="row-list" id="153622183440520">
             <div _ngcontent-c7="" class="cell-order"></div>
             <div _ngcontent-c7="" class="cell-action">
-                <!----><a _ngcontent-c7="" class="fas fa-times-circle" href="#" title="Xóa hàng hóa">
+                <a _ngcontent-c7="" class="fas fa-times-circle" href="#" title="Xóa hàng hóa">
                     <i _ngcontent-c7=""></i>
                 </a>
             </div>

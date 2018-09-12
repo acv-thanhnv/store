@@ -9,7 +9,9 @@
 namespace App\Api\V1\Services\Production;
 
 use App\Api\V1\Services\Interfaces\FoodServiceInterface;
+use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
+use App\Core\Entities\DataResultCollection;
 use App\Core\Events\OrderPusherEvent;
 use Illuminate\Http\Request;
 
@@ -46,6 +48,7 @@ class FoodService extends BaseService implements FoodServiceInterface
 
     public function orderToWaiter(Request $request)
     {
+        $result = new DataResultCollection();
         //event to
         $response = $request->all();
         $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
@@ -77,12 +80,15 @@ class FoodService extends BaseService implements FoodServiceInterface
             if (!empty($data)) {
                 SDB::table('store_order_detail')->insert($data);
             }
-            echo 'dsds';die;
             event(new OrderPusherEvent($storeId, $newOrderId,$locationId, $totalPrice,$now,$entity));
             SDB::commit();
+            $result->status = SDBStatusCode::OK;
         } catch (\Exception $e) {
             SDB::rollBack();
+            $result->status = SDBStatusCode::Excep;
+            $result->message = $e->getMessage();
         }
+        return $result;
     }
 
     public function orderToChef(Request $request)
