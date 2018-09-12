@@ -50,6 +50,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $response = $request->all();
         $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
         $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
+        $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
         $entity = json_decode($response['entity']);
         //insert into Database
         $dataOrder = array(
@@ -59,12 +60,13 @@ class FoodService extends BaseService implements FoodServiceInterface
             "status" => 2,
             "priority" => 1
         );
+        $now =  now()->toDateTimeString();
         try {
             SDB::beginTransaction();
             $newOrderId = SDB::table('store_order')->insertGetId($dataOrder);
             $data = array();
             if (!empty($entity)) {
-                foreach ($entity as $order) {
+                foreach ($entity as $key=>$order) {
                     $data[] = array(
                         'order_id' => $newOrderId,
                         'entities_id' => isset($order->id) ? $order->id : 0,
@@ -75,7 +77,7 @@ class FoodService extends BaseService implements FoodServiceInterface
             if (!empty($data)) {
                 SDB::table('store_order_detail')->insert($data);
             }
-            event(new OrderPusherEvent($storeId, $newOrderId,$locationId, $entity));
+            event(new OrderPusherEvent($storeId, $newOrderId,$locationId, $totalPrice,$now,$entity));
             SDB::commit();
         } catch (\Exception $e) {
             SDB::rollBack();
@@ -89,13 +91,14 @@ class FoodService extends BaseService implements FoodServiceInterface
         $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
         $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
         $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
+        $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
         $entity = json_decode($response['entity']);
         //Update Database
         $dataOrder = array(
             "status" => 3,
         );
         $newOrderId = SDB::table('store_order')->where('id',$orderId)->update($dataOrder);
-        event(new OrderPusherEvent($storeId, $orderId,$locationId, $entity));
+        event(new OrderPusherEvent($storeId, $orderId,$locationId,$totalPrice, $entity));
     }
     public function closeOrder(Request $request){
         //event to
@@ -103,6 +106,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
         $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
         $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
+        $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
         $entity = json_decode($response['entity']);
         //Update Database
         $dataOrder = array(

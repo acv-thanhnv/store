@@ -25,12 +25,16 @@ class OrderPusherEvent implements ShouldBroadcast
     public $orderId;
     public $locationId;
     public $entity;
-    public function __construct($storeId,$orderId,$locationId,$entity)
+    public $totalPrice;
+    public $dateTimeOrder;
+    public function __construct($storeId,$orderId,$locationId,$totalPrice,$now,$entity)
     {
         $this->storeId = $storeId;
         $this->entity = $entity;
         $this->orderId = $orderId;
         $this->locationId = $locationId;
+        $this->totalPrice = $totalPrice;
+        $this->dateTimeOrder = $now;
     }
     /**
      * The event's broadcast name.
