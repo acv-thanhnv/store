@@ -1,4 +1,9 @@
-
+<style type="text/css">
+    .image-item2{
+        width: 20px;
+        height: 20px;
+    }
+</style>
 <div id="list-order">
     <div _ngcontent-c7="" class="item-order">
         <div _ngcontent-c7="" class="row-list" id="153622183440520">

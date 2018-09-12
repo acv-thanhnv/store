@@ -86,7 +86,9 @@
 
             <kv-cashier-cart-list-item _ngcontent-c4="" _nghost-c7="">
                 <div _ngcontent-c7="" class="col-right-container">
-                    @include('frontend.order.list-order')
+                    <div id="order">
+
+                    </div>
 
                 </div>
 
@@ -170,7 +172,7 @@
     <!---->
     @include('frontend.order.item-list')
     @include('frontend.order.menu-item')
-    
+    @include('frontend.order.list-order')
 </div>
 </div>
 
@@ -235,22 +237,46 @@
             $(div).append($(item));
         });
     }
-    $(document).on("click","li.item-temp1",function(){
-        var i;
+
+    //
+    var max_fields = 10;
+    var wrapper    = $("#order"); //Fields wrapper
+    $(wrapper).empty();
+    var x          = 1;
+    //insert prop
+    $(document).on("click","li.item-temp1",function(event){
+
         var image = $(this).find('.image-item').attr('src');
         var name = $(this).find("span.product-name").text();
         var price = $(this).find("span.product-price").text();
-//////////////
-var order = $('#order');
-$(order).empty();
-{
-    var item= $('#list-order').contents().clone();
-    $(item).find('.image-item2').attr('src',image);
-    $(item).find('.name-item2').html(name);
-    $(order).append($(item));
-}
 
-});
+        var row = $("#list-order").contents().clone();
+        $(row).find('.image-item2').attr('src',image);
+        $(row).find('.name-item2').html(name);
+        x++;
+        if(x < max_fields&& x>1){
+            
+            $(wrapper).append(row);
+        }
+    });
+    //
+
+//     $(document).on("click","li.item-temp1",function(){
+//         var i;
+//         var image = $(this).find('.image-item').attr('src');
+//         var name = $(this).find("span.product-name").text();
+//         var price = $(this).find("span.product-price").text();
+// //////////////
+// var order = $('#order');
+// $(order).empty();
+// {
+//     var item= $('#list-order').contents().clone();
+//     $(item).find('.image-item2').attr('src',image);
+//     $(item).find('.name-item2').html(name);
+//     $(order).append($(item));
+// }
+
+// });
 
     // var order= $('#list-order').contents().clone();
     // $(order).find('.image-item2').attr('src');
