@@ -65,3 +65,6 @@ class OrderConst{
     const OrderChannelToChef = "to-chef";
     const OrderChefEventName = "order.chef";
 }
+class EntityProperty{
+    const maxField = 10;
+}
