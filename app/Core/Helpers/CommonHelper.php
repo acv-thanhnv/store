@@ -53,10 +53,11 @@ class CommonHelper
     public static function getExcelTemplatePath(){
         return base_path().'/resources/export_templates/';
     }
-    public static function getOrderEventName($storeId){
+    public static function getOrderEventName($storeId,$orderChannel){
         $hash = md5 ($storeId);
-        return $hash."-".OrderConst::OrderChannelToWaiter;
+        return $hash."-".$orderChannel;
     }
+
     public static function existsStore($storeId){
         $store = SDB::table('store_store')->where('id',$storeId)->first();
         if(!empty($store)){

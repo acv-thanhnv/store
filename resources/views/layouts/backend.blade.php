@@ -72,6 +72,8 @@
                             <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li><a href="{{route('backend_template')}}">Dashboard</a></li>
+                                    <li><a href="{{route('dashboardWaiter')}}">Waiter</a></li>
+                                    <li><a href="{{route('dashboardChef')}}">Chef</a></li>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-book"></i> Menu   <span class="fa fa-chevron-down"></span></a>

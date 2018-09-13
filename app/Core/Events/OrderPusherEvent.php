@@ -29,7 +29,8 @@ class OrderPusherEvent implements ShouldBroadcast
     public $entity;
     public $totalPrice;
     public $dateTimeOrder;
-    public function __construct($storeId,$orderId,$locationId,$totalPrice,$now,$entity)
+    public $requestType;
+    public function __construct($storeId,$orderId,$locationId,$totalPrice,$requestType,$now,$entity)
     {
         $this->storeId = $storeId;
         $this->entity = $entity;
@@ -37,6 +38,7 @@ class OrderPusherEvent implements ShouldBroadcast
         $this->locationId = $locationId;
         $this->totalPrice = $totalPrice;
         $this->dateTimeOrder = $now;
+        $this->requestType =  $requestType;
     }
     /**
      * The event's broadcast name.
@@ -54,6 +56,6 @@ class OrderPusherEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId));
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OrderChannelToWaiter));
     }
 }
