@@ -25,9 +25,11 @@ class DashboardController extends Controller
         return view('home');
     }
     public function dashboardWaiter(){
-        return view('backend.dashboard.dashboard_waiter');
+        $storeId = 1;
+        return view('backend.dashboard.dashboard_waiter',['storeId'=>$storeId]);
     }
     public function dashboardChef(){
-        return view('backend.dashboard.dashboard_waiter');
+        $storeId = 2;
+        return view('backend.dashboard.dashboard_chef',['storeId'=>$storeId]);
     }
 }

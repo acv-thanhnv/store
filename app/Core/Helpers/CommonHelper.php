@@ -6,6 +6,8 @@ namespace App\Core\Helpers;
  * Date: 6/30/2018
  * Time: 2:05 AM
  */
+use App\Core\Common\OrderConst;
+use App\Core\Dao\SDB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 class CommonHelper
@@ -50,6 +52,17 @@ class CommonHelper
     }
     public static function getExcelTemplatePath(){
         return base_path().'/resources/export_templates/';
+    }
+    public static function getOrderEventName($storeId){
+        $hash = md5 ($storeId);
+        return $hash."-".OrderConst::OrderChannelToWaiter;
+    }
+    public static function existsStore($storeId){
+        $store = SDB::table('store_store')->where('id',$storeId)->first();
+        if(!empty($store)){
+            return true;
+        }
+        return false;
     }
 
 }

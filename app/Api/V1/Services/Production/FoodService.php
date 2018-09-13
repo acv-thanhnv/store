@@ -13,6 +13,7 @@ use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Events\OrderPusherEvent;
+use App\Core\Helpers\CommonHelper;
 use Illuminate\Http\Request;
 
 class FoodService extends BaseService implements FoodServiceInterface
@@ -55,44 +56,51 @@ class FoodService extends BaseService implements FoodServiceInterface
         $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
         $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
         $entity = json_decode($response['entity']);
-        //insert into Database
-        $dataOrder = array(
-            "store_id" => $storeId,
-            "location_id" => $locationId,
-            "datetime_order" => now(),
-            "status" => 2,
-            "priority" => 1
-        );
-        $now =  now()->toDateTimeString();
-        try {
-            SDB::beginTransaction();
-            $newOrderId = SDB::table('store_order')->insertGetId($dataOrder);
-            $data = array();
-            if (!empty($entity)) {
-                foreach ($entity as $key=>$order) {
-                    $data[] = array(
-                        'order_id' => $newOrderId,
-                        'entities_id' => isset($order->id) ? $order->id : 0,
-                        'quantity' => isset($order->quantity) ? $order->quantity : 0
-                    );
+        if (CommonHelper::existsStore($storeId)) {
+            //insert into Database
+            $dataOrder = array(
+                "store_id" => $storeId,
+                "location_id" => $locationId,
+                "datetime_order" => now(),
+                "status" => 2,
+                "priority" => 1
+            );
+            $now = now()->toDateTimeString();
+            try {
+                SDB::beginTransaction();
+                $newOrderId = SDB::table('store_order')->insertGetId($dataOrder);
+                $data = array();
+                if (!empty($entity)) {
+                    foreach ($entity as $key => $order) {
+                        $data[] = array(
+                            'order_id' => $newOrderId,
+                            'entities_id' => isset($order->id) ? $order->id : 0,
+                            'quantity' => isset($order->quantity) ? $order->quantity : 0
+                        );
+                    }
                 }
+                if (!empty($data)) {
+                    SDB::table('store_order_detail')->insert($data);
+                }
+                event(new OrderPusherEvent($storeId, $newOrderId, $locationId, $totalPrice, $now, $entity));
+                SDB::commit();
+                $result->status = SDBStatusCode::OK;
+            } catch (\Exception $e) {
+                SDB::rollBack();
+                $result->status = SDBStatusCode::Excep;
+                $result->message = $e->getMessage();
             }
-            if (!empty($data)) {
-                SDB::table('store_order_detail')->insert($data);
-            }
-            event(new OrderPusherEvent($storeId, $newOrderId,$locationId, $totalPrice,$now,$entity));
-            SDB::commit();
-            $result->status = SDBStatusCode::OK;
-        } catch (\Exception $e) {
-            SDB::rollBack();
+        }else{
             $result->status = SDBStatusCode::Excep;
-            $result->message = $e->getMessage();
+            $result->message = "Store not exists";
         }
+
         return $result;
     }
 
     public function orderToChef(Request $request)
     {
+        $result = new DataResultCollection();
         //event to
         $response = $request->all();
         $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
@@ -104,10 +112,20 @@ class FoodService extends BaseService implements FoodServiceInterface
         $dataOrder = array(
             "status" => 3,
         );
-        $newOrderId = SDB::table('store_order')->where('id',$orderId)->update($dataOrder);
-        event(new OrderPusherEvent($storeId, $orderId,$locationId,$totalPrice, $entity));
+        $now = now()->toDateTimeString();
+        if (CommonHelper::existsStore($storeId)) {
+            SDB::table('store_order')->where('id', $orderId)->update($dataOrder);
+            event(new OrderPusherEvent($storeId, $orderId, $locationId, $totalPrice, $now, $entity));
+            $result->status = SDBStatusCode::OK;
+        } else {
+            $result->status = SDBStatusCode::Excep;
+            $result->message = "Store not exists";
+        }
+        return $result;
     }
-    public function closeOrder(Request $request){
+
+    public function closeOrder(Request $request)
+    {
         //event to
         $response = $request->all();
         $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
@@ -119,7 +137,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $dataOrder = array(
             "status" => 4,
         );
-        $newOrderId = SDB::table('store_order')->where('id',$orderId)->update($dataOrder);
+        $newOrderId = SDB::table('store_order')->where('id', $orderId)->update($dataOrder);
     }
 
     protected function buildFoodListByStoreId($foodList, $storeId)
