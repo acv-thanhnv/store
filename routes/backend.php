@@ -118,8 +118,10 @@
             Route::get("deleteAllFood","FoodController@deleteAllFood")->name("deleteAllFood");
         });
         //Dashboard
-        Route::group(["prefix" => "DashBoard"],function(){
+        Route::group(["prefix" => "dashboard"],function(){
             Route::get("dashboard-waiter","DashboardController@dashboardWaiter")->name("dashboardWaiter");
+            Route::get("dashboard-chef","DashboardController@dashboardChef")->name("dashboardChef");
+
         });
     });
 

@@ -41,9 +41,8 @@ class FoodController extends Controller
         return ResponseHelper::JsonDataResult($result);
     }
     public function orderToChef(Request $request){
-        $this->service->orderToChef($request);
-        $result  = new DataResultCollection ();
-        $result->status =  SDBStatusCode::OK;
+        $result  = $this->service->orderToChef($request);
+        return ResponseHelper::JsonDataResult($result);
     }
     public function closeOrder(Request $request){
         $this->service->closeOrder($request);

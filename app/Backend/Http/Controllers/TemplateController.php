@@ -10,6 +10,7 @@ use App\Core\Entities\DataResultCollection;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -40,6 +41,7 @@ class TemplateController extends Controller
     public function index()
     {
         return view('backend.template.index');
+
     }
 
     public function form()
