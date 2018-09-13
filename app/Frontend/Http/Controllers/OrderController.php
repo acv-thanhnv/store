@@ -26,4 +26,9 @@ class OrderController extends Controller
         return view('frontend.order.index');
     }
 
+    public function index2(){
+        return view('frontend.foodorder.index');
+    }
+
+
 }

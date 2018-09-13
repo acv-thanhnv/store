@@ -21,3 +21,5 @@
 
     Route::get('/order', 'OrderController@index')->name('order');
 
+    Route::get('/foodorder', 'OrderController@index2');
+

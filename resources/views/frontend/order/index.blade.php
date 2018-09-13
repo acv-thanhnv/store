@@ -5,7 +5,9 @@
 <kv-root _nghost-c0="" ng-version="4.4.7" class=""><!---->
     <!---->
     <!---->
-    <router-outlet _ngcontent-c0=""></router-outlet>
+    <router-outlet _ngcontent-c0="">
+
+    </router-outlet>
     <kv-cashier-page _nghost-c4=""><!---->
         <div _ngcontent-c4="" class="introduce-app">
             <button _ngcontent-c4="" class="btn-del"><i _ngcontent-c4="" class="fal fa-trash-alt"></i></button>
@@ -192,21 +194,21 @@
     });
 
     $(document).on('click', '.product-type', function(){
-            var id = $(this).attr('id');
-            $.ajax({
-                url         : '{{route("food/list-by-menu")}}'+'/'+id,
-                dataType    : 'JSON',
-                type        : 'GET', 
-                data: {id:id},
-                success: function(data){
-                    console.log(data.data);
+        var id = $(this).attr('id');
+        $.ajax({
+            url         : '{{route("food/list-by-menu")}}'+'/'+id,
+            dataType    : 'JSON',
+            type        : 'GET', 
+            data: {id:id},
+            success: function(data){
+                console.log(data.data);
                     //genFoodByMenuId();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log('Error '+xhr.status+' | '+thrownError);
                 },
             });
-        });
+    });
 
     function genFoodByStoreId(data)
     {
@@ -293,6 +295,12 @@
         }
     });
 
+    $(document).on("click",".delete-item-order",function(event){
+        $(this).parents(".item-order").remove();
+        x--;
+        
+    });
+
     $(document).on("click",".btn-order",function(){
 
         var storeId = 1;
@@ -333,8 +341,40 @@
         });
     });
 
-        
 
-    </script>
+    $(document).on("click", "up", function(){
 
-    @endsection
+    });
+
+    $(document).on("click", "down", function(){
+
+    }); 
+
+//soluong
+//
+    //update();
+    $(document).on("change",".quantity",function() {
+    update();
+    });
+
+    function update() {
+        var sum = 0.0;
+        var quantity;
+        $('.item-order').each(function() {
+
+          quantity = $(this).find('.quantity').val();
+          var price = parseFloat($(this).find('.product-price2').attr('order-price').replace(',', '.'));
+          var amount = $(this).find('.price-amount').text();
+          //console.log(amount);
+          amount = (quantity * price);
+          console.log(quantity);
+
+          // sum += amount;
+          // $(this).find('.amount').text('' + amount + ' грн');
+      });
+        // $('.total').text(sum + ' грн');
+    }
+    
+</script>
+
+@endsection
