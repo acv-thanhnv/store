@@ -43,6 +43,10 @@
 	tr.shown td.details-control {
 		background: url('backend/template1/img/details_close.png') no-repeat center center;
 	}
+	tr.group,tr.group:hover {
+		background-color: #ddd !important;
+		font-weight: bold;`
+	}
 </style>
 @endpush
 @extends("layouts.backend")
@@ -57,7 +61,7 @@
 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
     <div class="x_panel">
         <div class="x_title">
-        	<button class="btn btn-primary" id="add" title="Add New Type" data-toggle="tooltip">
+        	<button class="btn btn-primary" id="add" title="Add New Food" data-toggle="tooltip">
         		<i class="fa fa-plus"></i>
         	</button>
             <button class="btn btn-danger" id="delete_all" title="Delete All" data-toggle="tooltip">Delete All</button>
@@ -151,7 +155,7 @@
 			$(".iziModal-iframe").attr("src","");
 		},
 		focusInput	   : true,
-		title          : 'Type',
+		title          : 'Food',
 		subtitle       :'Add',
 		width          : 850,
 		iframeHeight   : 500,
@@ -211,7 +215,7 @@
 		iframeWidth    :500,
 		iframeURL      :""
 	});
-	//Delete User
+	//Delete Food
 	$("body").on("click",".delete",function(e){
 		var id = $(this).data("id");
 		var tr = $(this).parents('tr');
@@ -230,8 +234,8 @@
 					btnClass: 'btn btn-primary',
 					action  : function (){
 						$("#dataTable").DataTable().row(tr).remove().draw(false);
-						$.get("{{route('deleteType')}}",{id:id},function(data){
-							Alert("Type Have Been Deleted Successful!");
+						$.get("{{route('deleteFood')}}",{id:id},function(data){
+							Alert("Food Have Been Deleted Successful!");
 						});
 					}
 				},
@@ -264,7 +268,7 @@
 			type          :"orange",
 			closeIcon     : true,
 			closeIconClass: 'fa fa-close',
-			content       : "Are You Sure? All of these types and related data will be deleted!",
+			content       : "Are You Sure? All of these foods and related data will be deleted!",
 			buttons       : {
 				Save: {
 					text    : 'OK',
@@ -276,8 +280,8 @@
 							$("#dataTable").DataTable().row(tr).remove().draw(false);
 							arrId.push($(this).val());
 						});
-						$.get("{{route('deleteAllType')}}",{arrId:arrId},function(data){
-								Alert("Types have been deleted!");
+						$.get("{{route('deleteAllFood')}}",{arrId:arrId},function(data){
+								Alert("Foods have been deleted!");
 						});
 					}
 				},
@@ -319,7 +323,7 @@
 		//hiển thị bảng infor nhỏ
         function format ( d ) {
             // `d` is the original data object for the row
-            return '<table class="table table-hover" cellspacing="5px" border="0" style="padding-left:50px; width:50%">'+
+            return '<table class="table details table-hover" cellspacing="5px" border="0" style="padding-left:50px; width:50%">'+
                 '<tr>'+
                     '<td><b>Property 1:</b></td>'+
                     '<td>'+d.date+'</td>'+
@@ -346,7 +350,7 @@
                     "targets": [0,1,5,6,7]
                 }
 			],
-			order: [],
+			"order": [[ groupColumn, 'asc' ]],
 			"columns": [
 				{ "data": "check" },
 				{
@@ -370,7 +374,7 @@
 				api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
 					if ( last !== group ) {
 						$(rows).eq( i ).before(
-							'<tr class="group"><td colspan="5">'+group+'</td></tr>'
+							'<tr class="group"><td colspan="8">'+group+'</td></tr>'
 							);
 
 						last = group;
@@ -382,7 +386,8 @@
 		$('#dataTable tbody').on('click', 'td.details-control', function () {
 			var tr = $(this).closest('tr');
 			var row = table.row( tr );
-
+			console.log($("table"));
+			console.log(row);
 			if ( row.child.isShown() ) {
                     // This row is already open - close it
                     row.child.hide();
@@ -394,6 +399,16 @@
                     tr.addClass('shown');
                 }
         } );
-	}
+        // Order by the grouping
+        $('#dataTable tbody').on( 'click', 'tr.group', function () {
+        	var currentOrder = table.order()[0];
+        	if ( currentOrder[0] === groupColumn && currentOrder[1] === 'asc' ) {
+        		table.order( [ groupColumn, 'desc' ] ).draw();
+        	}
+        	else {
+        		table.order( [ groupColumn, 'asc' ] ).draw();
+        	}
+        } );
+    }
 </script>
 @endpush

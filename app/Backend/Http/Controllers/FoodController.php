@@ -227,7 +227,7 @@ class FoodController
     }
     public function deleteFood(Request $request)
     {
-        $this->service->deleteFood($request->id);
+        $this->foodService->deleteFood($request->id);
     }
     public function deleteFoodProp(Request $request)
     {
@@ -235,6 +235,6 @@ class FoodController
     }
     public function deleteAllFood(Request $request)
     {
-        $this->service->deleteAllFood($request->arrId);
+        $this->foodService->deleteAllFood($request->arrId);
     }
 }

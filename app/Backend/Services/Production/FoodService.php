@@ -20,6 +20,7 @@ class FoodService extends BaseService implements FoodServiceInterface
      * @param $fileName
      * HELPER: Generation Config File contain text translated.
      */
+    protected $diskLocalName = "public";
     public function getFood($idStore)
     {
     	$arrFood = SDB::table("store_entities as en")
@@ -72,7 +73,24 @@ class FoodService extends BaseService implements FoodServiceInterface
     }
     public function deleteFood($id)
     {
-        SDB::table("store_entity_Foods")->where("id",$id)->delete();
+        $image = SDB::table("store_entities")
+                    ->where("id",$id)
+                    ->select("image")
+                    ->get();
+        SDB::table("store_entities")->where("id",$id)->delete();
+        $arrPropId = SDB::table("store_entity_property_values")
+                ->where("entity_id",$id)
+                ->select("property_id")
+                ->get();
+        $ids = Array();
+        foreach($arrPropId as $obj){
+            $ids[] = $obj->property_id;
+        }
+        $arr = SDB::table("store_entity_properties")
+                ->whereIn('id',$ids)
+                ->delete();
+        SDB::table("store_entity_property_values")->where("entity_id",$id)->delete();
+        Storage::disk($this->diskLocalName)->delete($image[0]->image);
     } 
     public function deleteFoodProp($id)
     {
@@ -81,8 +99,25 @@ class FoodService extends BaseService implements FoodServiceInterface
     } 
     public function deleteAllFood($arrId)
     {
-        foreach($arrId as $obj){
-            SDB::table("store_entity_Foods")->where("id",$obj)->delete();
+        foreach($arrId as $id){
+            $image = SDB::table("store_entities")
+                        ->where("id",$id)
+                        ->select("image")
+                        ->get();
+            SDB::table("store_entities")->where("id",$id)->delete();
+            $arrPropId = SDB::table("store_entity_property_values")
+            ->where("entity_id",$id)
+            ->select("property_id")
+            ->get();
+            $ids = Array();
+            foreach($arrPropId as $obj){
+                $ids[] = $obj->property_id;
+            }
+            $arr = SDB::table("store_entity_properties")
+            ->whereIn('id',$ids)
+            ->delete();
+            SDB::table("store_entity_property_values")->where("entity_id",$id)->delete();
+            Storage::disk($this->diskLocalName)->delete($image[0]->image);
         }
     }
     public function getType($idStore)

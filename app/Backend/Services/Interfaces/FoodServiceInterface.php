@@ -17,12 +17,12 @@ interface FoodServiceInterface
 	public function getById($id);//Lấy món ăn về chỉnh sửa
 	public function editFood($obj);
 	public function editPropValue($obj);
-	public function deleteFood($id);
-	public function deleteFoodProp($id);//Xóa thuộc tính của món ăn
-	public function deleteAllFood($arrId);
 	public function getType($idStore);//Lấy thể loại món ăn
 	public function getProp($idType);//Lấy các thuộc tính của món ăn
 	public function getPropByFood($idFood);//Lấy thuộc tính theo món ăn
 	public function getMenu($idStore);//Lấy menu món ăn
 	public function getDataType();//Lấy kiểu dữ liệu của thuộc tính
+	public function deleteFood($id);
+	public function deleteFoodProp($id);//Xóa thuộc tính của món ăn
+	public function deleteAllFood($arrId);
 }
