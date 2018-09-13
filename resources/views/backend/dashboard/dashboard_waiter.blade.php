@@ -25,6 +25,9 @@
         .close-link{
             color:red !important;
         }
+        .cook-link{
+            color: green; !important;
+        }
         .order-avatar{
             width: 200px;
             max-width: 200px;
@@ -34,7 +37,7 @@
             width: 70px;
         }
         .button-right{
-            width: 70px;
+            width: 183px;
         }
         .header-total-price{
             width: 400px;
@@ -112,13 +115,13 @@
                 </div>
                 <div class="header-time"><span class="order-time"></span></div>
                 <div class="button-right">
-                    <a class="close-link"><i class="fa fa-close"></i></a>
+                    <button class="close-link"><i class="fa fa-close"></i></button>
+                    <button class="cook-link"><i class="glyphicon glyphicon-cutlery"></i></button>
                 </div>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content order_x_content display-none">
                 <ul class="list-unstyled order-item-list">
-
                 </ul>
             </div>
         </div>
@@ -137,14 +140,13 @@
                     </span>
                     <span class="message">
                     <div class="order-prop">
-                        <span>- Giá :</span> <span class="order-item-price">20,000</span> <span class="">VNĐ</span>
+                        <span>- Giá :</span> <span class="order-item-price">0</span> <span class="">VNĐ</span>
                     </div>
                     <div class="order-prop">
-                        <span>- Số lượng :</span> <span class="order-item-quantity">5</span>
+                        <span>- Số lượng :</span> <span class="order-item-quantity">0</span>
                     </div>
                 </span>
                 </div>
-
             </div>
         </li>
     </ul>
@@ -189,18 +191,18 @@
                 $(liTag).removeClass('display-none');
                 $(liTag).removeAttr('id');
                 $(liTag).find('.order-item-name').html(item.name);
-                $(liTag).find('.order-item-price').text(item.price);
+                $(liTag).find('.order-item-price').text(formatNumber(item.price));
                 $(liTag).find('.order-item-quantity').text(item.quantity);
                 $(liTag).find('.order-avatar img').attr('src', item.avatar);
                 $(orderArea).find('.order-item-list').append(liTag);
             });
-            $(orderArea).find('.order-total-price').html(data.totalPrice);
+            $(orderArea).find('.order-total-price').html(formatNumber(data.totalPrice) );
             $(orderArea).find('.order-location').html(data.locationId);
             $(orderArea).find('.order-time').text(data.dateTimeOrder);
             $('#order-waiting-list').append(orderArea);
         }
         function deleteOrder(){
-
+            //delete Order in Database
         }
     </script>
 @endpush
