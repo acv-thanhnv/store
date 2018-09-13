@@ -54,6 +54,6 @@ class OrderPusherEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId));
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OrderChannelToWaiter));
     }
 }

@@ -25,8 +25,13 @@
         .close-link{
             color:red !important;
         }
-        .cook-link{
-            color: green; !important;
+        .send-link{
+            color: red; !important;
+            font-weight: bold;
+        }
+        .ok-link{
+            color: green !important;
+            font-weight: bold;
         }
         .order-avatar{
             width: 200px;
@@ -70,6 +75,9 @@
         }
         .x_title span {
             color: #34495e !important;
+        }
+        .order-closed{
+            background: green;
         }
     </style>
 @endpush
@@ -116,7 +124,8 @@
                 <div class="header-time"><span class="order-time"></span></div>
                 <div class="button-right">
                     <button class="close-link"><i class="fa fa-close"></i></button>
-                    <button class="cook-link"><i class="glyphicon glyphicon-cutlery"></i></button>
+                    <button class="send-link"><i class="glyphicon glyphicon-send"></i></button>
+                    <label class="ok-link display-none"><i class="glyphicon glyphicon-ok"></i></label>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -154,18 +163,19 @@
 @push("js")
     <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
     <script>
+        _orderWaiting = [];
         $(document).ready(function () {
             var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
                 cluster: '{{env('PUSHER_APP_CLUSTER')}}',
                 encrypted: true
             });
-            var channel = pusher.subscribe('{{\App\Core\Helpers\CommonHelper::getOrderEventName($storeId)}}');
-            var eventName = "{{\App\Core\Common\OrderConst::OrderEventName}}";
+            var channel = pusher.subscribe('{{\App\Core\Helpers\CommonHelper::getOrderEventName($storeId,\App\Core\Common\OrderConst::OrderChannelToChef)}}');
+            var eventName = "{{\App\Core\Common\OrderConst::OrderChefEventName}}";
             channel.bind(eventName, addOrder);
 
             //Show - Hide order detail
             $(document).on('click','.collapse-link',function(){
-                var parent = $(this).parents('.order-detail-list');
+                var parent = $(this).parents('.order');
                 if($(parent).find('.order_x_content').hasClass('display-none')){
                     $(parent).find('.order_x_content').removeClass('display-none');
                     $(this).find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
@@ -177,6 +187,27 @@
             $(document).on('click','.close-link',function(){
                 $(this).parents('.order-detail-list').remove();
                 deleteOrder();
+            });
+            $(document).on('click','.send-link',function(){
+                var orderId =  $(this).attr('orderId');
+                var parrent = $(this).parents('.order');
+                var current = $(this);
+                $.ajax({
+                    url         : '{{route("food/closeOrder")}}',
+                    dataType    : 'JSON',
+                    type        : 'GET',
+                    data:  _orderWaiting[orderId],
+                    success: function(data){
+                        $(parrent).find('.ok-link').removeClass('display-none');
+                        $(parrent).find('.close-link').remove();
+                        $(current).remove();
+                        delete _orderWaiting[orderId];
+                        $(parrent).addClass('order-closed');
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log('Error '+xhr.status+' | '+thrownError);
+                    },
+                });
             });
         });
 
@@ -199,7 +230,11 @@
             $(orderArea).find('.order-total-price').html(formatNumber(data.totalPrice) );
             $(orderArea).find('.order-location').html(data.locationId);
             $(orderArea).find('.order-time').text(data.dateTimeOrder);
+            $(orderArea).find('.send-link').attr('orderId',data.orderId);
+            $(orderArea).find('.close-link').attr('orderId',data.orderId);
             $('#order-waiting-list').append(orderArea);
+            data.entity = JSON.stringify(data.entity);
+            _orderWaiting[data.orderId]=data;
         }
         function deleteOrder(){
             //delete Order in Database

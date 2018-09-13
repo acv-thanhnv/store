@@ -9,9 +9,11 @@
 namespace App\Api\V1\Services\Production;
 
 use App\Api\V1\Services\Interfaces\FoodServiceInterface;
+use App\Core\Common\OrderConst;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
+use App\Core\Events\OrderChefPusherEvent;
 use App\Core\Events\OrderPusherEvent;
 use App\Core\Helpers\CommonHelper;
 use Illuminate\Http\Request;
@@ -82,7 +84,7 @@ class FoodService extends BaseService implements FoodServiceInterface
                 if (!empty($data)) {
                     SDB::table('store_order_detail')->insert($data);
                 }
-                event(new OrderPusherEvent($storeId, $newOrderId, $locationId, $totalPrice, $now, $entity));
+                event(new OrderPusherEvent($storeId, $newOrderId, $locationId, $totalPrice,$now, $entity));
                 SDB::commit();
                 $result->status = SDBStatusCode::OK;
             } catch (\Exception $e) {
@@ -115,7 +117,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $now = now()->toDateTimeString();
         if (CommonHelper::existsStore($storeId)) {
             SDB::table('store_order')->where('id', $orderId)->update($dataOrder);
-            event(new OrderPusherEvent($storeId, $orderId, $locationId, $totalPrice, $now, $entity));
+            event(new OrderChefPusherEvent($storeId, $orderId, $locationId, $totalPrice,$now, $entity));
             $result->status = SDBStatusCode::OK;
         } else {
             $result->status = SDBStatusCode::Excep;
@@ -128,16 +130,14 @@ class FoodService extends BaseService implements FoodServiceInterface
     {
         //event to
         $response = $request->all();
-        $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
         $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
-        $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
-        $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
-        $entity = json_decode($response['entity']);
         //Update Database
         $dataOrder = array(
             "status" => 4,
         );
-        $newOrderId = SDB::table('store_order')->where('id', $orderId)->update($dataOrder);
+        SDB::table('store_order')->where('id', $orderId)->update($dataOrder);
+        $result = new DataResultCollection();
+        return $result;
     }
 
     protected function buildFoodListByStoreId($foodList, $storeId)

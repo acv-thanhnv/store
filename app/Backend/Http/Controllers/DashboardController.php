@@ -29,7 +29,7 @@ class DashboardController extends Controller
         return view('backend.dashboard.dashboard_waiter',['storeId'=>$storeId]);
     }
     public function dashboardChef(){
-        $storeId = 2;
+        $storeId = 1;
         return view('backend.dashboard.dashboard_chef',['storeId'=>$storeId]);
     }
 }
