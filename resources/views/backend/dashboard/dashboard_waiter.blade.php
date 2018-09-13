@@ -152,7 +152,7 @@
     </ul>
 @endsection
 @push("js")
-    <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+    <script src="{{ asset('js/lib/pusher.min.js')}}"></script>
     <script>
         _orderWaiting = [];
         $(document).ready(function () {
