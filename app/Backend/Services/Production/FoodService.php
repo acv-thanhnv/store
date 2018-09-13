@@ -55,11 +55,29 @@ class FoodService extends BaseService implements FoodServiceInterface
     }
     public function editFood($obj)
     {
-        SDB::table("store_entity_Foods")->where("id",$obj->id)->update(["name" => $obj->name,"description"=> $obj->description]);
+        SDB::table("store_entities")
+        ->where("id",$obj["id"])
+        ->update([
+            "name"    => $obj["name"],
+            "image"   => $obj["image"],
+            "price"   => $obj["price"],
+            "menu_id" => $obj["menu_id"],
+        ]);
+    }
+    public function editPropValue($obj)
+    {
+        SDB::table("store_entity_property_values")
+        ->where("id",$obj["id"])
+        ->update(["value" => $obj["value"]]);
     }
     public function deleteFood($id)
     {
         SDB::table("store_entity_Foods")->where("id",$id)->delete();
+    } 
+    public function deleteFoodProp($id)
+    {
+        SDB::table("store_entity_properties")->where("id",$id)->delete();
+        SDB::table("store_entity_property_values")->where("property_id",$id)->delete();
     } 
     public function deleteAllFood($arrId)
     {
@@ -81,6 +99,7 @@ class FoodService extends BaseService implements FoodServiceInterface
     {
         $arrProp = SDB::table("store_entity_property_values as value")
                     ->join("store_entity_properties as prop","value.property_id","=","prop.id")
+                    ->select("value.*","prop.property_label","prop.data_type_code","prop.sort")
                     ->where("value.entity_id",$idFood)->get();
         return $arrProp;
     }

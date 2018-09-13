@@ -48,7 +48,7 @@
 			border-top : 1px solid #D7CBCB;
 			padding-top: 5px;
 		}
-		.remove,.remove_by_type{
+		.remove,.remove_prop{
 			background: none;
 			border    :none;
 			color     : red;
@@ -70,6 +70,9 @@
 		.data,.sort{
 			padding-right: 0px !important;
 		}
+		#OpenImgUpload:hover{
+			cursor: pointer;
+		}
     </style>
 @endpush
 @section("content")
@@ -85,7 +88,8 @@
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<input id="file" name="image" type="file" class="form-control" />
 						<div id="preview">
-							<img data-src="{{$food->src}}" data-path="{{$food->src}}" class="thumb" title="avatar" src="{{$food->src}}">
+							<img id="OpenImgUpload" data-src="{{$food->src}}" data-path="{{$food->image}}" class="thumb" title="avatar" src="{{$food->src}}">
+							<span class="fa remove_img_preview" title="remove"></span>
 						</div>
 						<label for="file" class="custom-file-upload btn btn-outline-secondary camera">
 							<i class="fa fa-camera"></i> Choose Image
@@ -127,19 +131,6 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-						<label>Type </label>
-						<select class="form-control" id="type">
-							<option>--Choose Type--</option>
-							@foreach($arrType as $obj)
-							<option value="{{$obj->id}}">
-								{{$obj->name}}
-							</option>
-							@endforeach
-						</select>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<button type="button" title="Add Property" class="btn btn-info btn-sm add_prop" data-toggle="tooltip" data-placement="right"><i class="fa fa-plus-square"></i>Add Property</button>
 					</div>
 				</div>
@@ -157,13 +148,13 @@
 					</div>
 				</div>
 				<div class="prop">
-					<div class="form-group property_by_type">
-					</div>
 					<div class="form-group property">
 						@foreach($food->arrProp as $prop)
 						<span class="rows">
 							<div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback">
 								<input type="text" class="form-control has-feedback-left" name="label" placeholder="Property Label..." value="{{$prop->property_label}}">
+								<input type="hidden" name="idProp" value="{{$prop->property_id}}">
+								<input type="hidden" name="idValue" value="{{$prop->id}}">
 								<span class="fa fa-paper-plane form-control-feedback left" aria-hidden="true"></span>
 							</div>
 							<div class="col-md-2 col-sm-2 col-xs-2 form-group has-feedback">
@@ -188,7 +179,7 @@
 								<span class="fa fa-sort-numeric-desc form-control-feedback left" aria-hidden="true"></span>
 							</div>
 							<div class="col-md-1 col-sm-1 col-xs-1 form-group">
-								<button type="button" class="btn btn-danger remove">
+								<button type="button" class="btn btn-danger remove_prop" data-id="{{$prop->property_id}}">
 									<i class="fa fa-close"></i>
 								</button>
 							</div>
@@ -198,8 +189,8 @@
 				</div>
 				<div class="form-group footer">
 					<div>
-						<button class="btn btn-primary" type="reset">Reset</button>
-						<button type="button" class="btn btn-success add">Add</button>
+						<button class="btn btn-primary reset" type="reset">Reset</button>
+						<button type="button" class="btn btn-success save">Save</button>
 					</div>
 				</div>
 
@@ -250,7 +241,6 @@
 	var wrapper    = $(".property"); //Fields wrapper
 	var x          = $(".property .rows").length;
 	label(x);
-	var y          = 0;
 	//upload image 
 	function handleFileSelect(event) {
 		var input = this;
@@ -259,7 +249,6 @@
 			this.enabled = false
 			reader.onload = (function (e) {
 				$(".thumb").attr('src', e.target.result);
-				$("#preview").append('<span class="fa remove_img_preview" title="remove"></span>');
 			});
 			reader.readAsDataURL(input.files[0]);
 		}
@@ -269,38 +258,21 @@
 		var src = $("img").data("src");
 		$("img").attr('src', src);
 	});
-	//show property
-	$(document).on("change","#type",function(event){
-		var idType = $(this).val();
-		var prop_by_type = $(".property_by_type");
-		var row = $("#template").contents().clone();
-		$(prop_by_type).empty();
-		$.get("{{route('getProp')}}",{idType:idType},function(data){
-			y = data.length;
-			label(x+y);
-			if(data.length>0){
-				data.forEach(function(obj){
-					var row = $("#template").contents().clone();
-					$(row).find("input[name='label']").val(obj.property_label);
-					$(row).find("select[name='data']").val(obj.data_type_code);
-					$(row).find("input[name='sort']").val(obj.sort);
-					$(row).find("button").removeClass('remove').addClass('remove_by_type');
-					$(prop_by_type).append(row); 
-				});
-			}else{
-				var errors = $("#error").contents().clone();
-				$(errors).find("span.content-errors").html("Sorry but this type doen't have property, pleas add property in type option or bellow!");
-				$(errors).find("div.show-errors").css("display","block");
-				$(prop_by_type).append(errors); 
-			}
-		});
+	//Open dialog box for upload when click on image
+	$(document).on("click",'#OpenImgUpload',function(e){
+		$('#file').trigger('click');
+	});
+	//reset image
+	$(".reset").click(function(){
+		var src = $("img").data("src");
+		$("img").attr('src', src);
 	});
 	//insert prop
 	$(document).on("click",".add_prop",function(event){
 		var row = $("#template").contents().clone();
 		x++;
 		if(x < max_fields&& x>=1){
-			label(x+y);
+			label(x);
 			$(wrapper).append(row);
 		}else{
 			$.alert({
@@ -319,27 +291,58 @@
 	$(document).on("click",".remove",function(event){
 		$(this).parents("span").remove();
 		x--;
-		label(x+y);
+		label(x);
 	});
-	$(document).on("click",".remove_by_type",function(event){
-		$(this).parents("span").remove();
-		y--;
-		label(x+y);
-	});
+	//ajax delete prop
+		$(document).on("click",".remove_prop",function(event){
+			var tr = $(this);
+			$.confirm({
+			title         : '<p class="text-warning">Warning</p>',
+			icon          : 'fa fa-exclamation-circle',
+			boxWidth      : '50%',
+			useBootstrap  : false,
+			type          :"orange",
+			closeIcon     : true,
+			closeIconClass: 'fa fa-close',
+			content       : "Are You Sure? All data related to this property will be deleted!",
+			buttons       : {
+				Save: {
+					text    : 'OK',
+					btnClass: 'btn btn-primary',
+					action  : function (){
+						tr.parents("span").remove();
+						x--;
+						label(x);
+						var id = tr.data("id");
+						$.get("{{route('deleteFoodProp')}}",{id:id},function(data){
+								parent.Alert("Property have been deleted!");
+						});
+					}
+				},
+				cancel: {
+					text    : ' Cancel',
+					btnClass: 'btn btn-default'
+				}
+			}
+			});
+		});
 	//submit add 
-	$(".add").click(function(){
+	$(".save").click(function(){
 		var formData = new FormData();
 		var rows     = $("div.prop .rows");
 		var arrProp  = [];
 		for (var i = 0; i < rows.length; i++) {
-			var label  = $(rows[i]).find('input[name=label]').val();
-			var data   = $(rows[i]).find('.data').val();
-			var sort   = $(rows[i]).find('input[name=sort]').val();
-			var value  = $(rows[i]).find('input[name=value]').val();
-			arrProp[i] = {label : label,data:data,sort:sort,value:value};
+			var idProp  = $(rows[i]).find('input[name=idProp]').val();
+			var idValue = $(rows[i]).find('input[name=idValue]').val();
+			var label   = $(rows[i]).find('input[name=label]').val();
+			var data    = $(rows[i]).find('.data').val();
+			var sort    = $(rows[i]).find('input[name=sort]').val();
+			var value   = $(rows[i]).find('input[name=value]').val();
+			arrProp[i] = {idValue:idValue,idProp:idProp,label : label,data:data,sort:sort,value:value};
 		}
 		formData.append("name", $("#name").val());
         formData.append("image", $('input[type=file]')[0].files[0]);
+        formData.append("oldImage", $(".thumb").data("path"));
         formData.append("price", $("#price").val());
         formData.append("menu", $('#menu').val());
         formData.append("idStore", $('#idStore').val());
