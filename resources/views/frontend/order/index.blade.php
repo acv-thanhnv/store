@@ -170,6 +170,7 @@
             type        : 'GET', 
             success: function(data){
                 genFoodByStoreId(data);
+                //console.log(data);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Error '+xhr.status+' | '+thrownError);
@@ -182,7 +183,7 @@
             dataType    : 'JSON',
             type        : 'GET',
             success: function(data){
-                genFoodByMenuId(data);
+                genMenuList(data);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Error '+xhr.status+' | '+thrownError);
@@ -190,6 +191,22 @@
         });
     });
 
+    $(document).on('click', '.product-type', function(){
+            var id = $(this).attr('id');
+            $.ajax({
+                url         : '{{route("food/list-by-menu")}}'+'/'+id,
+                dataType    : 'JSON',
+                type        : 'GET', 
+                data: {id:id},
+                success: function(data){
+                    console.log(data.data);
+                    //genFoodByMenuId();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error '+xhr.status+' | '+thrownError);
+                },
+            });
+        });
 
     function genFoodByStoreId(data)
     {
@@ -207,19 +224,43 @@
             $(".menulist").find('.item-temp1').attr('item-name', obj.name);
             $(".menulist").find('.item-temp1').attr('item-image', obj.image);
             $(".menulist").find('.item-temp1').attr('item-price', obj.price);    
-        
+
 
             $(ul).append($(item));
         });
     }
 
-    function genFoodByMenuId(data) {
+    function genMenuList(data) {
         var div = $("#menu-item");
         $(div).empty();
         data.data.forEach(function(obj) {
             var item = $(".menu-item-temp").contents().clone();
+            $(item).attr('id', obj.id);
             $(item).text(obj.name);        
             $(div).append($(item));
+        });
+    }
+
+
+
+    function genFoodByMenuId(){
+        var ul = $("#list-item");
+        $(ul).empty();
+        data.data.forEach(function(obj) {
+            var item = $("#list-item-temp").contents().clone();
+            $(item).find('.product-title').attr('title', obj.name);
+            $(item).find('.id-item1').attr('id', obj.id);
+            $(item).find('.image-item').attr('src', obj.image);
+            $(item).find('.product-name').html(obj.name);
+            $(item).find('.product-price').html(obj.price);        
+            
+            $(".menulist").find('.item-temp1').attr('item-id', obj.id);
+            $(".menulist").find('.item-temp1').attr('item-name', obj.name);
+            $(".menulist").find('.item-temp1').attr('item-image', obj.image);
+            $(".menulist").find('.item-temp1').attr('item-price', obj.price);    
+
+
+            $(ul).append($(item));
         });
     }
 
@@ -240,7 +281,7 @@
         $(row).find('.image-item2').attr('src',image);
         $(row).find('.name-item2').html(name);
         $(row).find('.product-price2').text(price);
-           
+
         $(row).attr('order-id', id);
         $(row).attr('order-name', name);
         $(row).attr('order-price', price);  
@@ -253,7 +294,7 @@
     });
 
     $(document).on("click",".btn-order",function(){
-        
+
         var storeId = 1;
         var orderId = 0;
         var locationId = 1;
@@ -268,12 +309,6 @@
             var price = $(rows[i]).attr('order-price');
             var quantity = 1;
 
-            // console.log(avatar);    
-            // var name $(rows[i]).attr('order-name');
-            // var  $(rows[i]).find().attr('order-');
-            // var $(rows[i]).attr('order-price');
-            // 
-            // 
             var a = {id:id, name:name, avatar:avatar, price:price, quantity:quantity};
             entity.push( a);
 
@@ -290,7 +325,7 @@
             type        : 'GET', 
             data: {storeId:storeId, orderId:orderId, locationId:locationId, description:description, entity:entity, totalPrice:totalPrice},
             success: function(data){
-                
+
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Error '+xhr.status+' | '+thrownError);
@@ -298,6 +333,8 @@
         });
     });
 
-</script>
+        
 
-@endsection
+    </script>
+
+    @endsection
