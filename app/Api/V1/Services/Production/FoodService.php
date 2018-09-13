@@ -84,7 +84,8 @@ class FoodService extends BaseService implements FoodServiceInterface
                 if (!empty($data)) {
                     SDB::table('store_order_detail')->insert($data);
                 }
-                event(new OrderPusherEvent($storeId, $newOrderId, $locationId, $totalPrice,$now, $entity));
+                $requestType = OrderConst::TypeAdd;
+                event(new OrderPusherEvent($storeId, $newOrderId, $locationId, $totalPrice,$requestType,$now, $entity));
                 SDB::commit();
                 $result->status = SDBStatusCode::OK;
             } catch (\Exception $e) {
@@ -117,7 +118,12 @@ class FoodService extends BaseService implements FoodServiceInterface
         $now = now()->toDateTimeString();
         if (CommonHelper::existsStore($storeId)) {
             SDB::table('store_order')->where('id', $orderId)->update($dataOrder);
-            event(new OrderChefPusherEvent($storeId, $orderId, $locationId, $totalPrice,$now, $entity));
+            //send to chef
+            $requestTypeChef = OrderConst::TypeAdd;
+            event(new OrderChefPusherEvent($storeId, $orderId, $locationId, $totalPrice,$requestTypeChef,$now, $entity));
+            //remove from waiter
+            $requestType = OrderConst::TypeClearTrash;
+            event(new OrderPusherEvent($storeId, $orderId, $locationId, $totalPrice,$requestType,$now, $entity));
             $result->status = SDBStatusCode::OK;
         } else {
             $result->status = SDBStatusCode::Excep;
@@ -130,12 +136,20 @@ class FoodService extends BaseService implements FoodServiceInterface
     {
         //event to
         $response = $request->all();
+        $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
         $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
+        $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
+        $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
+        $entity = json_decode($response['entity']);
+        $now = now()->toDateTimeString();
         //Update Database
         $dataOrder = array(
             "status" => 4,
         );
         SDB::table('store_order')->where('id', $orderId)->update($dataOrder);
+        //clear to chef
+        $requestTypeChef = OrderConst::TypeClearTrash;
+        event(new OrderChefPusherEvent($storeId, $orderId, $locationId, $totalPrice,$requestTypeChef,$now, $entity));
         $result = new DataResultCollection();
         return $result;
     }

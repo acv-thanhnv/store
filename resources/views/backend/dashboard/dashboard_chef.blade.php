@@ -6,77 +6,98 @@
             font-weight: bold;
             color: #999;
         }
-.order-title{
-    font-weight: bold;
-}
+
+        .order-title {
+            font-weight: bold;
+        }
+
         .order-avatar img {
             width: 150px;
         }
-        .order-infor{
+
+        .order-infor {
             padding-top: 17px;
         }
-        .order-detail-list{
+
+        .order-detail-list {
             padding-bottom: 0px;
             margin-bottom: 0px;
         }
-        .order{
+
+        .order {
             margin-bottom: 10px;
         }
-        .close-link{
-            color:red !important;
+
+        .close-link {
+            color: red !important;
         }
-        .send-link{
-            color: red; !important;
+
+        .send-link {
+            color: red;
+        !important;
             font-weight: bold;
         }
-        .ok-link{
+
+        .ok-link {
             color: green !important;
             font-weight: bold;
         }
-        .order-avatar{
+
+        .order-avatar {
             width: 200px;
             max-width: 200px;
             min-width: 200px;
         }
-        .button-left{
+
+        .button-left {
             width: 70px;
         }
-        .button-right{
+
+        .button-right {
             width: 183px;
         }
-        .header-total-price{
+
+        .header-total-price {
             width: 400px;
             float: left;
             text-align: left;
         }
-        .header-location{
+
+        .header-location {
             text-align: left;
             width: 100%;
         }
-        .header-time{
+
+        .header-time {
             width: 380px;
             float: right;
             text-align: left;
         }
-        .x_title{
+
+        .x_title {
             font-weight: bold;
         }
-        .order-header{
+
+        .order-header {
             display: inline-flex;
             width: 100%;
         }
-        .order-header-area .x_title{
+
+        .order-header-area .x_title {
             border: none !important;
             color: #0c0c0c;
         }
-        .order-header-area .x_panel{
+
+        .order-header-area .x_panel {
             border: none !important;
             background: none;
         }
+
         .x_title span {
             color: #34495e !important;
         }
-        .order-closed{
+
+        .order-closed {
             background: green;
         }
     </style>
@@ -174,38 +195,34 @@
             channel.bind(eventName, addOrder);
 
             //Show - Hide order detail
-            $(document).on('click','.collapse-link',function(){
+            $(document).on('click', '.collapse-link', function () {
                 var parent = $(this).parents('.order');
-                if($(parent).find('.order_x_content').hasClass('display-none')){
+                if ($(parent).find('.order_x_content').hasClass('display-none')) {
                     $(parent).find('.order_x_content').removeClass('display-none');
                     $(this).find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-                }else{
+                } else {
                     $(parent).find('.order_x_content').addClass('display-none');
                     $(this).find('i').addClass('fa-chevron-down').removeClass('fa-chevron-up');
                 }
             });
-            $(document).on('click','.close-link',function(){
+            $(document).on('click', '.close-link', function () {
                 $(this).parents('.order-detail-list').remove();
                 deleteOrder();
             });
-            $(document).on('click','.send-link',function(){
-                var orderId =  $(this).attr('orderId');
+            $(document).on('click', '.send-link', function () {
+                var orderId = $(this).attr('orderId');
                 var parrent = $(this).parents('.order');
                 var current = $(this);
                 $.ajax({
-                    url         : '{{route("food/closeOrder")}}',
-                    dataType    : 'JSON',
-                    type        : 'GET',
-                    data:  _orderWaiting[orderId],
-                    success: function(data){
-                        $(parrent).find('.ok-link').removeClass('display-none');
-                        $(parrent).find('.close-link').remove();
-                        $(current).remove();
-                        delete _orderWaiting[orderId];
-                        $(parrent).addClass('order-closed');
+                    url: '{{route("food/closeOrder")}}',
+                    dataType: 'JSON',
+                    type: 'GET',
+                    data: _orderWaiting[orderId],
+                    success: function (data) {
+                        //OK
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        console.log('Error '+xhr.status+' | '+thrownError);
+                        console.log('Error ' + xhr.status + ' | ' + thrownError);
                     },
                 });
             });
@@ -213,30 +230,45 @@
 
         //function add message
         function addOrder(data) {
-            var entity = JSON.stringify(data.entity);
-            var orderArea = $('#order-template').clone();
-            $(orderArea).removeClass('display-none');
-            $(orderArea).removeAttr('id');
-            $.each(data.entity, function (index, item) {
-                var liTag = $('#order-item-template').children('li').clone();
-                $(liTag).removeClass('display-none');
-                $(liTag).removeAttr('id');
-                $(liTag).find('.order-item-name').html(item.name);
-                $(liTag).find('.order-item-price').text(formatNumber(item.price));
-                $(liTag).find('.order-item-quantity').text(item.quantity);
-                $(liTag).find('.order-avatar img').attr('src', item.avatar);
-                $(orderArea).find('.order-item-list').append(liTag);
-            });
-            $(orderArea).find('.order-total-price').html(formatNumber(data.totalPrice) );
-            $(orderArea).find('.order-location').html(data.locationId);
-            $(orderArea).find('.order-time').text(data.dateTimeOrder);
-            $(orderArea).find('.send-link').attr('orderId',data.orderId);
-            $(orderArea).find('.close-link').attr('orderId',data.orderId);
-            $('#order-waiting-list').append(orderArea);
-            data.entity = JSON.stringify(data.entity);
-            _orderWaiting[data.orderId]=data;
+            var orderId = data.orderId;
+            var record = $(".order[orderid='"+orderId+"']");
+            if (data.requestType == '{{\App\Core\Common\OrderConst::TypeAdd}}' && record.length == 0) {
+                var entity = JSON.stringify(data.entity);
+                var orderArea = $('#order-template').clone();
+                $(orderArea).removeClass('display-none');
+                $(orderArea).removeAttr('id');
+                $.each(data.entity, function (index, item) {
+                    var liTag = $('#order-item-template').children('li').clone();
+                    $(liTag).removeClass('display-none');
+                    $(liTag).removeAttr('id');
+                    $(liTag).find('.order-item-name').html(item.name);
+                    $(liTag).find('.order-item-price').text(formatNumber(item.price));
+                    $(liTag).find('.order-item-quantity').text(item.quantity);
+                    $(liTag).find('.order-avatar img').attr('src', item.avatar);
+                    $(orderArea).find('.order-item-list').append(liTag);
+                });
+                $(orderArea).find('.order-total-price').html(formatNumber(data.totalPrice));
+                $(orderArea).find('.order-location').html(data.locationId);
+                $(orderArea).find('.order-time').text(data.dateTimeOrder);
+                $(orderArea).attr('orderId',data.orderId);
+                $(orderArea).find('.send-link').attr('orderId', data.orderId);
+                $(orderArea).find('.close-link').attr('orderId', data.orderId);
+                $('#order-waiting-list').append(orderArea);
+                data.entity = JSON.stringify(data.entity);
+                _orderWaiting[data.orderId] = data;
+            }
+            else if (data.requestType == '{{\App\Core\Common\OrderConst::TypeClearTrash}}') {
+                var orderId = data.orderId;
+                var record = $(".order[orderid='"+orderId+"']");
+                $(record).find('.ok-link').removeClass('display-none');
+                $(record).find('.close-link').remove();
+                $(record).find('.send-link').remove();
+                delete _orderWaiting[orderId];
+                $(record).addClass('order-closed');
+            }
         }
-        function deleteOrder(){
+
+        function deleteOrder() {
             //delete Order in Database
         }
     </script>

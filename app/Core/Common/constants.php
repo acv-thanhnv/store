@@ -64,6 +64,10 @@ class OrderConst{
 
     const OrderChannelToChef = "to-chef";
     const OrderChefEventName = "order.chef";
+
+    const TypeDelete = "delete";
+    const TypeAdd = "add";
+    const TypeClearTrash = "clear_trash";
 }
 class EntityProperty{
     const maxField = 10;

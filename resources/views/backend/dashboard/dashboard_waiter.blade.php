@@ -191,10 +191,7 @@
                     type        : 'GET',
                     data:  _orderWaiting[orderId],
                     success: function(data){
-                        $(parrent).fadeOut('slow',function(){
-                            $(parrent).remove();
-                        });
-                        delete _orderWaiting[orderId];
+                        //Ok
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log('Error '+xhr.status+' | '+thrownError);
@@ -203,31 +200,51 @@
             });
         });
 
-        //function add message
+        /**
+         * function Recive and handler package message from Server
+         * */
         function addOrder(data) {
-            var orderArea = $('#order-template').clone();
-            $(orderArea).removeClass('display-none');
-            $(orderArea).removeAttr('id');
-            $.each(data.entity, function (index, item) {
-                var liTag = $('#order-item-template').children('li').clone();
-                $(liTag).removeClass('display-none');
-                $(liTag).removeAttr('id');
-                $(liTag).find('.order-item-name').html(item.name);
-                $(liTag).find('.order-item-price').text(formatNumber(item.price));
-                $(liTag).find('.order-item-quantity').text(item.quantity);
-                $(liTag).find('.order-avatar img').attr('src', item.avatar);
-                //Attr
-                $(orderArea).find('.order-item-list').append(liTag);
-            });
-            $(orderArea).find('.order-total-price').html(formatNumber(data.totalPrice) );
-            $(orderArea).find('.order-location').html(data.locationId);
-            $(orderArea).find('.order-time').text(data.dateTimeOrder);
-            $(orderArea).find('.cook-link').attr('orderId',data.orderId);
-            $(orderArea).find('.close-link').attr('orderId',data.orderId);
-            $('#order-waiting-list').append(orderArea);
-            data.entity = JSON.stringify(data.entity);
-            _orderWaiting[data.orderId]=data;
+            var orderId = data.orderId;
+            var record = $(".order[orderid='"+orderId+"']");
+            if(data.requestType == '{{\App\Core\Common\OrderConst::TypeAdd}}' && record.length == 0){
+                var orderArea = $('#order-template').clone();
+                $(orderArea).removeClass('display-none');
+                $(orderArea).removeAttr('id');
+                $.each(data.entity, function (index, item) {
+                    var liTag = $('#order-item-template').children('li').clone();
+                    $(liTag).removeClass('display-none');
+                    $(liTag).removeAttr('id');
+                    $(liTag).find('.order-item-name').html(item.name);
+                    $(liTag).find('.order-item-price').text(formatNumber(item.price));
+                    $(liTag).find('.order-item-quantity').text(item.quantity);
+                    $(liTag).find('.order-avatar img').attr('src', item.avatar);
+                    //Attr
+                    $(orderArea).find('.order-item-list').append(liTag);
+                });
+                $(orderArea).find('.order-total-price').html(formatNumber(data.totalPrice) );
+                $(orderArea).find('.order-location').html(data.locationId);
+                $(orderArea).find('.order-time').text(data.dateTimeOrder);
+                $(orderArea).attr('orderId',data.orderId);
+                $(orderArea).find('.cook-link').attr('orderId',data.orderId);
+                $(orderArea).find('.close-link').attr('orderId',data.orderId);
+                $('#order-waiting-list').append(orderArea);
+                data.entity = JSON.stringify(data.entity);
+                _orderWaiting[data.orderId]=data;
+            }else if(data.requestType == '{{\App\Core\Common\OrderConst::TypeClearTrash}}'){
+                var orderId = data.orderId;
+                var record = $(".order[orderid='"+orderId+"']");
+                $(record).fadeOut('slow',function(){
+                    $(record).remove();
+                });
+                delete _orderWaiting[orderId];
+            }
+
         }
+
+        /**
+         * Delete order from Database
+         * @param orderId
+         */
         function deleteOrder(orderId){
             //delete Order in Database
         }
