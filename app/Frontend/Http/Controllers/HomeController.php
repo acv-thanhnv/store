@@ -2,8 +2,11 @@
 
 namespace App\Frontend\Http\Controllers;
 use App\Api\V1\Services\Production\FoodService;
+use App\Core\Dao\SDB;
+use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class HomeController extends Controller
 {
@@ -34,5 +37,10 @@ class HomeController extends Controller
         $a = new FoodService();
         dd($a->getOrderList(1,2));
         return view('frontend.testorder');
+    }
+    public function getCoor()
+    {
+        $arrCoor = SDB::table("map")->get();
+        return response()->json($arrCoor);
     }
 }

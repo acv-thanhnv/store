@@ -37,7 +37,7 @@ class FoodController
             if($obj->image==NULL){
                 $obj->image = url('/')."/common_images/no-image.png";
             }else{
-                $obj->image = Storage::disk($diskLocalName)->url($obj->image);
+                $obj->image = CommonHelper::getImageUrl($obj->image);
             }
         }
         return view("backend.food.list",["arrFood" => $arrFood]);
@@ -130,7 +130,7 @@ class FoodController
         if($food->image==NULL){
            $food->src = url('/')."/common_images/no-image.png";
         }else{
-            $food->src = Storage::disk($diskLocalName)->url($food->image);
+            $food->src = CommonHelper::getImageUrl($food->image);
         }
         $food->arrProp = $this->foodService->getPropByFood($food->id);
         return view("backend.food.edit",[
