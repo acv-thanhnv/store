@@ -183,10 +183,6 @@ class FoodService extends BaseService implements FoodServiceInterface
                 $prop = array();
                 foreach ($foodList as $foodItem) {
                     if ($foodItem->id == $foods->id) {
-                        $foods->entity_type_id = $foodItem->entity_type_id;
-                        $foods->entity_type_name = $foodItem->entity_type_name;
-                        $foods->entity_type_description = $foodItem->entity_type_description;
-
                         $prop['entity_prop_id'] = $foodItem->entity_prop_id;
                         $prop['data_type_code'] = $foodItem->data_type_code;
                         $prop['prop_data_type'] = $foodItem->prop_data_type;
@@ -220,10 +216,6 @@ class FoodService extends BaseService implements FoodServiceInterface
                 $prop = array();
                 foreach ($foodList as $foodItem) {
                     if ($foodItem->id == $foods->id) {
-                        $foods->entity_type_id = $foodItem->entity_type_id;
-                        $foods->entity_type_name = $foodItem->entity_type_name;
-                        $foods->entity_type_description = $foodItem->entity_type_description;
-
                         $prop['entity_prop_id'] = $foodItem->entity_prop_id;
                         $prop['data_type_code'] = $foodItem->data_type_code;
                         $prop['prop_data_type'] = $foodItem->prop_data_type;
@@ -238,5 +230,30 @@ class FoodService extends BaseService implements FoodServiceInterface
             }
         }
         return $result;
+    }
+    protected function buildOrderList($storeId,$orderStatus){
+        $orderList = SDB::table('store_order')
+            ->where("store_order.store_id",$storeId)
+            ->where("store_order.status",$orderStatus)
+            ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
+            ->select()
+            ->get();
+        $orderListDetail = SDB::table('store_order')
+            ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
+            ->where("store_order.store_id",$storeId)
+            ->where("store_order.status",$orderStatus)
+            ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
+            ->select()
+            ->get();
+        $orderEntityList = SDB::table('store_order')
+            ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
+            ->join("store_entities","store_order_detail.entities_id","=","store_entities.id")
+            ->leftJoin('store_entity_property_values',"store_entity_property_values.entity_id","=","store_order_detail.entities_id")
+            ->leftJoin('store_entity_properties',"store_entity_properties.id","=","store_entity_property_values.property_id")
+            ->where("store_order.store_id",$storeId)
+            ->where("store_order.status",$orderStatus)
+            ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
+            ->select("entiy")
+            ->get();
     }
 }
