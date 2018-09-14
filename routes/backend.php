@@ -22,7 +22,7 @@
     //Backend Controller
     Route::group(["prefix" => "backend"],function(){
         Route::get('/executeSchedule', 'TemplateController@executeSchedule')->name('backend_schedule_template');
-        //Template Controller 
+        //Template Controller
         Route::group(["prefix" => "template"],function(){
             Route::get('', 'TemplateController@index')->name('backend_template');
             Route::get('form', 'TemplateController@form')->name('form_template');
@@ -52,7 +52,7 @@
 
             Route::post('doImport', 'TemplateController@doImport')->name('doImport_template');
         });
-        //User Controller 
+        //User Controller
         Route::group(["prefix" => "user"],function(){
             //get view user
             Route::get("list",'UserController@getList')->name("list");
@@ -78,7 +78,7 @@
         //Menu
         Route::group(["prefix" => "menu"],function(){
             Route::get("list","MenuController@getMenu")->name("getMenu");
-            //add 
+            //add
             Route::get("addMenu","MenuController@getAddMenu")->name("addMenu");
             Route::post("addMenu","MenuController@postAddMenu")->name("postAddMenu");
             //Edit
@@ -91,7 +91,7 @@
         //Group type
         Route::group(["prefix" => "Type"],function(){
             Route::get("list","TypeController@getType")->name("getType");
-            //add 
+            //add
             Route::get("addType","TypeController@getAddType")->name("addType");
             Route::post("addType","TypeController@postAddType")->name("postAddType");
             //Edit
@@ -102,12 +102,12 @@
             Route::get("deleteAllType","TypeController@deleteAllType")->name("deleteAllType");
             //Delete Prop
             Route::get("deleteProp","TypeController@deleteProp")->name("deleteTypeProp");
-            
+
         });
         //Group Food
         Route::group(["prefix" => "Food"],function(){
             Route::get("list","FoodController@getFood")->name("getFood");
-            //add 
+            //add
             Route::get("addFood","FoodController@getAddFood")->name("addFood");
             Route::post("addFood","FoodController@postAddFood");
             //Edit
@@ -121,5 +121,11 @@
             //Other
             Route::get("Prop","FoodController@getProp")->name("getProp");
         });
+        //Dashboard
+        Route::group(["prefix" => "dashboard"],function(){
+            Route::get("dashboard-waiter","DashboardController@dashboardWaiter")->name("dashboardWaiter");
+            Route::get("dashboard-chef","DashboardController@dashboardChef")->name("dashboardChef");
+
+        });
     });
-    
+

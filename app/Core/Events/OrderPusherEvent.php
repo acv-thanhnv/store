@@ -3,6 +3,7 @@
 namespace App\Core\Events;
 
 use App\Core\Common\OrderConst;
+use App\Core\Helpers\CommonHelper;
 use Illuminate\Broadcasting\Broadcasters\PusherBroadcaster;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -11,6 +12,7 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Support\Facades\Auth;
 
 class OrderPusherEvent implements ShouldBroadcast
 {
@@ -25,12 +27,18 @@ class OrderPusherEvent implements ShouldBroadcast
     public $orderId;
     public $locationId;
     public $entity;
-    public function __construct($storeId,$orderId,$locationId,$entity)
+    public $totalPrice;
+    public $dateTimeOrder;
+    public $requestType;
+    public function __construct($storeId,$orderId,$locationId,$totalPrice,$requestType,$now,$entity)
     {
         $this->storeId = $storeId;
         $this->entity = $entity;
         $this->orderId = $orderId;
         $this->locationId = $locationId;
+        $this->totalPrice = $totalPrice;
+        $this->dateTimeOrder = $now;
+        $this->requestType =  $requestType;
     }
     /**
      * The event's broadcast name.
@@ -48,6 +56,6 @@ class OrderPusherEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(OrderConst::OrderChannelToWaiter);
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OrderChannelToWaiter));
     }
 }

@@ -23,19 +23,7 @@ class OrderController extends Controller
 
     public function index()
     {  
-        return view('layouts.order');
+        return view('frontend.order.index');
     }
-
-    public function getFoodByStoreID()
-    {
-        $list = $this->foodService->getFoodByStoreId(1);
-        return $list;
-    }
-
-    public function getFoodByMenuID()
-    {
-        $arrType = $this->foodService->getFoodByStoreId(1);
-    }
-
 
 }
