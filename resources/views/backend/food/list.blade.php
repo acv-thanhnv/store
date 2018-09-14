@@ -119,8 +119,6 @@
 								</button>
 							</td>
 						</tr>
-						<tr class="prop">
-						</tr>
 						@endforeach
                     </tbody>
                 </table>

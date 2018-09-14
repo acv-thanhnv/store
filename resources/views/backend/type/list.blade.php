@@ -45,7 +45,7 @@
 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
     <div class="x_panel">
         <div class="x_title">
-        	<button class="btn btn-primary" id="add" title="Add New Type" data-toggle="tooltip">
+        	<button class="btn btn-primary" id="add" title="Add New Type" data-toggle="tooltip" data-placement="right">
         		<i class="fa fa-plus"></i>
         	</button>
             <button class="btn btn-danger" id="delete_all" title="Delete All" data-toggle="tooltip">Delete All</button>

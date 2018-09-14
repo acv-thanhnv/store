@@ -16,7 +16,7 @@
 		}
 		.thumb {
 			width : 100px;
-			height: 100px;
+			min-height: 100px;
 			margin: 0.2em -0.7em 0 0;
 			border-radius: 50%;
 		}
@@ -83,7 +83,6 @@
 			<form id="form_add" class="form-horizontal input_mask" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="_token" value="{{csrf_token('')}}">
 				<!--Should use session here to get idStore-->
-				<input type="hidden" id="idStore" name="idStore" value="1">
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<input id="file" name="image" type="file" class="form-control" />
@@ -131,7 +130,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-						<button type="button" title="Add Property" class="btn btn-info btn-sm add_prop" data-toggle="tooltip" data-placement="right"><i class="fa fa-plus-square"></i>Add Property</button>
+						<button type="button" title="Add Property" class="btn btn-info btn-sm add_prop"><i class="fa fa-plus-square"></i>Add Property</button>
 					</div>
 				</div>
 				<div class="form-group label_name" style="display:none">
@@ -345,7 +344,6 @@
         formData.append("oldImage", $(".thumb").data("path"));
         formData.append("price", $("#price").val());
         formData.append("menu", $('#menu').val());
-        formData.append("idStore", $('#idStore').val());
         formData.append("arrProp", JSON.stringify(arrProp));
         $.ajax({
         	type: 'POST',

@@ -41,7 +41,6 @@
 			<form id="form_add" class="form-horizontal input_mask" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="_token" value="{{csrf_token('')}}">
 				<!--Should use session here to get idStore-->
-				<input type="hidden" id="idStore" name="idStore" value="1">
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Type Name </label>
@@ -60,7 +59,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-						<button type="button" title="Add Property" class="btn btn-info btn-sm add_prop" data-toggle="tooltip" data-placement="right"><i class="fa fa-plus-square"></i>Add Property</button>
+						<button type="button" title="Add Property" class="btn btn-info btn-sm add_prop"><i class="fa fa-plus-square"></i>Add Property</button>
 					</div>
 				</div>
 				<div class="form-group label_name" style="display:none">
@@ -150,7 +149,6 @@
 	$(".add").click(function(){
 		var name        = $("#name").val();
 		var description = $("#description").val();
-		var idStore     = $("#idStore").val();
 		var rows        = $(".property .rows");
 		var arrProp     = [];
 		for (var i = 0; i < rows.length; i++) {
@@ -159,25 +157,24 @@
 			var sort = $(rows[i]).find('input[name=sort]').val();
 			arrProp[i] = {label : label,data:data,sort:sort};
 		}
-		console.log(arrProp);
-  //       $.ajax({
-  //       	type: 'POST',
-  //       	headers: {
-  //       		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-  //       	},
-  //       	url: "{{route('postAddType')}}",
-  //       	data:{name:name,description:description,store_id:idStore,arrProp:arrProp},
-  //       	success: function (result) {
-  //       		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
-  //       			//call parent and close modal
-  //       			parent.$('#modal-add').iziModal('close');
-  //       			localStorage.setItem("Message","Add new type successful!");
-  //       			parent.location.reload();
-  //       		}else{
-  //       			_commonShowError(result.data);
-  //       		}
-		// 	}
-		// });
+        $.ajax({
+        	type: 'POST',
+        	headers: {
+        		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        	},
+        	url: "{{route('postAddType')}}",
+        	data:{name:name,description:description,arrProp:arrProp},
+        	success: function (result) {
+        		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
+        			//call parent and close modal
+        			parent.$('#modal-add').iziModal('close');
+        			localStorage.setItem("Message","Add new type successful!");
+        			parent.location.reload();
+        		}else{
+        			_commonShowError(result.data);
+        		}
+			}
+		});
 	})
 </script>
 @endpush

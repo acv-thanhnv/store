@@ -74,7 +74,7 @@ class FoodController
         $validator = Validator::make($request->all(),$rule,$message_rule);
         if (!$validator->fails()) {
             if($image!=NULL){
-                $result = $this->uploadService->uploadFile(array($image),'public','FoodImage/'.$request->idStore,'');
+                $result = $this->uploadService->uploadFile(array($image),'public','FoodImage/'.CommonHelper::getStoreId(),'');
                 foreach ($result->data as $data){
                     $imageUrl = $data["uri"];
                 }
@@ -164,7 +164,7 @@ class FoodController
             if($image!=NULL){
                 //Delete old image
                 Storage::disk($diskLocalName)->delete($request->oldImage);
-                $result = $this->uploadService->uploadFile(array($image),$diskLocalName,'FoodImage/'.$request->idStore,'');
+                $result = $this->uploadService->uploadFile(array($image),$diskLocalName,'FoodImage/'.CommonHelper::getStoreId(),'');
                 foreach ($result->data as $data){
                     $imageUrl = $data["uri"];
                 }

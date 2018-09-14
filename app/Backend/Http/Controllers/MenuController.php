@@ -2,6 +2,7 @@
 
 namespace App\Backend\Http\Controllers;
 use Illuminate\Support\Facades\Route;
+use App\Core\Helpers\CommonHelper;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Services\Interfaces\UploadServiceInterface;
 use App\Backend\Services\Interfaces\MenuServiceInterface;
@@ -34,11 +35,14 @@ class MenuController
     }
     public function postAddMenu(Request $request)
     {
-        $result    = new DataResultCollection();
-        $rule      = ["name" => "required|min:3"];
-        $validator = Validator::make($request->all(),$rule);
+        $result             = new DataResultCollection();
+        $rule               = ["name" => "required|min:3"];
+        $validator          = Validator::make($request->all(),$rule);
+        $obj["store_id"]    = CommonHelper::getStoreId();
+        $obj["name"]        = $request->name;
+        $obj["description"] = $request->description;
         if(!$validator->fails()){
-            $this->service->addMenu($request->all());
+            $this->service->addMenu($obj);
             $result->status   = SDBStatusCode::OK;
             $result->message  = 'Success';
         }else {
