@@ -156,6 +156,9 @@
     <script>
         _orderWaiting = [];
         $(document).ready(function () {
+            getInitOrderWaiter();
+
+            //Init pusher
             var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
                 cluster: '{{env('PUSHER_APP_CLUSTER')}}',
                 encrypted: true
@@ -248,6 +251,44 @@
         function deleteOrder(orderId){
             //delete Order in Database
         }
-
+        function getInitOrderWaiter(){
+            $.ajax({
+                url         : '{{route("food/orderWaiterList")}}',
+                dataType    : 'JSON',
+                type        : 'GET',
+                success: function(data){
+                    if(data.status=="{{\App\Core\Common\SDBStatusCode::OK}}"){
+                        $.each(data.data, function (index, order) {
+                            var orderArea = $('#order-template').clone();
+                            $(orderArea).removeClass('display-none');
+                            $(orderArea).removeAttr('id');
+                            $.each(order.entity, function (index2, item) {
+                                var liTag = $('#order-item-template').children('li').clone();
+                                $(liTag).removeClass('display-none');
+                                $(liTag).removeAttr('id');
+                                $(liTag).find('.order-item-name').html(item.name);
+                                $(liTag).find('.order-item-price').text(formatNumber(item.price));
+                                $(liTag).find('.order-item-quantity').text(item.quantity);
+                                $(liTag).find('.order-avatar img').attr('src', item.avatar);
+                                //Attr
+                                $(orderArea).find('.order-item-list').append(liTag);
+                            });
+                            $(orderArea).find('.order-total-price').html(formatNumber(order.totalPrice) );
+                            $(orderArea).find('.order-location').html(order.location_id);
+                            $(orderArea).find('.order-time').text(order.dateTimeOrder);
+                            $(orderArea).attr('orderId',order.orderId);
+                            $(orderArea).find('.cook-link').attr('orderId',order.orderId);
+                            $(orderArea).find('.close-link').attr('orderId',order.orderId);
+                            $('#order-waiting-list').append(orderArea);
+                            order.entity = JSON.stringify(order.entity);
+                            _orderWaiting[order.orderId]=order;
+                        });
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error '+xhr.status+' | '+thrownError);
+                },
+            });
+        }
     </script>
 @endpush

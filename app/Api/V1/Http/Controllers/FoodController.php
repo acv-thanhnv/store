@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Api\V1\Http\Controllers;
+use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
 use App\Api\V1\Services\Interfaces\FoodServiceInterface;
 use App\Core\Entities\DataResultCollection;
@@ -46,6 +47,16 @@ class FoodController extends Controller
     }
     public function closeOrder(Request $request){
         $result = $this->service->closeOrder($request);
+        return ResponseHelper::JsonDataResult($result);
+    }
+    public function orderWaiterList(){
+        $storeId = 1;
+        $result = $this->service->getOrderList($storeId,OrderStatusValue::Waiter);
+        return ResponseHelper::JsonDataResult($result);
+    }
+    public function orderChefList(){
+        $storeId = 1;
+        $result = $this->service->getOrderList($storeId,OrderStatusValue::Cheft);
         return ResponseHelper::JsonDataResult($result);
     }
 }

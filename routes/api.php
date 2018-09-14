@@ -24,3 +24,6 @@ Route::group(['middleware' => [ 'auth:api' ]],function (){
 Route::get('/api/v1/food/order', 'FoodController@order')->name('food/order');
 Route::get('/api/v1/food/order-to-chef', 'FoodController@orderToChef')->name('food/orderToChef');
 Route::get('/api/v1/food/close-order', 'FoodController@closeOrder')->name('food/closeOrder');
+
+Route::get('/api/v1/food/order-waiter-list', 'FoodController@orderWaiterList')->name('food/orderWaiterList');
+Route::get('/api/v1/food/order-chef-list', 'FoodController@orderChefList')->name('food/orderChefList');

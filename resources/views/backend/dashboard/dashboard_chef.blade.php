@@ -186,6 +186,8 @@
     <script>
         _orderWaiting = [];
         $(document).ready(function () {
+            getInitOrderChef();
+
             var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
                 cluster: '{{env('PUSHER_APP_CLUSTER')}}',
                 encrypted: true
@@ -265,11 +267,53 @@
                 $(record).find('.send-link').remove();
                 delete _orderWaiting[orderId];
                 $(record).addClass('order-closed');
+                $(record).fadeOut("slow",function(){
+                    //nothing todo
+                });
             }
         }
 
         function deleteOrder() {
             //delete Order in Database
+        }
+        function getInitOrderChef(){
+            $.ajax({
+                url         : '{{route("food/orderChefList")}}',
+                dataType    : 'JSON',
+                type        : 'GET',
+                success: function(data){
+                    if(data.status=="{{\App\Core\Common\SDBStatusCode::OK}}"){
+                        $.each(data.data, function (index, order) {
+                            var entity = JSON.stringify(data.entity);
+                            var orderArea = $('#order-template').clone();
+                            $(orderArea).removeClass('display-none');
+                            $(orderArea).removeAttr('id');
+                            $.each(order.entity, function (index2, item) {
+                                var liTag = $('#order-item-template').children('li').clone();
+                                $(liTag).removeClass('display-none');
+                                $(liTag).removeAttr('id');
+                                $(liTag).find('.order-item-name').html(item.name);
+                                $(liTag).find('.order-item-price').text(formatNumber(item.price));
+                                $(liTag).find('.order-item-quantity').text(item.quantity);
+                                $(liTag).find('.order-avatar img').attr('src', item.avatar);
+                                $(orderArea).find('.order-item-list').append(liTag);
+                            });
+                            $(orderArea).find('.order-total-price').html(formatNumber(order.totalPrice));
+                            $(orderArea).find('.order-location').html(order.locationId);
+                            $(orderArea).find('.order-time').text(order.dateTimeOrder);
+                            $(orderArea).attr('orderId',order.orderId);
+                            $(orderArea).find('.send-link').attr('orderId', order.orderId);
+                            $(orderArea).find('.close-link').attr('orderId', order.orderId);
+                            $('#order-waiting-list').append(orderArea);
+                            order.entity = JSON.stringify(order.entity);
+                            _orderWaiting[order.orderId] = order;
+                        });
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error '+xhr.status+' | '+thrownError);
+                },
+            });
         }
     </script>
 @endpush

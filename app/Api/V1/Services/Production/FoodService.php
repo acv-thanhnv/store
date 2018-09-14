@@ -58,6 +58,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
         $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
         $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
+        $description = isset($response['description']) ? $response['description'] : '';
         $entity = json_decode($response['entity']);
         if (CommonHelper::existsStore($storeId)) {
             //insert into Database
@@ -66,7 +67,8 @@ class FoodService extends BaseService implements FoodServiceInterface
                 "location_id" => $locationId,
                 "datetime_order" => now(),
                 "status" => OrderStatusValue::Waiter,
-                "priority" => 1
+                "priority" => 1,
+                "description"=>$description
             );
             $now = now()->toDateTimeString();
             try {
@@ -86,7 +88,7 @@ class FoodService extends BaseService implements FoodServiceInterface
                     SDB::table('store_order_detail')->insert($data);
                 }
                 $requestType = OrderConst::TypeAdd;
-                event(new OrderPusherEvent($storeId, $newOrderId, $locationId, $totalPrice,$requestType,$now, $entity));
+                event(new OrderPusherEvent($storeId, $newOrderId, $locationId, $totalPrice,$description,$requestType,$now, $entity));
                 SDB::commit();
                 $result->status = SDBStatusCode::OK;
             } catch (\Exception $e) {
@@ -111,6 +113,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
         $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
         $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
+        $description = isset($response['description']) ? $response['description'] : '';
         $entity = json_decode($response['entity']);
         //Update Database
         $dataOrder = array(
@@ -124,7 +127,7 @@ class FoodService extends BaseService implements FoodServiceInterface
             event(new OrderChefPusherEvent($storeId, $orderId, $locationId, $totalPrice,$requestTypeChef,$now, $entity));
             //remove from waiter
             $requestType = OrderConst::TypeClearTrash;
-            event(new OrderPusherEvent($storeId, $orderId, $locationId, $totalPrice,$requestType,$now, $entity));
+            event(new OrderPusherEvent($storeId, $orderId, $locationId, $totalPrice,$description,$requestType,$now, $entity));
             $result->status = SDBStatusCode::OK;
         } else {
             $result->status = SDBStatusCode::Excep;
@@ -155,17 +158,15 @@ class FoodService extends BaseService implements FoodServiceInterface
         return $result;
     }
     public function getOrderList( $storeId, $orderStatus){
-        $orderList = SDB::table('store_order')
-            ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
-            ->join("store_entities","store_order_detail.entities_id","=","store_entities.id")
-            ->leftJoin('store_entity_property_values',"store_entity_property_values.entity_id","=","store_order_detail.entities_id")
-            ->leftJoin('store_entity_properties',"store_entity_properties.id","=","store_entity_property_values.property_id")
-            ->where("store_order.store_id",$storeId)
-            ->where("store_order.status",$orderStatus)
-            ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
-        ->select()
-        ->get();
-        return $orderList;
+        $result  =  new DataResultCollection();
+        try{
+            $result->status = SDBStatusCode::OK;
+            $result->data = $this->buildOrderList($storeId,$orderStatus);
+        }catch (\Exception $e){
+            $result->status = SDBStatusCode::Excep;
+            $result->message = $e->getMessage();
+        }
+        return $result;
     }
 
     protected function buildFoodListByStoreId($foodList, $storeId)
@@ -233,10 +234,13 @@ class FoodService extends BaseService implements FoodServiceInterface
     }
     protected function buildOrderList($storeId,$orderStatus){
         $orderList = SDB::table('store_order')
+            ->join('store_order_detail','store_order.id','=','store_order_detail.order_id')
+            ->join('store_entities','store_entities.id','=','store_order_detail.entities_id')
             ->where("store_order.store_id",$storeId)
             ->where("store_order.status",$orderStatus)
             ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
-            ->select()
+            ->selectRaw('store_order.id,store_order.store_id,store_order.location_id,store_order.description,store_order.datetime_order,SUM(store_order_detail.quantity * store_entities.price ) AS totalPrice')
+            ->groupBy("store_order.id","store_order.store_id","store_order.location_id","store_order.description","store_order.datetime_order")
             ->get();
         $orderListDetail = SDB::table('store_order')
             ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
@@ -245,15 +249,67 @@ class FoodService extends BaseService implements FoodServiceInterface
             ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
             ->select()
             ->get();
-        $orderEntityList = SDB::table('store_order')
+        $orderEntityInfoList = SDB::table('store_order')
             ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
-            ->join("store_entities","store_order_detail.entities_id","=","store_entities.id")
-            ->leftJoin('store_entity_property_values',"store_entity_property_values.entity_id","=","store_order_detail.entities_id")
-            ->leftJoin('store_entity_properties',"store_entity_properties.id","=","store_entity_property_values.property_id")
+            ->join("view_entity_infor","store_order_detail.entities_id","=","view_entity_infor.id")
             ->where("store_order.store_id",$storeId)
             ->where("store_order.status",$orderStatus)
             ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
-            ->select("entiy")
+            ->select("view_entity_infor.*")
+            ->distinct()
             ->get();
+        $orderEntityList = SDB::table('store_order')
+            ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
+            ->join("store_entities","store_order_detail.entities_id","=","store_entities.id")
+            ->where("store_order.store_id",$storeId)
+            ->where("store_order.status",$orderStatus)
+            ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
+            ->select("store_entities.id","store_entities.name","store_entities.menu_id","store_entities.image","store_entities.price")
+            ->distinct()
+            ->get();
+        $resultEntity = array();
+        if (!empty($orderEntityList)) {
+            foreach ($orderEntityList as $itemEntity) {
+                $foods = $itemEntity;
+                $foods->props = array();
+                $prop = array();
+                foreach ($orderEntityInfoList as $foodItem) {
+                    if ($foodItem->id == $foods->id) {
+                        $prop['entity_prop_id'] = $foodItem->entity_prop_id;
+                        $prop['data_type_code'] = $foodItem->data_type_code;
+                        $prop['prop_data_type'] = $foodItem->prop_data_type;
+                        $prop['property_label'] = $foodItem->property_label;
+                        $prop['property_name'] = $foodItem->property_name;
+                        $prop['value'] = $foodItem->value;
+                        $foods->props[] = $prop;
+                    }
+                }
+                $resultEntity[$itemEntity->id] = $foods;
+            }
+        }
+        $orderInfor = array();
+        if (!empty($orderList)) {
+            foreach ($orderList as $itemOrder) {
+                $order =  (object) array(
+                    "storeId"=>$itemOrder->store_id,
+                    "orderId"=> $itemOrder->id,
+                    "locationId"=> $itemOrder->location_id,
+                    "totalPrice"=>$itemOrder->totalPrice,
+                    "description"=>$itemOrder->description,
+                    "dateTimeOrder"=>$itemOrder->datetime_order
+                );
+                $order->entity = array();
+                foreach ($orderListDetail as $orderDetail) {
+                    if ($itemOrder->id == $orderDetail->order_id) {
+                        $food = $resultEntity[$orderDetail->entities_id];
+                        $food->quantity = $orderDetail->quantity;
+                        $food->avatar = $food->image;
+                        $order->entity[]= $food;
+                    }
+                }
+                $orderInfor[] = $order;
+            }
+        }
+        return $orderInfor;
     }
 }

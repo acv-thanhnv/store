@@ -30,7 +30,8 @@ class OrderPusherEvent implements ShouldBroadcast
     public $totalPrice;
     public $dateTimeOrder;
     public $requestType;
-    public function __construct($storeId,$orderId,$locationId,$totalPrice,$requestType,$now,$entity)
+    public $description;
+    public function __construct($storeId,$orderId,$locationId,$totalPrice,$description,$requestType,$now,$entity)
     {
         $this->storeId = $storeId;
         $this->entity = $entity;
@@ -39,6 +40,7 @@ class OrderPusherEvent implements ShouldBroadcast
         $this->totalPrice = $totalPrice;
         $this->dateTimeOrder = $now;
         $this->requestType =  $requestType;
+        $this->description = $description;
     }
     /**
      * The event's broadcast name.
