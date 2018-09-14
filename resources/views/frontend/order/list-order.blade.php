@@ -10,9 +10,7 @@
             <div _ngcontent-c7="" class="cell-count">
             </div>
             <div _ngcontent-c7="" class="cell-action">
-                <!----><a _ngcontent-c7="" class="fas fa-times-circle" href="#" title="Xóa hàng hóa">
-                    <i _ngcontent-c7=""></i>
-                </a>
+                <button class=" delete-item-order">x</button>
             </div>
 
             <div _ngcontent-c7="" class="row-product">
@@ -23,12 +21,10 @@
                     <h4 _ngcontent-c7="" class="name-item2" order-name="">
 
                     </h4>
-                    <div _ngcontent-c7="" class="wrap-note" href="#">
+                    <div _ngcontent-c7="" class="wrap-note" href="">
                         <label _ngcontent-c7="">
                             <button _ngcontent-c7="" class="btn-icon">
-                                <!---->
-                                <!----><span _ngcontent-c7="" class="note-hint">Ghi chú...</span>
-                                <!---->
+
                                 <i _ngcontent-c7="" class="fas fa-pen"></i>
                                 <!---->
                             </button>
@@ -41,14 +37,12 @@
                 <!---->
                 <!----><div _ngcontent-c7="" class="cell-warning">
                     <!----><button _ngcontent-c7="" class="btn-icon" type="button">
-                        <i _ngcontent-c7="" class="far fa-star"></i>
+                    
                     </button>
                 </div>
-                <div _ngcontent-c7="" class="cell-quatity">
+                <div _ngcontent-c7="" class="cell-quantity">
                     <button _ngcontent-c7="" class="btn-icon down" type="button"><i _ngcontent-c7="" class="fa fa-angle-down"></i></button>
-                    <button _ngcontent-c7="" class="form-control in-table">
-                        2
-                    </button>
+                    <input class="quantity" type="number" name="" value="">
                     <button _ngcontent-c7="" class="btn-icon up" type="button"><i _ngcontent-c7="" class="fa fa-angle-up"></i></button>
                     <!---->
                     <!---->
@@ -58,14 +52,11 @@
                 </div>
                 <div _ngcontent-c7="" class="cell-change-price">
                     <div _ngcontent-c7="" class="popup-anchor">
-                        <button _ngcontent-c7="" class="product-price2" order-price="">
-
-                        </button>
-                        <!---->
+                        <span class="product-price2" order-price=""></span>
                     </div>
                 </div>
                 <div _ngcontent-c7="" class="cell-price">
-                    60,000
+                  <span class="price-amount"></span>
                 </div>
                 <!---->
             </div>
