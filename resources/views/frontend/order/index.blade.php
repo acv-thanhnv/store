@@ -97,6 +97,15 @@
             <button _ngcontent-c4="" class="btn btn-success btn-order" skip-disable="" type="button">
                 Chuyển Nhà Bếp
             </button>
+            <div class="order-table">
+                <button class="choose-table" style="width: 60px; height: 20px">Bàn</button>
+            </div>
+            <div class="order-description">
+                <span>Description: <input type="text" name="" class="description" placeholder="ghi chú..."></span>
+            </div>
+            <span>Tổng tiền: <span class="total-price"></span></span>
+            
+            
 
         </div>
 
@@ -153,6 +162,9 @@
         @include('frontend.order.item-list')
         @include('frontend.order.menu-item')
         @include('frontend.order.list-order')
+
+        <div id="modal-iFrame" class="iziModal" display="none"></div>
+        
     </div>
 </div>
 
@@ -165,6 +177,24 @@
 
 @section('javascript')
 <script type="text/javascript">
+    
+    $(document).on('click', '.choose-table', function(event) {
+      event.preventDefault();
+                  $('#modal-iFrame').iziModal('open', this); // Do not forget the "this"
+              });
+
+
+    $("#modal-iFrame").iziModal({
+          title: 'Create Role', //Modal title
+          subtitle: 'Fill the table.', //Modal subtitle
+          headerColor: 'rgb(51, 76, 123)', //Color of modal header. Hexa colors allowed.
+          overlayColor: 'rgba(0, 0, 0, 0.4)', //Color of overlay behind the modal
+          iconColor: '',
+          iconClass: 'icon-chat',
+          iframe: true, //In this example, this flag is mandatory. Izimodal needs to understand you will call an iFrame from here
+          iframeURL: "{{route('listlocation')}}" //Link will be opened inside modal
+      });
+
     $( document ).ready(function(event) {
         $.ajax({
             url         : '{{route("food/list-by-store")}}'+"/1",
@@ -172,7 +202,6 @@
             type        : 'GET', 
             success: function(data){
                 genFoodByStoreId(data);
-                //console.log(data);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Error '+xhr.status+' | '+thrownError);
@@ -276,24 +305,37 @@
         var id = $(".menulist").find('.item-temp1').attr('item-id');
         var image = $(this).find('.image-item').attr('src');
         var name = $(this).find("span.product-name").text();
-        var price = $(this).find("span.product-price").text();
+        var price = parseInt($(this).find("span.product-price").text());
 
         var row = $("#list-order").contents().clone();
         $(row).find('.row-list').attr('id', id);
         $(row).find('.image-item2').attr('src',image);
         $(row).find('.name-item2').html(name);
         $(row).find('.product-price2').text(price);
+        $(row).find('.quantity').val('1');
+            //console.log($(row).find('.quantity').val());
 
-        $(row).attr('order-id', id);
-        $(row).attr('order-name', name);
-        $(row).attr('order-price', price);  
+            $(row).attr('order-id', id);
+            $(row).attr('order-name', name);
+            $(row).attr('order-price', price);
+            x++;
+            if(x < max_fields&& x>1){
 
-        x++;
-        if(x < max_fields&& x>1){
+                $(wrapper).append(row);
+                update();
+            }
 
-            $(wrapper).append(row);
-        }
-    });
+        // if(id!=$('#list-order').find('.row-list').attr('id')){
+
+        // }else{
+        //     var quantity = ('#list-order').find('.quantity').val(quantity+1);
+
+        // }
+
+//console.log($('#order').find('.row-list').attr('id'));
+
+
+});
 
     $(document).on("click",".delete-item-order",function(event){
         $(this).parents(".item-order").remove();
@@ -306,8 +348,9 @@
         var storeId = 1;
         var orderId = 0;
         var locationId = 1;
-        var description = 'aaajl';
-        var totalPrice = 10000;
+        var description = $('.description').val();
+        var totalPrice = $('.total-price').text();
+
         var rows= $('.item-order');
         var entity =[];
         for(var i=0; i<rows.length-1; i++){
@@ -352,29 +395,26 @@
 
 //soluong
 //
-    //update();
-    $(document).on("change",".quantity",function() {
+
+$(document).on("change",".quantity",function() {
     update();
+});
+
+function update(){
+    var total = 0;
+    $('.item-order').each(function() {
+        //get amount
+        var quantity = $(this).find('.quantity').val();
+        var price = $(this).find('.product-price2').text();
+        var amount=(quantity*price);
+        $(this).find('.price-amount').text(amount);
+
+        total+=amount;
     });
+    //get total
+    $('.total-price').text(total);
+}   
 
-    function update() {
-        var sum = 0.0;
-        var quantity;
-        $('.item-order').each(function() {
-
-          quantity = $(this).find('.quantity').val();
-          var price = parseFloat($(this).find('.product-price2').attr('order-price').replace(',', '.'));
-          var amount = $(this).find('.price-amount').text();
-          //console.log(amount);
-          amount = (quantity * price);
-          console.log(quantity);
-
-          // sum += amount;
-          // $(this).find('.amount').text('' + amount + ' грн');
-      });
-        // $('.total').text(sum + ' грн');
-    }
-    
 </script>
 
 @endsection

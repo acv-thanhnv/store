@@ -1,100 +1,111 @@
-@section('css')
 <style type="text/css">
+#item-order-template{
+    display: ;
+}
+.row-item-order *{
+    height: 61px;
+    float: left;
+}
+.row-item-order.active{
+        background-color: #edf6e4;
+}
+.cell-arrange{
+    width:30px;
+    padding: 12px 7px 0;
+}
+.cell-delete{
+    width: 35px;
+    padding: 12px 7px 0;
     
-</style>
-@endsection
+}
+.delete-row{
+    width:14px;
+    height: 14px;
+}
+.cell-image{
+    padding: 7px 7px;
+}
+div a{
+    color: red;
+}
+.item-image{
+    width:45px;
+    height: 45px;
+}
+.cell-name{
+    width: calc(100%-300px);
+    padding: 6px 7px;
+}
+.item-name{
+    color: #111;
+}
+.cell-quantity{
+    width: 50px;
+    padding: 12px 7px !important;
+}
+.item-quantity{
+    width:40px;
+    height: 20px;
+    color:#111;
+    border-width:0 0 1px;
+    border-style:solid;
+    border-color: #a0a0a0;
+    text-align: right;
+}
+.cell-price{
+    width:88px;
+    padding: 12px 7px;
 
-<style type="text/css">
-    .image-item2{
-        width: 40px;
-        height: 40px;
-    }
+}
+.item-price{
+    width:74px;
+    height: 20px;
+    font-size: 14px;
+    font-family: Arial,Helvetica,sans-serif;
+    text-align: right;
+}
+.cell-amount{
+    width:110px;
+    padding: 12px 7px;
+}
+.item-amount{
+    width:110px;
+    height: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: right;
+}
 </style>
+
 
 <div id="item-order-template">
     <div class="wrap-item-order">
-        <div class="row-item-order" id="">
-            <div class="cell-count">1</div>
+        <div class="col-sm-6 row-item-order" item-id="" item-name="" item-price="">
+            <div class="cell-arrange">
+                <span class="item-arrange">1</span>
+            </div>
             <div class="cell-delete">
-                <a class="" href=""><button></button></a>
-            </div>
-            <div class="cell-image"></div>
-            <div class="cell-name"></div>
-            <div class="cell-quantity"></div>
-            <div class="cell-price"></div>
-            <div class="cell-money"></div>
-        </div>
-    </div>
-</div>
-
-
-<div id="list-order">
-    <div _ngcontent-c7="" class="item-order" order-id="" order-name="" order-image="" order-price="">
-        <div _ngcontent-c7="" class="row-list" id="">
-            <div _ngcontent-c7="" class="cell-count">
-            </div>
-            <div _ngcontent-c7="" class="cell-action">
-                <!----><a _ngcontent-c7="" class="fas fa-times-circle delete-item-order" href="#" title="Xóa hàng hóa">
-                    <i _ngcontent-c7=""></i>
+                <a title="delete item order">
+                    <span class="glyphicon glyphicon-remove delete-row"></span>
                 </a>
             </div>
-
-            <div _ngcontent-c7="" class="row-product">
-                <div _ngcontent-c7="" class="cell-image">
-                    <img _ngcontent-c28="" class="image-item2" src="">
-                </div>
-                <div _ngcontent-c7="" class="cell-name full">
-                    <h4 _ngcontent-c7="" class="name-item2" order-name="">
-
-                    </h4>
-                    <div _ngcontent-c7="" class="wrap-note" href="#">
-                        <label _ngcontent-c7="">
-                            <button _ngcontent-c7="" class="btn-icon">
-                                <!---->
-                                <!----><span _ngcontent-c7="" class="note-hint">Ghi chú...</span>
-                                <!---->
-                                <i _ngcontent-c7="" class="fas fa-pen"></i>
-                                <!---->
-                            </button>
-                        </label>
-                    </div>
-                    <div _ngcontent-c7="" class="list-topping">
-                        <!---->
-                    </div>
-                </div>
-                <!---->
-                <!----><div _ngcontent-c7="" class="cell-warning">
-                    <!----><button _ngcontent-c7="" class="btn-icon" type="button">
-                        <i _ngcontent-c7="" class="far fa-star"></i>
-                    </button>
-                </div>
-                <div _ngcontent-c7="" class="cell-quatity">
-                    <button _ngcontent-c7="" class="btn-icon down" type="button"><i _ngcontent-c7="" class="fa fa-angle-down"></i></button>
-                    <button _ngcontent-c7="" class="form-control in-table">
-                    </button>
-                    <button _ngcontent-c7="" class="btn-icon up" type="button"><i _ngcontent-c7="" class="fa fa-angle-up"></i></button>
-                    <!---->
-                    <!---->
-                </div>
-                <div _ngcontent-c7="" class="cell-warning">
-                    <!---->
-                </div>
-                <div _ngcontent-c7="" class="cell-change-price">
-                    <div _ngcontent-c7="" class="popup-anchor">
-                        <button _ngcontent-c7="" class="product-price2" order-price="">
-
-                        </button>
-                        <!---->
-                    </div>
-                </div>
-                <div _ngcontent-c7="" class="cell-price">
-                    60,000
-                </div>
-                <!---->
+            <div class="cell-image">
+                <img class="item-image" src="">
+            </div>
+            <div class="cell-name">
+                <h4 class="item-name">Truong Son</h4>
+            </div>
+            <div class="cell-quantity">
+                <input class="item-quantity" type="number" value="">
+            </div>
+            <div class="cell-price">
+                <span class="item-price" type="number" value="">aaa</span>
+            </div>
+            <div class="cell-amount">
+                <span class="item-amount" type="number" value="">|aaa</span>
             </div>
         </div>
-
     </div>
-
 </div>
+
 

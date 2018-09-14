@@ -5,7 +5,7 @@
 </style>
 @endsection
 
-{{-- Begin content --}}
+
 @section('content')
 <div class="wraper-content col-sm-12">
 	{{--BEGIN HEADER CONTENT--}}
@@ -55,7 +55,11 @@
 		</div>
 	</div>
 	{{--END CONTENT--}}
-	
+
+	{{--INCLUDE TEMPLATE CONTENT--}}
+	@include('frontend.foodorder.item-type')
+	@include('frontend.foodorder.item')
+	@include('frontend.foodorder.item-order')
+
 </div>
 @endsection
-{{--END CONTENT--}}

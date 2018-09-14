@@ -1,12 +1,14 @@
-@section('css')
-<style type="text/css">
-    
-</style>
-@endsection
 
-<div id="item-template" style="display: none">
+<style type="text/css">
+ #item-template{
+    display: none;
+ }
+</style>
+
+
+<div id="item-template">
     <ul id="wrap-items"> 
-        <li class="item" item-id="" item-name="" item-image="" item-price="">
+        <li class="item" item-id="" item-name="" item-price="">
             <input type="hidden" class="item-id" id="">
             <a class="item-title" title="">
                 <div  class="wrap-item-image">
