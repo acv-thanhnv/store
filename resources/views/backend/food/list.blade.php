@@ -31,6 +31,22 @@
 		background: #172D44 !important;
 		color: white !important;
 	}
+	.img-food{
+		width: 100px;
+		height: 70px;
+	}
+	td.show_more {
+		background: url('backend/template1/img/details_open.png') no-repeat center;
+		width: 40px;
+		cursor: pointer;
+	}
+	td.show_prop{
+		background: url('backend/template1/img/details_close.png') no-repeat center center;
+	}
+	tr.group,tr.group:hover {
+		background-color: #ddd !important;
+		font-weight: bold;`
+	}
 </style>
 @endpush
 @extends("layouts.backend")
@@ -45,7 +61,7 @@
 <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
     <div class="x_panel">
         <div class="x_title">
-        	<button class="btn btn-primary" id="add" title="Add New Type" data-toggle="tooltip">
+        	<button class="btn btn-primary" id="add" title="Add New Food" data-toggle="tooltip">
         		<i class="fa fa-plus"></i>
         	</button>
             <button class="btn btn-danger" id="delete_all" title="Delete All" data-toggle="tooltip">Delete All</button>
@@ -60,39 +76,38 @@
         <!--Content-->
 
         <div class="x_content">
-            <div class="table-responsive">
+            <div class="">
                 <table class="table table-striped jambo_table table-hover table-user" id="dataTable">
                     <thead>
                     <tr class="headings">
                         <th style="text-align: center">
                             <input type="checkbox" id="check-all" class="flat">
                         </th>
+                        <th>Properties</th>
                         <th class="column-title">Name </th>
-                        <th class="column-title">Description </th>
-                        <th class="column-title">Properties</th>
+                        <th class="column-title">Image </th>
+                        <th class="column-title">Price</th>
+                        <th class="column-title">Menu</th>
                         <th class="column-title">Edit </th>
                         <th class="column-title">Delete </th>
                     </tr>
                     </thead>
                     <!--Tbody-->
                     <tbody id="tbody">
-                    	@foreach($arrType as $obj)
+                    	@foreach($arrFood as $obj)
 						<tr>
 							<td style="text-align: center" class="check-delete">
 								<input type="checkbox" value="{{$obj->id}}">
 							</td>
+							<td class="show_more"></td>
 							<td>{{$obj->name}}</td>
-							<td>{{$obj->description}}</td>
 							<td>
-								@if($obj->prop == NULL)
-									{{"None"}}
-								@else 
-									@foreach($obj->prop as $prop)
-										- {{$prop->property_label}}
-										<br>
-									@endforeach
-								@endif
+								<img class="img-food" src="{{$obj->image}}">
 							</td>
+							<td>
+								{{$obj->price}}
+							</td>
+							<td>Menu: {{$obj->menuName}}</td>
 							<td>
 								<button type="button" class="btn btn-primary edit round" data-id="{{$obj->id}}">
 									<i class="fa fa-pencil-square-o"></i>
@@ -140,10 +155,10 @@
 			$(".iziModal-iframe").attr("src","");
 		},
 		focusInput	   : true,
-		title          : 'Type',
+		title          : 'Food',
 		subtitle       :'Add',
-		width          : 750,
-		iframeHeight   : 400,
+		width          : 850,
+		iframeHeight   : 500,
 		headerColor    :"#405467",
 		icon           :"fa fa-user",
 		iconColor      :"#ECF0F1",
@@ -159,7 +174,7 @@
 		arrowKeys      :true,
 		iframe         : true,
 		iframeWidth    :400,
-		iframeURL      :"{{route('addType')}}"
+		iframeURL      :"{{route('addFood')}}"
 	});
 	//function edit
 	$(document).on('click', '.edit', function(event) {
@@ -169,7 +184,7 @@
 	{
 		onOpening: function(modal){
 			var id =$(event.target).closest("button").data("id");//get Id, get button then get id
-			$(".iziModal-iframe").attr("src","{{route('editType')}}?id="+id);
+			$(".iziModal-iframe").attr("src","{{route('editFood')}}?id="+id);
 			//set url iframe
 		},
 		onClosed: function(modal){
@@ -180,10 +195,10 @@
 			}
 			$(".iziModal-iframe").attr("src","");
 		},
-		title          : 'Type',
+		title          : 'Food',
 		subtitle       :'Edit',
-		width          : 750,
-		iframeHeight   : 300,
+		width          : 850,
+		iframeHeight   : 500,
 		headerColor    :"#405467",
 		icon           :"fa fa-user",
 		iconColor      :"#ECF0F1",
@@ -200,7 +215,7 @@
 		iframeWidth    :500,
 		iframeURL      :""
 	});
-	//Delete User
+	//Delete Food
 	$("body").on("click",".delete",function(e){
 		var id = $(this).data("id");
 		var tr = $(this).parents('tr');
@@ -219,8 +234,8 @@
 					btnClass: 'btn btn-primary',
 					action  : function (){
 						$("#dataTable").DataTable().row(tr).remove().draw(false);
-						$.get("{{route('deleteType')}}",{id:id},function(data){
-							Alert("Type Have Been Deleted Successful!");
+						$.get("{{route('deleteFood')}}",{id:id},function(data){
+							Alert("Food Have Been Deleted Successful!");
 						});
 					}
 				},
@@ -253,7 +268,7 @@
 			type          :"orange",
 			closeIcon     : true,
 			closeIconClass: 'fa fa-close',
-			content       : "Are You Sure? All of these types and related data will be deleted!",
+			content       : "Are You Sure? All of these foods and related data will be deleted!",
 			buttons       : {
 				Save: {
 					text    : 'OK',
@@ -265,8 +280,8 @@
 							$("#dataTable").DataTable().row(tr).remove().draw(false);
 							arrId.push($(this).val());
 						});
-						$.get("{{route('deleteAllType')}}",{arrId:arrId},function(data){
-								Alert("Types have been deleted!");
+						$.get("{{route('deleteAllFood')}}",{arrId:arrId},function(data){
+								Alert("Foods have been deleted!");
 						});
 					}
 				},
@@ -302,18 +317,56 @@
 		    loaderBg: '#9EC600'
 		});
 	}
+	// Show Property
+		$('#dataTable tbody').on('click', 'td.show_more', function () {
+			var row = $(this).closest("tr");
+			var table = $("#template_showMore").contents().clone();
+			console.log(table);
+			row.after(table);
+			$(this).toggleClass('show_prop');
+        } );
 	//function dataTable
 	function dataTable()
 	{
-		$("#dataTable").DataTable({
+		var groupColumn = 5;
+		var table = $('#dataTable').DataTable({
 			"columnDefs": [
-                { 
+				{ 
+					"visible": false, 
+					"targets": groupColumn 
+				},
+				{ 
                     "orderable": false ,
-                    "targets": [0,3,4]
+                    "targets": [0,1,5,6,7]
                 }
-            ],
-            order: []
-		});
-	}
+			],
+			"order": [[ groupColumn, 'asc' ]],
+			"drawCallback": function ( settings ) {
+				var api = this.api();
+				var rows = api.rows( {page:'current'} ).nodes();
+				var last=null;
+
+				api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
+					if ( last !== group ) {
+						$(rows).eq( i ).before(
+							'<tr class="group"><td colspan="8">'+group+'</td></tr>'
+							);
+
+						last = group;
+					}
+				} );
+			}
+		} );
+        // Order by the grouping
+        $('#dataTable tbody').on( 'click', 'tr.group', function () {
+        	var currentOrder = table.order()[0];
+        	if ( currentOrder[0] === groupColumn && currentOrder[1] === 'asc' ) {
+        		table.order( [ groupColumn, 'desc' ] ).draw();
+        	}
+        	else {
+        		table.order( [ groupColumn, 'asc' ] ).draw();
+        	}
+        } );
+    }
 </script>
 @endpush

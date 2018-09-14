@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Backend\Http\Controllers;
+use App\Core\Helpers\CommonHelper;
 use Illuminate\Support\Facades\Route;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Services\Interfaces\UploadServiceInterface;
@@ -52,7 +53,7 @@ class TypeController
             $prop              = Array();
             //adType
             $type["name"]        = $request->name;
-            $type["store_id"]    = $request->store_id;
+            $type["store_id"]    = CommonHelper::getStoreId();
             $type["description"] = $request->description;
             $idType = $this->service->addType($type);
             //add Property
@@ -60,7 +61,7 @@ class TypeController
                 foreach ($request->arrProp as $obj) {
                     if($obj["label"]!=NULL){
                         $prop["entity_type_id"] = $idType;
-                        $prop["property_name"] = changeTitle($obj["label"]);
+                        $prop["property_name"] = CommonHelper::changeTitle($obj["label"]);
                         $prop["data_type_code"] = $obj["data"];
                         $prop["property_label"] = $obj["label"];
                         $prop["sort"] = $obj["sort"];
@@ -83,10 +84,10 @@ class TypeController
     {
         $obj  = $this->service->getById($request->id);
         $prop =  $this->service->getProp($obj->id);
-        $obj->arrProp = $prop; 
+        $obj->arrProp = $prop;
         $arrData      = $this->service->getDataType();
         return view("backend.type.edit",[
-            "obj"     => $obj, 
+            "obj"     => $obj,
             "arrData" => $arrData
         ]);
     }
@@ -102,7 +103,7 @@ class TypeController
             //adType
             $type["id"]          = $request->id;
             $type["name"]        = $request->name;
-            $type["store_id"]    = $request->store_id;
+            $type["store_id"]    = CommonHelper::getStoreId();
             $type["description"] = $request->description;
             $idType = $this->service->editType($type);
             //add Property
@@ -110,7 +111,7 @@ class TypeController
                 foreach ($request->arrProp as $obj) {
                     if($obj["label"]!=NULL){
                         $prop["entity_type_id"] = $request->id;
-                        $prop["property_name"] = changeTitle($obj["label"]);
+                        $prop["property_name"] = CommonHelper::changeTitle($obj["label"]);
                         $prop["data_type_code"] = $obj["data"];
                         $prop["property_label"] = $obj["label"];
                         $prop["sort"] = $obj["sort"];
@@ -146,5 +147,5 @@ class TypeController
     {
         $this->service->deleteProp($request->id);
     }
-    
+
 }

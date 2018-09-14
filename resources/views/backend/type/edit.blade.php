@@ -31,7 +31,6 @@
 			<form id="form_add" class="form-horizontal input_mask" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="_token" value="{{csrf_token('')}}">
 				<!--Should use session here to get idStore-->
-				<input type="hidden" id="idStore" name="idStore" value="1">
 				<input type="hidden" id="idType" value="{{$obj->id}}">
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
@@ -50,7 +49,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-						<button type="button" title="Add Property" class="btn btn-info btn-sm add_prop" data-toggle="tooltip" data-placement="right"><i class="fa fa-plus-square"></i>Add Property</button>
+						<button type="button" title="Add Property" class="btn btn-info btn-sm add_prop"><i class="fa fa-plus-square"></i>Add Property</button>
 					</div>
 				</div>
 				<div class="form-group label_name" style="display:none">
@@ -203,7 +202,6 @@
 		$(".save").click(function(){
 			var name        = $("#name").val();
 			var description = $("#description").val();
-			var idStore     = $("#idStore").val();
 			var idType      = $("#idType").val();
 			var rows        = $(".property .rows");
 			var arrProp     = [];
@@ -220,7 +218,7 @@
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 				url: "{{route('postEditType')}}",
-				data:{id:idType,name:name,description:description,store_id:idStore,arrProp:arrProp},
+				data:{id:idType,name:name,description:description,arrProp:arrProp},
 				success: function (result) {
 					if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
         			//call parent and close modal

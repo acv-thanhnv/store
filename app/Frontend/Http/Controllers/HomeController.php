@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Frontend\Http\Controllers;
+use App\Api\V1\Services\Production\FoodService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,6 +31,8 @@ class HomeController extends Controller
     }
     public function test(Request $request)
     {
+        $a = new FoodService();
+        dd($a->getOrderList(1,2));
         return view('frontend.testorder');
     }
 }
