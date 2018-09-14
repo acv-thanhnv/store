@@ -21,9 +21,9 @@ class OrderController extends Controller
         $this->foodService = $foodService;
     }
 
-    public function index()
+    public function index($idStore)
     {  
-        return view('frontend.order.index');
+        return view('frontend.order.index',["idStore" => $idStore]);
     }
 
     public function index2(){

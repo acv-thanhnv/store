@@ -99,13 +99,14 @@
             </button>
             <div class="order-table">
                 <button class="choose-table" style="width: 60px; height: 20px">Bàn</button>
+                <span id="lbl-table"></span>
             </div>
             <div class="order-description">
                 <span>Description: <input type="text" name="" class="description" placeholder="ghi chú..."></span>
             </div>
             <span>Tổng tiền: <span class="total-price"></span></span>
             
-            
+            <span id="idStore" store-id="{{$idStore}}" style="display: none"></span>
 
         </div>
 
@@ -177,7 +178,8 @@
 
 @section('javascript')
 <script type="text/javascript">
-    
+
+
     $(document).on('click', '.choose-table', function(event) {
       event.preventDefault();
                   $('#modal-iFrame').iziModal('open', this); // Do not forget the "this"
@@ -185,8 +187,7 @@
 
 
     $("#modal-iFrame").iziModal({
-          title: 'Create Role', //Modal title
-          subtitle: 'Fill the table.', //Modal subtitle
+          title: 'Choose Table', //Modal title
           headerColor: 'rgb(51, 76, 123)', //Color of modal header. Hexa colors allowed.
           overlayColor: 'rgba(0, 0, 0, 0.4)', //Color of overlay behind the modal
           iconColor: '',
@@ -324,17 +325,6 @@
                 $(wrapper).append(row);
                 update();
             }
-
-        // if(id!=$('#list-order').find('.row-list').attr('id')){
-
-        // }else{
-        //     var quantity = ('#list-order').find('.quantity').val(quantity+1);
-
-        // }
-
-//console.log($('#order').find('.row-list').attr('id'));
-
-
 });
 
     $(document).on("click",".delete-item-order",function(event){
@@ -345,9 +335,9 @@
 
     $(document).on("click",".btn-order",function(){
 
-        var storeId = 1;
+        var storeId = $('#idStore').attr('store-id');
         var orderId = 0;
-        var locationId = 1;
+        var locationId = $('#lbl-table').text();
         var description = $('.description').val();
         var totalPrice = $('.total-price').text();
 
@@ -368,9 +358,7 @@
         entity = JSON.stringify(entity);
 
         $.ajax({
-            // headers: {
-            //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            // },
+
             url         : '{{route("food/order")}}',
             dataType    : 'JSON',
             type        : 'GET', 
@@ -385,15 +373,6 @@
     });
 
 
-    $(document).on("click", "up", function(){
-
-    });
-
-    $(document).on("click", "down", function(){
-
-    }); 
-
-//soluong
 //
 
 $(document).on("change",".quantity",function() {
