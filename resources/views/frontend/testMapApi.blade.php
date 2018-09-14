@@ -22,30 +22,15 @@
     <div id="map"></div>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
     <script>
-      var locations ;
+      var locations =<?php echo $arrCoor?>;
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 10,
-          center: {lat: -28.024, lng: 140.887}
+          center: {lat: -33.863276, lng: 151.207977}
         });
         setMarkers(map);
       }
-      //function get coordinates 
-      function getCoordinates()
-      {
-        $(document).ready(function(){
-          $.ajax({
-            type: 'GET',
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: "{{route('getCoor')}}",
-            success: function (result) {
-                locations = result;
-              }
-            });
-        });
-      }
+      console.log(locations[0]["long"]);
       function setMarkers(map)
       {
         var image = {
@@ -58,16 +43,16 @@
             anchor: new google.maps.Point(0, 32)
           };
           for (var i = 0; i < locations.length; i++) {
-            var locations = locations[i];
+            var location = locations[i];
             var marker = new google.maps.Marker({
-              position: {lat: beach[3], lng: beach[4]},
+              position: {lat: location["lat"], lng: location["lng"]},
               map: map,
               icon: image,
-              shape: shape,
-              title: beach[0]
+              title: location["name"]
             });
           }
       }
+      //function get coordinates 
     </script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script>

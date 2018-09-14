@@ -20,8 +20,5 @@
     Route::get('/frontend/test', 'HomeController@test')->name('test');
 
     Route::get('/order', 'OrderController@index')->name('order');
-    Route::get('/testMap',function(){
-    	return view("frontend.testMapApi");
-    });
-    Route::get("getCoor","HomeController@getCoor")->name("getCoor");
+    Route::get("Map","HomeController@Map");
 
