@@ -36,9 +36,10 @@ class HomeController extends Controller
     {
         return view('frontend.testorder');
     }
-    public function getCoor()
+    public function Map()
     {
         $arrCoor = SDB::table("map")->get();
-        return response()->json($arrCoor);
+        $arrCoor = json_encode($arrCoor);
+        return view("frontend.testMapApi",["arrCoor" => $arrCoor]); 
     }
 }

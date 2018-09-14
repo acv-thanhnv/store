@@ -24,8 +24,5 @@ Route::get('/order/{idStore?}', 'OrderController@index')->name('order');
 Route::get('/foodorder', 'OrderController@index2');
 Route::get('listlocation','OrderController@getTables')->name('listlocation');
     Route::get('/order', 'OrderController@index')->name('order');
-    Route::get('/testMap',function(){
-    	return view("frontend.testMapApi");
-    });
-    Route::get("getCoor","HomeController@getCoor")->name("getCoor");
+    Route::get("Map","HomeController@Map");
 
