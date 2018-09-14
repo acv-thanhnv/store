@@ -51,7 +51,6 @@
 			<form id="form_add" class="form-horizontal input_mask" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="_token" value="{{csrf_token('')}}">
 				<!--Should use session here to get idStore-->
-				<input type="hidden" id="idStore" name="idStore" value="1">
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Menu Name </label>
@@ -86,14 +85,13 @@
 	$(".add").click(function(){
 		var name        = $("#name").val();
 		var description = $("#description").val();
-		var idStore     = $("#idStore").val();
         $.ajax({
         	type: 'POST',
         	headers: {
         		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         	},
         	url: "{{route('postAddMenu')}}",
-        	data:{name:name,description:description,store_id:idStore},
+        	data:{name:name,description:description},
         	success: function (result) {
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
         			//call parent and close modal

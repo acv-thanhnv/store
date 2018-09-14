@@ -48,7 +48,6 @@
 			<form id="form_edit" class="form-horizontal input_mask" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="_token" value="{{csrf_token('')}}">
 				<!--Should use session here to get idStore-->
-				<input type="hidden" id="idStore" name="idStore" value="{{$obj->store_id}}">
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Menu Name </label>

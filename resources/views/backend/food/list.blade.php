@@ -35,12 +35,12 @@
 		width: 100px;
 		height: 70px;
 	}
-	td.details-control {
-		background: url('backend/template1/img/details_open.png') no-repeat center center;
+	td.show_more {
+		background: url('backend/template1/img/details_open.png') no-repeat center;
 		width: 40px;
 		cursor: pointer;
 	}
-	tr.shown td.details-control {
+	td.show_prop{
 		background: url('backend/template1/img/details_close.png') no-repeat center center;
 	}
 	tr.group,tr.group:hover {
@@ -99,7 +99,7 @@
 							<td style="text-align: center" class="check-delete">
 								<input type="checkbox" value="{{$obj->id}}">
 							</td>
-							<td></td>
+							<td class="show_more"></td>
 							<td>{{$obj->name}}</td>
 							<td>
 								<img class="img-food" src="{{$obj->image}}">
@@ -317,27 +317,17 @@
 		    loaderBg: '#9EC600'
 		});
 	}
+	// Show Property
+		$('#dataTable tbody').on('click', 'td.show_more', function () {
+			var row = $(this).closest("tr");
+			var table = $("#template_showMore").contents().clone();
+			console.log(table);
+			row.after(table);
+			$(this).toggleClass('show_prop');
+        } );
 	//function dataTable
 	function dataTable()
 	{
-		//hiển thị bảng infor nhỏ
-        function format ( d ) {
-            // `d` is the original data object for the row
-            return '<table class="table details table-hover" cellspacing="5px" border="0" style="padding-left:50px; width:50%">'+
-                '<tr>'+
-                    '<td><b>Property 1:</b></td>'+
-                    '<td>'+d.date+'</td>'+
-                '</tr>'+
-                '<tr>'+
-                    '<td><b>Property 2:</b></td>'+
-                    '<td>'+d.gt+'</td>'+
-                '</tr>'+
-                '<tr>'+
-                    '<td><b>Property 3:</b></td>'+
-                    '<td>'+d.dc+'</td>'+
-                '</tr>'+
-            '</table>';
-        }
 		var groupColumn = 5;
 		var table = $('#dataTable').DataTable({
 			"columnDefs": [
@@ -351,21 +341,6 @@
                 }
 			],
 			"order": [[ groupColumn, 'asc' ]],
-			"columns": [
-				{ "data": "check" },
-				{
-					"className":      'details-control',
-					"orderable":      false,
-					"data":           null,
-					"defaultContent": ''
-				},
-				{ "data": "name" },
-				{ "data": "image" },
-				{ "data": "price" },
-				{ "data": "menu" },
-				{ "data": "edit" },
-				{ "data": "delete" }
-			],
 			"drawCallback": function ( settings ) {
 				var api = this.api();
 				var rows = api.rows( {page:'current'} ).nodes();
@@ -382,23 +357,6 @@
 				} );
 			}
 		} );
-		// Add event listener for opening and closing details
-		$('#dataTable tbody').on('click', 'td.details-control', function () {
-			var tr = $(this).closest('tr');
-			var row = table.row( tr );
-			console.log($("table"));
-			console.log(row);
-			if ( row.child.isShown() ) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                }
-                else {
-                    // Open this row
-                    row.child( format(row.data()) ).show();
-                    tr.addClass('shown');
-                }
-        } );
         // Order by the grouping
         $('#dataTable tbody').on( 'click', 'tr.group', function () {
         	var currentOrder = table.order()[0];

@@ -45,7 +45,6 @@ class TypeController
     }
     public function postAddType(Request $request)
     {
-        dd($request->arrProp);
         $result    = new DataResultCollection();
         $rule      = ["name" => "required|min:3"];
         $validator = Validator::make($request->all(),$rule);
@@ -54,7 +53,7 @@ class TypeController
             $prop              = Array();
             //adType
             $type["name"]        = $request->name;
-            $type["store_id"]    = $request->store_id;
+            $type["store_id"]    = CommonHelper::getStoreId();
             $type["description"] = $request->description;
             $idType = $this->service->addType($type);
             //add Property
@@ -104,7 +103,7 @@ class TypeController
             //adType
             $type["id"]          = $request->id;
             $type["name"]        = $request->name;
-            $type["store_id"]    = $request->store_id;
+            $type["store_id"]    = CommonHelper::getStoreId();
             $type["description"] = $request->description;
             $idType = $this->service->editType($type);
             //add Property

@@ -10,6 +10,7 @@ use App\Core\Common\OrderConst;
 use App\Core\Dao\SDB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use Session;
 class CommonHelper
 {
     public static function CommonLog($message){
@@ -64,6 +65,11 @@ class CommonHelper
             return true;
         }
         return false;
+    }
+    //Get store id
+    public static function getStoreId(){
+        $storeId = Session::get("id");
+        return 1;
     }
     // Mở composer.json
     // Thêm vào trong "autoload" chuỗi sau
