@@ -44,6 +44,7 @@ class TypeController
     }
     public function postAddType(Request $request)
     {
+        dd($request->arrProp);
         $result    = new DataResultCollection();
         $rule      = ["name" => "required|min:3"];
         $validator = Validator::make($request->all(),$rule);

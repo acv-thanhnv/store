@@ -116,6 +116,10 @@
             //Delete
             Route::get("deleteFood","FoodController@deleteFood")->name("deleteFood");
             Route::get("deleteAllFood","FoodController@deleteAllFood")->name("deleteAllFood");
+             //Delete Food Prop
+            Route::get("deleteFoodProp","FoodController@deleteFoodProp")->name("deleteFoodProp");
+            //Other
+            Route::get("Prop","FoodController@getProp")->name("getProp");
         });
         //Dashboard
         Route::group(["prefix" => "dashboard"],function(){
