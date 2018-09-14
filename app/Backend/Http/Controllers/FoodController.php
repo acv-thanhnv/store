@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Backend\Http\Controllers;
+use App\Core\Helpers\CommonHelper;
 use Illuminate\Support\Facades\Route;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Services\Interfaces\UploadServiceInterface;
@@ -48,7 +49,7 @@ class FoodController
         $arrData = $this->foodService->getDataType();
         return view("backend.food.add",[
             "arrType" => $arrType,
-            "arrMenu" => $arrMenu, 
+            "arrMenu" => $arrMenu,
             "arrData" => $arrData
         ]);
     }
@@ -92,9 +93,9 @@ class FoodController
             //insert into table entity
             $obj            = Array();
             $obj["image"]   = $imageUrl;
-            $obj["name"]    = $request->name; 
+            $obj["name"]    = $request->name;
             $obj["price"]   = $request->price;
-            $obj["menu_id"] = $request->menu; 
+            $obj["menu_id"] = $request->menu;
             $idFood         = $this->foodService->addFood($obj);
             // insert into table store_entity_properties
             $prop = Array();
@@ -103,7 +104,7 @@ class FoodController
             if($arrProp!=NULL){
                 foreach ($arrProp as $objProp) {
                     if($objProp->label!=NULL){
-                        $prop["property_name"]    = changeTitle($objProp->label);
+                        $prop["property_name"]    = CommonHelper::changeTitle($objProp->label);
                         $prop["data_type_code"]   = $objProp->data;
                         $prop["property_label"]   = $objProp->label;
                         $prop["sort"]             = (int) $objProp->sort;
@@ -127,7 +128,7 @@ class FoodController
         $arrData = $this->foodService->getDataType();
         $food = $this->foodService->getById($request->id);
         if($food->image==NULL){
-           $food->src = url('/')."/common_images/no-image.png"; 
+           $food->src = url('/')."/common_images/no-image.png";
         }else{
             $food->src = Storage::disk($diskLocalName)->url($food->image);
         }
@@ -183,7 +184,7 @@ class FoodController
             $obj            = Array();
             $obj["image"]   = $imageUrl;
             $obj["id"]      = $request->id;
-            $obj["name"]    = $request->name; 
+            $obj["name"]    = $request->name;
             $obj["price"]   = (int) $request->price;
             $obj["menu_id"] = $request->menu;
             $this->foodService->editFood($obj);
@@ -196,7 +197,7 @@ class FoodController
                     // dd($objProp);
                     if($objProp->label!=NULL){
                         //get property
-                        $prop["property_name"]  = changeTitle($objProp->label);
+                        $prop["property_name"]  = CommonHelper::changeTitle($objProp->label);
                         $prop["data_type_code"] = $objProp->data;
                         $prop["property_label"] = $objProp->label;
                         $prop["sort"]           = (int) $objProp->sort;

@@ -23,4 +23,6 @@ interface FoodServiceInterface
     public function orderToChef(Request $request);
 
     public function closeOrder(Request $request);
+
+    public function getOrderList( $storeId, $orderStatus);
 }

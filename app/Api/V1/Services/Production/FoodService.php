@@ -10,6 +10,7 @@ namespace App\Api\V1\Services\Production;
 
 use App\Api\V1\Services\Interfaces\FoodServiceInterface;
 use App\Core\Common\OrderConst;
+use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
@@ -64,7 +65,7 @@ class FoodService extends BaseService implements FoodServiceInterface
                 "store_id" => $storeId,
                 "location_id" => $locationId,
                 "datetime_order" => now(),
-                "status" => 2,
+                "status" => OrderStatusValue::Waiter,
                 "priority" => 1
             );
             $now = now()->toDateTimeString();
@@ -113,7 +114,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $entity = json_decode($response['entity']);
         //Update Database
         $dataOrder = array(
-            "status" => 3,
+            "status" => OrderStatusValue::Cheft,
         );
         $now = now()->toDateTimeString();
         if (CommonHelper::existsStore($storeId)) {
@@ -144,7 +145,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $now = now()->toDateTimeString();
         //Update Database
         $dataOrder = array(
-            "status" => 4,
+            "status" => OrderStatusValue::Close,
         );
         SDB::table('store_order')->where('id', $orderId)->update($dataOrder);
         //clear to chef
@@ -152,6 +153,19 @@ class FoodService extends BaseService implements FoodServiceInterface
         event(new OrderChefPusherEvent($storeId, $orderId, $locationId, $totalPrice,$requestTypeChef,$now, $entity));
         $result = new DataResultCollection();
         return $result;
+    }
+    public function getOrderList( $storeId, $orderStatus){
+        $orderList = SDB::table('store_order')
+            ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
+            ->join("store_entities","store_order_detail.entities_id","=","store_entities.id")
+            ->leftJoin('store_entity_property_values',"store_entity_property_values.entity_id","=","store_order_detail.entities_id")
+            ->leftJoin('store_entity_properties',"store_entity_properties.id","=","store_entity_property_values.property_id")
+            ->where("store_order.store_id",$storeId)
+            ->where("store_order.status",$orderStatus)
+            ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
+        ->select()
+        ->get();
+        return $orderList;
     }
 
     protected function buildFoodListByStoreId($foodList, $storeId)
