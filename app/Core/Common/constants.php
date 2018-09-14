@@ -72,3 +72,8 @@ class OrderConst{
 class EntityProperty{
     const maxField = 10;
 }
+class OrderStatusValue{
+    const Waiter = 1;
+    const Cheft = 2;
+    const Close = 3;
+}
