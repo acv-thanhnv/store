@@ -10,6 +10,7 @@ use App\Core\Common\OrderConst;
 use App\Core\Dao\SDB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Session;
 class CommonHelper
 {
@@ -22,7 +23,12 @@ class CommonHelper
             Log::error($message);
         }
     }
-
+    //get Image Url
+    public static function getImageUrl($imageUri,$diskLocalName = "public")
+    {
+        $imageUrl = Storage::disk($diskLocalName)->url($imageUri);
+        return $imageUrl;
+    }
     /**
      * @return ModuleInfor
      */
