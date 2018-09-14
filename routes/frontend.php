@@ -23,4 +23,8 @@
     Route::get('/order', 'OrderController@index')->name('order');
     Route::get('/listMenu', 'OrderController@getFoodByStoreID')->name('listMenu');
     Route::get('/listMenuType', 'OrderController@getFoodByStoreID')->name('listMenuType');
+    Route::get('/MapApi',function(){
+    	return view("frontend.testMapApi");
+    });
+
 
