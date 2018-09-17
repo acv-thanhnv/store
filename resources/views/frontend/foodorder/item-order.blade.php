@@ -1,19 +1,24 @@
 <style type="text/css">
 #item-order-template{
-    display: ;
+    display:none;
+
 }
-.row-item-order *{
+.row-item-order{
+
     height: 61px;
-    float: left;
+    clear: both;
+    
 }
 .row-item-order.active{
-        background-color: #edf6e4;
+    background-color: #edf6e4;
 }
 .cell-arrange{
+    float: left;
     width:30px;
     padding: 12px 7px 0;
 }
 .cell-delete{
+    float: left;
     width: 35px;
     padding: 12px 7px 0;
     
@@ -23,27 +28,30 @@
     height: 14px;
 }
 .cell-image{
+    float: left;
     padding: 7px 7px;
 }
 div a{
     color: red;
 }
-.item-image{
+.item-order-image{
     width:45px;
     height: 45px;
 }
 .cell-name{
+    float: left;
     width: calc(100%-300px);
     padding: 6px 7px;
 }
-.item-name{
+.item-order-name{
     color: #111;
 }
 .cell-quantity{
+    float: left;
     width: 50px;
     padding: 12px 7px !important;
 }
-.item-quantity{
+.item-order-quantity{
     width:40px;
     height: 20px;
     color:#111;
@@ -53,11 +61,12 @@ div a{
     text-align: right;
 }
 .cell-price{
+    float: left;
     width:88px;
     padding: 12px 7px;
 
 }
-.item-price{
+.item-order-price{
     width:74px;
     height: 20px;
     font-size: 14px;
@@ -65,10 +74,11 @@ div a{
     text-align: right;
 }
 .cell-amount{
+    float: left;
     width:110px;
     padding: 12px 7px;
 }
-.item-amount{
+.item-order-amount{
     width:110px;
     height: 20px;
     font-size: 14px;
@@ -78,32 +88,31 @@ div a{
 </style>
 
 
+
 <div id="item-order-template">
-    <div class="wrap-item-order">
-        <div class="col-sm-6 row-item-order" item-id="" item-name="" item-price="">
-            <div class="cell-arrange">
-                <span class="item-arrange">1</span>
-            </div>
-            <div class="cell-delete">
-                <a title="delete item order">
-                    <span class="glyphicon glyphicon-remove delete-row"></span>
-                </a>
-            </div>
-            <div class="cell-image">
-                <img class="item-image" src="">
-            </div>
-            <div class="cell-name">
-                <h4 class="item-name">Truong Son</h4>
-            </div>
-            <div class="cell-quantity">
-                <input class="item-quantity" type="number" value="">
-            </div>
-            <div class="cell-price">
-                <span class="item-price" type="number" value="">aaa</span>
-            </div>
-            <div class="cell-amount">
-                <span class="item-amount" type="number" value="">|aaa</span>
-            </div>
+    <div class="row-item-order" item-order-id="" item-order-name="" item-order-price="">
+        <div class="cell-arrange">
+            <span class="item-order-arrange">1</span>
+        </div>
+        <div class="cell-image">
+            <img class="item-order-image" src="">
+        </div>
+        <div class="cell-name">
+            <h4 class="item-order-name">Truong Son</h4>
+        </div>
+        <div class="cell-quantity">
+            <input class="item-order-quantity" type="number" value="">
+        </div>
+        <div class="cell-price">
+            <span class="item-order-price" type="number" value="">aaa</span>
+        </div>
+        <div class="cell-amount">
+            <span class="item-order-amount" type="number" value="">|aaa</span>
+        </div>
+        <div class="cell-delete">
+            <a title="delete item order">
+                <span class="glyphicon glyphicon-remove delete-item-order"></span>
+            </a>
         </div>
     </div>
 </div>

@@ -20,7 +20,9 @@ Route::get('/company/login', 'HomeController@apilogin')->name('apiloginform');
 Route::get('/frontend/test', 'HomeController@test')->name('test');
 
 Route::get('/order/{idStore?}', 'OrderController@index')->name('order');
-
-Route::get('/foodorder', 'OrderController@index2');
+//Route::get('/foodorder', 'OrderController@index2');
 Route::get('listlocation','OrderController@getTables')->name('listlocation');
 
+
+Route::get('/foodorder/{idStore?}', 'FoodOrderController@index')->name('foodorder');
+Route::get('/location','FoodOrderController@getLocations')->name('location');
