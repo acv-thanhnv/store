@@ -42,7 +42,7 @@
                 </div>
                 <div _ngcontent-c7="" class="cell-quantity">
                     <button _ngcontent-c7="" class="btn-icon down" type="button"><i _ngcontent-c7="" class="fa fa-angle-down"></i></button>
-                    <input class="quantity" type="number" name="" value="">
+                    <input class="quantity" type="number" name="">
                     <button _ngcontent-c7="" class="btn-icon up" type="button"><i _ngcontent-c7="" class="fa fa-angle-up"></i></button>
                     <!---->
                     <!---->

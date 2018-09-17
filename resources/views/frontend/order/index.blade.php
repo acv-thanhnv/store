@@ -348,7 +348,8 @@
             var name = $(rows[i]).attr('order-name');
             var avatar = $(rows[i]).find('.image-item2').attr('src');
             var price = $(rows[i]).attr('order-price');
-            var quantity = 1;
+            var quantity = $(rows[i]).find('.quantity').val();
+            console.log(quantity);
 
             var a = {id:id, name:name, avatar:avatar, price:price, quantity:quantity};
             entity.push( a);
