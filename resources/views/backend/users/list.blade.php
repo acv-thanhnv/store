@@ -16,7 +16,7 @@
 		margin-top: 10px;
 	}
 	.img{
-		width: 50px; 
+		width: 50px;
 		height: 50px;
 	}
 	.img{
@@ -176,7 +176,6 @@
 		radius         :15,
 		transitionIn   :"bounceInDown",
 		transitionOut  :"bounceOutUp",
-		arrowKeys      :true,
 		iframe         : true,
 		iframeWidth    :400,
 		iframeURL      :""
@@ -268,7 +267,7 @@
 			});
 		}
 	});
-	//function alert 
+	//function alert
 	function alert(type)
 	{
 		$.toast({
@@ -280,7 +279,7 @@
 		    hideAfter: 2000,
 		    stack: 5,
 		    position: 'top-right',
-		    textAlign: 'left', 
+		    textAlign: 'left',
 		    loader: true,
 		    loaderBg: '#9EC600',
 		});
@@ -326,7 +325,7 @@
 		$('#pagination-demo').twbsPagination({
 			totalPages            : totalPages,
 			visiblePages          : 5,
-			hideOnlyOnePage       :true,	
+			hideOnlyOnePage       :true,
 			initiateStartPageClick:false,
 			onPageClick:function(event,page){
 				$("#check-all").prop('checked',false);//set check-all = false

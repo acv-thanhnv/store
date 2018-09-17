@@ -100,6 +100,12 @@
         .order-closed {
             background: green;
         }
+        .order-description{
+            margin-bottom: 10px;
+        }
+        .order-item .div-order-item{
+            padding-bottom: 5px;
+        }
     </style>
 @endpush
 @extends("layouts.backend")
@@ -113,7 +119,6 @@
                     <div class="header-total-price">
                         <span class="order-total-price"></span>
                         <span>Tổng giá</span>
-                        </span>
                     </div>
                     <div class="header-location">
                         <span class="order-location">Vị trí</span>
@@ -137,7 +142,6 @@
                 <div class="header-total-price">
                     <span class="order-total-price"></span>
                     <span>VNĐ</span>
-                    </span>
                 </div>
                 <div class="header-location">
                     <span class="order-location"></span>
@@ -154,11 +158,12 @@
                 <ul class="list-unstyled order-item-list">
                 </ul>
             </div>
+            <div class="order-description"></div>
         </div>
     </div>
     <ul id="order-item-template" class="display-none">
         <li class="order-item">
-            <div class="col-md-12 col-ms-12 col-xs-12">
+            <div class="col-md-12 col-ms-12 col-xs-12 div-order-item">
                 <div class="pull-left order-avatar">
                     <img
                         src=""
@@ -255,6 +260,7 @@
                 $(orderArea).attr('orderId',data.orderId);
                 $(orderArea).find('.send-link').attr('orderId', data.orderId);
                 $(orderArea).find('.close-link').attr('orderId', data.orderId);
+                $(orderArea).find('.order-description').text(data.description);
                 $('#order-waiting-list').append(orderArea);
                 data.entity = JSON.stringify(data.entity);
                 _orderWaiting[data.orderId] = data;
@@ -304,6 +310,7 @@
                             $(orderArea).attr('orderId',order.orderId);
                             $(orderArea).find('.send-link').attr('orderId', order.orderId);
                             $(orderArea).find('.close-link').attr('orderId', order.orderId);
+                            $(orderArea).find('.order-description').text(order.description);
                             $('#order-waiting-list').append(orderArea);
                             order.entity = JSON.stringify(order.entity);
                             _orderWaiting[order.orderId] = order;

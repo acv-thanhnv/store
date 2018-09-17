@@ -57,6 +57,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $response = $request->all();
         $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
         $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
+        $locationName = isset($response['locationName']) ? $response['locationName'] : '';
         $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
         $description = isset($response['description']) ? $response['description'] : '';
         $entity = json_decode($response['entity']);
@@ -88,7 +89,7 @@ class FoodService extends BaseService implements FoodServiceInterface
                     SDB::table('store_order_detail')->insert($data);
                 }
                 $requestType = OrderConst::TypeAdd;
-                event(new OrderPusherEvent($storeId, $newOrderId, $locationId, $totalPrice,$description,$requestType,$now, $entity));
+                event(new OrderPusherEvent($storeId, $newOrderId, $locationId,$locationName, $totalPrice,$description,$requestType,$now, $entity));
                 SDB::commit();
                 $result->status = SDBStatusCode::OK;
             } catch (\Exception $e) {
@@ -112,6 +113,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
         $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
         $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
+        $locationName = isset($response['locationName']) ? $response['locationName'] : '';
         $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
         $description = isset($response['description']) ? $response['description'] : '';
         $entity = json_decode($response['entity']);
@@ -124,10 +126,10 @@ class FoodService extends BaseService implements FoodServiceInterface
             SDB::table('store_order')->where('id', $orderId)->update($dataOrder);
             //send to chef
             $requestTypeChef = OrderConst::TypeAdd;
-            event(new OrderChefPusherEvent($storeId, $orderId, $locationId, $totalPrice,$requestTypeChef,$now, $entity));
+            event(new OrderChefPusherEvent($storeId, $orderId, $locationId,$locationName, $totalPrice,$requestTypeChef,$now, $entity));
             //remove from waiter
             $requestType = OrderConst::TypeClearTrash;
-            event(new OrderPusherEvent($storeId, $orderId, $locationId, $totalPrice,$description,$requestType,$now, $entity));
+            event(new OrderPusherEvent($storeId, $orderId, $locationId,$locationName, $totalPrice,$description,$requestType,$now, $entity));
             $result->status = SDBStatusCode::OK;
         } else {
             $result->status = SDBStatusCode::Excep;
@@ -143,6 +145,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
         $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
         $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
+        $locationName = isset($response['locationName']) ? $response['locationName'] : '';
         $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
         $entity = json_decode($response['entity']);
         $now = now()->toDateTimeString();
@@ -153,7 +156,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         SDB::table('store_order')->where('id', $orderId)->update($dataOrder);
         //clear to chef
         $requestTypeChef = OrderConst::TypeClearTrash;
-        event(new OrderChefPusherEvent($storeId, $orderId, $locationId, $totalPrice,$requestTypeChef,$now, $entity));
+        event(new OrderChefPusherEvent($storeId, $orderId, $locationId,$locationName, $totalPrice,$requestTypeChef,$now, $entity));
         $result = new DataResultCollection();
         return $result;
     }
@@ -306,7 +309,7 @@ class FoodService extends BaseService implements FoodServiceInterface
                     if ($itemOrder->id == $orderDetail->order_id) {
                         $food = $resultEntity[$orderDetail->entities_id];
                         $food->quantity = $orderDetail->quantity;
-                        $food->avatar = $food->image;
+                        $food->avatar = CommonHelper::getImageUrl($food->image);
                         $order->entity[]= $food;
                     }
                 }
