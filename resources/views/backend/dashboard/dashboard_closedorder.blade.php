@@ -6,70 +6,99 @@
             font-weight: bold;
             color: #999;
         }
-.order-title{
-    font-weight: bold;
-}
+
+        .order-title {
+            font-weight: bold;
+        }
+
         .order-avatar img {
             width: 150px;
         }
-        .order-infor{
+
+        .order-infor {
             padding-top: 17px;
         }
-        .order-detail-list{
+
+        .order-detail-list {
             padding-bottom: 0px;
             margin-bottom: 0px;
         }
-        .order{
+
+        .order {
             margin-bottom: 10px;
         }
-        .close-link{
-            color:red !important;
+
+        .close-link {
+            color: red !important;
         }
-        .cook-link{
-            color: green; !important;
+
+        .send-link {
+            color: red;
+        !important;
+            font-weight: bold;
         }
-        .order-avatar{
+
+        .ok-link {
+            color: green !important;
+            font-weight: bold;
+        }
+
+        .order-avatar {
             width: 200px;
             max-width: 200px;
             min-width: 200px;
         }
-        .button-left{
+
+        .button-left {
             width: 70px;
         }
-        .button-right{
+
+        .button-right {
             width: 183px;
         }
-        .header-total-price{
+
+        .header-total-price {
             width: 400px;
             float: left;
             text-align: left;
         }
-        .header-location{
+
+        .header-location {
             text-align: left;
             width: 100%;
         }
-        .header-time{
+
+        .header-time {
             width: 380px;
             float: right;
             text-align: left;
         }
-        .x_title{
+
+        .x_title {
             font-weight: bold;
         }
-        .order-header{
+
+        .order-header {
             display: inline-flex;
             width: 100%;
         }
-        .order-header-area .x_title{
+
+        .order-header-area .x_title {
             border: none !important;
             color: #0c0c0c;
         }
-        .order-header-area .x_panel{
+
+        .order-header-area .x_panel {
             border: none !important;
             background: none;
         }
+
         .x_title span {
             color: #34495e !important;
+        }
+
+        .order-closed {
+            background: green;
         }
     </style>
 @endpush
@@ -116,7 +145,7 @@
                 <div class="header-time"><span class="order-time"></span></div>
                 <div class="button-right">
                     <button class="close-link"><i class="fa fa-close"></i></button>
-                    <button class="cook-link"><i class="glyphicon glyphicon-cutlery"></i></button>
+                    <label class="ok-link display-none"><i class="glyphicon glyphicon-ok"></i></label>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -152,112 +181,36 @@
     </ul>
 @endsection
 @push("js")
-    <script src="{{ asset('js/lib/pusher.min.js')}}"></script>
     <script>
-        _orderWaiting = [];
         $(document).ready(function () {
-            getInitOrderWaiter();
-
-            //Init pusher
-            var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
-                cluster: '{{env('PUSHER_APP_CLUSTER')}}',
-                encrypted: true
-            });
-            var channel = pusher.subscribe('{{\App\Core\Helpers\CommonHelper::getOrderEventName($storeId,\App\Core\Common\OrderConst::OrderChannelToWaiter)}}');
-            var eventName = "{{\App\Core\Common\OrderConst::OrderEventName}}";
-            channel.bind(eventName, addOrder);
-
+            getInitOrderClosed();
             //Show - Hide order detail
-            $(document).on('click','.collapse-link',function(){
+            $(document).on('click', '.collapse-link', function () {
                 var parent = $(this).parents('.order');
-                if($(parent).find('.order_x_content').hasClass('display-none')){
+                if ($(parent).find('.order_x_content').hasClass('display-none')) {
                     $(parent).find('.order_x_content').removeClass('display-none');
                     $(this).find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-                }else{
+                } else {
                     $(parent).find('.order_x_content').addClass('display-none');
                     $(this).find('i').addClass('fa-chevron-down').removeClass('fa-chevron-up');
                 }
             });
-            $(document).on('click','.close-link',function(){
-                var orderId = $(this).attr('orderId');
-                $(this).parents('.order').remove();
-                delete _orderWaiting[orderId];
-                deleteOrder(orderId);
-            });
-
-            $(document).on('click','.cook-link',function(){
-                var orderId =  $(this).attr('orderId');
-                var parrent = $(this).parents('.order');
-                $.ajax({
-                    url         : '{{route("food/orderToChef")}}',
-                    dataType    : 'JSON',
-                    type        : 'GET',
-                    data:  _orderWaiting[orderId],
-                    success: function(data){
-                        //Ok
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        console.log('Error '+xhr.status+' | '+thrownError);
-                    },
-                });
+            $(document).on('click', '.close-link', function () {
+                $(this).parents('.order-detail-list').remove();
+                deleteOrder();
             });
         });
-
-        /**
-         * function Recive and handler package message from Server
-         * */
-        function addOrder(data) {
-            var orderId = data.orderId;
-            var record = $(".order[orderid='"+orderId+"']");
-            if(data.requestType == '{{\App\Core\Common\OrderConst::TypeAdd}}' && record.length == 0){
-                var orderArea = $('#order-template').clone();
-                $(orderArea).removeClass('display-none');
-                $(orderArea).removeAttr('id');
-                $.each(data.entity, function (index, item) {
-                    var liTag = $('#order-item-template').children('li').clone();
-                    $(liTag).removeClass('display-none');
-                    $(liTag).removeAttr('id');
-                    $(liTag).find('.order-item-name').html(item.name);
-                    $(liTag).find('.order-item-price').text(formatNumber(item.price));
-                    $(liTag).find('.order-item-quantity').text(item.quantity);
-                    $(liTag).find('.order-avatar img').attr('src', item.avatar);
-                    //Attr
-                    $(orderArea).find('.order-item-list').append(liTag);
-                });
-                $(orderArea).find('.order-total-price').html(formatNumber(data.totalPrice) );
-                $(orderArea).find('.order-location').html(data.locationName);
-                $(orderArea).find('.order-time').text(data.dateTimeOrder);
-                $(orderArea).attr('orderId',data.orderId);
-                $(orderArea).find('.cook-link').attr('orderId',data.orderId);
-                $(orderArea).find('.close-link').attr('orderId',data.orderId);
-                $('#order-waiting-list').append(orderArea);
-                data.entity = JSON.stringify(data.entity);
-                _orderWaiting[data.orderId]=data;
-            }else if(data.requestType == '{{\App\Core\Common\OrderConst::TypeClearTrash}}'){
-                var orderId = data.orderId;
-                var record = $(".order[orderid='"+orderId+"']");
-                $(record).fadeOut('slow',function(){
-                    $(record).remove();
-                });
-                delete _orderWaiting[orderId];
-            }
-
-        }
-
-        /**
-         * Delete order from Database
-         * @param orderId
-         */
-        function deleteOrder(orderId){
+        function deleteOrder() {
             //delete Order in Database
         }
-        function getInitOrderWaiter(){
+        function getInitOrderClosed(){
             $.ajax({
-                url         : '{{route("food/orderWaiterList")}}',
+                url         : '{{route("food/orderClosedList")}}',
                 dataType    : 'JSON',
                 type        : 'GET',
                 success: function(data){
                     if(data.status=="{{\App\Core\Common\SDBStatusCode::OK}}"){
+                        $('#order-waiting-list').empty();
                         $.each(data.data, function (index, order) {
                             var orderArea = $('#order-template').clone();
                             $(orderArea).removeClass('display-none');
@@ -270,18 +223,14 @@
                                 $(liTag).find('.order-item-price').text(formatNumber(item.price));
                                 $(liTag).find('.order-item-quantity').text(item.quantity);
                                 $(liTag).find('.order-avatar img').attr('src', item.avatar);
-                                //Attr
                                 $(orderArea).find('.order-item-list').append(liTag);
                             });
-                            $(orderArea).find('.order-total-price').html(formatNumber(order.totalPrice) );
+                            $(orderArea).find('.order-total-price').html(formatNumber(order.totalPrice));
                             $(orderArea).find('.order-location').html(order.locationName);
                             $(orderArea).find('.order-time').text(order.dateTimeOrder);
                             $(orderArea).attr('orderId',order.orderId);
-                            $(orderArea).find('.cook-link').attr('orderId',order.orderId);
-                            $(orderArea).find('.close-link').attr('orderId',order.orderId);
+                            $(orderArea).find('.close-link').attr('orderId', order.orderId);
                             $('#order-waiting-list').append(orderArea);
-                            order.entity = JSON.stringify(order.entity);
-                            _orderWaiting[order.orderId]=order;
                         });
                     }
                 },

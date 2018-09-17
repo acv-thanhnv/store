@@ -27,3 +27,5 @@ Route::get('/api/v1/food/close-order', 'FoodController@closeOrder')->name('food/
 
 Route::get('/api/v1/food/order-waiter-list', 'FoodController@orderWaiterList')->name('food/orderWaiterList');
 Route::get('/api/v1/food/order-chef-list', 'FoodController@orderChefList')->name('food/orderChefList');
+Route::get('/api/v1/food/order-closed-list', 'FoodController@orderClosedList')->name('food/orderClosedList');
+Route::get('/api/v1/food/order-history-list', 'FoodController@orderHistoryList')->name('food/orderHistoryList');

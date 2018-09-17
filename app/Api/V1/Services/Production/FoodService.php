@@ -157,11 +157,11 @@ class FoodService extends BaseService implements FoodServiceInterface
         $result = new DataResultCollection();
         return $result;
     }
-    public function getOrderList( $storeId, $orderStatus){
+    public function getOrderList( $storeId, $orderStatus=null,$orderDate=null,$page=null,$limitPage=null){
         $result  =  new DataResultCollection();
         try{
             $result->status = SDBStatusCode::OK;
-            $result->data = $this->buildOrderList($storeId,$orderStatus);
+            $result->data = $this->buildOrderList($storeId,$orderStatus,$orderDate,$page,$limitPage);
         }catch (\Exception $e){
             $result->status = SDBStatusCode::Excep;
             $result->message = $e->getMessage();
@@ -232,29 +232,30 @@ class FoodService extends BaseService implements FoodServiceInterface
         }
         return $result;
     }
-    protected function buildOrderList($storeId,$orderStatus){
+    protected function buildOrderList($storeId,$orderStatus=null,$dateOrder = null,$page=null,$pageLimit=null){
         $orderList = SDB::table('store_order')
             ->join('store_order_detail','store_order.id','=','store_order_detail.order_id')
             ->join('store_entities','store_entities.id','=','store_order_detail.entities_id')
+            ->leftJoin('store_location','store_order.location_id','=','store_location.id')
             ->where("store_order.store_id",$storeId)
-            ->where("store_order.status",$orderStatus)
-            ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
-            ->selectRaw('store_order.id,store_order.store_id,store_order.location_id,store_order.description,store_order.datetime_order,SUM(store_order_detail.quantity * store_entities.price ) AS totalPrice')
-            ->groupBy("store_order.id","store_order.store_id","store_order.location_id","store_order.description","store_order.datetime_order")
-            ->get();
+            ->whereRaw("(? IS NULL OR ?=store_order.status)",[$orderStatus,$orderStatus])
+            ->whereRaw("(? IS NULL OR  DATE(store_order.datetime_order) = ?)",[$dateOrder,$dateOrder])
+            ->selectRaw('store_order.id,store_order.store_id,store_order.location_id,store_order.description,store_order.datetime_order,store_location.name AS location_name,SUM(store_order_detail.quantity * store_entities.price ) AS totalPrice')
+            ->groupBy("store_order.id","store_order.store_id","store_order.location_id","store_order.description","store_order.datetime_order","store_location.name")
+            ->get()->forPage($page,$pageLimit);
         $orderListDetail = SDB::table('store_order')
             ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
             ->where("store_order.store_id",$storeId)
-            ->where("store_order.status",$orderStatus)
-            ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
+            ->whereRaw("(? IS NULL OR ?=store_order.status)",[$orderStatus,$orderStatus])
+            ->whereRaw("(? IS NULL OR DATE(store_order.datetime_order)=?)",[$dateOrder,$dateOrder])
             ->select()
             ->get();
         $orderEntityInfoList = SDB::table('store_order')
             ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
             ->join("view_entity_infor","store_order_detail.entities_id","=","view_entity_infor.id")
             ->where("store_order.store_id",$storeId)
-            ->where("store_order.status",$orderStatus)
-            ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
+            ->whereRaw("(? IS NULL OR ?=store_order.status)",[$orderStatus,$orderStatus])
+            ->whereRaw("(? IS NULL OR  DATE(store_order.datetime_order) = ?)",[$dateOrder,$dateOrder])
             ->select("view_entity_infor.*")
             ->distinct()
             ->get();
@@ -262,8 +263,8 @@ class FoodService extends BaseService implements FoodServiceInterface
             ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
             ->join("store_entities","store_order_detail.entities_id","=","store_entities.id")
             ->where("store_order.store_id",$storeId)
-            ->where("store_order.status",$orderStatus)
-            ->whereRaw("DATE(store_order.datetime_order) = CURDATE()")
+            ->whereRaw("(? IS NULL OR ?=store_order.status)",[$orderStatus,$orderStatus])
+            ->whereRaw("(? IS NULL OR  DATE(store_order.datetime_order) = ?)",[$dateOrder,$dateOrder])
             ->select("store_entities.id","store_entities.name","store_entities.menu_id","store_entities.image","store_entities.price")
             ->distinct()
             ->get();
@@ -271,6 +272,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         if (!empty($orderEntityList)) {
             foreach ($orderEntityList as $itemEntity) {
                 $foods = $itemEntity;
+                $foods->price = number_format($foods->price);
                 $foods->props = array();
                 $prop = array();
                 foreach ($orderEntityInfoList as $foodItem) {
@@ -294,7 +296,8 @@ class FoodService extends BaseService implements FoodServiceInterface
                     "storeId"=>$itemOrder->store_id,
                     "orderId"=> $itemOrder->id,
                     "locationId"=> $itemOrder->location_id,
-                    "totalPrice"=>$itemOrder->totalPrice,
+                    "locationName"=> $itemOrder->location_name,
+                    "totalPrice"=> number_format($itemOrder->totalPrice),
                     "description"=>$itemOrder->description,
                     "dateTimeOrder"=>$itemOrder->datetime_order
                 );

@@ -250,7 +250,7 @@
                     $(orderArea).find('.order-item-list').append(liTag);
                 });
                 $(orderArea).find('.order-total-price').html(formatNumber(data.totalPrice));
-                $(orderArea).find('.order-location').html(data.locationId);
+                $(orderArea).find('.order-location').html(data.locationName);
                 $(orderArea).find('.order-time').text(data.dateTimeOrder);
                 $(orderArea).attr('orderId',data.orderId);
                 $(orderArea).find('.send-link').attr('orderId', data.orderId);
@@ -299,7 +299,7 @@
                                 $(orderArea).find('.order-item-list').append(liTag);
                             });
                             $(orderArea).find('.order-total-price').html(formatNumber(order.totalPrice));
-                            $(orderArea).find('.order-location').html(order.locationId);
+                            $(orderArea).find('.order-location').html(order.locationName);
                             $(orderArea).find('.order-time').text(order.dateTimeOrder);
                             $(orderArea).attr('orderId',order.orderId);
                             $(orderArea).find('.send-link').attr('orderId', order.orderId);

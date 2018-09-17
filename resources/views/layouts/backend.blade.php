@@ -71,21 +71,36 @@
                         <ul class="nav side-menu">
                             <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <li><a href="{{route('backend_template')}}">Dashboard</a></li>
-                                    <li><a href="{{route('dashboardWaiter')}}">Waiter</a></li>
-                                    <li><a href="{{route('dashboardChef')}}">Chef</a></li>
+                                    <?php if(\App\Core\Helpers\AuthHelper::IsAccess('backend_template')==true){ ?>
+                                    <li>
+                                        <a href="{{route('backend_template')}}">Dashboard</a>
+                                    </li>
+                                        <?php }?>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('dashboardWaiter')==true){ ?>
+                                    <li><a href="{{route('dashboardWaiter')}}">Waiter</a></li><?php }?>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('dashboardChef')==true){ ?>
+                                    <li><a href="{{route('dashboardChef')}}">Chef</a></li><?php }?>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('dashboardClosedOrder')==true){ ?>
+                                    <li><a href="{{route('dashboardClosedOrder')}}">Closed order</a></li><?php }?>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('dashboardHistoryOrder')==true){ ?>
+                                    <li><a href="{{route('dashboardHistoryOrder')}}">History order</a></li><?php }?>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-book"></i> Menu   <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <li><a href="{{route('getMenu')}}">List</a></li>
-                                    <li><a href="{{route('getType')}}">Type</a></li>
+                                    <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getMenu')==true){ ?>
+                                    <li><a href="{{route('getMenu')}}">List</a></li><?php }?>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getType')==true){ ?>
+                                    <li><a href="{{route('getType')}}">Type</a></li><?php }?>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getFood')==true){ ?>
                                     <li><a href="{{route('getFood')}}">Foods</a></li>
+                                        <?php }?>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <li><a href="{{route('form_template')}}">General Form</a></li>
+                                    <?php if(\App\Core\Helpers\AuthHelper::IsAccess('form_template')==true){ ?>
+                                    <li><a href="{{route('form_template')}}">General Form</a></li><?php }?>
                                     <li><a href="{{route('component_template')}}">Advanced Components</a></li>
                                     <li><a href="{{route('button_template')}}">Form Buttons</a></li>
                                     <li><a href="{{route('upload_template')}}">Form Upload</a></li>

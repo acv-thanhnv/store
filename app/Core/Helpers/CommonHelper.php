@@ -17,7 +17,6 @@ class CommonHelper
     public static function CommonLog($message){
         //Logging
         if(env('APP_DEBUG')==true){
-           die($message);
             abort($message);
         }else{
             Log::error($message);
@@ -36,6 +35,34 @@ class CommonHelper
         $result = new ModuleInfor();
         try{
             $currentRoute =  Route::getCurrentRoute();
+            if($currentRoute !=null){
+                $curentActionInfo = $currentRoute->getAction();
+                $module = strtolower(trim(str_replace('App\\', '', $curentActionInfo['namespace']), '\\'));
+                $module =  explode("\\",$module)[0];
+                $_action =isset($curentActionInfo['controller'])? explode('@', $curentActionInfo['controller']):array();
+                $_namespaces_chunks =isset($_action[0])? explode('\\', $_action[0]):array();
+                $controllers = strtolower(end($_namespaces_chunks));
+                $action = strtolower(end($_action));
+                $screenCode = $curentActionInfo['namespace']."\\".$controllers."\\".$action;
+
+                $result->module = $module;
+                $result->controller = $controllers;
+                $result->action = $action;
+                $result->screenCode = $screenCode;
+            }
+
+        }catch (\Exception $ex){
+            //Dont handler here...
+        }
+        return $result;
+    }
+    /**
+     * @return ModuleInfor
+     */
+    public static function getModuleInforByRouter($routerName):ModuleInfor{
+        $result = new ModuleInfor();
+        try{
+            $currentRoute =  Route::getRoutes()->getByName($routerName);
             if($currentRoute !=null){
                 $curentActionInfo = $currentRoute->getAction();
                 $module = strtolower(trim(str_replace('App\\', '', $curentActionInfo['namespace']), '\\'));
@@ -77,13 +104,6 @@ class CommonHelper
         $storeId = Session::get("id");
         return 1;
     }
-    // Mở composer.json
-    // Thêm vào trong "autoload" chuỗi sau
-    // "files": [
-    //         "app/function/function.php"
-    // ]
-
-    // Chạy cmd : composer  dumpautoload
 
     public static function changeTitle($str,$strSymbol='_',$case=MB_CASE_LOWER){// MB_CASE_UPPER / MB_CASE_TITLE / MB_CASE_LOWER
         $str=trim($str);

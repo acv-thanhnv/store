@@ -24,5 +24,5 @@ interface FoodServiceInterface
 
     public function closeOrder(Request $request);
 
-    public function getOrderList( $storeId, $orderStatus);
+    public function getOrderList( $storeId, $orderStatus,$orderDate,$page,$limitPage);
 }

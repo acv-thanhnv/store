@@ -6,6 +6,7 @@ use App\Core\Common\SDBStatusCode;
 use App\Api\V1\Services\Interfaces\FoodServiceInterface;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Events\OrderPusherEvent;
+use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
 
@@ -50,13 +51,28 @@ class FoodController extends Controller
         return ResponseHelper::JsonDataResult($result);
     }
     public function orderWaiterList(){
-        $storeId = 1;
-        $result = $this->service->getOrderList($storeId,OrderStatusValue::Waiter);
+        $storeId = CommonHelper::getStoreId();
+        $orderDate= date('y/m/d');
+        $result = $this->service->getOrderList($storeId,OrderStatusValue::Waiter,$orderDate,null,null);
         return ResponseHelper::JsonDataResult($result);
     }
     public function orderChefList(){
-        $storeId = 1;
-        $result = $this->service->getOrderList($storeId,OrderStatusValue::Cheft);
+        $storeId = CommonHelper::getStoreId();
+        $orderDate= date('y/m/d');
+        $result = $this->service->getOrderList($storeId,OrderStatusValue::Cheft,$orderDate,null,null);
+        return ResponseHelper::JsonDataResult($result);
+    }
+    public function orderClosedList(){
+        $storeId = CommonHelper::getStoreId();
+        $orderDate= date('y/m/d');
+        $result = $this->service->getOrderList($storeId,OrderStatusValue::Close,$orderDate,null,null);
+        return ResponseHelper::JsonDataResult($result);
+    }
+    public function orderHistoryList(Request $request){
+        $storeId = CommonHelper::getStoreId();
+        $page = $request->input('page');
+        $pageSize = $request->input('pageSize');
+        $result = $this->service->getOrderList($storeId,null,null,$page,$pageSize);
         return ResponseHelper::JsonDataResult($result);
     }
 }
