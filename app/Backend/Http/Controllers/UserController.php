@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Backend\Http\Controllers;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Services\Interfaces\UploadServiceInterface;
@@ -30,7 +31,7 @@ class UserController
         $diskLocalName = "public";
         $user = $this->service->getById($request->id);
         if($user->avatar==NULL){
-           $user->src = url('/')."/common_images/no-avatar.png"; 
+           $user->src = url('/')."/common_images/no-avatar.png";
         }else{
             $user->src = Storage::disk($diskLocalName)->url($user->avatar);
         }
@@ -55,7 +56,7 @@ class UserController
         return view("backend.users.add",["arrRole" => $arrRole]);
     }
     public function addPost(Request $request)
-    {   
+    {
         $image  = $request->file("image");
         $result =  new DataResultCollection();
         $rule_image = "";
@@ -83,7 +84,7 @@ class UserController
             } else{
                 $result->status = SDBStatusCode::OK;
             }
-            
+
         } else {
             $error           = array($validator->errors());
             $result->status  = SDBStatusCode::ValidateError;
@@ -96,11 +97,11 @@ class UserController
             if($image!=NULL){
                 $obj->image  = $imageUrl;
             }
-            $obj->name   = $request->name; 
+            $obj->name   = $request->name;
             $obj->date   = $request->date;
-            $obj->gender = $request->gender; 
+            $obj->gender = $request->gender;
             $obj->email  = $request->email;
-            $obj->pass   = md5($request->pass);
+            $obj->pass   = Hash::make($request->pass);
             $obj->role   = $request->role;
             $this->service->insert($obj);
         }
@@ -111,17 +112,17 @@ class UserController
         $user = $this->service->getById($request->id);
         $arrRole = $this->service->getRole();
         if($user->avatar==NULL){
-           $user->src = url('/')."/common_images/no-avatar.png"; 
+           $user->src = url('/')."/common_images/no-avatar.png";
         }else{
             $user->src = Storage::disk($diskLocalName)->url($user->avatar);
         }
         return view("backend.users.edit",[
-            "user" => $user, 
+            "user" => $user,
             "arrRole" => $arrRole
         ]);
     }
     public function editPost(Request $request)
-    {   
+    {
         $diskLocalName    = "public";
         $image            = $request->file("image");
         $rule_image       = "";
@@ -147,7 +148,7 @@ class UserController
             ];
         $message_rule = [
             '*.mimes' => 'Mime not Allowed',
-            "password_confirmation.confirmed" => "Password does not match the confirm password",  
+            "password_confirmation.confirmed" => "Password does not match the confirm password",
         ];
         $validator = Validator::make($request->all(), $rule,$message_rule);
         if (!$validator->fails()) {
@@ -178,9 +179,9 @@ class UserController
                 $obj->pass   = md5($request->pass);
             }
             $obj->id     = $request->id;
-            $obj->name   = $request->name; 
+            $obj->name   = $request->name;
             $obj->date   = $request->date;
-            $obj->gender = $request->gender; 
+            $obj->gender = $request->gender;
             $obj->email  = $request->email;
             $obj->role   = $request->role;
             $this->service->update($obj);

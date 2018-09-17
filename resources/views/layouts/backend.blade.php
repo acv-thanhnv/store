@@ -101,33 +101,46 @@
                                 <ul class="nav child_menu">
                                     <?php if(\App\Core\Helpers\AuthHelper::IsAccess('form_template')==true){ ?>
                                     <li><a href="{{route('form_template')}}">General Form</a></li><?php }?>
-                                    <li><a href="{{route('component_template')}}">Advanced Components</a></li>
-                                    <li><a href="{{route('button_template')}}">Form Buttons</a></li>
-                                    <li><a href="{{route('upload_template')}}">Form Upload</a></li>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('component_template')==true){ ?>
+                                    <li><a href="{{route('component_template')}}">Advanced Components</a></li><?php }?>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('button_template')==true){ ?>
+                                    <li><a href="{{route('button_template')}}">Form Buttons</a></li><?php }?>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('upload_template')==true){ ?>
+                                    <li><a href="{{route('upload_template')}}">Form Upload</a></li><?php }?>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-desktop"></i> UI Elements <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <li><a href="{{route('generalElement_template')}}">General Elements</a></li>
-                                    <li><a href="{{route('icons_template')}}">Icons</a></li>
-                                    <li><a href="{{route('glyphicons_template')}}">Glyphicons</a></li>
-                                    <li><a href="{{route('calendar_template')}}">Calendar</a></li>
+                                    <?php if(\App\Core\Helpers\AuthHelper::IsAccess('generalElement_template')==true){ ?>
+                                    <li><a href="{{route('generalElement_template')}}">General Elements</a></li><?php }?>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('icons_template')==true){ ?>
+                                    <li><a href="{{route('icons_template')}}">Icons</a></li><?php }?>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('glyphicons_template')==true){ ?>
+                                    <li><a href="{{route('glyphicons_template')}}">Glyphicons</a></li><?php }?>
+                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('calendar_template')==true){ ?>
+                                    <li><a href="{{route('calendar_template')}}">Calendar</a></li><?php }?>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-download"></i> Export/Import <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
+                                    <?php if(\App\Core\Helpers\AuthHelper::IsAccess('export_template')==true){ ?>
                                     <li><a href="{{route('export_template')}}">Export Excel/Csv</a></li>
+                                        <?php }?>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
+                                    <?php if(\App\Core\Helpers\AuthHelper::IsAccess('table_template')==true){ ?>
                                     <li><a href="{{route('table_template')}}">Tables</a></li>
+                                        <?php }?>
                                 </ul>
                             </li>
                             <!--User-->
                             <li><a><i class="fa fa-user"></i> User <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <li><a href="{{route('list')}}">List</a></li>
+                                    <?php if(\App\Core\Helpers\AuthHelper::IsAccess('backend.user.list')==true){ ?>
+                                    <li><a href="{{route('backend.user.list')}}">List</a></li>
+                                        <?php }?>
                                 </ul>
                             </li>
                         </ul>

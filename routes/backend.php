@@ -55,7 +55,7 @@
         //User Controller
         Route::group(["prefix" => "user"],function(){
             //get view user
-            Route::get("list",'UserController@getList')->name("list");
+            Route::get("list",'UserController@getList')->name("backend.user.list");
             //get profile user
             Route::get("profile",'UserController@profile')->name("profile");
             //get user and paginate
