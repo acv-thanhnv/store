@@ -85,6 +85,7 @@ function showPosition(position) {
          });
          infowindow = new google.maps.InfoWindow();
          for (var i = 0; i < locations.length; i++) {
+            console.log(locations[i]);
             createMarker(locations[i],i*200);
          }
       })
@@ -111,7 +112,7 @@ function showPosition(position) {
       window.setTimeout(function(){
          //create marker
          marker = new google.maps.Marker({
-            position: {lat: location["lat"], lng: location["lng"]},
+            position: {lat: location["lat"]*1, lng: location["lng"]*1},
             map: map,
             icon: image,
             animation: google.maps.Animation.DROP,
