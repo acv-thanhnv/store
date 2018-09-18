@@ -110,6 +110,18 @@
         .order-item .div-order-item{
             padding-bottom: 5px;
         }
+        .order-waiter{
+            background: orange;
+        }
+        .order-chef{
+            background: blue;
+        }
+        .order-closed{
+            background: limegreen;
+        }
+        .order-deleted{
+            background: grey;
+        }
     </style>
 @endpush
 @extends("layouts.backend")
@@ -264,6 +276,17 @@
                             $(orderArea).attr('orderId',order.orderId);
                             $(orderArea).find('.close-link').attr('orderId', order.orderId);
                             $(orderArea).find('.order-description').text(order.description);
+                            if(order.status == '{{\App\Core\Common\OrderStatusValue::Waiter}}'){
+                                $(orderArea).addClass('order-waiter');
+                            }else if(order.status=='{{\App\Core\Common\OrderStatusValue::Cheft}}'){
+                                $(orderArea).addClass('order-chef');
+                            }else if(order.status=='{{\App\Core\Common\OrderStatusValue::Deleted}}'){
+                                $(orderArea).addClass('order-deleted');
+                            }else if(order.status=='{{\App\Core\Common\OrderStatusValue::Close}}'){
+                                $(orderArea).addClass('order-closed');
+                            }
+
+
                             $('#order-waiting-list').append(orderArea);
                         });
                     }

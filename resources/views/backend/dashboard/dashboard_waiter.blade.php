@@ -161,7 +161,6 @@
         _orderWaiting = [];
         $(document).ready(function () {
             getInitOrderWaiter();
-
             //Init pusher
             var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
                 cluster: '{{env('PUSHER_APP_CLUSTER')}}',
@@ -183,10 +182,26 @@
                 }
             });
             $(document).on('click','.close-link',function(){
-                var orderId = $(this).attr('orderId');
-                $(this).parents('.order').remove();
-                delete _orderWaiting[orderId];
-                deleteOrder(orderId);
+                var current = $(this);
+                $.confirm({
+                    title: 'Xác nhận',
+                    content: 'Bạn có chắc chắn xóa?',
+                    buttons: {
+                        confirm: {
+                            text: 'Xác nhận',
+                            btnClass: 'btn-red',
+                            action: function(){
+                                var orderId = $(current).attr('orderId');
+                                $(current).parents('.order').remove();
+                                delete _orderWaiting[orderId];
+                                deleteOrder(orderId);
+                            }
+                        },
+                        close: {
+                            text: 'Bỏ qua',
+                        }
+                    }
+                });
             });
 
             $(document).on('click','.cook-link',function(){
@@ -254,7 +269,18 @@
          * @param orderId
          */
         function deleteOrder(orderId){
-            //delete Order in Database
+            $.ajax({
+                url         : '{{route("food/orderDeleteWaiter")}}',
+                dataType    : 'JSON',
+                type        : 'DELETE',
+                data:  _orderWaiting[orderId],
+                success: function(data){
+                    //Ok
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error '+xhr.status+' | '+thrownError);
+                },
+            });
         }
         function getInitOrderWaiter(){
             $.ajax({
