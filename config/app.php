@@ -189,12 +189,8 @@ return [
          /**
           * Backend
           */
-        App\Backend\Providers\UserServiceProvider::class,
         App\Backend\Providers\RouteServiceProvider::class,
         App\Backend\Providers\BackendServiceProvider::class,
-        App\Backend\Providers\MenuServiceProvider::class,
-        App\Backend\Providers\TypeServiceProvider::class,
-        App\Backend\Providers\FoodServiceProvider::class,
         /**
          * FrontEnd
          */
@@ -251,7 +247,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

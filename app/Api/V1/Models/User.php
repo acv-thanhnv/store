@@ -2,6 +2,7 @@
 
 namespace App\Api\V1\Models;
 
+use App\Core\Dao\SDB;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class User extends Authenticatable
      */
     protected $primaryKey = 'id';
     protected $fillable = [
-        'name', 'email', 'password','role_value'
+        'id','name', 'email', 'password','role_value'
     ];
 
     /**
@@ -29,7 +30,4 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    public function details() {
-        return SDB::table('users_detail')->where(array('id',$this->getKey())) ;
-    }
 }

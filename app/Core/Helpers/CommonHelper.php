@@ -10,19 +10,24 @@ use App\Core\Common\OrderConst;
 use App\Core\Dao\SDB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Session;
 class CommonHelper
 {
     public static function CommonLog($message){
         //Logging
         if(env('APP_DEBUG')==true){
-           die($message);
             abort($message);
         }else{
             Log::error($message);
         }
     }
-
+    //get Image Url
+    public static function getImageUrl($imageUri,$diskLocalName = "public")
+    {
+        $imageUrl = Storage::disk($diskLocalName)->url($imageUri);
+        return $imageUrl;
+    }
     /**
      * @return ModuleInfor
      */
@@ -30,6 +35,34 @@ class CommonHelper
         $result = new ModuleInfor();
         try{
             $currentRoute =  Route::getCurrentRoute();
+            if($currentRoute !=null){
+                $curentActionInfo = $currentRoute->getAction();
+                $module = strtolower(trim(str_replace('App\\', '', $curentActionInfo['namespace']), '\\'));
+                $module =  explode("\\",$module)[0];
+                $_action =isset($curentActionInfo['controller'])? explode('@', $curentActionInfo['controller']):array();
+                $_namespaces_chunks =isset($_action[0])? explode('\\', $_action[0]):array();
+                $controllers = strtolower(end($_namespaces_chunks));
+                $action = strtolower(end($_action));
+                $screenCode = $curentActionInfo['namespace']."\\".$controllers."\\".$action;
+
+                $result->module = $module;
+                $result->controller = $controllers;
+                $result->action = $action;
+                $result->screenCode = $screenCode;
+            }
+
+        }catch (\Exception $ex){
+            //Dont handler here...
+        }
+        return $result;
+    }
+    /**
+     * @return ModuleInfor
+     */
+    public static function getModuleInforByRouter($routerName):ModuleInfor{
+        $result = new ModuleInfor();
+        try{
+            $currentRoute =  Route::getRoutes()->getByName($routerName);
             if($currentRoute !=null){
                 $curentActionInfo = $currentRoute->getAction();
                 $module = strtolower(trim(str_replace('App\\', '', $curentActionInfo['namespace']), '\\'));
@@ -68,16 +101,13 @@ class CommonHelper
     }
     //Get store id
     public static function getStoreId(){
-        $storeId = Session::get("id");
-        return 1;
+        $userId = AuthHelper::getUserInfor()->id;
+        $store = SDB::table('store_user_store')
+            ->whereRaw('store_user_store.user_id = ?',[$userId])
+            ->select('store_user_store.store_id')
+            ->first();
+        return $store->store_id;
     }
-    // Mở composer.json
-    // Thêm vào trong "autoload" chuỗi sau
-    // "files": [
-    //         "app/function/function.php"
-    // ]
-
-    // Chạy cmd : composer  dumpautoload
 
     public static function changeTitle($str,$strSymbol='_',$case=MB_CASE_LOWER){// MB_CASE_UPPER / MB_CASE_TITLE / MB_CASE_LOWER
         $str=trim($str);
@@ -89,7 +119,6 @@ class CommonHelper
         $str = preg_replace('/[\W|_]+/',$strSymbol,$str);
         return $str;
     }
-
     public static function stripUnicode($str){
         if(!$str) return '';
         //$str = str_replace($a, $b, $str);

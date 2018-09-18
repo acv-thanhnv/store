@@ -21,6 +21,5 @@ Route::get('/api/v1/food/list-menu-by-store/{storeId?}', 'FoodController@listMen
 Route::group(['middleware' => [ 'auth:api' ]],function (){
     Route::match(array('GET','POST'),'/api/v1/auth/logout', 'Auth\UserController@logout')->name('api_v1_logout_call');
 });
-Route::get('/api/v1/food/order', 'FoodController@order')->name('food/order');
-Route::get('/api/v1/food/order-to-chef', 'FoodController@orderToChef')->name('food/orderToChef');
-Route::get('/api/v1/food/close-order', 'FoodController@closeOrder')->name('food/closeOrder');
+Route::get('/api/v1/food/order', 'OrderController@order')->name('food/order');
+

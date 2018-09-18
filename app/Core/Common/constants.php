@@ -76,4 +76,5 @@ class OrderStatusValue{
     const Waiter = 1;
     const Cheft = 2;
     const Close = 3;
+    const Deleted = 10;
 }

@@ -55,7 +55,7 @@
         //User Controller
         Route::group(["prefix" => "user"],function(){
             //get view user
-            Route::get("list",'UserController@getList')->name("list");
+            Route::get("list",'UserController@getList')->name("backend.user.list");
             //get profile user
             Route::get("profile",'UserController@profile')->name("profile");
             //get user and paginate
@@ -123,9 +123,26 @@
         });
         //Dashboard
         Route::group(["prefix" => "dashboard"],function(){
+
+            Route::get("","DashboardController@index")->name("dashboardIndex");
             Route::get("dashboard-waiter","DashboardController@dashboardWaiter")->name("dashboardWaiter");
             Route::get("dashboard-chef","DashboardController@dashboardChef")->name("dashboardChef");
-
+            Route::get("dashboard-closed","DashboardController@dashboardClosedOrder")->name("dashboardClosedOrder");
+            Route::get("dashboard-order-history","DashboardController@dashboardHistoryOrder")->name("dashboardHistoryOrder");
         });
+
+        Route::get('food/order-to-chef', 'OrderController@orderToChef')->name('food/orderToChef');
+        Route::get('food/close-order', 'OrderController@closeOrder')->name('food/closeOrder');
+
+
+        Route::delete('food/order-delete-waiter', 'OrderController@orderDeleteWaiter')->name('food/orderDeleteWaiter');
+        Route::delete('food/order-delete-chef', 'OrderController@orderDeleteChef')->name('food/orderDeleteChef');
+        Route::delete('food/order-delete-closed', 'OrderController@orderDeleteClosed')->name('food/orderDeleteClosed');
+        Route::delete('food/order-delete-history', 'OrderController@orderDeleteHistory')->name('food/orderDeleteHistory');
+
+        Route::get('food/order-waiter-list', 'OrderController@orderWaiterList')->name('food/orderWaiterList');
+        Route::get('food/order-chef-list', 'OrderController@orderChefList')->name('food/orderChefList');
+        Route::get('food/order-closed-list', 'OrderController@orderClosedList')->name('food/orderClosedList');
+        Route::get('food/order-history-list', 'OrderController@orderHistoryList')->name('food/orderHistoryList');
     });
 
