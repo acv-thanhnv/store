@@ -241,7 +241,7 @@ class OrderService extends BaseService implements OrderServiceInterface
             ->whereRaw("(? IS NULL OR  DATE(store_order.datetime_order) = ?)",[$dateOrder,$dateOrder])
             ->selectRaw('store_order.id,store_order.store_id,store_order.location_id,store_order.description,store_order.datetime_order,store_location.name AS location_name,store_order.status,SUM(store_order_detail.quantity * store_entities.price ) AS totalPrice')
             ->groupBy("store_order.id","store_order.store_id","store_order.location_id","store_order.description","store_order.datetime_order","store_order.status","store_location.name")
-            ->get()->forPage($page,$pageLimit);
+            ->paginate($pageLimit,['*'],'page',$page);
         $orderListDetail = SDB::table('store_order')
             ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
             ->where("store_order.store_id",$storeId)
