@@ -270,10 +270,13 @@
          */
         function deleteOrder(orderId){
             $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 url         : '{{route("food/orderDeleteWaiter")}}',
                 dataType    : 'JSON',
                 type        : 'DELETE',
-                data:  _orderWaiting[orderId],
+                data:  {orderId:orderId},
                 success: function(data){
                     //Ok
                 },

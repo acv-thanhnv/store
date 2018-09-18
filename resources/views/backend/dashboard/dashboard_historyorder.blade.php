@@ -97,29 +97,36 @@
             color: #34495e !important;
         }
 
-        .pagination>li>a{
-            padding  : 8px 12px;
+        .pagination > li > a {
+            padding: 8px 12px;
             font-size: 16px;
         }
-        .pagination>.active>a{
+
+        .pagination > .active > a {
             font-weight: bold;
         }
-        .order-description{
+
+        .order-description {
             margin-bottom: 10px;
         }
-        .order-item .div-order-item{
+
+        .order-item .div-order-item {
             padding-bottom: 5px;
         }
-        .order-waiter{
+
+        .order-waiter {
             background: orange;
         }
-        .order-chef{
+
+        .order-chef {
             background: blue;
         }
-        .order-closed{
+
+        .order-closed {
             background: limegreen;
         }
-        .order-deleted{
+
+        .order-deleted {
             background: grey;
         }
     </style>
@@ -209,14 +216,14 @@
         var _pageVisible = 5;
         $(document).ready(function () {
             getOrderHistory({
-                page:1,
-                pageSize:_pageSize
-            },function(totalRecord){
-                var numberOfPage = Math.ceil(totalRecord/_pageSize);
-                if( _pageVisible > numberOfPage){
+                page: 1,
+                pageSize: _pageSize
+            }, function (totalRecord) {
+                var numberOfPage = Math.ceil(totalRecord / _pageSize);
+                if (_pageVisible > numberOfPage) {
                     _pageVisible = numberOfPage;
                 }
-                initPagging(_pageVisible,numberOfPage);
+                initPagging(_pageVisible, numberOfPage);
             });
 
 
@@ -232,36 +239,81 @@
                 }
             });
             $(document).on('click', '.close-link', function () {
-                $(this).parents('.order-detail-list').remove();
-                deleteOrder();
+                var current = $(this);
+                $.confirm({
+                    title: 'Xác nhận',
+                    content: 'Bạn có chắc chắn xóa?',
+                    buttons: {
+                        confirm: {
+                            text: 'Xác nhận',
+                            btnClass: 'btn-red',
+                            action: function () {
+                                var orderId = $(current).attr('orderId');
+                                $(current).parents('.order').remove();
+                                deleteOrder(orderId);
+                            }
+                        },
+                        close: {
+                            text: 'Bỏ qua',
+                        }
+                    }
+                });
             });
         });
 
-        function initPagging(visiblePages,numberOfPage){
+        function initPagging(visiblePages, numberOfPage) {
             $('#pagination-order').twbsPagination('destroy');
             $('#pagination-order').twbsPagination({
                 totalPages: numberOfPage,
                 visiblePages: visiblePages,
-                initiateStartPageClick:false,
-                onPageClick:function(event,page){
+                initiateStartPageClick: false,
+                onPageClick: function (event, page) {
                     getOrderHistory({
-                        page:page,
-                        pageSize:_pageSize
+                        page: page,
+                        pageSize: _pageSize
                     });
                 }
             });
         }
-        function deleteOrder() {
-            //delete Order in Database
-        }
-        function getOrderHistory(data,callback){
+
+        function deleteOrder(orderId) {
             $.ajax({
-                url         : '{{route("food/orderHistoryList")}}',
-                dataType    : 'JSON',
-                type        : 'GET',
-                data : data,
-                success: function(data){
-                    if(data.status=="{{\App\Core\Common\SDBStatusCode::OK}}"){
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route("food/orderDeleteHistory")}}',
+                dataType: 'JSON',
+                type: 'DELETE',
+                data: {orderId: orderId},
+                success: function (data) {
+                    getOrderHistory(
+                        {
+                            page: 1,
+                            pageSize: _pageSize
+                            , function (totalRecord) {
+                                var numberOfPage = Math.ceil(totalRecord / _pageSize);
+                                if (_pageVisible > numberOfPage) {
+                                    _pageVisible = numberOfPage;
+                                }
+                                initPagging(_pageVisible, numberOfPage);
+                            }
+                        }
+                    );
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error ' + xhr.status + ' | ' + thrownError);
+                },
+            });
+        }
+
+        function getOrderHistory(data, callback) {
+            $.ajax({
+                url: '{{route("food/orderHistoryList")}}',
+                dataType: 'JSON',
+                type: 'GET',
+                data: data,
+                success: function (data) {
+                    if (data.status == "{{\App\Core\Common\SDBStatusCode::OK}}") {
                         $('#order-waiting-list').empty();
                         $.each(data.data, function (index, order) {
                             var orderArea = $('#order-template').clone();
@@ -280,27 +332,27 @@
                             $(orderArea).find('.order-total-price').html(formatNumber(order.totalPrice));
                             $(orderArea).find('.order-location').html(order.locationName);
                             $(orderArea).find('.order-time').text(order.dateTimeOrder);
-                            $(orderArea).attr('orderId',order.orderId);
+                            $(orderArea).attr('orderId', order.orderId);
                             $(orderArea).find('.close-link').attr('orderId', order.orderId);
                             $(orderArea).find('.order-description').text(order.description);
-                            if(order.status == '{{\App\Core\Common\OrderStatusValue::Waiter}}'){
+                            if (order.status == '{{\App\Core\Common\OrderStatusValue::Waiter}}') {
                                 $(orderArea).addClass('order-waiter');
-                            }else if(order.status=='{{\App\Core\Common\OrderStatusValue::Cheft}}'){
+                            } else if (order.status == '{{\App\Core\Common\OrderStatusValue::Cheft}}') {
                                 $(orderArea).addClass('order-chef');
-                            }else if(order.status=='{{\App\Core\Common\OrderStatusValue::Deleted}}'){
+                            } else if (order.status == '{{\App\Core\Common\OrderStatusValue::Deleted}}') {
                                 $(orderArea).addClass('order-deleted');
-                            }else if(order.status=='{{\App\Core\Common\OrderStatusValue::Close}}'){
+                            } else if (order.status == '{{\App\Core\Common\OrderStatusValue::Close}}') {
                                 $(orderArea).addClass('order-closed');
                             }
                             $('#order-waiting-list').append(orderArea);
                         });
-                        if(callback){
-                            callback(data.data.totalRecord);
+                        if (callback) {
+                            callback(data.totalRecord);
                         }
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    console.log('Error '+xhr.status+' | '+thrownError);
+                    console.log('Error ' + xhr.status + ' | ' + thrownError);
                 },
             });
         }

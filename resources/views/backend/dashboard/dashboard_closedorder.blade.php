@@ -130,9 +130,7 @@
                 </div>
             </div>
         </div>
-        <div id="order-waiting-list">
-
-        </div>
+        <div id="order-waiting-list"></div>
     </div>
     <div class="col-md-12 col-ms-12 col-xs-12 display-none order" id="order-template">
         <div class="x_panel order-detail-list">
@@ -202,12 +200,43 @@
                 }
             });
             $(document).on('click', '.close-link', function () {
-                $(this).parents('.order-detail-list').remove();
-                deleteOrder();
+                var current = $(this);
+                $.confirm({
+                    title: 'Xác nhận',
+                    content: 'Bạn có chắc chắn xóa?',
+                    buttons: {
+                        confirm: {
+                            text: 'Xác nhận',
+                            btnClass: 'btn-red',
+                            action: function(){
+                                var orderId = $(current).attr('orderId');
+                                $(current).parents('.order').remove();
+                                deleteOrder(orderId);
+                            }
+                        },
+                        close: {
+                            text: 'Bỏ qua',
+                        }
+                    }
+                });
             });
         });
-        function deleteOrder() {
-            //delete Order in Database
+        function deleteOrder(orderId) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url         : '{{route("food/orderDeleteClosed")}}',
+                dataType    : 'JSON',
+                type        : 'DELETE',
+                data:  {orderId:orderId,status:'{{\App\Core\Common\OrderStatusValue::Close}}'},
+                success: function(data){
+                    getInitOrderClosed();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error '+xhr.status+' | '+thrownError);
+                },
+            });
         }
         function getInitOrderClosed(){
             $.ajax({

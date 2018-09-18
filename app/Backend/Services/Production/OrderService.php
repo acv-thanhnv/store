@@ -133,14 +133,15 @@ class OrderService extends BaseService implements OrderServiceInterface
     }
     public function deleteOrder(Request $request,$userStoreId,$orderStatus){
         $response = $request->all();
-        $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
+        $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
+        $storeId =  SDB::table('store_order')->whereRaw('id = ?',[$orderId])->select('*')->get()->first()->store_id;
+        $result = new DataResultCollection();
         if($userStoreId == $storeId){
-            $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
             $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
             $locationName = isset($response['locationName']) ? $response['locationName'] : '';
             $description = isset($response['description']) ? $response['description'] : '';
             $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
-            $entity = json_decode($response['entity']);
+            $entity = isset($response['entity']) ? json_decode($response['entity']):'';
             SDB::table('store_order')
                 ->where('store_order.id','=',$orderId)
                 ->where('store_order.store_id','=',$storeId)
@@ -152,15 +153,22 @@ class OrderService extends BaseService implements OrderServiceInterface
             }else if($orderStatus == OrderStatusValue::Cheft){
                 event(new OrderPusherEvent($storeId, $orderId, $locationId,$locationName, $totalPrice,$description,$requestClearType,$now, $entity));
             }
+            $result->status = SDBStatusCode::OK;
+        }else{
+            $result->status = SDBStatusCode::WebError;
+            $result->message = "Store incorrect";
         }
+        return $result;
     }
 
 
     public function getOrderList( $storeId, $orderStatus=null,$orderDate=null,$page=null,$limitPage=null){
         $result  =  new DataResultCollection();
         try{
+            $orderList =  $this->buildOrderList($storeId,$orderStatus,$orderDate,$page,$limitPage);
             $result->status = SDBStatusCode::OK;
-            $result->data = $this->buildOrderList($storeId,$orderStatus,$orderDate,$page,$limitPage);
+            $result->data = $orderList['data'];
+            $result->totalRecord = $orderList['totalRecord'];
         }catch (\Exception $e){
             $result->status = SDBStatusCode::Excep;
             $result->message = $e->getMessage();
@@ -323,7 +331,10 @@ class OrderService extends BaseService implements OrderServiceInterface
                 $orderInfor[] = $order;
             }
         }
-        $orderInfor['totalRecord']= $countOrder;
-        return $orderInfor;
+        $dataFinal = array(
+            'totalRecord'=>$countOrder,
+            'data'=>$orderInfor
+        );
+        return $dataFinal;
     }
 }

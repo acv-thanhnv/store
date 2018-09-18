@@ -213,8 +213,26 @@
                 }
             });
             $(document).on('click', '.close-link', function () {
-                $(this).parents('.order-detail-list').remove();
-                deleteOrder();
+                var current = $(this);
+                $.confirm({
+                    title: 'Xác nhận',
+                    content: 'Bạn có chắc chắn xóa?',
+                    buttons: {
+                        confirm: {
+                            text: 'Xác nhận',
+                            btnClass: 'btn-red',
+                            action: function(){
+                                var orderId = $(current).attr('orderId');
+                                $(current).parents('.order').remove();
+                                delete _orderWaiting[orderId];
+                                deleteOrder(orderId);
+                            }
+                        },
+                        close: {
+                            text: 'Bỏ qua',
+                        }
+                    }
+                });
             });
             $(document).on('click', '.send-link', function () {
                 var orderId = $(this).attr('orderId');
@@ -279,8 +297,22 @@
             }
         }
 
-        function deleteOrder() {
-            //delete Order in Database
+        function deleteOrder(orderId) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url         : '{{route("food/orderDeleteChef")}}',
+                dataType    : 'JSON',
+                type        : 'DELETE',
+                data:  {orderId:orderId},
+                success: function(data){
+                    //Ok
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error '+xhr.status+' | '+thrownError);
+                },
+            });
         }
         function getInitOrderChef(){
             $.ajax({

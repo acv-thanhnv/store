@@ -31,6 +31,22 @@ class OrderController extends Controller
         $result = $this->service->deleteOrder($request,$storeId,OrderStatusValue::Waiter);
         return ResponseHelper::JsonDataResult($result);
     }
+    public function orderDeleteChef(Request $request){
+        $storeId = CommonHelper::getStoreId();
+        $result = $this->service->deleteOrder($request,$storeId,OrderStatusValue::Cheft);
+        return ResponseHelper::JsonDataResult($result);
+    }
+    public function orderDeleteClosed(Request $request){
+        $storeId = CommonHelper::getStoreId();
+        $result = $this->service->deleteOrder($request,$storeId,OrderStatusValue::Close);
+        return ResponseHelper::JsonDataResult($result);
+    }
+    public function orderDeleteHistory(Request $request){
+        $storeId = CommonHelper::getStoreId();
+        $result = $this->service->deleteOrder($request,$storeId,null);
+        return ResponseHelper::JsonDataResult($result);
+    }
+
     public function orderWaiterList(){
         $storeId = CommonHelper::getStoreId();
         $orderDate= date('Y/m/d');
