@@ -19,15 +19,17 @@ class TypeController
 {
     protected $service;
     protected $uploadService;
+    protected $storeId;
     public function __construct(TypeServiceInterface $typeService,UploadServiceInterface $uploadService)
     {
         $this->service       = $typeService;
         $this->uploadService = $uploadService;
+        $this->storeId = CommonHelper::getStoreId();
     }
     //Type
     public function getType()
     {
-        $arrType = $this->service->getType(1);
+        $arrType = $this->service->getType($this->storeId);
         foreach ($arrType as $type) {
             $prop = $this->service->getProp($type->id);
             if(count($prop)===0){

@@ -2,6 +2,7 @@
 
 namespace App\Backend\Http\Controllers;
 use App\Core\Helpers\CommonHelper;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Services\Interfaces\UploadServiceInterface;
@@ -13,25 +14,26 @@ use Illuminate\Support\Facades\Storage;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use Intervention\Image\ImageManagerStatic as Image;
-use DateTime;
 
 class FoodController
 {
     protected $foodService;
     protected $typeService;
     protected $uploadService;
+    protected $storeId;
     public function __construct(FoodServiceInterface $foodService,UploadServiceInterface $uploadService,TypeServiceInterface $typeService)
     {
         $this->foodService   = $foodService;
         $this->typeService   = $typeService;
         $this->uploadService = $uploadService;
+        $this->storeId =CommonHelper::getStoreId();
     }
     //Foods
     public function getFood()
     {
+        //dd(Auth::user());
         $diskLocalName = "public";
-        $arrFood = $this->foodService->getFood(1);
+        $arrFood = $this->foodService->getFood($this->storeId);
         foreach($arrFood as $obj)
         {
             if($obj->image==NULL){
@@ -44,8 +46,8 @@ class FoodController
     }
     public function getAddFood(Request $request)
     {
-        $arrType = $this->foodService->getType(1);
-        $arrMenu = $this->foodService->getMenu(1);
+        $arrType = $this->foodService->getType($this->storeId);
+        $arrMenu = $this->foodService->getMenu($this->storeId);
         $arrData = $this->foodService->getDataType();
         return view("backend.food.add",[
             "arrType" => $arrType,
@@ -124,7 +126,7 @@ class FoodController
     public function getEditFood(Request $request)
     {
         $diskLocalName = "public";
-        $arrMenu = $this->foodService->getMenu(1);
+        $arrMenu = $this->foodService->getMenu($this->storeId);
         $arrData = $this->foodService->getDataType();
         $food = $this->foodService->getById($request->id);
         if($food->image==NULL){

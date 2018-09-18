@@ -19,14 +19,16 @@ class MenuController
 {
     protected $service;
     protected $uploadService;
+    protected $storeId;
     public function __construct(MenuServiceInterface $menuService,UploadServiceInterface $uploadService)
     {
         $this->service       = $menuService;
         $this->uploadService = $uploadService;
+        $this->storeId =  CommonHelper::getStoreId();
     }
 	public function getMenu()
     {
-        $arrMenu = $this->service->getMenu(1);
+        $arrMenu = $this->service->getMenu($this->storeId);
         return view("backend.menu.list",["arrMenu" => $arrMenu]);
     }
     public function getAddMenu()
