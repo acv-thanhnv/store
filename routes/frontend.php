@@ -23,7 +23,7 @@ Route::get('/order/{idStore?}', 'OrderController@index')->name('order');
 //Route::get('/foodorder', 'OrderController@index2');
 Route::get('listlocation','OrderController@getTables')->name('listlocation');
     Route::get('/order', 'OrderController@index')->name('order');
-    Route::get("Map","HomeController@Map");
+    Route::get("map","HomeController@Map");
 
 
 Route::get('/foodorder/{idStore?}', 'FoodOrderController@index')->name('foodorder');
