@@ -18,6 +18,6 @@
 
 
 <div id="item-type-template">
-	<button class="btn btn-primary btn-item-type" type="button" id="">HELLO</button>   
+	<button class="btn btn-primary btn-item-type" type="button" item-type-id="">HELLO</button>   
 </div>
 
