@@ -115,7 +115,6 @@ class CommonHelper
         $str = preg_replace('/[\W|_]+/',$strSymbol,$str);
         return $str;
     }
-
     public static function stripUnicode($str){
         if(!$str) return '';
         //$str = str_replace($a, $b, $str);

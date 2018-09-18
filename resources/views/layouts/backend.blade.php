@@ -36,16 +36,23 @@
     <link href="{{ asset('css/lib/jquery.dataTables.min.css') }}" rel="stylesheet">
     <title>{{ config('app.name', 'Laravel') }}</title>
     @stack("css")
-
+    <style>
+        .img-circle.profile_img {
+            width: 60px;
+            height: 60px;
+        }
+    </style>
 </head>
-
+<?php
+    $userInfor =  \App\Core\Helpers\AuthHelper::getUserInfor();
+?>
 <body class="nav-md">
 <div class="container body">
     <div class="main_container">
         <div class="col-md-3 left_col">
             <div class="left_col scroll-view">
                 <div class="navbar nav_title" style="border: 0;">
-                    <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>{{ config('app.name', 'Laravel') }}</span></a>
+                    <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>{{ config('app.name', 'Laravel') }}</span></a>
                 </div>
 
                 <div class="clearfix"></div>
@@ -53,11 +60,11 @@
                 <!-- menu profile quick info -->
                 <div class="profile clearfix">
                     <div class="profile_pic">
-                        <img src="{{ asset('backend/template1/images/avatar.jpg') }}" alt="..." class="img-circle profile_img">
+                        <img src="{{ \App\Core\Helpers\CommonHelper::getImageUrl(($userInfor->avatar)) }}" alt="..." class="img-circle profile_img">
                     </div>
                     <div class="profile_info">
-                        <span>Welcome,</span>
-                        <h2>John Doe</h2>
+                        <span>Xin chào,</span>
+                        <h2>{{ $userInfor->name}}</h2>
                     </div>
                 </div>
                 <!-- /menu profile quick info -->
@@ -71,9 +78,9 @@
                         <ul class="nav side-menu">
                             <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <?php if(\App\Core\Helpers\AuthHelper::IsAccess('backend_template')==true){ ?>
+                                    <?php if(\App\Core\Helpers\AuthHelper::IsAccess('dashboardIndex')==true){ ?>
                                     <li>
-                                        <a href="{{route('backend_template')}}">Dashboard</a>
+                                        <a href="{{route('dashboardIndex')}}">Dashboard</a>
                                     </li>
                                         <?php }?>
                                         <?php if(\App\Core\Helpers\AuthHelper::IsAccess('dashboardWaiter')==true){ ?>
@@ -159,7 +166,7 @@
                     <a data-toggle="tooltip" data-placement="top" title="Lock">
                         <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
                     </a>
-                    <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+                    <a data-toggle="tooltip" data-placement="top" title="Logout" href="{{route('logout')}}">
                         <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                     </a>
                 </div>
@@ -178,7 +185,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li class="">
                             <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                <img src="{{ asset('backend/template1/images/avatar.jpg') }}" alt="">John Doe
+                                <img src="{{ \App\Core\Helpers\CommonHelper::getImageUrl(($userInfor->avatar)) }}" alt="">{{ $userInfor->name }}
                                 <span class=" fa fa-angle-down"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -190,38 +197,11 @@
                                     </a>
                                 </li>
                                 <li><a href="javascript:;">Help</a></li>
-                                <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                <li><a href="{{route('logout')}}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                             </ul>
                         </li>
 
-                        <li role="presentation" class="dropdown">
-                            <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-envelope-o"></i>
-                                <span class="badge bg-green">6</span>
-                            </a>
-                            <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                                <?php for ($i=0;$i<4;$i++){ ?>
-                                <li>
-                                    <a>
-                                        <span class="image"><img src="{{ asset('backend/template1/images/avatar.jpg') }}" alt="Profile Image" /></span>
-                                        <span>
-                                            <span>John Smith</span>
-                                            <span class="time">{{$i+1}} mins ago</span>
-                                        </span>
-                                        <span class="message">Film festivals used to be do-or-die moments for movie makers. They were where...</span>
-                                    </a>
-                                </li>
-                                <?php } ?>
-                                <li>
-                                    <div class="text-center">
-                                        <a>
-                                            <strong>See All Alerts</strong>
-                                            <i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
+                        <li role="presentation" class="dropdown"></li>
                     </ul>
                 </nav>
             </div>

@@ -9,6 +9,7 @@
 namespace App\Core\Helpers;
 
 use App\Core\Common\RoleConst;
+use App\Core\Dao\SDB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 
@@ -42,5 +43,13 @@ class AuthHelper
             return true;
         }
         return false;
+    }
+    public static function getUserInfor() {
+        $detail = SDB::table('users')
+            ->join('users_detail','users_detail.user_id','=','users.id')
+            ->whereRaw('user_id=?',[Auth::user()->id])
+            ->selectRaw('users.*,users_detail.avatar,users_detail.gender,users_detail.birth_date')
+            ->get()->first() ;
+        return $detail;
     }
 }

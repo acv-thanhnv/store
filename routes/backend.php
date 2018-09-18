@@ -123,6 +123,8 @@
         });
         //Dashboard
         Route::group(["prefix" => "dashboard"],function(){
+
+            Route::get("","DashboardController@index")->name("dashboardIndex");
             Route::get("dashboard-waiter","DashboardController@dashboardWaiter")->name("dashboardWaiter");
             Route::get("dashboard-chef","DashboardController@dashboardChef")->name("dashboardChef");
             Route::get("dashboard-closed","DashboardController@dashboardClosedOrder")->name("dashboardClosedOrder");

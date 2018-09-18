@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Backend\Http\Controllers;
+use App\Core\Helpers\AuthHelper;
 use App\Core\Helpers\CommonHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -23,7 +25,8 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
-        return view('home');
+        $storeId = CommonHelper::getStoreId();
+        return view('backend.dashboard.dashboard',['storeId'=>$storeId]);
     }
     public function dashboardWaiter(){
         $storeId = CommonHelper::getStoreId();
