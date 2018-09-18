@@ -1,33 +1,50 @@
 @extends('layouts.foodorder')
 @section('css')
 <style type="text/css">
-#wrap-content{
-	height: 100%;;
-	background-color: #ebebeb;
-    position: fixed;
-	clear: both;
+.nopadd{
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.wraper-content{
+    margin-top: 5px;
+	height: 100%;
+    width: 100%;
+    padding: 0px 0px;
+    border-top: 1px solid grey;
+}
+.wraper-content-left{
+    height: 700px;
+    border-right: 1px solid #c1c1c1;
+    overflow: auto;
+
+}
+.wraper-content-right{
+    height: 700px;
+    border-left: 1px solid #ebebeb;
 }
 .content-col-left{
-
 	position: relative;
 	height: 100%;
 	overflow: hidden;
 }
 .content-col-right{
-
-	background-color: #fff;
-	height: 100%;
+	height: calc(100% - 150px);
 	float: left;
 	position: relative;
+}
+.wrap-list-item-type{
+    margin: 10px;
 }
 #item-order{
 	clear: both;
 }
 .wrap-order{
+    border: 1px solid #ebebeb;
     position: fixed;
     bottom: 0px;
-    margin: 0 12px;
-    padding-top: 5px;
+    margin: 0px;
+    padding: 0px;
+    height: 150px;
 }
 .wrap-order-info{
     border-top: 1px solid #0090da;
@@ -35,14 +52,45 @@
     height: 60px;
 }
 .wrap-order-submit{
-    height: 97px;
+
+}
+.order-submit{
+    width: 250px;
+    height: 50px;
+    position: fixed;
+    right: 20px;
+    bottom: 30px;
 }
 #list-item-order{
-    height: calc(100% - 147px);
+    max-height: 500px;
     margin: 0 4px 0 12px;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     background-color: #fff;
+}
+
+.wrap-order{
+    background-color: #fff;
+}
+.order-total{
+    float: right;
+    position: fixed;
+    right: 23px;
+}
+.wrap-order{
+    width:  100%; 
+    padding: 10px;
+}
+.order-location{
+    margin-left: 15px;
+}
+.wrap-description{
+    margin-left: 15px;
+    margin-top: 10px;
+}
+.order-description{
+    width: calc(100%-300px);
+    height: 30px;
 }
 </style>
 @endsection
@@ -52,26 +100,18 @@
 {{--content--}}
 <div class="wraper-content col-sm-12">
     {{--content left--}}
-    <div class="wraper-content-left col-sm-6">
-        <div class="content-col-left col-sm-12">
-            <div class="wrap-header">
-                <div class="header-col-left">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#menu-content">Menu</a></li>
-                    </ul>
-
-                </div>
-            </div>
+    <div class="wraper-content-left col-sm-6 nopadd">
+        <div class="content-col-left col-sm-12 nopadd">
             <div class="tab-content">
                 <div id="menu-content" class="tab-pane fade in active">
                  <div class="wrap-list-item-type col-sm-12">
                      <div id="list-item-type">
-                      type activities
+                   
                   </div>
               </div>
               <div class="wrap-list-item col-sm-12">
                   <div id="list-item">
-                      item activities
+                   
                   </div>
               </div>
           </div>
@@ -79,41 +119,32 @@
   </div>
 </div>
 {{--content right--}}
-<div class="wraper-content-right col-sm-6">
-    <div class="content-col-right col-sm-12">
-        <div class ="wrap-header col-sm-12">
-            <div class="header-col-right">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#order-content">Order</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="tab-content col-sm-12">
+<div class="wraper-content-right col-sm-6 nopadd">
+    <div class="content-col-right col-sm-12 nopadd"> 
+        <div class="tab-content">
             <div id="order-content" class="tab-pane fade in active">
-             <div class="wrap-item-order col-sm-12">
+             <div class="wrap-item-order">
                  <div id="list-item-order">
-                  list order item
+                
               </div>
           </div>
           <div class="wrap-order">
-           <div id="order">
-              <div class="wrap-order-info col-sm-12">
-                <div class="order-action">
-                    <span class="order-location fa fa-th col-sm-4"> Vị Trí</span>
-                    <span class="fa fa-pencil col-sm-4">Mô tả: <textarea class="order-description"></textarea></span>
-                </div>
-                <div class="order-total">
-                  <span>Tổng Tiền: </span>
-                  <span class="total-price-order"></span>
-              </div>
+            <span class="order-location fa fa-th" location-id="" location-name=""> Chọn Vị Trí</span>
+            <div class="order-total">
+              <span>Tổng Tiền: </span>
+              <span class="total-price-order">__.___</span>
+              <span>(vnđ)</span>
           </div>
-          <div class="wrap-order-submit col-sm-12" >
-                <span id="idStore" store-id="{{$idStore}}" style="display: none"></span>
-              <button class="order-submit btn btn-success">Chuyển Nhà Bếp</button>
-          </div>
-      </div>
-  </div>
+
+          <div class="wrap-description">
+            <span class="fa fa-pencil"> Mô tả: <textarea class="order-description"></textarea></span>
+        </div>
+
+        <div class="wrap-order-submit" >
+            <span id="idStore" store-id="{{$idStore}}" style="display: none"></span>
+            <button class="order-submit btn btn-success">Chuyển Nhà Bếp</button>
+        </div>
+    </div>
 
 </div>
 </div>
@@ -154,7 +185,7 @@
         });
         //load item by store
         $.ajax({
-            url         : '{{route("food/list-by-store")}}'+"/1",
+            url         : '{{route("food/list-by-menu")}}',    
             dataType    : 'JSON',
             type        : 'GET', 
             success: function(data){
@@ -171,11 +202,30 @@
         $(itemtype).empty();
         data.data.forEach(function(obj) {
             var item = $("#item-type-template").contents().clone();
-            $(item).attr('id', obj.id);
+            $(item).attr('item-type-id', obj.id);
             $(item).html(obj.name);        
             $(itemtype).append($(item));
         });
     }
+
+    //get item by item type
+    $(document).on('click', '.btn-item-type', function(){
+        var id = $(this).attr('item-type-id');
+        $.ajax({
+            url         : '{{route("food/list-by-menu")}}'+'/'+id,
+            dataType    : 'JSON',
+            type        : 'GET', 
+            data: {id:id},
+            success: function(data){
+                console.log(data.data);
+                genFoodByStoreId(data); 
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Error '+xhr.status+' | '+thrownError);
+            },
+        });
+    });
+
         //gen item to template
         function genFoodByStoreId(data){
             var listitem = $("#list-item");
@@ -186,7 +236,7 @@
                 $(item).find('.item-title').attr('title', obj.name);
                 $(item).find('.item-image').attr('src', obj.image);
                 $(item).find('.item-name').html(obj.name);
-                $(item).find('.item-price').html(obj.price);        
+                $(item).find('.item-price').html(parseInt(obj.price));        
             //set attr
             $(item).attr('item-id', obj.id);
             $(item).attr('item-name', obj.name);
@@ -212,7 +262,7 @@ $(document).on("click",".item",function(event){
     $(row).find('.item-order-image').attr('src',image);
     $(row).find('.item-order-name').html(name);
     $(row).find('.item-order-quantity').val('1');
-    $(row).find('.item-order-price').text(price);
+    $(row).find('.item-order-price').text(parseInt(price));
     //set attr
     $(row).attr('item-order-name', name);
     $(row).attr('item-order-price', price);
@@ -237,7 +287,7 @@ function updatePrice(){
         var quantity = $(this).find('.item-order-quantity').val();
         var price = $(this).attr('item-order-price');
         var amount=(quantity*price);
-        $(this).find('.item-order-amount').html(amount);
+        // $(this).find('.item-order-amount').html(amount);
         total+=amount;
     });
     //set total
@@ -248,10 +298,26 @@ $(document).on("change",".item-order-quantity",function() {
     updatePrice();
 });
 
+$(document).on("click",".quantity-down",function() {
+    var quantity = parseInt($(this).parents('.row-item-order').find('.item-order-quantity').val());
+    var quantity2 = quantity-1;
+    $(this).parents('.row-item-order').find('.item-order-quantity').val(quantity2);
+    updatePrice();
+});
+
+$(document).on("click",".quantity-up",function() {
+    var quantity = parseInt($(this).parents('.row-item-order').find('.item-order-quantity').val());
+    console.log(quantity);
+    var quantity2 = quantity+1;
+    $(this).parents('.row-item-order').find('.item-order-quantity').val(quantity2);
+    updatePrice();
+});
+
 //delete row item order
 $(document).on("click",".delete-item-order",function(event){
     $(this).parents(".row-item-order").remove();
     updateArange();
+    updatePrice();
 });
 
 //set location
@@ -271,7 +337,7 @@ $("#modal-iFrame").iziModal({
 
 //submit to chef
 $(document).on("click",".order-submit",function(){
-
+    var item = $('#list-item-order').find('.row-item-order');
     var storeId = $('#idStore').attr('store-id');
     var orderId = 0;
     var locationId = $('.order-location').attr('location-id');
@@ -290,24 +356,63 @@ $(document).on("click",".order-submit",function(){
 
         var a = {id:id, name:name, avatar:avatar, price:price, quantity:quantity};
         entity.push( a);
-
-
     }
     entity = JSON.stringify(entity);
 
-    $.ajax({
+    if(item.length==0){
+        $.alert({
+            title: 'Bạn chưa chọn món!',
+            content: 'Quay lại chọn món.',
+        });
+    }else if(locationId==0){
+        $.alert({
+            title: 'Bạn chưa chọn vị trí!',
+            content: 'Quay lại chọn vị trí.',
+        });
+    }else{
+        $.confirm({
+            title: 'Chuyển tới nhà bếp !',
+            content: 'Nhấn xác nhận để tiếp tục...',
+            type: 'yellow',
+            boxWidth: "30%",
+            useBootstrap: false,
+            typeAnimated: true,
+            buttons: {
+             ok: {
+                 text: 'Xác Nhận',
+                 btnClass: 'btn-orange',
+                 keys: ['enter'],
+                 action: function(){
+                    $.ajax({
 
-        url         : '{{route("food/order")}}',
-        dataType    : 'JSON',
-        type        : 'GET', 
-        data: {storeId:storeId, orderId:orderId, locationId:locationId, locationName:locationName, description:description, entity:entity, totalPrice:totalPrice},
-        success: function(data){
+                        url         : '{{route("food/order")}}',
+                        dataType    : 'JSON',
+                        type        : 'GET', 
+                        data: {storeId:storeId, orderId:orderId, locationId:locationId, locationName:locationName, description:description, entity:entity, totalPrice:totalPrice},
+                        success: function(data){
 
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            console.log('Error '+xhr.status+' | '+thrownError);
-        },
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log('Error '+xhr.status+' | '+thrownError);
+                        },
+                    }); 
+
+                }
+            },
+            Hủy: function () {
+            }
+        }
+
     });
+    }
+
 });
+
+
+
+
+
+
+    //parent.$('.order-submit').prop('disabled',false)
 </script>
 @endsection

@@ -16,6 +16,10 @@
     padding: 10px;
     margin: 0;
 }
+.wrap-item-image{
+    width: 100px;
+    height: 100px;
+}
 .item-image{
     width: 100px;
     height: 100px;

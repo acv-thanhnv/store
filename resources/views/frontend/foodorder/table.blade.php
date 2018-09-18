@@ -60,30 +60,10 @@
 		$(document).on('click', '.table-item', function(){
 			var name= $(this).find('.table-name').text();
 			var id= $(this).attr('table-id');
-			$.confirm({
-				title: 'Bạn muốn chọn <b>'+name +'</b>?',
-				content: 'Nhấn OK để tiếp tục...',
-				type: 'blue',
-				boxWidth: "50%",
-				useBootstrap: false,
-				typeAnimated: true,
-				buttons: {
-					ok: {
-						text: 'OK',
-						btnClass: 'btn-green',
-						keys: ['enter'],
-						action: function(){
-							parent.$('.order-location').attr('location-id',id);
+			parent.$('.order-location').attr('location-id',id);
 							parent.$('.order-location').attr('location-name',name);
 							parent.$('.order-location').text(name);
-							parent.$('#modal-iFrame').iziModal('close');
-						}
-					},
-					close: function () {
-					}
-				}
-			});
-			
+							parent.$('#modal-iFrame').iziModal('close');		
 		});
 
 	</script>
