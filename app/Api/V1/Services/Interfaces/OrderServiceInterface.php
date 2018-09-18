@@ -21,5 +21,5 @@ interface OrderServiceInterface
 
     public function getOrderList( $storeId, $orderStatus,$orderDate,$page,$limitPage);
 
-    public function deleteOrder(Request $request, $orderStatus);
+    public function deleteOrder(Request $request,$userStoreId, $orderStatus);
 }

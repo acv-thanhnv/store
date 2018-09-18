@@ -205,14 +205,20 @@
 @endsection
 @push("js")
     <script>
+        var _pageSize = 10;
+        var _pageVisible = 5;
         $(document).ready(function () {
-            var _pageSize = 10;
-            var _pageVisible = 5;
             getOrderHistory({
                 page:1,
                 pageSize:_pageSize
+            },function(totalRecord){
+                var numberOfPage = Math.ceil(totalRecord/_pageSize);
+                if( _pageVisible > numberOfPage){
+                    _pageVisible = numberOfPage;
+                }
+                initPagging(_pageVisible,numberOfPage);
             });
-            initPagging(_pageVisible,_pageSize);
+
 
             //Show - Hide order detail
             $(document).on('click', '.collapse-link', function () {
@@ -231,15 +237,16 @@
             });
         });
 
-        function initPagging(visiblePages,pageSize){
+        function initPagging(visiblePages,numberOfPage){
+            $('#pagination-order').twbsPagination('destroy');
             $('#pagination-order').twbsPagination({
-                totalPages: pageSize,
+                totalPages: numberOfPage,
                 visiblePages: visiblePages,
                 initiateStartPageClick:false,
                 onPageClick:function(event,page){
                     getOrderHistory({
                         page:page,
-                        pageSize:pageSize
+                        pageSize:_pageSize
                     });
                 }
             });
@@ -247,7 +254,7 @@
         function deleteOrder() {
             //delete Order in Database
         }
-        function getOrderHistory(data){
+        function getOrderHistory(data,callback){
             $.ajax({
                 url         : '{{route("food/orderHistoryList")}}',
                 dataType    : 'JSON',
@@ -285,10 +292,11 @@
                             }else if(order.status=='{{\App\Core\Common\OrderStatusValue::Close}}'){
                                 $(orderArea).addClass('order-closed');
                             }
-
-
                             $('#order-waiting-list').append(orderArea);
                         });
+                        if(callback){
+                            callback(data.data.totalRecord);
+                        }
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {

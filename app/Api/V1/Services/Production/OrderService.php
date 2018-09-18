@@ -132,27 +132,28 @@ class OrderService extends BaseService implements OrderServiceInterface
         $result = new DataResultCollection();
         return $result;
     }
-    public function deleteOrder(Request $request,$orderStatus){
+    public function deleteOrder(Request $request,$userStoreId,$orderStatus){
         $response = $request->all();
         $storeId = isset($response['storeId']) ? $response['storeId'] : 0;
-        $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
-        $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
-        $locationName = isset($response['locationName']) ? $response['locationName'] : '';
-        $description = isset($response['description']) ? $response['description'] : '';
-        $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
-        $entity = json_decode($response['entity']);
-        SDB::table('store_order')
-            ->where('store_order.id','=',$orderId)
-            ->where('store_order.store_id','=',$storeId)
-            ->update(array('status'=>OrderStatusValue::Deleted));
-        $requestClearType = OrderConst::TypeClearTrash;
-        $now = now()->toDateTimeString();
-        if($orderStatus == OrderStatusValue::Waiter){
-            event(new OrderPusherEvent($storeId, $orderId, $locationId,$locationName, $totalPrice,$description,$requestClearType,$now, $entity));
-        }else if($orderStatus == OrderStatusValue::Cheft){
-            event(new OrderPusherEvent($storeId, $orderId, $locationId,$locationName, $totalPrice,$description,$requestClearType,$now, $entity));
+        if($userStoreId == $storeId){
+            $orderId = isset($response['orderId']) ? $response['orderId'] : 0;
+            $locationId = isset($response['locationId']) ? $response['locationId'] : 0;
+            $locationName = isset($response['locationName']) ? $response['locationName'] : '';
+            $description = isset($response['description']) ? $response['description'] : '';
+            $totalPrice = isset($response['totalPrice']) ? $response['totalPrice'] : 0;
+            $entity = json_decode($response['entity']);
+            SDB::table('store_order')
+                ->where('store_order.id','=',$orderId)
+                ->where('store_order.store_id','=',$storeId)
+                ->update(array('status'=>OrderStatusValue::Deleted));
+            $requestClearType = OrderConst::TypeClearTrash;
+            $now = now()->toDateTimeString();
+            if($orderStatus == OrderStatusValue::Waiter){
+                event(new OrderPusherEvent($storeId, $orderId, $locationId,$locationName, $totalPrice,$description,$requestClearType,$now, $entity));
+            }else if($orderStatus == OrderStatusValue::Cheft){
+                event(new OrderPusherEvent($storeId, $orderId, $locationId,$locationName, $totalPrice,$description,$requestClearType,$now, $entity));
+            }
         }
-
     }
 
 
@@ -232,16 +233,26 @@ class OrderService extends BaseService implements OrderServiceInterface
         return $result;
     }
     protected function buildOrderList($storeId,$orderStatus=null,$dateOrder = null,$page=null,$pageLimit=null){
-        $orderList = SDB::table('store_order')
-            ->join('store_order_detail','store_order.id','=','store_order_detail.order_id')
-            ->join('store_entities','store_entities.id','=','store_order_detail.entities_id')
+        $orderObjList = SDB::table('store_order')
+            ->leftJoin('store_order_detail','store_order.id','=','store_order_detail.order_id')
+            ->leftJoin('store_entities','store_entities.id','=','store_order_detail.entities_id')
             ->leftJoin('store_location','store_order.location_id','=','store_location.id')
+            ->selectRaw('store_order.id,store_order.store_id,store_order.location_id,store_order.description,store_order.datetime_order,store_location.name AS location_name,store_order.status,SUM(store_order_detail.quantity * store_entities.price ) AS totalPrice')
             ->where("store_order.store_id",$storeId)
             ->whereRaw("(? IS NULL OR ?=store_order.status)",[$orderStatus,$orderStatus])
             ->whereRaw("(? IS NULL OR  DATE(store_order.datetime_order) = ?)",[$dateOrder,$dateOrder])
-            ->selectRaw('store_order.id,store_order.store_id,store_order.location_id,store_order.description,store_order.datetime_order,store_location.name AS location_name,store_order.status,SUM(store_order_detail.quantity * store_entities.price ) AS totalPrice')
             ->groupBy("store_order.id","store_order.store_id","store_order.location_id","store_order.description","store_order.datetime_order","store_order.status","store_location.name")
-            ->paginate($pageLimit,['*'],'page',$page);
+            ->orderByDesc('store_order.datetime_order');
+        if($page !=null && $pageLimit!=null){
+            $orderList = $orderObjList->paginate($pageLimit,['*'],'page',$page);
+        }else{
+            $orderList = $orderObjList->get();
+        }
+        $countOrder = SDB::table('store_order')
+            ->where("store_order.store_id",$storeId)
+            ->whereRaw("(? IS NULL OR ?=store_order.status)",[$orderStatus,$orderStatus])
+            ->whereRaw("(? IS NULL OR  DATE(store_order.datetime_order) = ?)",[$dateOrder,$dateOrder])
+            ->count();
         $orderListDetail = SDB::table('store_order')
             ->join("store_order_detail","store_order.id","=","store_order_detail.order_id")
             ->where("store_order.store_id",$storeId)
@@ -313,6 +324,7 @@ class OrderService extends BaseService implements OrderServiceInterface
                 $orderInfor[] = $order;
             }
         }
+        $orderInfor['totalRecord']= $countOrder;
         return $orderInfor;
     }
 }
