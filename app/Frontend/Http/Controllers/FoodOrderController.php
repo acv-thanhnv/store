@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Api\V1\Services\Interfaces\FoodServiceInterface;
 use Illuminate\Support\Facades\DB;
-class OrderController extends Controller
+class FoodOrderController extends Controller
 {   
 
     protected $foodService;
@@ -23,17 +23,13 @@ class OrderController extends Controller
 
     public function index($idStore)
     {  
-        return view('frontend.order.index',["idStore" => $idStore]);
+        return view('frontend.foodorder.index',["idStore" => $idStore]);
     }
 
-    public function index2(){
-        return view('frontend.foodorder.index');
-    }
-
-    public function getTables()
+    public function getLocations()
     {
         $location = DB::table('store_location')->select('id', 'name')->get();
-    return view('frontend.order.table', ['location' => $location]);
+    return view('frontend.foodorder.table', ['location' => $location]);
     }
 
 

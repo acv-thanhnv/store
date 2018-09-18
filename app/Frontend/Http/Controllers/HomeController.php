@@ -34,8 +34,6 @@ class HomeController extends Controller
     }
     public function test(Request $request)
     {
-        $a = new FoodService();
-        dd($a->getOrderList(1,2));
         return view('frontend.testorder');
     }
     public function Map()

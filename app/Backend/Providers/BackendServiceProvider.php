@@ -5,12 +5,17 @@
 namespace App\Backend\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Core\Services\Interfaces;
-use App\Core\Services\Production;
+use App\Backend\Services\Interfaces;
+use App\Backend\Services\Production;
+use App\Core\Services\Interfaces As CoreInterFace;
+use App\Core\Services\Production As CoreProduction;
 class BackendServiceProvider extends ServiceProvider
 {
     protected $services = [
-        Interfaces\UploadServiceInterface::class => Production\UploadService ::class,
+        CoreInterFace\UploadServiceInterface::class => CoreProduction\UploadService ::class,
+        Interfaces\FoodServiceInterface::class=>Production\FoodService::class,
+        Interfaces\MenuServiceInterface::class=>Production\MenuService::class,
+        Interfaces\TypeServiceInterface::class=>Production\TypeService::class,
         Interfaces\UserServiceInterface::class=>Production\UserService::class,
     ];
     /**

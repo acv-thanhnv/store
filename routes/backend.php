@@ -55,7 +55,7 @@
         //User Controller
         Route::group(["prefix" => "user"],function(){
             //get view user
-            Route::get("list",'UserController@getList')->name("list");
+            Route::get("list",'UserController@getList')->name("backend.user.list");
             //get profile user
             Route::get("profile",'UserController@profile')->name("profile");
             //get user and paginate
@@ -125,7 +125,8 @@
         Route::group(["prefix" => "dashboard"],function(){
             Route::get("dashboard-waiter","DashboardController@dashboardWaiter")->name("dashboardWaiter");
             Route::get("dashboard-chef","DashboardController@dashboardChef")->name("dashboardChef");
-
+            Route::get("dashboard-closed","DashboardController@dashboardClosedOrder")->name("dashboardClosedOrder");
+            Route::get("dashboard-order-history","DashboardController@dashboardHistoryOrder")->name("dashboardHistoryOrder");
         });
     });
 

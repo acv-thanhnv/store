@@ -71,6 +71,12 @@
         .x_title span {
             color: #34495e !important;
         }
+        .order-description{
+            margin-bottom: 10px;
+        }
+        .order-item .div-order-item{
+            padding-bottom: 5px;
+        }
     </style>
 @endpush
 @extends("layouts.backend")
@@ -84,7 +90,6 @@
                     <div class="header-total-price">
                         <span class="order-total-price"></span>
                         <span>Tổng giá</span>
-                        </span>
                     </div>
                     <div class="header-location">
                         <span class="order-location">Vị trí</span>
@@ -95,9 +100,7 @@
                 </div>
             </div>
         </div>
-        <div id="order-waiting-list">
-
-        </div>
+        <div id="order-waiting-list"></div>
     </div>
     <div class="col-md-12 col-ms-12 col-xs-12 display-none order" id="order-template">
         <div class="x_panel order-detail-list">
@@ -124,11 +127,12 @@
                 <ul class="list-unstyled order-item-list">
                 </ul>
             </div>
+            <div class="order-description"></div>
         </div>
     </div>
     <ul id="order-item-template" class="display-none">
         <li class="order-item">
-            <div class="col-md-12 col-ms-12 col-xs-12">
+            <div class="col-md-12 col-ms-12 col-xs-12 div-order-item">
                 <div class="pull-left order-avatar">
                     <img
                         src=""
@@ -156,6 +160,8 @@
     <script>
         _orderWaiting = [];
         $(document).ready(function () {
+            getInitOrderWaiter();
+            //Init pusher
             var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
                 cluster: '{{env('PUSHER_APP_CLUSTER')}}',
                 encrypted: true
@@ -176,10 +182,26 @@
                 }
             });
             $(document).on('click','.close-link',function(){
-                var orderId = $(this).attr('orderId');
-                $(this).parents('.order').remove();
-                delete _orderWaiting[orderId];
-                deleteOrder(orderId);
+                var current = $(this);
+                $.confirm({
+                    title: 'Xác nhận',
+                    content: 'Bạn có chắc chắn xóa?',
+                    buttons: {
+                        confirm: {
+                            text: 'Xác nhận',
+                            btnClass: 'btn-red',
+                            action: function(){
+                                var orderId = $(current).attr('orderId');
+                                $(current).parents('.order').remove();
+                                delete _orderWaiting[orderId];
+                                deleteOrder(orderId);
+                            }
+                        },
+                        close: {
+                            text: 'Bỏ qua',
+                        }
+                    }
+                });
             });
 
             $(document).on('click','.cook-link',function(){
@@ -222,11 +244,12 @@
                     $(orderArea).find('.order-item-list').append(liTag);
                 });
                 $(orderArea).find('.order-total-price').html(formatNumber(data.totalPrice) );
-                $(orderArea).find('.order-location').html(data.locationId);
+                $(orderArea).find('.order-location').html(data.locationName);
                 $(orderArea).find('.order-time').text(data.dateTimeOrder);
                 $(orderArea).attr('orderId',data.orderId);
                 $(orderArea).find('.cook-link').attr('orderId',data.orderId);
                 $(orderArea).find('.close-link').attr('orderId',data.orderId);
+                $(orderArea).find('.order-description').text(data.description);
                 $('#order-waiting-list').append(orderArea);
                 data.entity = JSON.stringify(data.entity);
                 _orderWaiting[data.orderId]=data;
@@ -246,8 +269,58 @@
          * @param orderId
          */
         function deleteOrder(orderId){
-            //delete Order in Database
+            $.ajax({
+                url         : '{{route("food/orderDeleteWaiter")}}',
+                dataType    : 'JSON',
+                type        : 'DELETE',
+                data:  _orderWaiting[orderId],
+                success: function(data){
+                    //Ok
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error '+xhr.status+' | '+thrownError);
+                },
+            });
         }
-
+        function getInitOrderWaiter(){
+            $.ajax({
+                url         : '{{route("food/orderWaiterList")}}',
+                dataType    : 'JSON',
+                type        : 'GET',
+                success: function(data){
+                    if(data.status=="{{\App\Core\Common\SDBStatusCode::OK}}"){
+                        $.each(data.data, function (index, order) {
+                            var orderArea = $('#order-template').clone();
+                            $(orderArea).removeClass('display-none');
+                            $(orderArea).removeAttr('id');
+                            $.each(order.entity, function (index2, item) {
+                                var liTag = $('#order-item-template').children('li').clone();
+                                $(liTag).removeClass('display-none');
+                                $(liTag).removeAttr('id');
+                                $(liTag).find('.order-item-name').html(item.name);
+                                $(liTag).find('.order-item-price').text(formatNumber(item.price));
+                                $(liTag).find('.order-item-quantity').text(item.quantity);
+                                $(liTag).find('.order-avatar img').attr('src', item.avatar);
+                                //Attr
+                                $(orderArea).find('.order-item-list').append(liTag);
+                            });
+                            $(orderArea).find('.order-total-price').html(formatNumber(order.totalPrice) );
+                            $(orderArea).find('.order-location').html(order.locationName);
+                            $(orderArea).find('.order-time').text(order.dateTimeOrder);
+                            $(orderArea).attr('orderId',order.orderId);
+                            $(orderArea).find('.cook-link').attr('orderId',order.orderId);
+                            $(orderArea).find('.close-link').attr('orderId',order.orderId);
+                            $(orderArea).find('.order-description').text(order.description);
+                            $('#order-waiting-list').append(orderArea);
+                            order.entity = JSON.stringify(order.entity);
+                            _orderWaiting[order.orderId]=order;
+                        });
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error '+xhr.status+' | '+thrownError);
+                },
+            });
+        }
     </script>
 @endpush

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Backend\Http\Controllers;
+use App\Core\Helpers\CommonHelper;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -25,11 +26,19 @@ class DashboardController extends Controller
         return view('home');
     }
     public function dashboardWaiter(){
-        $storeId = 1;
+        $storeId = CommonHelper::getStoreId();
         return view('backend.dashboard.dashboard_waiter',['storeId'=>$storeId]);
     }
     public function dashboardChef(){
-        $storeId = 1;
+        $storeId = CommonHelper::getStoreId();
         return view('backend.dashboard.dashboard_chef',['storeId'=>$storeId]);
+    }
+    public function dashboardClosedOrder(){
+        $storeId = CommonHelper::getStoreId();
+        return view('backend.dashboard.dashboard_closedorder',['storeId'=>$storeId]);
+    }
+    public function dashboardHistoryOrder(){
+        $storeId = CommonHelper::getStoreId();
+        return view('backend.dashboard.dashboard_historyorder',['storeId'=>$storeId]);
     }
 }
