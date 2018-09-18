@@ -20,5 +20,5 @@
     Route::get('/frontend/test', 'HomeController@test')->name('test');
 
     Route::get('/order', 'OrderController@index')->name('order');
-    Route::get("Map","HomeController@Map");
+    Route::get("map","HomeController@Map");
 

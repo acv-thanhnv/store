@@ -42,6 +42,6 @@ class HomeController extends Controller
     {
         $arrCoor = SDB::table("map")->get();
         $arrCoor = json_encode($arrCoor);
-        return view("frontend.testMapApi",["arrCoor" => $arrCoor]); 
+        return view("frontend.mapApi",["arrCoor" => $arrCoor]); 
     }
 }
