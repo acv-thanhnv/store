@@ -101,8 +101,12 @@ class CommonHelper
     }
     //Get store id
     public static function getStoreId(){
-        $storeId = Session::get("id");
-        return 1;
+        $userId = AuthHelper::getUserInfor()->id;
+        $store = SDB::table('store_user_store')
+            ->whereRaw('store_user_store.user_id = ?',[$userId])
+            ->select('store_user_store.store_id')
+            ->first();
+        return $store->store_id;
     }
 
     public static function changeTitle($str,$strSymbol='_',$case=MB_CASE_LOWER){// MB_CASE_UPPER / MB_CASE_TITLE / MB_CASE_LOWER

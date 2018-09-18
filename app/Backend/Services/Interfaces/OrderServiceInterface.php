@@ -7,7 +7,18 @@
  */
 namespace App\Backend\Services\Interfaces;
 
+
+use Illuminate\Http\Request;
+
 interface OrderServiceInterface
 {
-	public function countOrderHistory($idStore);
+    public function orderToWaiter(Request $request);
+
+    public function orderToChef(Request $request);
+
+    public function closeOrder(Request $request);
+
+    public function getOrderList( $storeId, $orderStatus,$orderDate,$page,$limitPage);
+
+    public function deleteOrder(Request $request,$userStoreId, $orderStatus);
 }

@@ -130,5 +130,14 @@
             Route::get("dashboard-closed","DashboardController@dashboardClosedOrder")->name("dashboardClosedOrder");
             Route::get("dashboard-order-history","DashboardController@dashboardHistoryOrder")->name("dashboardHistoryOrder");
         });
+        Route::get('food/order-to-chef', 'OrderController@orderToChef')->name('food/orderToChef');
+        Route::get('food/close-order', 'OrderController@closeOrder')->name('food/closeOrder');
+
+        Route::delete('food/order-delete-waiter', 'OrderController@orderDeleteWaiter')->name('food/orderDeleteWaiter');
+
+        Route::get('food/order-waiter-list', 'OrderController@orderWaiterList')->name('food/orderWaiterList');
+        Route::get('food/order-chef-list', 'OrderController@orderChefList')->name('food/orderChefList');
+        Route::get('food/order-closed-list', 'OrderController@orderClosedList')->name('food/orderClosedList');
+        Route::get('food/order-history-list', 'OrderController@orderHistoryList')->name('food/orderHistoryList');
     });
 

@@ -23,42 +23,4 @@ class OrderController extends Controller
         $result = $this->service->orderToWaiter($request);
         return ResponseHelper::JsonDataResult($result);
     }
-    public function orderToChef(Request $request){
-        $result  = $this->service->orderToChef($request);
-        return ResponseHelper::JsonDataResult($result);
-    }
-    public function closeOrder(Request $request){
-        $result = $this->service->closeOrder($request);
-        return ResponseHelper::JsonDataResult($result);
-    }
-    public function orderDeleteWaiter(Request $request){
-        $storeId = CommonHelper::getStoreId();
-        $result = $this->service->deleteOrder($request,$storeId,OrderStatusValue::Waiter);
-        return ResponseHelper::JsonDataResult($result);
-    }
-    public function orderWaiterList(){
-        $storeId = CommonHelper::getStoreId();
-        $orderDate= date('Y/m/d');
-        $result = $this->service->getOrderList($storeId,OrderStatusValue::Waiter,$orderDate,null,null);
-        return ResponseHelper::JsonDataResult($result);
-    }
-    public function orderChefList(){
-        $storeId = CommonHelper::getStoreId();
-        $orderDate= date('Y/m/d');
-        $result = $this->service->getOrderList($storeId,OrderStatusValue::Cheft,$orderDate,null,null);
-        return ResponseHelper::JsonDataResult($result);
-    }
-    public function orderClosedList(){
-        $storeId = CommonHelper::getStoreId();
-        $orderDate= date('Y/m/d');
-        $result = $this->service->getOrderList($storeId,OrderStatusValue::Close,$orderDate,null,null);
-        return ResponseHelper::JsonDataResult($result);
-    }
-    public function orderHistoryList(Request $request){
-        $storeId = CommonHelper::getStoreId();
-        $page = $request->input('page');
-        $pageSize = $request->input('pageSize');
-        $result = $this->service->getOrderList($storeId,null,null,$page,$pageSize);
-        return ResponseHelper::JsonDataResult($result);
-    }
 }

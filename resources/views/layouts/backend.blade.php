@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="images/favicon.ico" type="image/ico" />
 
-    <title>Gentelella Alela! | </title>
+    <title>Food Store | </title>
 
     <!-- Bootstrap -->
     <link href="{{ asset('backend/template1/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -217,7 +217,7 @@
         <!-- footer content -->
         <footer>
             <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                ACV -  Food store system
             </div>
             <div class="clearfix"></div>
         </footer>
