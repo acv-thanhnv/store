@@ -106,12 +106,12 @@
                 <div id="menu-content" class="tab-pane fade in active">
                  <div class="wrap-list-item-type col-sm-12">
                      <div id="list-item-type">
-                      type activities
+                   
                   </div>
               </div>
               <div class="wrap-list-item col-sm-12">
                   <div id="list-item">
-                      item activities
+                   
                   </div>
               </div>
           </div>
@@ -125,7 +125,7 @@
             <div id="order-content" class="tab-pane fade in active">
              <div class="wrap-item-order">
                  <div id="list-item-order">
-                  list order item
+                
               </div>
           </div>
           <div class="wrap-order">
