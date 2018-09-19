@@ -60,6 +60,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         if (!empty($listEntity)) {
             foreach ($listEntity as $itemEntity) {
                 $itemEntity->image = CommonHelper::getImageUrl($itemEntity->image);
+                $itemEntity->price = number_format($itemEntity->price);
                 $foods = $itemEntity;
                 $foods->props = array();
                 $prop = array();

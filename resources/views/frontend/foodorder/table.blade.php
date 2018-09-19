@@ -31,7 +31,7 @@
 
 		<tbody>
 			<div class="wrap-list-table">
-				@foreach ($location as $table) 
+				@foreach ($location as $table)
 				<tr class="table-item" table-id="{{$table->id}}">
 					<td></td>
 					<td>
@@ -51,7 +51,7 @@
 		$(document).ready(function() {
 			$('#tbl-table').DataTable({
 				lengthChange: false,
-				info: false,   
+				info: false,
 				paging: false,
 			});
 
@@ -60,12 +60,12 @@
 		$(document).on('click', '.table-item', function(){
 			var name= $(this).find('.table-name').text();
 			var id= $(this).attr('table-id');
-			parent.$('.order-location').attr('location-id',id);
-							parent.$('.order-location').attr('location-name',name);
-							parent.$('.order-location').text(name);
-							parent.$('#modal-iFrame').iziModal('close');		
+			parent.$('.order-location-label').attr('location-id',id);
+							parent.$('.order-location-label').attr('location-name',name);
+							parent.$('.order-location-label').text(name);
+							parent.$('#modal-iFrame').iziModal('close');
 		});
 
 	</script>
 </body>
-</html>	
+</html>
