@@ -40,29 +40,12 @@
             <p class="link"><a href="{{route('foodorder')}}/1">Go To Website</a></p>
          </div>
    </div>
-<script>
-var x = document.getElementById("demo");
-
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else { 
-        x.innerHTML = "Geolocation is not supported by this browser.";
-    }
-}
-
-function showPosition(position) {
-    x.innerHTML = "Latitude: " + position.coords.latitude + 
-    "<br>Longitude: " + position.coords.longitude;
-}
-</script>
 @endsection
 @push("js")
 <script type="text/javascript">
    var locations =<?php echo $arrCoor?>;
    var infowindow = null;
    var map;
-   var center = {lat: 20.96841, lng: 105.717798};
    // Try HTML5 geolocation. get current user position
    function CurrentPosition(callback)
    {
@@ -132,8 +115,6 @@ function showPosition(position) {
         });
       },timeout);
    }
-</script>
-<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
 </script>
 <script async defer
    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcW21XZbz_N3NzUiwUSd-K_4vLCZSCM7I&callback=initMap">
