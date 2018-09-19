@@ -2,6 +2,7 @@
 
 namespace App\Backend\Http\Controllers;
 use App\Core\Helpers\CommonHelper;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Services\Interfaces\UploadServiceInterface;
@@ -16,7 +17,7 @@ use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use DateTime;
 
-class FoodController
+class FoodController extends Controller
 {
     protected $foodService;
     protected $typeService;
@@ -26,12 +27,14 @@ class FoodController
         $this->foodService   = $foodService;
         $this->typeService   = $typeService;
         $this->uploadService = $uploadService;
+
     }
     //Foods
     public function getFood()
     {
+        $storeId =CommonHelper::getStoreId();
         $diskLocalName = "public";
-        $arrFood = $this->foodService->getFood(1);
+        $arrFood = $this->foodService->getFood($storeId);
         foreach($arrFood as $obj)
         {
             if($obj->image==NULL){
@@ -44,8 +47,9 @@ class FoodController
     }
     public function getAddFood(Request $request)
     {
-        $arrType = $this->foodService->getType(1);
-        $arrMenu = $this->foodService->getMenu(1);
+        $storeId =CommonHelper::getStoreId();
+        $arrType = $this->foodService->getType($storeId);
+        $arrMenu = $this->foodService->getMenu($storeId);
         $arrData = $this->foodService->getDataType();
         return view("backend.food.add",[
             "arrType" => $arrType,
@@ -124,7 +128,8 @@ class FoodController
     public function getEditFood(Request $request)
     {
         $diskLocalName = "public";
-        $arrMenu = $this->foodService->getMenu(1);
+        $storeId =CommonHelper::getStoreId();
+        $arrMenu = $this->foodService->getMenu($storeId);
         $arrData = $this->foodService->getDataType();
         $food = $this->foodService->getById($request->id);
         if($food->image==NULL){

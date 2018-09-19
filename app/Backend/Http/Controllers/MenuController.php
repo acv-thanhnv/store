@@ -26,7 +26,8 @@ class MenuController
     }
 	public function getMenu()
     {
-        $arrMenu = $this->service->getMenu(1);
+        $storeId =  CommonHelper::getStoreId();
+        $arrMenu = $this->service->getMenu($storeId);
         return view("backend.menu.list",["arrMenu" => $arrMenu]);
     }
     public function getAddMenu()

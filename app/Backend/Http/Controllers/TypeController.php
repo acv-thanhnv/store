@@ -27,7 +27,8 @@ class TypeController
     //Type
     public function getType()
     {
-        $arrType = $this->service->getType(1);
+        $storeId = CommonHelper::getStoreId();
+        $arrType = $this->service->getType($storeId);
         foreach ($arrType as $type) {
             $prop = $this->service->getProp($type->id);
             if(count($prop)===0){
