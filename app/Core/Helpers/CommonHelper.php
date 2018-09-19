@@ -108,7 +108,6 @@ class CommonHelper
             ->first();
         return $store->store_id;
     }
-
     public static function changeTitle($str,$strSymbol='_',$case=MB_CASE_LOWER){// MB_CASE_UPPER / MB_CASE_TITLE / MB_CASE_LOWER
         $str=trim($str);
         if ($str=="") return "";

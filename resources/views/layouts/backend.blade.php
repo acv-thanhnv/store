@@ -93,6 +93,12 @@
                                     <li><a href="{{route('dashboardHistoryOrder')}}">History order</a></li><?php }?>
                                 </ul>
                             </li>
+                            <li><a><i class="fa fa-book"></i> Store   <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a href="{{route('getStore')}}">List</a></li>
+                                    <li><a href="{{route('addStore')}}">Add</a></li>
+                                </ul>
+                            </li>
                             <li><a><i class="fa fa-book"></i> Menu   <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getMenu')==true){ ?>

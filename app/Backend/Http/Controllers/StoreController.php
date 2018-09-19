@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Services\Interfaces\UploadServiceInterface;
-use App\Backend\Services\Interfaces\FoodServiceInterface;
-use App\Backend\Services\Interfaces\TypeServiceInterface;
+use App\Backend\Services\Interfaces\StoreServiceInterface;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Common\UploadConst;
 use Illuminate\Support\Facades\Storage;
@@ -17,25 +16,22 @@ use Illuminate\Http\Request;
 use App\Core\Helpers\AuthHelper;
 
 
-class FoodController
+class StoreController
 {
-    protected $foodService;
-    protected $typeService;
+    protected $storeService;
     protected $uploadService;
     protected $storeId;
-    public function __construct(FoodServiceInterface $foodService,UploadServiceInterface $uploadService,TypeServiceInterface $typeService)
+    public function __construct(StoreServiceInterface $storeService,UploadServiceInterface $uploadService)
     {
-        $this->foodService   = $foodService;
-        $this->typeService   = $typeService;
+        $this->storeService   = $storeService;
         $this->uploadService = $uploadService;
-        $this->storeId =CommonHelper::getStoreId();
     }
     //Foods
-    public function getFood()
+    public function getStore()
     {
         //dd(Auth::user());
         $diskLocalName = "public";
-        $arrFood = $this->foodService->getFood($this->storeId);
+        $arrStore = $this->storeService->getStore($this->storeId);
         foreach($arrFood as $obj)
         {
             if($obj->image==NULL){
@@ -46,16 +42,9 @@ class FoodController
         }
         return view("backend.food.list",["arrFood" => $arrFood]);
     }
-    public function getAddFood(Request $request)
+    public function getAddStore(Request $request)
     {
-        $arrType = $this->foodService->getType($this->storeId);
-        $arrMenu = $this->foodService->getMenu($this->storeId);
-        $arrData = $this->foodService->getDataType();
-        return view("backend.food.add",[
-            "arrType" => $arrType,
-            "arrMenu" => $arrMenu,
-            "arrData" => $arrData
-        ]);
+        return view("backend.store.add");
     }
     public function postAddFood(Request $request)
     {
