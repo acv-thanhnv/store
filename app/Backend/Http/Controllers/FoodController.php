@@ -14,28 +14,27 @@ use Illuminate\Support\Facades\Storage;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Core\Helpers\AuthHelper;
+use Intervention\Image\ImageManagerStatic as Image;
+use DateTime;
 
-
-class FoodController
+class FoodController extends Controller
 {
     protected $foodService;
     protected $typeService;
     protected $uploadService;
-    protected $storeId;
     public function __construct(FoodServiceInterface $foodService,UploadServiceInterface $uploadService,TypeServiceInterface $typeService)
     {
         $this->foodService   = $foodService;
         $this->typeService   = $typeService;
         $this->uploadService = $uploadService;
-        $this->storeId =CommonHelper::getStoreId();
+
     }
     //Foods
     public function getFood()
     {
-        //dd(Auth::user());
+        $storeId =CommonHelper::getStoreId();
         $diskLocalName = "public";
-        $arrFood = $this->foodService->getFood($this->storeId);
+        $arrFood = $this->foodService->getFood($storeId);
         foreach($arrFood as $obj)
         {
             if($obj->image==NULL){
@@ -48,8 +47,9 @@ class FoodController
     }
     public function getAddFood(Request $request)
     {
-        $arrType = $this->foodService->getType($this->storeId);
-        $arrMenu = $this->foodService->getMenu($this->storeId);
+        $storeId =CommonHelper::getStoreId();
+        $arrType = $this->foodService->getType($storeId);
+        $arrMenu = $this->foodService->getMenu($storeId);
         $arrData = $this->foodService->getDataType();
         return view("backend.food.add",[
             "arrType" => $arrType,
@@ -128,7 +128,8 @@ class FoodController
     public function getEditFood(Request $request)
     {
         $diskLocalName = "public";
-        $arrMenu = $this->foodService->getMenu($this->storeId);
+        $storeId =CommonHelper::getStoreId();
+        $arrMenu = $this->foodService->getMenu($storeId);
         $arrData = $this->foodService->getDataType();
         $food = $this->foodService->getById($request->id);
         if($food->image==NULL){
