@@ -172,7 +172,7 @@
 
         //load item type by store
         $.ajax({
-            url         : '{{route("food/list-menu-by-store")}}'+'/1',
+            url         : '{{route("food/list-menu-by-store")}}'+'/'+'1',
             dataType    : 'JSON',
             type        : 'GET',
             success: function(data){
