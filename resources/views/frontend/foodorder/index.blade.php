@@ -162,7 +162,7 @@
                 <div class="wrap-order">
                     <div>
                         <span><button class="order-location"><i class="color-red glyphicon glyphicon-map-marker"></i> Chọn vị trí</button></span>
-                        <span class="order-location-label" location-id="" location-name="">............... </span>
+                        <span class="order-location-label" location-id="" location-name=""> </span>
                         <div class="order-total pull-right">
                             <span class="title-label">Tổng Tiền: </span>
                             <span class="total-price-order">__.___</span>
@@ -358,7 +358,7 @@
             $('#modal-iFrame').iziModal('open', this); // Do not forget the "this"
         });
         $("#modal-iFrame").iziModal({
-            title: 'Select Location', //Modal title
+            title: 'Lựa chọn vị trí', //Modal title
             headerColor: 'rgb(51, 76, 123)', //Color of modal header. Hexa colors allowed.
             overlayColor: 'rgba(0, 0, 0, 0.4)', //Color of overlay behind the modal
             iconColor: '',
