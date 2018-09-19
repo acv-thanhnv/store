@@ -21,9 +21,10 @@ class FoodOrderController extends Controller
         $this->foodService = $foodService;
     }
 
-    public function index($idStore)
+    public function index($storeId)
     {  
-        return view('frontend.foodorder.index',["idStore" => $idStore]);
+        //dd($storeId);
+        return view('frontend.foodorder.index',["storeId" => $storeId]);
     }
 
     public function getLocations()
