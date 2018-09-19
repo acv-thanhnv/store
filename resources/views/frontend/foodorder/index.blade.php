@@ -176,6 +176,7 @@
 
         {{--INCLUDE TEMPLATE iframe location--}}
         <div id="modal-iFrame" class="iziModal" display="none"></div>
+        <div id="modal-iFrame2" class="iziModal" display="none"></div>
 
     </div>
 @endsection
@@ -257,19 +258,34 @@
                 $(item).find('.item-name').html(obj.name);
                 $(item).find('.item-price').html(parseInt(obj.price));
                 //set attr
-                $(item).attr('item-id', obj.id);
-                $(item).attr('item-name', obj.name);
-                $(item).attr('item-price', obj.price);
+                $(item).find('.item-link').attr('item-id', obj.id);
+                $(item).find('.item-link').attr('item-name', obj.name);
+                $(item).find('.item-link').attr('item-price', obj.price);
 
                 $(listitem).append($(item));
             });
         }
 
+        //show detail item
+        $(document).on('click', '.item-detail', function(){
+            $('#modal-iFrame2').iziModal('open', this)
+        });
+        $("#modal-iFrame2").iziModal({
+            title: 'Food Detail', //Modal title
+            headerColor: 'rgb(51, 76, 123)', //Color of modal header. Hexa colors allowed.
+            overlayColor: 'rgba(0, 0, 0, 0.4)', //Color of overlay behind the modal
+            iconColor: '',
+            iconClass: 'icon-chat',
+            iframe: true, //In this example, this flag is mandatory. Izimodal needs to understand you will call an iFrame from here
+            iframeURL: "{{route('itemdetail')}}" //Link will be opened inside modal
+        });
+
+
         //choose item to order
         var item = $("#list-item-order");
         $(item).empty();
 
-        $(document).on("click", ".item", function (event) {
+        $(document).on("click", ".item-link", function (event) {
             var id = $(this).attr('item-id');
             var image = $(this).find('.item-image').attr('src');
             var name = $(this).attr('item-name');

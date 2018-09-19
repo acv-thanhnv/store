@@ -33,5 +33,11 @@ class FoodOrderController extends Controller
     return view('frontend.foodorder.table', ['location' => $location]);
     }
 
+    public function getDetail()
+    {
+        $detail = DB::table('store_entities')->get();
+        return view('frontend.foodorder.detail', ['detail'=>$detail]);
+    }
+
 
 }
