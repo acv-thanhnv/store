@@ -25,6 +25,7 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
+        dd(AuthHelper::getUserInfor());
         $storeId = CommonHelper::getStoreId();
         return view('backend.dashboard.dashboard',['storeId'=>$storeId]);
     }
