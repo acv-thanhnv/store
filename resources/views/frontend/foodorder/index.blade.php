@@ -1,201 +1,212 @@
 @extends('layouts.foodorder')
 @section('css')
-    <style type="text/css">
-        .nopadd {
-            padding: 0 !important;
-            margin: 0 !important;
-        }
+<style type="text/css">
+.nopadd {
+    padding: 0 !important;
+    margin: 0 !important;
+}
 
-        .wraper-content {
-            margin-top: 5px;
-            height: 100%;
-            width: 100%;
-            padding: 0px 0px;
-        }
-        .title-label{
-            font-weight: bold;
-        }
-        .wraper-content-left {
-            border-right: 1px solid #c1c1c1;
-            overflow: auto;
+.wraper-content {
+    margin-top: 5px;
+    height: 100%;
+    width: 100%;
+    padding: 0px 0px;
+}
+.title-label{
+    font-weight: bold;
+}
+.wraper-content-left {
+    border-right: 1px solid #c1c1c1;
+    overflow: auto;
 
-        }
-        .color-red{
-            color: red;
-        }
-        .wraper-content-right {
-            border-left: 1px solid #ebebeb;
-        }
+}
+.color-red{
+    color: red;
+}
+.wraper-content-right {
+    border-left: 1px solid #ebebeb;
+}
 
-        .content-col-left {
-            position: relative;
-            height: 100%;
-            overflow: hidden;
-        }
+.content-col-left {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
 
-        .content-col-right {
-            height: calc(100%);
-            float: left;
-            position: relative;
-        }
+.content-col-right {
+    height: calc(100%);
+    float: left;
+    position: relative;
+}
 
-        .wrap-list-item-type {
-            margin: 10px;
-        }
+.wrap-list-item-type {
+    margin: 10px;
+}
 
-        #item-order {
-            clear: both;
-        }
+#item-order {
+    clear: both;
+}
 
-        .wrap-order {
-            bottom: 0px;
-            margin: 0px;
-            padding: 0px;
-            height: 150px;
-        }
+.wrap-order {
+    bottom: 0px;
+    margin: 0px;
+    padding: 0px;
+    height: 150px;
+}
 
-        .wrap-order-info {
-            border-top: 1px solid #0090da;
-            padding-top: 15px;
-            height: 60px;
-        }
+.wrap-order-info {
+    border-top: 1px solid #0090da;
+    padding-top: 15px;
+    height: 60px;
+}
 
-        .wrap-order-submit {
+.wrap-order-submit {
 
-        }
+}
 
-        .order-submit {
-            width: 250px;
-            height: 50px;
-            right: 20px;
-            bottom: 30px;
-        }
+.order-submit {
+    width: 250px;
+    height: 50px;
+    right: 20px;
+    bottom: 30px;
+}
 
 
-        .wrap-order {
-            background-color: #fff;
-        }
+.wrap-order {
+    background-color: #fff;
+}
 
-        .order-total {
-            float: right;
-            right: 23px;
-        }
+.order-total {
+    float: right;
+    right: 23px;
+}
 
-        .wrap-order {
-            width: 100%;
-            padding: 10px;
-        }
+.wrap-order {
+    width: 100%;
+    padding: 10px;
+}
 
-        .order-location-label{
-            margin-left: 15px;
-        }
+.order-location-label{
+    margin-left: 15px;
+}
 
-        .wrap-description {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
+.wrap-description {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 
-        .order-description {
-            width: 100%;
-            height: 30px;
-        }
+.order-description {
+    width: 100%;
+    height: 30px;
+}
 
-        .wrap-list {
-            overflow: auto;
-            height: 700px;
-            border-bottom: 1px solid #d0d6d0;
-        }
-        @media only screen and (max-width: 1024px) {
-            .wrap-list {
-                overflow: auto;
-                height: 473px !important;
-                border-bottom: 1px solid #d0d6d0;
-            }
-        }
-        @media only screen and (max-width: 768px) {
-            .wrap-list {
-                overflow: auto;
-                height: 400px !important;
-                border-bottom: 1px solid #d0d6d0;
-            }
-        }
-    </style>
+.wrap-list {
+    overflow: auto;
+    height: 700px;
+    border-bottom: 1px solid #d0d6d0;
+}
+@media only screen and (max-width: 1024px) {
+    .wrap-list {
+        overflow: auto;
+        height: 473px !important;
+        border-bottom: 1px solid #d0d6d0;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .wrap-list {
+        overflow: auto;
+        height: 400px !important;
+        border-bottom: 1px solid #d0d6d0;
+    }
+}
+@media only screen and (max-width: 1920px) {
+    .wrap-list {
+        overflow: auto;
+        height: 460px !important;
+        border-bottom: 1px solid #d0d6d0;
+    }
+}
+</style>
 @endsection
 
 
 @section('content')
-    {{--content--}}
-    <div class="wraper-content col-sm-12">
-        {{--content left--}}
-        <div class="wraper-content-top">
-            <div class="wrap-list-item-type col-sm-6">
-                <div id="list-item-type"></div>
+{{--content--}}
+<div class="wraper-content col-sm-12">
+    {{--content left--}}
+    <div class="wraper-content-top">
+        <div class="wrap-list-item-type col-sm-6">
+            <div id="list-item-type">
+                <button class="btn btn-primary btn-item-type" type="button" item-type-id="">Tất cả</button>
             </div>
-            <div class="clearfix"></div>
         </div>
-        <div class="wraper-content-middle">
-            <div class="wraper-content-left col-sm-6 nopadd">
-                <div class="tab-content">
-                    <div id="menu-content" class="tab-pane fade in active">
-                        <div class="wrap-list-item wrap-list col-sm-12">
-                            <div id="list-item"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{--content right--}}
-            <div class="wraper-content-right col-sm-6 nopadd">
-                <div class="tab-content">
-                    <div id="order-content" class="tab-pane fade in active">
-                        <div class="wrap-item-order wrap-list">
-                            <div id="list-item-order"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{--END CONTENT--}}
-            <div class="clearfix"></div>
-        </div>
-        <div class="wraper-content-bottom col-ms-12">
-            <div class="col-ms-6 col-md-6"></div>
-            <div class="col-ms-6 col-md-6 nopadd">
-                <div class="wrap-order">
-                    <div>
-                        <span><button class="order-location"><i class="color-red glyphicon glyphicon-map-marker"></i> Chọn vị trí</button></span>
-                        <span class="order-location-label" location-id="" location-name=""> </span>
-                        <div class="order-total pull-right">
-                            <span class="title-label">Tổng Tiền: </span>
-                            <span class="total-price-order">__.___</span>
-                            <span>(VNĐ)</span>
-                        </div>
-                    </div>
-                    <div class="wrap-description">
-                        <span class="title-label">Ghi chú: </span>
-                        <span>
-                            <textarea class="order-description form-control"></textarea>
-                        </span>
-                    </div>
-                    <div class="wrap-order-submit">
-                        <button class="order-submit btn btn-success">Chuyển nhà bếp</button>
-                    </div>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-        </div>
+        <div class="clearfix"></div>
     </div>
-    {{--INCLUDE TEMPLATE CONTENT--}}
-    @include('frontend.foodorder.item-type')
-    @include('frontend.foodorder.item')
-    @include('frontend.foodorder.item-order')
+    <div class="wraper-content-middle">
+        <div class="wraper-content-left col-sm-6 nopadd">
+            <div class="tab-content">
+                <div id="menu-content" class="tab-pane fade in active">
+                    <div class="wrap-list-item wrap-list col-sm-12">
+                        <div id="list-item">
 
-    {{--INCLUDE TEMPLATE iframe location--}}
-    <div id="modal-iFrame" class="iziModal" display="none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{--content right--}}
+        <div class="wraper-content-right col-sm-6 nopadd">
+            <div class="tab-content">
+                <div id="order-content" class="tab-pane fade in active">
+                    <div class="wrap-item-order wrap-list">
+                        <div id="list-item-order"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{--END CONTENT--}}
+        <div class="clearfix"></div>
+    </div>
+    <div class="wraper-content-bottom col-ms-12">
+        <div class="col-ms-6 col-md-6"></div>
+        <div class="col-ms-6 col-md-6 nopadd">
+            <div class="wrap-order">
+                <div>
+                    <span><button class="order-location"><i class="color-red glyphicon glyphicon-map-marker"></i> Chọn vị trí</button></span>
+                    <span class="order-location-label" location-id="" location-name="">............... </span>
+                    <div class="order-total pull-right">
+                        <span class="title-label">Tổng Tiền: </span>
+                        <span class="total-price-order">__.___</span>
+                        <span>(VNĐ)</span>
+                    </div>
+                </div>
+                <div class="wrap-description">
+                    <span class="title-label">Ghi chú: </span>
+                    <span>
+                        <textarea class="order-description form-control"></textarea>
+                    </span>
+                </div>
+                <div class="wrap-order-submit">
+                    <button class="order-submit btn btn-success">Chuyển nhà bếp</button>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+{{--INCLUDE TEMPLATE CONTENT--}}
+@include('frontend.foodorder.item-type')
+@include('frontend.foodorder.item')
+@include('frontend.foodorder.item-order')
+
+{{--INCLUDE TEMPLATE iframe location--}}
+<div id="modal-iFrame" class="iziModal" display="none"></div>
 @endsection
 
 
 {{-- include javascript --}}
 @section('javascript')
-    <script type="text/javascript">
+<script type="text/javascript">
         //load data page
         var _storeId = '{{$storeId}}';
         $(document).ready(function (event) {
@@ -206,7 +217,7 @@
                 dataType: 'JSON',
                 type: 'GET',
                 success: function (data) {
-                    //console.log(data);
+
                     genListItemType(data);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -231,7 +242,6 @@
         //gen list item type to template
         function genListItemType(data) {
             var itemtype = $("#list-item-type");
-            $(itemtype).empty();
             data.data.forEach(function (obj) {
                 var item = $("#item-type-template").contents().clone();
                 $(item).attr('item-type-id', obj.id);
@@ -340,7 +350,6 @@
 
         $(document).on("click", ".quantity-up", function () {
             var quantity = parseInt($(this).parents('.row-item-order').find('.item-order-quantity').val());
-            console.log(quantity);
             var quantity2 = quantity + 1;
             $(this).parents('.row-item-order').find('.item-order-quantity').val(quantity2);
             updatePrice();
@@ -358,7 +367,7 @@
             $('#modal-iFrame').iziModal('open', this); // Do not forget the "this"
         });
         $("#modal-iFrame").iziModal({
-            title: 'Lựa chọn vị trí', //Modal title
+            title: 'Select Location', //Modal title
             headerColor: 'rgb(51, 76, 123)', //Color of modal header. Hexa colors allowed.
             overlayColor: 'rgba(0, 0, 0, 0.4)', //Color of overlay behind the modal
             iconColor: '',
@@ -370,6 +379,7 @@
         //submit to chef
         $(document).on("click", ".order-submit", function () {
             var item = $('#list-item-order').find('.row-item-order');
+            //var clearorder= item.remove();
             var storeId = _storeId;
             var orderId = 0;
             var locationId = $('.order-location-label').attr('location-id');
@@ -436,7 +446,19 @@
                                         console.log('Error ' + xhr.status + ' | ' + thrownError);
                                     },
                                 });
-
+                                item.remove();
+                                $('.order-location-label').attr('location-id','');
+                                $('.order-location-label').attr('location-name', '');
+                                $('.order-location-label').text('...............');
+                                $('.order-description').val('');
+                                $('.total-price-order').text('__.___');
+                                $.toast({
+                                    heading: 'Success',
+                                    text: 'Đơn đã gửi đến Bếp chờ xử lý..',
+                                    showHideTransition: 'slide',
+                                    position: 'top-right',
+                                    icon: 'success'
+                                })
                             }
                         },
                         Cancel: {
@@ -449,7 +471,5 @@
 
         });
 
-
-        //parent.$('.order-submit').prop('disabled',false)
     </script>
-@endsection
+    @endsection

@@ -23,7 +23,7 @@ class FoodOrderController extends Controller
 
     public function index($storeId)
     {  
-        //dd($storeId);
+
         return view('frontend.foodorder.index',["storeId" => $storeId]);
     }
 
@@ -31,6 +31,12 @@ class FoodOrderController extends Controller
     {
         $location = DB::table('store_location')->select('id', 'name')->get();
     return view('frontend.foodorder.table', ['location' => $location]);
+    }
+
+    public function getDetail()
+    {
+        $detail = DB::table('store_entities')->get();
+        return view('frontend.foodorder.detail', ['detail'=>$detail]);
     }
 
 

@@ -28,3 +28,4 @@ Route::get('listlocation','OrderController@getTables')->name('listlocation');
 
 Route::get('/foodorder/{idStore?}', 'FoodOrderController@index')->name('foodorder');
 Route::get('/location','FoodOrderController@getLocations')->name('location');
+Route::get('/itemdetail','FoodOrderController@getDetail')->name('itemdetail');
