@@ -8,7 +8,8 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('css/lib/jquery-confirm.css')}}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/
 	font-awesome.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.5.1/css/iziModal.min.css">
+	<link rel="stylesheet" href="{{asset('backend/template1/modal/css/iziModal.min.css')}}">
+	<link rel="stylesheet" href="{{asset('css/toast.css')}}">
 	@yield('css')
 </head>
 <body>
@@ -22,8 +23,9 @@
 <script type="text/javascript" src="{{asset('js/lib/bootstrap.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/lib/bootstrap.min.js')}}"></script>
 <script src="{{ asset('js/lib/jquery-confirm.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.5.1/js/iziModal.min.js"></script>
-    <script src="{{ asset('js/common.js')}}"></script>
+<script src="{{asset('backend/template1/modal/js/iziModal.min.js')}}"></script>
+<script src="{{ asset('js/common.js')}}"></script>
+<script src="{{ asset('js/toast.js')}}"></script>
 @yield('javascript')
 </body>
 </html>

@@ -34,6 +34,9 @@
 .item-order-name{
     color: #111;
     overflow: hidden;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
 }
 .cell-quantity{
     float: left;
@@ -62,6 +65,7 @@
     width:200px;
     padding: 10px 7px;
     text-align: right;
+    color: green;
 
 }
 .item-order-price{
@@ -95,6 +99,19 @@
     .cell-quantity {
         width: 240px !important;
     }
+}
+@media only screen and (max-width: 1920px) {
+    .cell-quantity {
+        float: left;
+        width: 165px;
+        padding: 10px 7px;
+    }
+    .cell-price {
+    float: left;
+    width: 277px;
+    padding: 10px 7px;
+    text-align: right;
+    color: green;
 }
 </style>
 
