@@ -23,6 +23,7 @@
 <script type="text/javascript" src="{{asset('js/lib/bootstrap.min.js')}}"></script>
 <script src="{{ asset('js/lib/jquery-confirm.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.5.1/js/iziModal.min.js"></script>
+    <script src="{{ asset('js/common.js')}}"></script>
 @yield('javascript')
 </body>
 </html>

@@ -11,18 +11,19 @@
             height: 100%;
             width: 100%;
             padding: 0px 0px;
-            border-top: 1px solid grey;
         }
-
+        .title-label{
+            font-weight: bold;
+        }
         .wraper-content-left {
-            height: 700px;
             border-right: 1px solid #c1c1c1;
             overflow: auto;
 
         }
-
+        .color-red{
+            color: red;
+        }
         .wraper-content-right {
-            height: 700px;
             border-left: 1px solid #ebebeb;
         }
 
@@ -33,7 +34,7 @@
         }
 
         .content-col-right {
-            height: calc(100% - 150px);
+            height: calc(100%);
             float: left;
             position: relative;
         }
@@ -47,8 +48,6 @@
         }
 
         .wrap-order {
-            border: 1px solid #ebebeb;
-            position: fixed;
             bottom: 0px;
             margin: 0px;
             padding: 0px;
@@ -68,18 +67,10 @@
         .order-submit {
             width: 250px;
             height: 50px;
-            position: fixed;
             right: 20px;
             bottom: 30px;
         }
 
-        #list-item-order {
-            max-height: 500px;
-            margin: 0 4px 0 12px;
-            overflow-x: hidden;
-            overflow-y: auto;
-            background-color: #fff;
-        }
 
         .wrap-order {
             background-color: #fff;
@@ -87,7 +78,6 @@
 
         .order-total {
             float: right;
-            position: fixed;
             right: 23px;
         }
 
@@ -96,18 +86,38 @@
             padding: 10px;
         }
 
-        .order-location {
+        .order-location-label{
             margin-left: 15px;
         }
 
         .wrap-description {
-            margin-left: 15px;
             margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         .order-description {
-            width: calc(100% - 300px);
+            width: 100%;
             height: 30px;
+        }
+
+        .wrap-list {
+            overflow: auto;
+            height: 700px;
+            border-bottom: 1px solid #d0d6d0;
+        }
+        @media only screen and (max-width: 1024px) {
+            .wrap-list {
+                overflow: auto;
+                height: 473px !important;
+                border-bottom: 1px solid #d0d6d0;
+            }
+        }
+        @media only screen and (max-width: 768px) {
+            .wrap-list {
+                overflow: auto;
+                height: 400px !important;
+                border-bottom: 1px solid #d0d6d0;
+            }
         }
     </style>
 @endsection
@@ -117,67 +127,69 @@
     {{--content--}}
     <div class="wraper-content col-sm-12">
         {{--content left--}}
-        <div class="wraper-content-left col-sm-6 nopadd">
-            <div class="content-col-left col-sm-12 nopadd">
+        <div class="wraper-content-top">
+            <div class="wrap-list-item-type col-sm-6">
+                <div id="list-item-type"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="wraper-content-middle">
+            <div class="wraper-content-left col-sm-6 nopadd">
                 <div class="tab-content">
                     <div id="menu-content" class="tab-pane fade in active">
-                        <div class="wrap-list-item-type col-sm-12">
-                            <div id="list-item-type">
-
-                            </div>
-                        </div>
-                        <div class="wrap-list-item col-sm-12">
-                            <div id="list-item">
-
-                            </div>
+                        <div class="wrap-list-item wrap-list col-sm-12">
+                            <div id="list-item"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        {{--content right--}}
-        <div class="wraper-content-right col-sm-6 nopadd">
-            <div class="content-col-right col-sm-12 nopadd">
+            {{--content right--}}
+            <div class="wraper-content-right col-sm-6 nopadd">
                 <div class="tab-content">
                     <div id="order-content" class="tab-pane fade in active">
-                        <div class="wrap-item-order">
-                            <div id="list-item-order">
-
-                            </div>
+                        <div class="wrap-item-order wrap-list">
+                            <div id="list-item-order"></div>
                         </div>
-                        <div class="wrap-order">
-                            <span class="order-location fa fa-th" location-id="" location-name=""> Chọn Vị Trí</span>
-                            <div class="order-total">
-                                <span>Tổng Tiền: </span>
-                                <span class="total-price-order">__.___</span>
-                                <span>(vnđ)</span>
-                            </div>
-
-                            <div class="wrap-description">
-                                <span class="fa fa-pencil"> Mô tả: <textarea
-                                        class="order-description"></textarea></span>
-                            </div>
-
-                            <div class="wrap-order-submit">
-                                <button class="order-submit btn btn-success">Chuyển Nhà Bếp</button>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
+            {{--END CONTENT--}}
+            <div class="clearfix"></div>
         </div>
-        {{--END CONTENT--}}
-
-        {{--INCLUDE TEMPLATE CONTENT--}}
-        @include('frontend.foodorder.item-type')
-        @include('frontend.foodorder.item')
-        @include('frontend.foodorder.item-order')
-
-        {{--INCLUDE TEMPLATE iframe location--}}
-        <div id="modal-iFrame" class="iziModal" display="none"></div>
-
+        <div class="wraper-content-bottom col-ms-12">
+            <div class="col-ms-6 col-md-6"></div>
+            <div class="col-ms-6 col-md-6 nopadd">
+                <div class="wrap-order">
+                    <div>
+                        <span><button class="order-location"><i class="color-red glyphicon glyphicon-map-marker"></i> Chọn vị trí</button></span>
+                        <span class="order-location-label" location-id="" location-name="">............... </span>
+                        <div class="order-total pull-right">
+                            <span class="title-label">Tổng Tiền: </span>
+                            <span class="total-price-order">__.___</span>
+                            <span>(VNĐ)</span>
+                        </div>
+                    </div>
+                    <div class="wrap-description">
+                        <span class="title-label">Ghi chú: </span>
+                        <span>
+                            <textarea class="order-description form-control"></textarea>
+                        </span>
+                    </div>
+                    <div class="wrap-order-submit">
+                        <button class="order-submit btn btn-success">Chuyển nhà bếp</button>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
     </div>
+    {{--INCLUDE TEMPLATE CONTENT--}}
+    @include('frontend.foodorder.item-type')
+    @include('frontend.foodorder.item')
+    @include('frontend.foodorder.item-order')
+
+    {{--INCLUDE TEMPLATE iframe location--}}
+    <div id="modal-iFrame" class="iziModal" display="none"></div>
 @endsection
 
 
@@ -206,7 +218,7 @@
                 url: '{{route("food/list-by-menu")}}',
                 dataType: 'JSON',
                 type: 'GET',
-                data:{storeId:_storeId},
+                data: {storeId: _storeId},
                 success: function (data) {
                     genFoodByStoreId(data);
                 },
@@ -235,7 +247,7 @@
                 url: '{{route("food/list-by-menu")}}' + '/' + id,
                 dataType: 'JSON',
                 type: 'GET',
-                data:{storeId : _storeId},
+                data: {storeId: _storeId},
                 success: function (data) {
                     genFoodByStoreId(data);
                 },
@@ -255,7 +267,7 @@
                 $(item).find('.item-title').attr('title', obj.name);
                 $(item).find('.item-image').attr('src', obj.image);
                 $(item).find('.item-name').html(obj.name);
-                $(item).find('.item-price').html(parseInt(obj.price));
+                $(item).find('.item-price').html(formatNumber(parseInt(obj.price)));
                 //set attr
                 $(item).attr('item-id', obj.id);
                 $(item).attr('item-name', obj.name);
@@ -281,7 +293,7 @@
             $(row).find('.item-order-image').attr('src', image);
             $(row).find('.item-order-name').html(name);
             $(row).find('.item-order-quantity').val('1');
-            $(row).find('.item-order-price').text(parseInt(price));
+            $(row).find('.item-order-price').text(formatNumber(parseInt(price)));
             //set attr
             $(row).attr('item-order-name', name);
             $(row).attr('item-order-price', price);
@@ -311,7 +323,7 @@
                 total += amount;
             });
             //set total
-            $('.total-price-order').text(total);
+            $('.total-price-order').text(formatNumber(parseInt(total)));
         }
 
         //change quantity
@@ -343,7 +355,6 @@
 
         //set location
         $(document).on('click', '.order-location', function (event) {
-            event.preventDefault();
             $('#modal-iFrame').iziModal('open', this); // Do not forget the "this"
         });
         $("#modal-iFrame").iziModal({
@@ -361,8 +372,8 @@
             var item = $('#list-item-order').find('.row-item-order');
             var storeId = _storeId;
             var orderId = 0;
-            var locationId = $('.order-location').attr('location-id');
-            var locationName = $('.order-location').attr('location-name');
+            var locationId = $('.order-location-label').attr('location-id');
+            var locationName = $('.order-location-label').attr('location-name');
             var description = $('.order-description').val();
             var totalPrice = $('.total-price-order').text();
 
