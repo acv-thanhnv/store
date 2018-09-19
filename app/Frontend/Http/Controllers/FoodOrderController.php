@@ -23,7 +23,7 @@ class FoodOrderController extends Controller
 
     public function index($storeId)
     {  
-        //dd($storeId);
+
         return view('frontend.foodorder.index',["storeId" => $storeId]);
     }
 
