@@ -141,7 +141,6 @@
         </div>
 
         <div class="wrap-order-submit" >
-            <span id="idStore" store-id="{{$idStore}}" style="display: none"></span>
             <button class="order-submit btn btn-success">Chuyển Nhà Bếp</button>
         </div>
     </div>
@@ -168,11 +167,12 @@
 @section('javascript')
 <script type="text/javascript">
         //load data page
+        var _storeId = '{{$storeId}}';
         $( document ).ready(function(event) {
 
         //load item type by store
         $.ajax({
-            url         : '{{route("food/list-menu-by-store")}}'+'/1',
+            url         : '{{route("food/list-menu-by-store")}}'+'/'+_storeId,
             dataType    : 'JSON',
             type        : 'GET',
             success: function(data){
@@ -338,7 +338,7 @@ $("#modal-iFrame").iziModal({
 //submit to chef
 $(document).on("click",".order-submit",function(){
     var item = $('#list-item-order').find('.row-item-order');
-    var storeId = $('#idStore').attr('store-id');
+    var storeId = _storeId;
     var orderId = 0;
     var locationId = $('.order-location').attr('location-id');
     var locationName = $('.order-location').attr('location-name');
