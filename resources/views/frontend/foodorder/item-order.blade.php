@@ -97,7 +97,7 @@
 }
 @media only screen and (max-width: 1024px) {
     .cell-quantity {
-        width: 240px !important;
+        width: 256px !important;
     }
 }
 @media only screen and (max-width: 1920px) {
@@ -107,16 +107,14 @@
         padding: 10px 7px;
     }
     .cell-price {
-    float: left;
-    width: 277px;
-    padding: 10px 7px;
-    text-align: right;
-    color: green;
+        float: left;
+        width: 277px;
+        padding: 10px 7px;
+        text-align: right;
+        color: green;
+    }
 }
 </style>
-
-
-
 <div id="item-order-template">
     <div class="row-item-order" item-order-id="" item-order-name="" item-order-price="">
         <div class="cell-arrange">

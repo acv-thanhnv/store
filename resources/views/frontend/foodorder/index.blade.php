@@ -119,7 +119,7 @@
         border-bottom: 1px solid #d0d6d0;
     }
 }
-@media only screen and (max-width: 1920px) {
+@media only screen and (max-width: 1600px) {
     .wrap-list {
         overflow: auto;
         height: 460px !important;
@@ -367,7 +367,7 @@
             $('#modal-iFrame').iziModal('open', this); // Do not forget the "this"
         });
         $("#modal-iFrame").iziModal({
-            title: 'Select Location', //Modal title
+            title: 'Chọn vị trí', //Modal title
             headerColor: 'rgb(51, 76, 123)', //Color of modal header. Hexa colors allowed.
             overlayColor: 'rgba(0, 0, 0, 0.4)', //Color of overlay behind the modal
             iconColor: '',
@@ -454,7 +454,7 @@
                                 $('.total-price-order').text('__.___');
                                 $.toast({
                                     heading: 'Success',
-                                    text: 'Đơn đã gửi đến Bếp chờ xử lý..',
+                                    text: 'Đơn đã gửi đến bếp chờ xử lý..',
                                     showHideTransition: 'slide',
                                     position: 'top-right',
                                     icon: 'success'
