@@ -146,7 +146,6 @@ class FoodController extends Controller
     }
     public function postEditFood(Request $request)
     {
-        // dd($request->all());
         $arrProp       = json_decode($request->arrProp);//encode from FormData
         $image         = $request->file("image");
         $result        =  new DataResultCollection();
