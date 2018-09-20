@@ -28,10 +28,10 @@ class StoreService extends BaseService implements StoreServiceInterface
     // 				->get();
     // 	return $arrMenu;
     // }
-    // public function addStore($obj)
-    // {
-    //     SDB::table("store_menu")->insert($obj);
-    // }
+    public function addStore($obj)
+    {
+        SDB::table("store_store")->insert($obj);
+    }
     // public function getById($id)
     // {
     //     $obj = SDB::table("store_menu")->where("id",$id)->get();
