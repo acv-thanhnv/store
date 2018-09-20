@@ -9,9 +9,11 @@
 namespace App\Backend\Services\Production;
 
 use App\Backend\Services\Interfaces\UserServiceInterface;
+use App\Core\Common\RoleConst;
 use App\Core\Dao\SDB;
 use App\Core\Helpers\CommonHelper;
 use DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends BaseService implements UserServiceInterface
@@ -23,12 +25,14 @@ class UserService extends BaseService implements UserServiceInterface
      */
     public function getAll()
     {
+        $currentRole = Auth::user()->role_value;
         $storeId = CommonHelper::getStoreId();
         $arrUser = SDB::table("users")
             ->join("sys_roles", "users.role_value", "=", "sys_roles.role_value")
             ->leftJoin("users_detail as dt", "users.id", "=", "dt.user_id")
             ->join('store_user_store', 'store_user_store.user_id', '=', 'users.id')
             ->where('store_user_store.store_id', '=', $storeId)
+            ->orWhereRaw("? = ?",[$currentRole,RoleConst::SysAdminRole])
             ->orderby("users.id", "desc")
             ->select("users.*", "sys_roles.name as role", "dt.avatar", "dt.gender")
             ->paginate(5);
@@ -37,7 +41,12 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function getRole()
     {
-        $arrRole = SDB::table("sys_roles")->get();
+        $currentRole =  Auth::user()->role_value;
+        $arrRole =SDB::table("sys_roles")
+            ->join('sys_role_config',"sys_roles.role_value",'=',"sys_role_config.role_value_allowed")
+            ->whereRaw("sys_role_config.role_value = ?",[$currentRole])
+            ->select("sys_roles.*")
+            ->get();
         return $arrRole;
     }
 
