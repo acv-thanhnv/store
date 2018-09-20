@@ -41,6 +41,32 @@
             width: 60px;
             height: 60px;
         }
+        label.camera{
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #preview .thumb {
+            width : 300px;
+            min-height: 100px;
+            height: 200px;
+            margin: 0.2em -0.7em 0 0;
+            border-radius: 20px;
+        }
+        #preview .remove_img_preview {
+            position:relative;
+            left: 300px;
+            top:-200px;
+            width: 15px;
+            background:black;
+            color:white;
+            border-radius:90px;
+            padding: 2px;
+            text-align:center;
+            cursor:pointer;
+        }
+        #preview .remove_img_preview:before {
+            content:"\f057";
+        }
     </style>
 </head>
 <?php
@@ -95,7 +121,10 @@
                             </li>
                             <li><a><i class="fa fa-book"></i> Store   <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <li><a href="{{route('getStore')}}">List</a></li>
+                                    <li><a href="{{route('getStore')}}">List</a>
+                                    </li>
+                                    <li><a href="{{route('editStore')}}">My Store</a>
+                                    </li>
                                     <li><a href="{{route('addStore')}}">Add</a></li>
                                 </ul>
                             </li>

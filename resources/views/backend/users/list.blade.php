@@ -149,7 +149,6 @@
 	//function edit
 	$(document).on('click', '.edit', function(event) {
 	  	$('#modal-edit').iziModal('open',event);
-	  	$('#modal-profile').iziModal('resetProgress');
 	});
 	$('#modal-edit').iziModal(
 	{

@@ -27,22 +27,6 @@ class StoreController
         $this->storeService   = $storeService;
         $this->uploadService = $uploadService;
     }
-    //Foods
-    public function getStore()
-    {
-        //dd(Auth::user());
-        $diskLocalName = "public";
-        $arrStore = $this->storeService->getStore($this->storeId);
-        foreach($arrFood as $obj)
-        {
-            if($obj->image==NULL){
-                $obj->image = url('/')."/common_images/no-image.png";
-            }else{
-                $obj->image = CommonHelper::getImageUrl($obj->image);
-            }
-        }
-        return view("backend.food.list",["arrFood" => $arrFood]);
-    }
     public function getAddStore(Request $request)
     {
         return view("backend.store.add");
@@ -60,11 +44,13 @@ class StoreController
             "image"   => $rule_image,
             "name"    => "required|min:3",
             "lat"     => "required",
-            "lng"     => "required",
+            "lng"    => "required",
             "address" => "required"
         ];
         $message_rule = [
-            '*.mimes' => 'Mime not Allowed'
+            '*.mimes' => 'Mime not Allowed',
+            "lat.required" => "The latitude is required!",
+            "lng.required" => "The longtitude is required!",
         ];
         $validator = Validator::make($request->all(),$rule,$message_rule);
         if (!$validator->fails()) {
@@ -96,50 +82,45 @@ class StoreController
         }
         return ResponseHelper::JsonDataResult($result);
     }
-    public function getEditFood(Request $request)
+    public function getEditStore(Request $request)
     {
-        $diskLocalName = "public";
-        $arrMenu = $this->foodService->getMenu($this->storeId);
-        $arrData = $this->foodService->getDataType();
-        $food = $this->foodService->getById($request->id);
-        if($food->image==NULL){
-           $food->src = url('/')."/common_images/no-image.png";
+        $diskLocalName = StorageDisk::diskLocalName;
+        $storeId = CommonHelper::getStoreId();
+        $store = $this->storeService->getMyStore($storeId);
+        if($store->avatar==NULL){
+           $store->src = url('/')."/common_images/no-store.png";
         }else{
-            $food->src = CommonHelper::getImageUrl($food->image);
+            $store->src = CommonHelper::getImageUrl($store->avatar);
         }
-        $food->arrProp = $this->foodService->getPropByFood($food->id);
-        return view("backend.food.edit",[
-            "food" => $food,
-            "arrMenu" => $arrMenu,
-            "arrData" => $arrData
-        ]);
+        return view("backend.store.edit",["store" => $store]);
     }
-    public function postEditFood(Request $request)
+    public function postEditStore(Request $request)
     {
-        // dd($request->all());
-        $arrProp       = json_decode($request->arrProp);//encode from FormData
         $image         = $request->file("image");
         $result        =  new DataResultCollection();
-        $diskLocalName = "public";
+        $diskLocalName = StorageDisk::diskLocalName;
         $rule_image    = "";
         if($image!=NULL){
             $rule_image = "mimes:".UploadConst::FILE_IMAGE_UPLOAD_ACCESSED."|image|max:".UploadConst::BACKEND_UPLOAD_IMAGE_MAX;
         }
         $rule   = [
-            "image" => $rule_image,
-            "name"  => "required|min:3",
-            "price" => "required",
-            "menu"  => "required",
+            "image"   => $rule_image,
+            "name"    => "required|min:3",
+            "lat"     => "required",
+            "lng"    => "required",
+            "address" => "required"
         ];
         $message_rule = [
-            '*.mimes' => 'Mime not Allowed'
+            '*.mimes' => 'Mime not Allowed',
+            "lat.required" => "The latitude is required!",
+            "lng.required" => "The longtitude is required!",
         ];
         $validator = Validator::make($request->all(),$rule,$message_rule);
         if (!$validator->fails()) {
             if($image!=NULL){
                 //Delete old image
                 Storage::disk($diskLocalName)->delete($request->oldImage);
-                $result = $this->uploadService->uploadFile(array($image),$diskLocalName,'FoodImage/'.CommonHelper::getStoreId(),'');
+                $result = $this->uploadService->uploadFile(array($image),$diskLocalName,'StoreImage/'.CommonHelper::getStoreId(),'');
                 foreach ($result->data as $data){
                     $imageUrl = $data["uri"];
                 }
@@ -156,61 +137,16 @@ class StoreController
         }
         if($result->status=="OK"){
             //update table entity
-            $obj            = Array();
-            $obj["image"]   = $imageUrl;
-            $obj["id"]      = $request->id;
-            $obj["name"]    = $request->name;
-            $obj["price"]   = (int) $request->price;
-            $obj["menu_id"] = $request->menu;
-            $this->foodService->editFood($obj);
-            // update table store_entity_properties
-            $prop      = Array();
-            $propValue = Array();
-            //if isset:update else add Property
-            if($arrProp!=NULL){
-                foreach ($arrProp as $objProp) {
-                    // dd($objProp);
-                    if($objProp->label!=NULL){
-                        //get property
-                        $prop["property_name"]  = CommonHelper::changeTitle($objProp->label);
-                        $prop["data_type_code"] = $objProp->data;
-                        $prop["property_label"] = $objProp->label;
-                        $prop["sort"]           = (int) $objProp->sort;
-                        //get property values
-                        $propValue["entity_id"]   = $request->id;
-                        $propValue["value"]       = $objProp->value;
-                        if(isset($objProp->idProp)){//if have id property)
-                            $prop["id"]      = (int) $objProp->idProp;
-                            $propValue["id"] = (int) $objProp->idValue;
-                            $this->typeService->editProp($prop);
-                            $this->foodService->editPropValue($propValue);
-                        }else{
-                            unset($prop["id"]);
-                            unset($propValue["id"]);
-                            $propValue["property_id"] = $this->foodService->addProp($prop);
-                            $this->foodService->addPropValue($propValue);
-                        }
-                    }
-                }
-            }
+            $obj                = Array();
+            $obj["id"]          = CommonHelper::getStoreId();
+            $obj["avatar"]      = $imageUrl;
+            $obj["name"]        = $request->name;
+            $obj["lat"]         = $request->lat;
+            $obj["lng"]         = $request->lng;
+            $obj["address"]     = $request->address;
+            $obj["description"] = $request->description;
+            $this->storeService->editStore($obj);
         }
         return ResponseHelper::JsonDataResult($result);
-    }
-    public function getProp(Request $request)
-    {
-        $arrProp = $this->foodService->getProp($request->idType);
-        return $arrProp;
-    }
-    public function deleteFood(Request $request)
-    {
-        $this->foodService->deleteFood($request->id);
-    }
-    public function deleteFoodProp(Request $request)
-    {
-        $this->foodService->deleteFoodProp($request->id);
-    }
-    public function deleteAllFood(Request $request)
-    {
-        $this->foodService->deleteAllFood($request->arrId);
     }
 }

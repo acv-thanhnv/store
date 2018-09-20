@@ -23,6 +23,28 @@
     		font-weight: normal;
     		font-size: 12px;
     	}
+        #preview .thumb {
+            width : 300px;
+            min-height: 100px;
+            height: 200px;
+            margin: 0.2em -0.7em 0 0;
+            border-radius: 20px;
+        }
+        #preview .remove_img_preview {
+            position:relative;
+            left: 300px;
+            top:-200px;
+            width: 15px;
+            background:black;
+            color:white;
+            border-radius:90px;
+            padding: 2px;
+            text-align:center;
+            cursor:pointer;
+        }
+        #preview .remove_img_preview:before {
+            content:"\f057";
+        }
     </style>
     @stack("css")
 </head>
