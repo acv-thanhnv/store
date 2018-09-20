@@ -14,7 +14,7 @@ interface FoodServiceInterface
 {
     public function getFoodByStoreId($storeId);
 
-    public function getFoodByMenuId($menuId);
+    public function getFoodByMenuId($menuId,$storeId);
 
     public function getMenuList($storeId);
 

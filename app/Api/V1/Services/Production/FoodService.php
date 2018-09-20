@@ -30,15 +30,13 @@ class FoodService extends BaseService implements FoodServiceInterface
         return $this->buildFoodListByStoreId($list, $storeId);
     }
 
-    public function getFoodByMenuId($menuId = null)
+    public function getFoodByMenuId($menuId = null,$storeId = null)
     {
         $list = SDB::table("view_entity_infor")
-            ->whereRaw("? IS NULL", [$menuId])
-            ->orWhereRaw("?=''", [$menuId])
-            ->orWhereRaw("menu_id = ?", [$menuId])
+            ->whereRaw("? IS NOT NULL AND store_id = ?  AND (? IS NULL OR ? ='' OR ? = menu_id)",[$storeId,$storeId,$menuId,$menuId,$menuId])
             ->select('*')
             ->get();
-        return $this->buildFoodListByMenu($list, $menuId);
+        return $this->buildFoodListByMenu($list, $menuId,$storeId);
     }
 
     public function getMenuList($storeId = null)
@@ -62,6 +60,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         if (!empty($listEntity)) {
             foreach ($listEntity as $itemEntity) {
                 $itemEntity->image = CommonHelper::getImageUrl($itemEntity->image);
+                $itemEntity->price = number_format($itemEntity->price);
                 $foods = $itemEntity;
                 $foods->props = array();
                 $prop = array();
@@ -84,12 +83,11 @@ class FoodService extends BaseService implements FoodServiceInterface
 
     }
 
-    protected function buildFoodListByMenu($foodList, $menuId)
+    protected function buildFoodListByMenu($foodList, $menuId, $storeId)
     {
         $listEntity = SDB::table("store_entities")
-            ->whereRaw("? IS NULL", [$menuId])
-            ->orWhereRaw("?=''", [$menuId])
-            ->orWhereRaw("menu_id = ?", [$menuId])
+            ->join('store_menu','store_menu.id','=','store_entities.menu_id')
+            ->whereRaw("? IS NOT NULL AND store_menu.store_id = ?  AND (? IS NULL OR ?='' OR ? = store_entities.menu_id)",[$storeId,$storeId,$menuId,$menuId,$menuId])
             ->select('store_entities.*')
             ->get();
         $result = array();

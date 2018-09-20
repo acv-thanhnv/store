@@ -45,7 +45,7 @@
 	}
 	tr.group,tr.group:hover {
 		background-color: #ddd !important;
-		font-weight: bold;`
+		font-weight: bold;
 	}
 </style>
 @endpush
@@ -105,7 +105,7 @@
 								<img class="img-food" src="{{$obj->image}}">
 							</td>
 							<td>
-								{{$obj->price}}
+								{{number_format($obj->price)}}
 							</td>
 							<td>Menu: {{$obj->menuName}}</td>
 							<td>
@@ -134,7 +134,7 @@
 		dataTable();
 		//drag modal
 		$( "#modal-add" ).draggable();
-		$( "#modal-edit" ).draggable(); 
+		$( "#modal-edit" ).draggable();
 	    if(localStorage.getItem("Message"))
 	    {
 	    	if(localStorage.getItem("page")){
@@ -300,7 +300,7 @@
 	    var checkboxes = $(this).closest('table').find(':checkbox');
 	    checkboxes.prop('checked', $(this).is(':checked'));
 	});
-	//function alert 
+	//function alert
 	function Alert(content)
 	{
 		$.toast({
@@ -312,7 +312,7 @@
 		    hideAfter: 1500,
 		    stack: 5,
 		    position: 'top-right',
-		    textAlign: 'left', 
+		    textAlign: 'left',
 		    loader : true,
 		    loaderBg: '#9EC600'
 		});
@@ -331,11 +331,11 @@
 		var groupColumn = 5;
 		var table = $('#dataTable').DataTable({
 			"columnDefs": [
-				{ 
-					"visible": false, 
-					"targets": groupColumn 
+				{
+					"visible": false,
+					"targets": groupColumn
 				},
-				{ 
+				{
                     "orderable": false ,
                     "targets": [0,1,5,6,7]
                 }

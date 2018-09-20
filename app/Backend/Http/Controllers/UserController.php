@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Backend\Http\Controllers;
+use App\Core\Helpers\AuthHelper;
+use App\Core\ValidationRules\RoleLevelRule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Core\Entities\DataResultCollection;
@@ -91,7 +93,7 @@ class UserController
             $result->message = 'An error occured while uploading avatar or validate!';
             $result->data    =$error;
         }
-        if($result->status=="OK"){
+        if($result->status==SDBStatusCode::OK){
             $obj        = new \stdClass();
             $obj->image = NULL;
             if($image!=NULL){
@@ -129,6 +131,7 @@ class UserController
         $rule_pass        = "";
         $rule_passConfirm = "";
         $result     =  new DataResultCollection();
+        $currentRoleValue = AuthHelper::getUserInfor()->role_value;
         if($image!=NULL){
             $rule_image = "mimes:".UploadConst::FILE_IMAGE_UPLOAD_ACCESSED."|image|max:".UploadConst::BACKEND_UPLOAD_IMAGE_MAX;
         }
@@ -143,7 +146,7 @@ class UserController
                 "email" => "required|email|unique:users,email,".$request->id,
                 "pass"  => $rule_pass,
                 "password_confirmation" => $rule_passConfirm,
-                "role"  => "required",
+                "role"  => ["required",new RoleLevelRule($currentRoleValue)],
                 "rePass" => "compare:pass"
             ];
         $message_rule = [
@@ -166,7 +169,7 @@ class UserController
             $result->message = 'An error occured while uploading avatar or validate!';
             $result->data =$error;
         }
-        if($result->status=="OK"){
+        if($result->status==SDBStatusCode::OK){
             $obj         = new \stdClass();
             if($image!=NULL){
                 foreach ($result->data as $data){

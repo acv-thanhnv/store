@@ -11,15 +11,14 @@
 @stack("css")
 <body>
 <div id="content">
-
     @yield('content')
-
 </div>
 </body>
 </html>
 <!--JS-->
 <script src="{{ asset('backend/template1/js/jquery.min.js')}}"></script>
 <script src="{{ asset('backend/template1/js/bootstrap.min.js')}}"></script>
+<script src="{{ asset('js/common.js')}}"></script>
 @stack("js")
 
 

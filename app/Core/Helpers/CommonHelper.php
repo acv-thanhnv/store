@@ -106,7 +106,10 @@ class CommonHelper
             ->whereRaw('store_user_store.user_id = ?',[$userId])
             ->select('store_user_store.store_id')
             ->first();
-        return $store->store_id;
+        if(!empty($store) && isset($store->store_id)){
+            return $store->store_id;
+        }
+        return 0;
     }
     public static function changeTitle($str,$strSymbol='_',$case=MB_CASE_LOWER){// MB_CASE_UPPER / MB_CASE_TITLE / MB_CASE_LOWER
         $str=trim($str);

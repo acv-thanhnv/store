@@ -5,13 +5,13 @@
 .row-item-order{
     box-sizing: border-box;
     float: left;
-    border-bottom: 1px solid #ebebeb;
-    padding: 10px 0px 0px;
-    
+    padding: 0px 0px 10px;
+    width: 100%;
+    display: inline-flex;
+
 }
 .cell-arrange{
-    width: 30px;
-    font-family: Arial,Helvetica,sans-serif;
+    width: 50px;
     font-size: 13px;
     color: #666;
     padding: 10px 7px;
@@ -28,17 +28,19 @@
 }
 .cell-name{
     float: left;
-    font-family: Arial,Helvetica,sans-serif;
     padding:0px 10px;
+    width: 100%;
 }
 .item-order-name{
     color: #111;
-    width:280px;
     overflow: hidden;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
 }
 .cell-quantity{
     float: left;
-    width: 80px;
+    width: 150px;
     padding: 10px 7px;
 }
 .quantity-down{
@@ -46,7 +48,6 @@
     width: 15px;
 }
 .quantity-up{
-    widows: 15px;
     float: left
 }
 .item-order-quantity{
@@ -61,9 +62,10 @@
 }
 .cell-price{
     float: left;
-    width:88px;
+    width:200px;
     padding: 10px 7px;
     text-align: right;
+    color: green;
 
 }
 .item-order-price{
@@ -84,19 +86,35 @@
 }
 .cell-delete{
     float: left;
-    width: 35px;
+    width: 70px;
     padding: 10px 7px 0;
-    
+
 }
 .delete-item-order{
     width:14px;
     height: 14px;
     color: red;
 }
+@media only screen and (max-width: 1024px) {
+    .cell-quantity {
+        width: 256px !important;
+    }
+}
+@media only screen and (max-width: 1920px) {
+    .cell-quantity {
+        float: left;
+        width: 165px;
+        padding: 10px 7px;
+    }
+    .cell-price {
+        float: left;
+        width: 277px;
+        padding: 10px 7px;
+        text-align: right;
+        color: green;
+    }
+}
 </style>
-
-
-
 <div id="item-order-template">
     <div class="row-item-order" item-order-id="" item-order-name="" item-order-price="">
         <div class="cell-arrange">
@@ -109,9 +127,9 @@
             <h4 class="item-order-name"></h4>
         </div>
         <div class="cell-quantity">
-            <span class="quantity-down fa fa-sort-desc"></span>
+            <span class="quantity-down glyphicon glyphicon-minus"></span>
             <input class="item-order-quantity" type="text" value="" >
-            <span class="quantity-up fa fa-sort-asc"></span>
+            <span class="quantity-up glyphicon glyphicon-plus"></span>
         </div>
         <div class="cell-price">
             <span class="item-order-price" type="number" value=""></span>
@@ -124,5 +142,4 @@
         </div>
     </div>
 </div>
-
 
