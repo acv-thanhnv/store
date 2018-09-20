@@ -61,6 +61,7 @@
                         <th class="column-title">Image </th>
                         <th class="column-title">Name </th>
                         <th class="column-title">Email </th>
+                        <th class="column-title">Store </th>
                         <th class="column-title">Role </th>
                         <th class="column-title">Active </th>
                         <th class="column-title">Edit </th>
@@ -305,6 +306,7 @@
 			$(row).find('.img').data("id",obj.id);
 		 	$(row).find('.name').html(obj.name);
 		 	$(row).find('.email').html(obj.email);
+            $(row).find('.store').html(obj.store_name);
 		 	$(row).find('.role').html(obj.role);
 		 	if(obj.is_active===1){
 		 		$(row).find('.active').html("Có");
