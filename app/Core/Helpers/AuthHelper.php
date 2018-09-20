@@ -45,11 +45,25 @@ class AuthHelper
         return false;
     }
     public static function getUserInfor() {
-        $detail = SDB::table('users')
+        $detail=  new \stdClass();
+
+        $detail->id =0;
+        $detail->email='';
+        $detail->name='';
+        $detail->role_value=0;
+        $detail->avatar='';
+        $detail->gender='';
+        $detail->birth_date=now()->toDateTimeString();
+
+        $userId =  (isset(Auth::user()->id))?Auth::user()->id:0;
+        $userDetail = SDB::table('users')
             ->join('users_detail','users_detail.user_id','=','users.id')
-            ->whereRaw('user_id=?',[Auth::user()->id])
-            ->selectRaw('users.*,users_detail.avatar,users_detail.gender,users_detail.birth_date')
+            ->whereRaw('user_id=?',[$userId])
+            ->selectRaw('users.id,users.email,users.role_value,users.name,users_detail.avatar,users_detail.gender,users_detail.birth_date')
             ->get()->first() ;
+        if( !empty($userDetail)){
+            $detail =$userDetail;
+        }
         return $detail;
     }
 }

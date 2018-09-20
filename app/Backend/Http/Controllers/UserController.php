@@ -91,7 +91,7 @@ class UserController
             $result->message = 'An error occured while uploading avatar or validate!';
             $result->data    =$error;
         }
-        if($result->status=="OK"){
+        if($result->status==SDBStatusCode::OK){
             $obj        = new \stdClass();
             $obj->image = NULL;
             if($image!=NULL){
@@ -166,7 +166,7 @@ class UserController
             $result->message = 'An error occured while uploading avatar or validate!';
             $result->data =$error;
         }
-        if($result->status=="OK"){
+        if($result->status==SDBStatusCode::OK){
             $obj         = new \stdClass();
             if($image!=NULL){
                 foreach ($result->data as $data){

@@ -15,15 +15,15 @@
 /**
  * frontend module
  */
-    Route::get('/frontend/home', 'HomeController@index')->name('home');
-    Route::get('/company/login', 'HomeController@apilogin')->name('apiloginform');
-    Route::get('/frontend/test', 'HomeController@test')->name('test');
+//Route::get('/frontend/home', 'HomeController@index')->name('home');
+Route::get('/company/login', 'HomeController@apilogin')->name('apiloginform');
+Route::get('/frontend/test', 'HomeController@test')->name('test');
 
 Route::get('/order/{idStore?}', 'OrderController@index')->name('order');
 //Route::get('/foodorder', 'OrderController@index2');
 Route::get('listlocation','OrderController@getTables')->name('listlocation');
     Route::get('/order', 'OrderController@index')->name('order');
-    Route::get("map","HomeController@Map");
+    Route::get("/","HomeController@Map")->name('home');
 
 
 Route::get('/foodorder/{idStore?}', 'FoodOrderController@index')->name('foodorder');
