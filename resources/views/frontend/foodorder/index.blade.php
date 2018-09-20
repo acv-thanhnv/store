@@ -201,7 +201,7 @@
 
 {{--INCLUDE TEMPLATE iframe location--}}
 <div id="modal-iFrame" class="iziModal" display="none"></div>
-<div id="modal-iFrame2" class="iziModal" display="none"></div>
+<div id="modal-iFrame2" class="iziModal" display="none" item-detail-id="" item-detail-name="" item-detail-price=""></div>
 @endsection
 
 
@@ -210,7 +210,7 @@
 <script type="text/javascript">
         //load data page
         var _storeId = '{{$storeId}}';
-        $(document).ready(function (event) {
+        $(document).ready(function () {
 
             //load item type by store
             $.ajax({
@@ -289,18 +289,23 @@
         }
 
         //show detail item
-        $(document).on('click', '.item-detail', function (event) {
-            $('#modal-iFrame2').iziModal('open', this); // Do not forget the "this"
-        });
-        $("#modal-iFrame2").iziModal({
+        $(document).on('click', '.item-detail', function () {
+
+            //get id
+            var id= $(this).parents('.item').attr('item-id');
+
+            $('#modal-iFrame2').iziModal('open', this);
+             $("#modal-iFrame2").iziModal({
             title: 'Thông tin chi tiết', //Modal title
             headerColor: 'rgb(51, 76, 123)', //Color of modal header. Hexa colors allowed.
             overlayColor: 'rgba(0, 0, 0, 0.4)', //Color of overlay behind the modal
             iconColor: '',
             iconClass: 'icon-chat',
-            iframe: true, //In this example, this flag is mandatory. Izimodal needs to understand you will call an iFrame from here
-            iframeURL: "{{route('itemdetail')}}" //Link will be opened inside modal
+            iframe: true, //In this example, this flag is mandatory. Izimodal needs to understand you will call an 
+            iframeURL: "{{route('itemdetail')}}?id="+id, //Link will be opened inside modal
         });
+        });
+       
 
         //choose item to order
         var item = $("#list-item-order");
@@ -380,7 +385,7 @@
 
         //set location
         $(document).on('click', '.order-location', function (event) {
-            $('#modal-iFrame').iziModal('open', this); // Do not forget the "this"
+            $('#modal-iFrame').iziModal('open'); 
         });
         $("#modal-iFrame").iziModal({
             title: 'Chọn vị trí', //Modal title
@@ -389,7 +394,7 @@
             iconColor: '',
             iconClass: 'icon-chat',
             iframe: true, //In this example, this flag is mandatory. Izimodal needs to understand you will call an iFrame from here
-            iframeURL: "{{route('location')}}" //Link will be opened inside modal
+            iframeURL: "{{route('location')}}?storeId="+_storeId, //Link will be opened inside modal
         });
 
         //submit to chef

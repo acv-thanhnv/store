@@ -17,15 +17,15 @@
 		position: relative;
 	}
 	.detail-image{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #bebebe; 
-    position: absolute;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 100%;
+		height: 100%;
+		border-radius: 8px;
+		overflow: hidden;
+		border: 1px solid #bebebe; 
+		position: absolute;
 	}
 	.infomation-detail{
 		margin-top: 10px;
@@ -37,18 +37,20 @@
 		float: left;
 	}
 	.wrap-detail-price{
-	float: right;
+		float: right;
 	}
 </style>
 </head>
+@foreach($detail as $item)
 <div class="wrap-container col-sm-12">
 	<div class="wrap-detail-image">
-			<img class="detail-image" alt="Image detail" src="https://www.gettyimages.ca/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg">
+		<img class="detail-image" alt="Image detail" src="{{$item->image}}">
 	</div>
 	<div class="infomation-detail">
-		<span class="wrap-detail-name">Name:<span class="detail-name">______</span></span>
-		<span class="wrap-detail-price">Price:<span class="detail-price">______</span></span>
+		<span class="wrap-detail-name">Name:<span class="detail-name">{{$item->name}}</span></span>
+		<span class="wrap-detail-price">Price:<span class="detail-price">{{$item->price}}</span></span>
 	</div>
+	@endforeach
 	<div class="properties-detail">
 		properties
 	</div>

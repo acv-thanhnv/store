@@ -25,6 +25,8 @@
 .item-order-image{
     width:100px;
     height: 100px;
+    border-radius: 8px;
+    box-shadow: 3px 3px 3px #cccccc;
 }
 .cell-name{
     float: left;
@@ -103,7 +105,7 @@
 @media only screen and (max-width: 1920px) {
     .cell-quantity {
         float: left;
-        width: 165px;
+        width: 168px;
         padding: 10px 7px;
     }
     .cell-price {
