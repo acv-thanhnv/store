@@ -6,19 +6,26 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('css/lib/jquery-confirm.css')}}">
 	<style type="text/css">
 	.wrap-container{
-		height: 400px;
-		overflow: auto;
+		height: 300px;
+		width: 100%;
+		overflow: hidden;
 	}
 	.wrap-detail-image{
 		clear: both;
 		width: 100%;
-		height: 250px;
+		height: 230px;
+		position: relative;
 	}
 	.detail-image{
     display: block;
     margin-left: auto;
     margin-right: auto;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
     border: 1px solid #bebebe; 
+    position: absolute;
 	}
 	.infomation-detail{
 		margin-top: 10px;
@@ -36,7 +43,7 @@
 </head>
 <div class="wrap-container col-sm-12">
 	<div class="wrap-detail-image">
-			<img class="detail-image" alt="Image detail" src="">
+			<img class="detail-image" alt="Image detail" src="https://www.gettyimages.ca/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg">
 	</div>
 	<div class="infomation-detail">
 		<span class="wrap-detail-name">Name:<span class="detail-name">______</span></span>
@@ -52,7 +59,6 @@
 <script src="{{ asset('js/lib/jquery.dataTables.min.js')}}"></script>
 <script src="{{ asset('js/lib/jquery-confirm.js')}}"></script>
 <script type="text/javascript">
-
 
 </script>
 </body>
