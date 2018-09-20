@@ -257,7 +257,9 @@
 <!-- Custom Theme Scripts -->
 @yield('lib_scripts')
 <script src="{{ asset('backend/template1/js/custom.js')}}"></script>
+<script src="{{ asset('js/lang/text.js')}}"></script>
 <script src="{{ asset('js/common.js')}}"></script>
+
 @yield('form_scripts')
 @stack("js")
 </html>

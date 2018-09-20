@@ -9,6 +9,7 @@ use App\Core\Services\Interfaces\UploadServiceInterface;
 use App\Backend\Services\Interfaces\StoreServiceInterface;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Common\UploadConst;
+use App\Core\Common\StorageDisk;
 use Illuminate\Support\Facades\Storage;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Support\Facades\Validator;
@@ -46,9 +47,9 @@ class StoreController
     {
         return view("backend.store.add");
     }
-    public function postAddFood(Request $request)
+    public function postAddStore(Request $request)
     {
-        $arrProp = json_decode($request->arrProp);//encode from FormData
+        $diskLocalName = StorageDisk::diskLocalName;
         $image      = $request->file("image");
         $result     =  new DataResultCollection();
         $rule_image = "";
@@ -56,10 +57,11 @@ class StoreController
             $rule_image = "mimes:".UploadConst::FILE_IMAGE_UPLOAD_ACCESSED."|image|max:".UploadConst::BACKEND_UPLOAD_IMAGE_MAX;
         }
         $rule   = [
-            "image" => $rule_image,
-            "name"  => "required|min:3",
-            "price" => "required|int",
-            "menu"  => "required",
+            "image"   => $rule_image,
+            "name"    => "required|min:3",
+            "lat"     => "required",
+            "lng"     => "required",
+            "address" => "required"
         ];
         $message_rule = [
             '*.mimes' => 'Mime not Allowed'
@@ -67,7 +69,7 @@ class StoreController
         $validator = Validator::make($request->all(),$rule,$message_rule);
         if (!$validator->fails()) {
             if($image!=NULL){
-                $result = $this->uploadService->uploadFile(array($image),'public','FoodImage/'.CommonHelper::getStoreId(),'');
+                $result = $this->uploadService->uploadFile(array($image),$diskLocalName,'StoreImage/'.CommonHelper::getStoreId(),'');
                 foreach ($result->data as $data){
                     $imageUrl = $data["uri"];
                 }
@@ -75,45 +77,25 @@ class StoreController
                 $imageUrl       = NULL;
                 $result->status = SDBStatusCode::OK;
             }
-            $result->status = SDBStatusCode::OK;
         } else {
             $error           = $validator->errors();
             $result->status  = SDBStatusCode::ValidateError;
             $result->message = 'An error occured while uploading avatar or validate!';
             $result->data    = $error;
         }
-        if($result->status=="OK"){
+        if($result->status== SDBStatusCode::OK){
             //insert into table entity
-            $obj            = Array();
-            $obj["image"]   = $imageUrl;
-            $obj["name"]    = $request->name;
-            $obj["price"]   = $request->price;
-            $obj["menu_id"] = $request->menu;
-            $idFood         = $this->foodService->addFood($obj);
-            // insert into table store_entity_properties
-            $prop = Array();
-            $arrIdProp = Array();
-            //add Property
-            if($arrProp!=NULL){
-                foreach ($arrProp as $objProp) {
-                    if($objProp->label!=NULL){
-                        $prop["property_name"]    = CommonHelper::changeTitle($objProp->label);
-                        $prop["data_type_code"]   = $objProp->data;
-                        $prop["property_label"]   = $objProp->label;
-                        $prop["sort"]             = (int) $objProp->sort;
-                        $idProp         = $this->foodService->addProp($prop);
-                        $propValue                = Array();
-                        $propValue["entity_id"]   = $idFood;
-                        $propValue["property_id"] = $idProp;
-                        $propValue["value"]       = $objProp->value;
-                        $this->foodService->addPropValue($propValue);
-                    }
-                }
-            }
+            $obj                = Array();
+            $obj["avatar"]      = $imageUrl;
+            $obj["name"]        = $request->name;
+            $obj["lat"]         = $request->lat;
+            $obj["lng"]         = $request->lng;
+            $obj["address"]     = $request->address;
+            $obj["description"] = $request->description;
+            $this->storeService->addStore($obj);
         }
         return ResponseHelper::JsonDataResult($result);
     }
-
     public function getEditFood(Request $request)
     {
         $diskLocalName = "public";

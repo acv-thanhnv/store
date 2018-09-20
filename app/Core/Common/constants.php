@@ -72,6 +72,9 @@ class OrderConst{
 class EntityProperty{
     const maxField = 10;
 }
+class StorageDisk{
+    const diskLocalName = "public";
+}
 class OrderStatusValue{
     const Waiter = 1;
     const Cheft = 2;

@@ -141,7 +141,7 @@
 				<div class="form-group">
 					<div class="col-md-10 col-sm-10 col-xs-12 form-group has-feedback">
 						<label>Address </label>
-						<input type="text" autofocus="" class="form-control has-feedback-left" id="address"
+						<input type="text" autofocus="" class="form-control has-feedback-left" id="address" name="address" 
 						placeholder="Input Address of Store...">
 						<span class="fa fa-road form-control-feedback left" aria-hidden="true"></span>
 					</div>
@@ -165,13 +165,13 @@
 				<div class="form-group">
 					<div class="col-md-10 col-sm-10 col-xs-12 form-group has-feedback">
 						<label>Description</label>
-						<textarea class="form-control" rows="2" placeholder="Description for store..."></textarea>
+						<textarea class="form-control" id="description" rows="2" placeholder="Description for store..."></textarea>
 					</div>
 				</div>
 				<div class="form-group footer">
 					<div>
-						<button class="btn btn-primary pull-right" type="reset">Reset</button>
 						<button type="button" class="btn btn-success add pull-right">Add</button>
+						<button class="btn btn-primary pull-right" type="reset">Reset</button>
 					</div>
 				</div>
 
@@ -253,10 +253,6 @@
     }
 </script>
 <script type="text/javascript">
-	var max_fields = "{{\App\Core\Common\EntityProperty::maxField}}";
-	var wrapper    = $(".property"); //Fields wrapper
-	var x          = 0;
-	var y          = 0;
 	//upload image 
 	function handleFileSelect(event) {
 		var input = this;
@@ -278,80 +274,15 @@
 	$(document).on("click",'#OpenImgUpload',function(e){
 		$('#file').trigger('click');
 	});
-	//show property
-	$(document).on("change","#type",function(event){
-		var idType = $(this).val();
-		var prop_by_type = $(".property_by_type");
-		var row = $("#template").contents().clone();
-		$(prop_by_type).empty();
-		$.get("{{route('getProp')}}",{idType:idType},function(data){
-			y = data.length;
-			label(x+y);
-			if(data.length>0){
-				data.forEach(function(obj){
-					var row = $("#template").contents().clone();
-					$(row).find("input[name='label']").val(obj.property_label);
-					$(row).find("select[name='data']").val(obj.data_type_code);
-					$(row).find("input[name='sort']").val(obj.sort);
-					$(row).find("button").removeClass('remove').addClass('remove_by_type');
-					$(prop_by_type).append(row); 
-				});
-			}else{
-				var errors = $("#error").contents().clone();
-				$(errors).find("span.content-errors").html("Sorry but this type doen't have property, pleas add property in type option or bellow!");
-				$(errors).find("div.show-errors").css("display","block");
-				$(prop_by_type).append(errors); 
-			}
-		});
-	});
-	//insert prop
-	$(document).on("click",".add_prop",function(event){
-		var row = $("#template").contents().clone();
-		x++;
-		if(x < max_fields&& x>=1){
-			label(x+y);
-			$(wrapper).append(row);
-		}else{
-			$.alert({
-			title         : '<p class="text-warning">Warning</p>',
-			icon          : 'fa fa-exclamation-circle',
-			boxWidth      : '30%',
-			useBootstrap  : false,
-			type          :"orange",
-			closeIcon     : true,
-			closeIconClass: 'fa fa-close',
-			content       : "Warning! You can only add up to 10 properties",
-		});
-		}
-	});
-	//remove prop
-	$(document).on("click",".remove",function(event){
-		$(this).parents("span").remove();
-		x--;
-		label(x+y);
-	});
-	$(document).on("click",".remove_by_type",function(event){
-		$(this).parents("span").remove();
-		y--;
-		label(x+y);
-	});
 	//submit add 
 	$(".add").click(function(){
 		var formData = new FormData();
-		var rows     = $("div.prop .rows");
-		var arrProp  = [];
-		for (var i = 0; i < rows.length; i++) {
-			var label  = $(rows[i]).find('input[name=label]').val();
-			var data   = $(rows[i]).find('.data').val();
-			var sort   = $(rows[i]).find('input[name=sort]').val();
-			var value  = $(rows[i]).find('input[name=value]').val();
-			arrProp[i] = {label : label,data:data,sort:sort,value:value};
-		}
 		formData.append("name", $("#name").val());
+		formData.append("address", $("#address").val());
         formData.append("image", $('input[type=file]')[0].files[0]);
-        formData.append("price", $("#price").val());
-        formData.append("menu", $('#menu').val());
-        formData.append("arrProp", JSON.stringify(arrProp));
+        formData.append("lat", $("#lat").val());
+        formData.append("lng", $('#lng').val());
+        formData.append("description",$('#description').val());
         $.ajax({
         	type: 'POST',
         	headers: {
@@ -363,24 +294,19 @@
         	data:formData,
         	success: function (result) {
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
-        			//call parent and close modal
-        			parent.$('#modal-add').iziModal('close');
-        			localStorage.setItem("Message","Add new type successful!");
-        			parent.location.reload();
+        			$.alert({
+        				title: '<p class="text-warning">Successful!</p>',
+        				icon          : 'fa fa-exclamation-circle',
+        				type          :"orange",
+        				boxWidth: '20%',
+        				content: '<span style="font-size: 16px">Store have been added on map</span>'
+        			});
         		}else{
         			_commonShowError(result.data);
         		}
 			}
 		});
 	})
-	//function show label
-	function label(num_rows) {
-		if(num_rows<=0){
-			$(".label_name").css("display","none");
-		}else{
-			$(".label_name").css("display","block");
-		}
-	}
 </script>
 <script async defer
    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcW21XZbz_N3NzUiwUSd-K_4vLCZSCM7I&callback=initMap&libraries=places">
