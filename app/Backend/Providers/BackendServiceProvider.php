@@ -14,6 +14,7 @@ class BackendServiceProvider extends ServiceProvider
     protected $services = [
         CoreInterFace\UploadServiceInterface::class => CoreProduction\UploadService ::class,
         Interfaces\FoodServiceInterface::class=>Production\FoodService::class,
+        Interfaces\StoreServiceInterface::class=>Production\StoreService::class,
         Interfaces\MenuServiceInterface::class=>Production\MenuService::class,
         Interfaces\TypeServiceInterface::class=>Production\TypeService::class,
         Interfaces\UserServiceInterface::class=>Production\UserService::class,

@@ -20,6 +20,12 @@
          color: red;
          font-weight: bold;
       }
+      .link{
+         font-weight: bold;
+      }
+      .link a:hover{
+         text-decoration: none;
+      }
 </style>
 @endpush
 @section("content")
@@ -31,31 +37,15 @@
             <p class="name"></p>
             <p><b>Address:</b> <span class="address"></span></p>
             <p><b>Description:</b> <span class="address"></span></p>
+            <p class="link"><a href="{{route('foodorder')}}/1">Go To Website</a></p>
          </div>
    </div>
-<script>
-var x = document.getElementById("demo");
-
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else { 
-        x.innerHTML = "Geolocation is not supported by this browser.";
-    }
-}
-
-function showPosition(position) {
-    x.innerHTML = "Latitude: " + position.coords.latitude + 
-    "<br>Longitude: " + position.coords.longitude;
-}
-</script>
 @endsection
 @push("js")
 <script type="text/javascript">
    var locations =<?php echo $arrCoor?>;
    var infowindow = null;
    var map;
-   var center = {lat: 20.96841, lng: 105.717798};
    // Try HTML5 geolocation. get current user position
    function CurrentPosition(callback)
    {
@@ -75,17 +65,16 @@ function showPosition(position) {
          map = new google.maps.Map(document.getElementById('map'), {
             zoom: 16,
             center: center,
-            styles: [
-            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
-            {
-              featureType: 'administrative.locality',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#d59563'}]
-            }]
+            styles: [{
+               "featureType": "landscape",
+               "elementType": "labels",
+               "stylers": [
+                  { "visibility": "off" }
+               ]}
+            ]
          });
          infowindow = new google.maps.InfoWindow();
          for (var i = 0; i < locations.length; i++) {
-            console.log(locations[i]);
             createMarker(locations[i],i*200);
          }
       })
@@ -94,7 +83,7 @@ function showPosition(position) {
    {
       //custom image icon
       var image = {
-         url: 'common_images/restaurant2.png',
+         url: 'common_images/r3.png',
          // This marker is 20 pixels wide by 32 pixels high.
          size: new google.maps.Size(40,40 ),
          // The origin for this image is (0, 0).
@@ -102,7 +91,7 @@ function showPosition(position) {
          // The anchor for this image is the base of the flagpole at (0, 32).
          anchor: new google.maps.Point(0, 32),
          //scale size image
-         scaledSize: new google.maps.Size(25, 25)
+         scaledSize: new google.maps.Size(30, 30)
       };
       //custom content of info
       var content = $('#info_window').clone();
@@ -116,8 +105,7 @@ function showPosition(position) {
             map: map,
             icon: image,
             animation: google.maps.Animation.DROP,
-            title: location["name"],
-            label:'R'
+            title: location["name"]
          });
          //add event click
          marker.addListener('click', function() {
@@ -127,8 +115,6 @@ function showPosition(position) {
         });
       },timeout);
    }
-</script>
-<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
 </script>
 <script async defer
    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcW21XZbz_N3NzUiwUSd-K_4vLCZSCM7I&callback=initMap">
