@@ -1,9 +1,12 @@
 <?php
 /**
  * @author thanhnv
+ * Check allow insert
  */
-namespace App\Dev\Rules;
+namespace App\Core\ValidationRules ;
 
+use App\Core\Common\RoleConst;
+use App\Core\Dao\SDB;
 use Illuminate\Contracts\Validation\Rule;
 
 class RoleLevelRule implements Rule
@@ -13,9 +16,10 @@ class RoleLevelRule implements Rule
      *
      * @return void
      */
-    public function __construct()
+    protected $currentRoleValue;
+    public function __construct($currentRoleValue)
     {
-        //
+        $this->currentRoleValue = $currentRoleValue;
     }
 
     /**
@@ -27,8 +31,10 @@ class RoleLevelRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        //$currentRole =  (isset())
-        return (strtoupper($value) === $value);
+        $count = SDB::table('sys_role_config')
+            ->whereRaw('role_value = ?',[$this->currentRoleValue])
+            ->whereRaw('role_value_allowed = ?',[$value]);
+        return ($count > 0 || $this->currentRoleValue==RoleConst::SysAdminRole);
     }
 
     /**
