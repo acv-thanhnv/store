@@ -38,6 +38,9 @@
     .item-name{
         font-weight: bold;
     }
+    .item-detail{
+        float: right;
+    }
 </style>
 
 
@@ -50,7 +53,7 @@
         </a>
         <div class="wrap-item-info">
             <div class="item-name"></div>
-            <div class="div-price"><span class="item-price"></span> <span>VNĐ</span></div>
+            <div class="div-price"><span class="item-price"></span> <span class="item-detail fa fa-eye fa-lg mt-4"></span></div>
         </div>
         </a>
     </div>

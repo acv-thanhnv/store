@@ -21,6 +21,7 @@
 		height: 20px;
 		font-size: 14px;
         font-weight: bold;
+        color: #999999;
 	}
         #tbl-table td:hover{
             background: #d9edf7;
@@ -66,9 +67,9 @@
 				@foreach ($location as $table)
 				<tr class="table-item" table-id="{{$table->id}}">
 					<td></td>
-					<td>
+					<td class="td-loaction" style="border: 1px solid #ebebeb">
                         <span class="table-name">{{$table->name}}</span>
-						<img class="table-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKbR777dK73iOtIZ1-7adBIYgAM-H-rJWMybIWb_xIM-B5u9s5" alt="Image" >
+						<img class="table-image" src="https://cdn.iconscout.com/public/images/icon/premium/png-512/restaurant-table-3f928d3e77eb3a90-512x512.png" alt="Image">
 					</td>
 				</tr>
 				@endforeach
@@ -81,6 +82,12 @@
 	<script src="{{ asset('js/lib/jquery-confirm.js')}}"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			$ajax({
+					url:'{{route("location")}}',
+					dataType:'Json',
+					//data: {store_id:store_id}
+
+					})
 			$('#tbl-table').DataTable({
 				lengthChange: false,
 				info: false,

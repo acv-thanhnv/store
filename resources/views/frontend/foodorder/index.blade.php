@@ -201,6 +201,7 @@
 
 {{--INCLUDE TEMPLATE iframe location--}}
 <div id="modal-iFrame" class="iziModal" display="none"></div>
+<div id="modal-iFrame2" class="iziModal" display="none"></div>
 @endsection
 
 
@@ -287,15 +288,30 @@
             });
         }
 
+        //show detail item
+        $(document).on('click', '.item-detail', function (event) {
+            $('#modal-iFrame2').iziModal('open', this); // Do not forget the "this"
+        });
+        $("#modal-iFrame2").iziModal({
+            title: 'Thông tin chi tiết', //Modal title
+            headerColor: 'rgb(51, 76, 123)', //Color of modal header. Hexa colors allowed.
+            overlayColor: 'rgba(0, 0, 0, 0.4)', //Color of overlay behind the modal
+            iconColor: '',
+            iconClass: 'icon-chat',
+            iframe: true, //In this example, this flag is mandatory. Izimodal needs to understand you will call an iFrame from here
+            iframeURL: "{{route('itemdetail')}}" //Link will be opened inside modal
+        });
+
         //choose item to order
         var item = $("#list-item-order");
         $(item).empty();
 
-        $(document).on("click", ".item", function (event) {
-            var id = $(this).attr('item-id');
-            var image = $(this).find('.item-image').attr('src');
-            var name = $(this).attr('item-name');
-            var price = $(this).attr('item-price');
+        $(document).on("click", ".item-image", function (event) {
+            var id = $(this).parents('.item').attr('item-id');
+            var image = $(this).attr('src');
+            console.log(image);
+            var name = $(this).parents('.item').attr('item-name');
+            var price = $(this).parents('.item').attr('item-price');
 
             var row = $("#item-order-template").contents().clone();
             //$(row).find('.item-order-arrange').html(i);
@@ -417,7 +433,7 @@
                     content: 'Nhấn xác nhận để tiếp tục...',
                     type: 'yellow',
                     boxWidth: "30%",
-                    useBootstrap: false,
+                    useBootstrap: true,
                     typeAnimated: true,
                     buttons: {
                         ok: {
@@ -440,25 +456,30 @@
                                         totalPrice: totalPrice
                                     },
                                     success: function (data) {
-
+                                        $.toast({
+                                            heading: 'Success',
+                                            text: 'Đơn đã gửi đến bếp chờ xử lý..',
+                                            showHideTransition: 'slide',
+                                            position: 'top-right',
+                                            icon: 'success',
+                                            hideAfter:1000,
+                                            afterHidden: function () {
+                                                item.remove();
+                                                $('.order-location-label').attr('location-id','');
+                                                $('.order-location-label').attr('location-name', '');
+                                                $('.order-location-label').text('...............');
+                                                $('.order-description').val('');
+                                                $('.total-price-order').text('__.___');
+                                            }
+                                        })
+                                        
                                     },
                                     error: function (xhr, ajaxOptions, thrownError) {
                                         console.log('Error ' + xhr.status + ' | ' + thrownError);
                                     },
                                 });
-                                item.remove();
-                                $('.order-location-label').attr('location-id','');
-                                $('.order-location-label').attr('location-name', '');
-                                $('.order-location-label').text('...............');
-                                $('.order-description').val('');
-                                $('.total-price-order').text('__.___');
-                                $.toast({
-                                    heading: 'Success',
-                                    text: 'Đơn đã gửi đến bếp chờ xử lý..',
-                                    showHideTransition: 'slide',
-                                    position: 'top-right',
-                                    icon: 'success'
-                                })
+                                
+                                //...
                             }
                         },
                         Cancel: {
