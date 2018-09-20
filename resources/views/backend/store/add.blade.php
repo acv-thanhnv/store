@@ -20,27 +20,6 @@
 			display: inline; 
 			padding: 8px 12px;
 		}
-		.thumb {
-			width : 100px;
-			min-height: 100px;
-			margin: 0.2em -0.7em 0 0;
-			border-radius: 50%;
-		}
-		.remove_img_preview {
-			position:relative;
-			left: 100px;
-			top:-100px;
-			width: 15px;
-			background:black;
-			color:white;
-			border-radius:90px;
-			padding: 2px;
-			text-align:center;
-			cursor:pointer;
-		}
-		.remove_img_preview:before {
-			content:"\f057";
-		}
 		#success_message{
 			display:none;
 		}
@@ -84,7 +63,6 @@
 			width: 100%;
 		}
 		.controls {
-			margin-top: 10px;
 			border: 1px solid transparent;
 			border-radius: 2px 0 0 2px;
 			box-sizing: border-box;
@@ -97,7 +75,6 @@
 			font-family: Roboto;
 			font-size: 15px;
 			font-weight: 300;
-			padding: 0 11px 0 13px;
 			text-overflow: ellipsis;
 			width: 100%;
 		}
@@ -110,7 +87,12 @@
 <div class="add_map">
 	<div class="col-md-6 col-xs-12">
 		<div class="x_panel">
-			<input id="search" class="controls" type="text" placeholder="Enter a location...">
+			<label>Choose Coordinate For Store</label>
+			<div class="col-md-12 col-sm-10 col-xs-12 form-group has-feedback">
+				<input type="text" autofocus="" name="name" class="form-control controls has-feedback-left" id="search"
+				placeholder="Search location for store...">
+				<span class="fa fa-search form-control-feedback left" aria-hidden="true"></span>
+			</div>
 			<div id="map"></div>
 		</div>
 	</div>
@@ -149,15 +131,15 @@
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Latitude  </label>
-						<input type="number" id="lat" class="form-control has-feedback-left"
+						<input type="number" id="lat" class="form-control has-feedback-left" name="lat" 
 						placeholder="Latitude...">
 						<span class="fa fa-compass form-control-feedback left" aria-hidden="true"></span>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-						<label>Longitude   </label>
-						<input type="number" id="lng" class="form-control has-feedback-left"
+						<label>Longtitude   </label>
+						<input type="number" id="lng" class="form-control has-feedback-left" name="lng" 
 						placeholder="Longitude...">
 						<span class="fa fa-compass form-control-feedback left" aria-hidden="true"></span>
 					</div>
@@ -294,12 +276,18 @@
         	data:formData,
         	success: function (result) {
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
-        			$.alert({
-        				title: '<p class="text-warning">Successful!</p>',
-        				icon          : 'fa fa-exclamation-circle',
-        				type          :"orange",
-        				boxWidth: '20%',
-        				content: '<span style="font-size: 16px">Store have been added on map</span>'
+        			$.toast({
+        				text: "Store have been added on map!",
+        				heading: 'Successful',
+        				icon: "success",
+        				showHideTransition: 'slide',
+        				allowToastClose: true,
+        				hideAfter: 1500,
+        				stack: 5,
+        				position: 'top-right',
+        				textAlign: 'left', 
+        				loader : true,
+        				loaderBg: '#9EC600'
         			});
         		}else{
         			_commonShowError(result.data);

@@ -213,7 +213,7 @@
 		arrowKeys      :true,
 		iframe         : true,
 		iframeWidth    :500,
-		iframeURL      :""
+		iframeURL      :"google.com"
 	});
 	//Delete Food
 	$("body").on("click",".delete",function(e){

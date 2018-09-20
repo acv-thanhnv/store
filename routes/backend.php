@@ -123,7 +123,7 @@
         });
         //Group Store
         Route::group(["prefix" => "Store"],function(){
-            Route::get("list","StoreController@getStore")->name("getStore");
+            Route::get("myStore","StoreController@getStore")->name("getStore");
             //add
             Route::get("addStore","StoreController@getAddStore")->name("addStore");
             Route::post("addStore","StoreController@postAddStore");

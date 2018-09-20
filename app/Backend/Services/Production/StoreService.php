@@ -20,35 +20,26 @@ class StoreService extends BaseService implements StoreServiceInterface
      * @param $fileName
      * HELPER: Generation Config File contain text translated.
      */
-    // public function getStore($idStore)
-    // {
-    // 	$arrStore = SDB::table("store_store")
-    // 				->where("store_id",$idStore)
-    //                 ->orderby("id","desc")
-    // 				->get();
-    // 	return $arrMenu;
-    // }
     public function addStore($obj)
     {
         SDB::table("store_store")->insert($obj);
     }
-    // public function getById($id)
-    // {
-    //     $obj = SDB::table("store_menu")->where("id",$id)->get();
-    //     return $obj[0];
-    // }
-    // public function editMenu($obj)
-    // {
-    //     SDB::table("store_menu")->where("id",$obj->id)->update(["name" => $obj->name,"description"=> $obj->description]);
-    // }
-    // public function deleteMenu($id)
-    // {
-    //     SDB::table("store_menu")->where("id",$id)->delete();
-    // } 
-    // public function deleteAllMenu($arrId)
-    // {
-    //     foreach($arrId as $obj){
-    //         SDB::table("store_menu")->where("id",$obj)->delete();
-    //     }
-    // }
+    public function getMyStore($storeId)
+    {
+        $obj = SDB::table("store_store")->where("id",$storeId)->get();
+        return $obj[0];
+    }
+    public function editStore($obj)
+    {
+        SDB::table("store_store")
+        ->where("id",$obj["id"])
+        ->update([
+            "name"        => $obj["name"],
+            "lat"         => $obj["lat"],
+            "lng"         => $obj["lng"],
+            "address"     => $obj["address"],
+            "avatar"      => $obj["avatar"],
+            "description" => $obj["description"]
+        ]);
+    }
 }

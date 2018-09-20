@@ -10,10 +10,7 @@ namespace App\Backend\Services\Interfaces;
 interface StoreServiceInterface
 {
 	//Store
-	// public function getStore($idStore);
 	public function addStore($obj);
-	// public function getById($id);
-	// public function editStore($obj);
-	// public function deleteStore($id);
-	// public function deleteAllStore($arrId);
+	public function getMyStore($storeId);
+	public function editStore($obj);
 }
