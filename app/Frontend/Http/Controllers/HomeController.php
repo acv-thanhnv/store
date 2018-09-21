@@ -39,15 +39,35 @@ class HomeController extends Controller
     }
     public function Map()
     {
-        $arrCoor = SDB::table("store_store")->get();
-        foreach ($arrCoor as $obj) {
+        $map = SDB::table("store_store")->get();
+        foreach ($map as $obj) {
             if($obj->avatar==NULL){
                  $obj->src = url('/')."/common_images/no-store.png";
             }else{
                 $obj->src = CommonHelper::getImageUrl($obj->avatar);
             }
         }
-        $arrCoor = json_encode($arrCoor);
-        return view("frontend.mapApi",["arrCoor" => $arrCoor]); 
+        $map = json_encode($map);
+        return view("frontend.mapApi",["map" => $map]); 
+    }
+    public function Home()
+    {
+        $store = SDB::table("store_store")->orderBy("id","desc")->get();
+        foreach ($store as $obj) {
+            if($obj->avatar==NULL){
+                 $obj->src = url('/')."/common_images/no-store.png";
+            }else{
+                $obj->src = CommonHelper::getImageUrl($obj->avatar);
+            }
+        }
+        $map = json_encode($store);
+        return view("frontend.home",["map" => $map,"store" => $store]);
+    }
+    public function Search(Request $request)
+    {
+        $store = SDB::table("store_store")
+                    ->where("name","like",'%'.$request->key.'%')
+                    ->get();
+        return response()->json(['store' => $store]);
     }
 }

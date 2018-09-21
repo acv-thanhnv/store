@@ -119,6 +119,26 @@
 								</button>
 							</td>
 						</tr>
+						<tr>
+							<td style="text-align: center" class="check-delete">
+								<input type="checkbox" value="{{$obj->id}}">
+							</td>
+							<td class="show_more"></td>
+							<td>{{$obj->name}}</td>
+							<td>
+								<img class="img-food" src="{{$obj->image}}">
+							</td>
+							<td>
+								{{number_format($obj->price)}}
+							</td>
+							<td>Menu: {{$obj->menuName}}</td>
+							<td>
+								<button type="button" class="btn btn-primary edit round" data-id="{{$obj->id}}">
+									<i class="fa fa-pencil-square-o"></i>
+								</button>
+							</td>
+							<td></td>
+						</tr>
 						@endforeach
                     </tbody>
                 </table>
@@ -227,7 +247,7 @@
 			type          :"orange",
 			closeIcon     : true,
 			closeIconClass: 'fa fa-close',
-			content       : "Are You Sure? This Type and Related Data Will Be Deleted!",
+			content       : "Are You Sure? This Food and Related Data Will Be Deleted!",
 			buttons       : {
 				Save: {
 					text    : 'OK',
@@ -320,10 +340,8 @@
 	// Show Property
 		$('#dataTable tbody').on('click', 'td.show_more', function () {
 			var row = $(this).closest("tr");
-			var table = $("#template_showMore").contents().clone();
-			console.log(table);
-			row.after(table);
-			$(this).toggleClass('show_prop');
+			$(row).next().toggle();
+			// $(this).toggleClass('show_prop');
         } );
 	//function dataTable
 	function dataTable()

@@ -23,9 +23,9 @@ Route::get('/order/{idStore?}', 'OrderController@index')->name('order');
 //Route::get('/foodorder', 'OrderController@index2');
 Route::get('listlocation','OrderController@getTables')->name('listlocation');
     Route::get('/order', 'OrderController@index')->name('order');
-    Route::get("/","HomeController@Map")->name('home');
-
 
 Route::get('/foodorder/{idStore?}', 'FoodOrderController@index')->name('foodorder');
 Route::get('/location','FoodOrderController@getLocations')->name('location');
 Route::get('/itemdetail','FoodOrderController@getDetail')->name('itemdetail');
+Route::get('Home','HomeController@Home');
+Route::get('Search','HomeController@Search');
