@@ -77,9 +77,10 @@
 <script src="{{ asset('js/lib/jquery.dataTables.min.js')}}"></script>
 <script src="{{ asset('js/lib/jquery-confirm.js')}}"></script>
 <script type="text/javascript">
-$.ajax({
-
-});
+// $.ajax({
+// url:'',
+// dataType:
+// });
 </script>
 </body>
 </html>	
