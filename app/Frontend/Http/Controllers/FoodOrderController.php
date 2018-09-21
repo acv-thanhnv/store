@@ -34,7 +34,7 @@ class FoodOrderController extends Controller
     }
 
     public function getDetail(Request $request)
-    {   $id=$request->id;
+    {   $id=$request->input('id');
         $detail = DB::table('store_entities')->where('id',$id)->get();
         return view('frontend.foodorder.detail', ['detail'=>$detail]);
     }

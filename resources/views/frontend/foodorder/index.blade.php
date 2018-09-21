@@ -105,6 +105,18 @@
     height: 700px;
     border-bottom: 1px solid #d0d6d0;
 }
+.wrap-item-empty{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+.item-empty{
+   font-size: 50px;
+   opacity: 0.5;
+}
+.wrap-item-empty h4{
+    opacity: 0.5;
+}
 @media only screen and (max-width: 1024px) {
     .wrap-list {
         overflow: auto;
@@ -122,7 +134,7 @@
 @media only screen and (max-width: 1600px) {
     .wrap-list {
         overflow: auto;
-        height: 460px !important;
+        height: 429px !important;
         border-bottom: 1px solid #d0d6d0;
     }
 }
@@ -148,7 +160,6 @@
                 <div id="menu-content" class="tab-pane fade in active">
                     <div class="wrap-list-item wrap-list col-sm-12">
                         <div id="list-item">
-
                         </div>
                     </div>
                 </div>
@@ -160,6 +171,10 @@
                 <div id="order-content" class="tab-pane fade in active">
                     <div class="wrap-item-order wrap-list">
                         <div id="list-item-order"></div>
+                        <div class="wrap-item-empty">
+                        <span class="item-empty fa fa-sticky-note-o"></span> 
+                        <h4>Chưa có sản phẩm nào</h4> 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -290,22 +305,30 @@
 
         //show detail item
         $(document).on('click', '.item-detail', function () {
-
             //get id
             var id= $(this).parents('.item').attr('item-id');
 
+            //set attr
+            $('#modal-iFrame2').attr('item-detail-id',id);
+
             $('#modal-iFrame2').iziModal('open', this);
-             $("#modal-iFrame2").iziModal({
+
+        });
+        $("#modal-iFrame2").iziModal({
             title: 'Thông tin chi tiết', //Modal title
             headerColor: 'rgb(51, 76, 123)', //Color of modal header. Hexa colors allowed.
             overlayColor: 'rgba(0, 0, 0, 0.4)', //Color of overlay behind the modal
             iconColor: '',
             iconClass: 'icon-chat',
             iframe: true, //In this example, this flag is mandatory. Izimodal needs to understand you will call an 
-            iframeURL: "{{route('itemdetail')}}?id="+id, //Link will be opened inside modal
+            iframeURL: "",//Link will be opened inside 
+            iframeHeight: 600,
+            onOpening: function(modal){
+                var id = $('#modal-iFrame2').attr('item-detail-id');    
+                $(".iziModal-iframe").attr("src","{{route('itemdetail')}}?id="+id);
+                
+            },
         });
-        });
-       
 
         //choose item to order
         var item = $("#list-item-order");
@@ -314,12 +337,10 @@
         $(document).on("click", ".item-image", function (event) {
             var id = $(this).parents('.item').attr('item-id');
             var image = $(this).attr('src');
-            console.log(image);
             var name = $(this).parents('.item').attr('item-name');
             var price = $(this).parents('.item').attr('item-price');
 
             var row = $("#item-order-template").contents().clone();
-            //$(row).find('.item-order-arrange').html(i);
             $(row).attr('item-order-id', id);
             $(row).find('.item-order-image').attr('src', image);
             $(row).find('.item-order-name').html(name);
@@ -332,8 +353,20 @@
             $(item).append(row);
             updatePrice();
             updateArange();
+            //remove
+            isEmpty();
         });
 
+        //check empty
+        function isEmpty(){
+            var item =$('#list-item-order').find('.row-item-order');
+            var empty=$('.wrap-item-empty');
+            if(item.length==0){
+                empty.css("display", "block");
+            }else{
+                empty.css("display", "none");
+            }
+        }
         //update arrange row
         function updateArange() {
             var row = $("#list-item-order").find('.row-item-order');
@@ -350,7 +383,6 @@
                 var quantity = $(this).find('.item-order-quantity').val();
                 var price = $(this).attr('item-order-price');
                 var amount = (quantity * price);
-                // $(this).find('.item-order-amount').html(amount);
                 total += amount;
             });
             //set total
@@ -381,6 +413,7 @@
             $(this).parents(".row-item-order").remove();
             updateArange();
             updatePrice();
+            isEmpty();
         });
 
         //set location
@@ -400,7 +433,6 @@
         //submit to chef
         $(document).on("click", ".order-submit", function () {
             var item = $('#list-item-order').find('.row-item-order');
-            //var clearorder= item.remove();
             var storeId = _storeId;
             var orderId = 0;
             var locationId = $('.order-location-label').attr('location-id');
@@ -475,6 +507,7 @@
                                                 $('.order-location-label').text('...............');
                                                 $('.order-description').val('');
                                                 $('.total-price-order').text('__.___');
+                                                isEmpty();
                                             }
                                         })
                                         
@@ -483,8 +516,7 @@
                                         console.log('Error ' + xhr.status + ' | ' + thrownError);
                                     },
                                 });
-                                
-                                //...
+
                             }
                         },
                         Cancel: {
