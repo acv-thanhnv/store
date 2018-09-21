@@ -59,7 +59,7 @@
 			cursor: pointer;
 		}
 		#map {
-			height: 520px;
+			height: 678px;
 			width: 100%;
 		}
 		.controls {
@@ -202,12 +202,6 @@
 			labelAnchor: new google.maps.Point(25, 0),
 			icon: image,
             animation: google.maps.Animation.DROP,
-            label: {
-		      text: "<?php echo $store->name ?>",
-		      color: "#7E2323",
-		      fontSize: "16px",
-		      fontWeight: "bold",
-		    },
 			position : center,
 		});
 		//Tao su kien khi thay doi dia diem cua input

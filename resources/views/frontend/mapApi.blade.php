@@ -16,6 +16,7 @@
          height: 100px;
          width: 200px;
          border-radius: 10px;
+         box-shadow: 5px 10px 18px #D7C7C7;
       }
       .name{
          padding-top: 15px;

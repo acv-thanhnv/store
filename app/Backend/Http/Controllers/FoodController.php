@@ -37,6 +37,7 @@ class FoodController extends Controller
         $arrFood = $this->foodService->getFood($storeId);
         foreach($arrFood as $obj)
         {
+            $obj->arrProp = $this->foodService->getPropByFood($obj->id);
             if($obj->image==NULL){
                 $obj->image = url('/')."/common_images/no-image.png";
             }else{

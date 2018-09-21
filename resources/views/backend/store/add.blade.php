@@ -59,7 +59,7 @@
 			cursor: pointer;
 		}
 		#map {
-			height: 520px;
+			height: 678px;
 			width: 100%;
 		}
 		.controls {
@@ -80,6 +80,15 @@
 		}
 		#search:focus {
 			border-color: #4d90fe;
+		}
+		#preview{
+			/*width : 300px;
+            min-height: 100px;
+            height: 200px;
+            margin: 0.2em -0.7em 0 0;
+            border-radius: 20px;
+            box-shadow: 5px 5px 2px 5px #D7C7C7;
+			/*background-image: url("common_images/no-store.png");*/*/
 		}
     </style>
 @endpush
@@ -106,7 +115,10 @@
 				<div class="form-group">
 					<div class="col-md-10 col-sm-10 col-xs-12 form-group has-feedback">
 						<input id="file" name="image" type="file" class="form-control" />
-						<div id="preview"></div>
+						<div id="preview">
+							<img src="common_images/no-store.png" class="thumb" id="OpenImgUpload">
+							<div id="block" style="margin-bottom: 17px"></div>
+						</div>
 						<label for="file" class="custom-file-upload btn btn-outline-secondary camera">
 							<i class="fa fa-camera"></i> Choose Image
 						</label>
@@ -184,6 +196,19 @@
    	}
     function initMap(){
     	CurrentPosition(function(current){//get current position
+    		//create icon marker
+    		var image = {
+				url: 'common_images/redStore.png',
+		         // This marker is 20 pixels wide by 32 pixels high.
+		         size: new google.maps.Size(40,40 ),
+		         // The origin for this image is (0, 0).
+		         origin: new google.maps.Point(0, 0),
+		         // The anchor for this image is the base of the flagpole at (0, 32).
+		         anchor: new google.maps.Point(0, 40),
+		         //scale size image
+		         scaledSize: new google.maps.Size(40, 40),
+		         labelOrigin: new google.maps.Point(25,50)
+     		};
     		//Khoi tao map
     		map = new google.maps.Map(document.getElementById('map'), {
     			center: current,
@@ -198,9 +223,10 @@
     		infowindow = new google.maps.InfoWindow();
     		//khoi tao marker
     		marker = new google.maps.Marker({
-    			map: map,
-    			draggable: true,
-    			anchorPoint: new google.maps.Point(0, -20)
+				map        : map,
+				icon       :image,
+				draggable  : true,
+				anchorPoint: new google.maps.Point(0, -20)
     		});
     		//Tao su kien khi thay doi dia diem cua input
     		autocomplete.addListener('place_changed', function(){
@@ -249,8 +275,9 @@
 	}
 	$('#file').change(handleFileSelect);
 	$('#preview').on('click', '.remove_img_preview', function () {
-		$("#preview").empty()
+		$("#OpenImgUpload").attr("src","common_images/no-store.png");
 		$("#file").val("");
+		$(".remove_img_preview").css("visibility","hidden");
 	});
 	//Open dialog box for upload when click on image
 	$(document).on("click",'#OpenImgUpload',function(e){

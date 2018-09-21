@@ -337,7 +337,7 @@
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
         			//call parent and close modal
         			parent.$('#modal-add').iziModal('close');
-        			localStorage.setItem("Message","Add new type successful!");
+        			localStorage.setItem("Message","Food have been updated!");
         			parent.location.reload();
         		}else{
         			_commonShowError(result.data);

@@ -41,8 +41,11 @@
             width: 60px;
             height: 60px;
         }
+        label.camera i{
+            font-size: 20px;
+            font-weight: bold;
+        }
         label.camera{
-            font-size: 18px;
             font-weight: bold;
         }
         #preview .thumb {
@@ -51,6 +54,7 @@
             height: 200px;
             margin: 0.2em -0.7em 0 0;
             border-radius: 20px;
+            box-shadow: 5px 5px 2px 5px #D7C7C7;
         }
         #preview .remove_img_preview {
             position:relative;
