@@ -119,26 +119,6 @@
 								</button>
 							</td>
 						</tr>
-						<tr>
-							<td style="text-align: center" class="check-delete">
-								<input type="checkbox" value="{{$obj->id}}">
-							</td>
-							<td class="show_more"></td>
-							<td>{{$obj->name}}</td>
-							<td>
-								<img class="img-food" src="{{$obj->image}}">
-							</td>
-							<td>
-								{{number_format($obj->price)}}
-							</td>
-							<td>Menu: {{$obj->menuName}}</td>
-							<td>
-								<button type="button" class="btn btn-primary edit round" data-id="{{$obj->id}}">
-									<i class="fa fa-pencil-square-o"></i>
-								</button>
-							</td>
-							<td></td>
-						</tr>
 						@endforeach
                     </tbody>
                 </table>
@@ -337,12 +317,12 @@
 		    loaderBg: '#9EC600'
 		});
 	}
-	// Show Property
-		$('#dataTable tbody').on('click', 'td.show_more', function () {
-			var row = $(this).closest("tr");
-			$(row).next().toggle();
-			// $(this).toggleClass('show_prop');
-        } );
+	// // Show Property
+	// 	$('#dataTable tbody').on('click', 'td.show_more', function () {
+	// 		var row = $(this).closest("tr");
+	// 		$(row).next().toggle();
+	// 		// $(this).toggleClass('show_prop');
+ //        } );
 	//function dataTable
 	function dataTable()
 	{

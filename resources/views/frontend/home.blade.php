@@ -328,7 +328,7 @@
    var locations =<?php echo $map?>;
    var infowindow = null;
    var map;
-   var markers = [];
+   var markers = Array();
    var bounds;
    // Try HTML5 geolocation. get current user position
    function CurrentPosition(callback)
@@ -435,8 +435,9 @@
    function clearMarker()
    {
       for (var i = 0; i < markers.length; i++) {
-         markers[i].setMap(null);
+         markers[i].setMap(null);//Ẩn marker đi 
       }
+      markers = [];
    }
    //search by store name 
    $(document).on("change","#searchStore",function(){
@@ -450,10 +451,15 @@
          data:{key:key},
          success: function (result) {
             clearMarker();
+            var bounds = new google.maps.LatLngBounds();
             for(var i=0;i<result.store.length;i++){
                createMarker(result.store[i],i*200);
             }
-            map.setZoom(14);
+            for (var i = 0; i < result.store.length; i++) {
+               var myLatLng = new google.maps.LatLng(result.store[i].lat, result.store[i].lng);
+               bounds.extend(myLatLng);
+            }
+            map.fitBounds(bounds);
          }
       });
    })
