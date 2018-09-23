@@ -34,9 +34,17 @@ class FoodOrderController extends Controller
     }
 
     public function getDetail(Request $request)
-    {   $id=$request->input('id');
+    {   
+        $id=$request->input('id');
         $detail = DB::table('store_entities')->where('id',$id)->get();
-        return view('frontend.foodorder.detail', ['detail'=>$detail]);
+        $properties = DB::table('store_entities')
+        ->join('store_entity_property_values', 'store_entity_property_values.entity_id', '=','store_entities.id')
+        ->join('store_entity_properties', 'store_entity_properties.id', '=','store_entity_property_values.property_id')
+        ->select('store_entities.id','store_entities.name','store_entities.price','store_entity_properties.property_label','store_entity_property_values.value')
+        ->where('store_entities.id',$id)
+        ->get();
+
+        return view('frontend.foodorder.detail', ['detail'=>$detail,'properties'=>$properties] );
     }
 
 
