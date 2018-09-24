@@ -33,7 +33,7 @@ class FoodOrderController extends Controller
     {
         $location = DB::table('store_location')->join('store_store', 'store_location.id', '=', 'store_store.id')->where('store_location.id', '=', 'store_store.id')->select('store_location.id', 'store_location.name')->get();
         //dd($location);
-    return view('frontend.foodorder.table', ['location' => $location]);
+        return view('frontend.foodorder.table', ['location' => $location]);
     }
 
     public function getDetail()
