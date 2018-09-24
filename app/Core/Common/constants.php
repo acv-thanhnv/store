@@ -39,6 +39,7 @@ class RoleConst
     const PartyRole = 10;
     const PublicRole = 0;
     const SysAdminRole = 1;
+    const UserWaittingAccept = 3;
 }
 
 class UploadConst

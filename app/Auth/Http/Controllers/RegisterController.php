@@ -3,6 +3,7 @@
 namespace App\Auth\Http\Controllers;
 
 use App\Auth\Models\User;
+use App\Core\Common\RoleConst;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -67,7 +68,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role_value'=>3
+            'role_value'=> RoleConst::UserWaittingAccept
         ]);
     }
 

@@ -82,12 +82,6 @@
 	<script src="{{ asset('js/lib/jquery-confirm.js')}}"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$ajax({
-					url:'{{route("location")}}',
-					dataType:'Json',
-					//data: {store_id:store_id}
-
-					})
 			$('#tbl-table').DataTable({
 				lengthChange: false,
 				info: false,

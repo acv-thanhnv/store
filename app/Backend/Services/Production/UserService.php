@@ -31,11 +31,12 @@ class UserService extends BaseService implements UserServiceInterface
             ->join('sys_role_config',"users.role_value","=","sys_role_config.role_value_allowed")
             ->leftJoin("users_detail as dt", "users.id", "=", "dt.user_id")
             ->join('store_user_store', 'store_user_store.user_id', '=', 'users.id')
-            ->where('store_user_store.store_id', '=', $storeId)
-            ->WhereRaw("sys_role_config.role_value = ?",[$currentRole])
+            ->leftJoin("store_store", "store_store.id", "=", "store_user_store.store_id")
+            ->whereRaw('( ? = ? OR store_user_store.store_id = ? )', [$currentRole,RoleConst::SysAdminRole,$storeId] )
+            ->whereRaw("sys_role_config.role_value = ? ",[$currentRole])
             ->orderby("users.id", "desc")
-            ->select("users.*", "sys_roles.name as role", "dt.avatar", "dt.gender")
-            ->paginate(5);
+            ->select("users.*", "sys_roles.name as role", "dt.avatar", "dt.gender","store_store.name AS store_name")
+            ->paginate(10);
         return $arrUser;
     }
 
@@ -52,12 +53,13 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function getById($id)
     {
+        $currentRole = Auth::user()->role_value;
         $storeId = CommonHelper::getStoreId();
         $user = SDB::table("users")
             ->join("sys_roles", "users.role_value", "=", "sys_roles.role_value")
             ->leftJoin("users_detail", "users.id", "=", "users_detail.user_id")
             ->join('store_user_store', 'store_user_store.user_id', '=', 'users.id')
-            ->where('store_user_store.store_id', '=', $storeId)
+            ->whereRaw('( ? = ? OR store_user_store.store_id = ? )', [$currentRole,RoleConst::SysAdminRole,$storeId] )
             ->where("users.id", $id)
             ->select("users.*", "users_detail.gender", "users_detail.birth_date", "users_detail.avatar", "sys_roles.name as RoleName")
             ->get();
@@ -127,7 +129,7 @@ class UserService extends BaseService implements UserServiceInterface
             ]);
             SDB::table('store_user_store')->insert([
                 "store_id" => $storeId,
-                "user_id" => $id[0]->id,
+                "user_id" => $id[0]->id
             ]);
             SDB::commit();
         } catch (\Exception $e) {

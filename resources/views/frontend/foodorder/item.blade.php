@@ -26,6 +26,8 @@
     .item-image {
         width: 130px;
         height: 130px;
+        border-radius: 8px;
+        box-shadow: 3px 3px 3px #cccccc;
     }
 
     .item-title {
@@ -40,6 +42,9 @@
     }
     .item-detail{
         float: right;
+    }
+    .wrap-item-info{
+        padding-top: 7px;
     }
 </style>
 

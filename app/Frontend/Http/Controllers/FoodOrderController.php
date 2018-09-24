@@ -25,20 +25,17 @@ class FoodOrderController extends Controller
     {  
         return view('frontend.foodorder.index',["storeId" => $storeId]);
     }
-    public function Index2()
-    {  
-        return view('frontend.index');
-    }
-    public function getLocations($storeId)
-    {
-        $location = DB::table('store_location')->join('store_store', 'store_location.id', '=', 'store_store.id')->where('store_location.id', '=', 'store_store.id')->select('store_location.id', 'store_location.name')->get();
-        //dd($location);
-        return view('frontend.foodorder.table', ['location' => $location]);
+
+    public function getLocations(Request $request)
+    {   
+        $storeId = $request->storeId;
+        $location = DB::table('store_location')->join('store_store', 'store_location.store_id', '=', 'store_store.id')->where('store_store.id', $storeId)->select('store_location.id', 'store_location.name')->get();
+    return view('frontend.foodorder.table', ['location' => $location]);
     }
 
-    public function getDetail()
-    {
-        $detail = DB::table('store_entities')->get();
+    public function getDetail(Request $request)
+    {   $id=$request->input('id');
+        $detail = DB::table('store_entities')->where('id',$id)->get();
         return view('frontend.foodorder.detail', ['detail'=>$detail]);
     }
 
