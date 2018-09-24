@@ -29,23 +29,29 @@
 	}
 	.dataTables_paginate a.current{
 		background: #172D44 !important;
-		color: white !important;
+		color     : white !important;
 	}
 	.img-food{
-		width: 100px;
+		width : 100px;
 		height: 70px;
 	}
 	td.show_more {
 		background: url('backend/template1/img/details_open.png') no-repeat center;
-		width: 40px;
-		cursor: pointer;
+		width     : 40px;
+		cursor    : pointer;
 	}
 	td.show_prop{
 		background: url('backend/template1/img/details_close.png') no-repeat center center;
 	}
 	tr.group,tr.group:hover {
 		background-color: #ddd !important;
+		font-weight     : bold;
+	}
+	.property_label{
 		font-weight: bold;
+	}
+	.property table{
+		margin: 10px 10px 0 10px;
 	}
 </style>
 @endpush
@@ -118,6 +124,33 @@
 									<i class="fa fa-trash-o"></i>
 								</button>
 							</td>
+						</tr>
+						<tr class="property" style="display: none">
+							<td colspan="3">
+								@if(count($obj->arrProp)===0)
+									{{"This food don't have property ! You can add property"}}
+								@else
+								<table class="table table-hover table-striped" cellpadding="5" cellspacing="0">
+									@foreach($obj->arrProp as $prop)
+									<tr>
+										<td>
+											<span class="property_label">
+												{{$prop->property_label}} :
+											</span>
+											{{$prop->value}}
+										</td>
+									</tr>
+									@endforeach
+								</table>
+								@endif
+							</td>
+							<td style="display: none"></td>
+							<td style="display: none;"></td>
+							<td style="display: none;"></td>
+							<td style="display: none;"></td>
+							<td>Menu: {{$obj->menuName}}</td>
+							<td style="display: none;"></td>
+							<td style="display: none;"></td>
 						</tr>
 						@endforeach
                     </tbody>
@@ -317,17 +350,18 @@
 		    loaderBg: '#9EC600'
 		});
 	}
-	// // Show Property
-	// 	$('#dataTable tbody').on('click', 'td.show_more', function () {
-	// 		var row = $(this).closest("tr");
-	// 		$(row).next().toggle();
-	// 		// $(this).toggleClass('show_prop');
- //        } );
+	// Show Property
+		$('#dataTable tbody').on('click', 'td.show_more', function () {
+			var row = $(this).closest("tr");
+			$(row).next().toggle();
+			$(this).toggleClass('show_prop');
+        } );
 	//function dataTable
 	function dataTable()
 	{
 		var groupColumn = 5;
 		var table = $('#dataTable').DataTable({
+			"autoWidth": false,
 			"columnDefs": [
 				{
 					"visible": false,

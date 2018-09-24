@@ -135,6 +135,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $arrProp = SDB::table("store_entity_property_values as value")
                     ->join("store_entity_properties as prop","value.property_id","=","prop.id")
                     ->select("value.*","prop.property_label","prop.data_type_code","prop.sort")
+                    ->orderby("prop.sort")
                     ->where("value.entity_id",$idFood)->get();
         return $arrProp;
     }

@@ -34,7 +34,7 @@ class RoleLevelRule implements Rule
         $count = SDB::table('sys_role_config')
             ->whereRaw('role_value = ?',[$this->currentRoleValue])
             ->whereRaw('role_value_allowed = ?',[$value]);
-        return ($count > 0 || $this->currentRoleValue==RoleConst::SysAdminRole);
+        return (count($count > 0) || $this->currentRoleValue==RoleConst::SysAdminRole);
     }
 
     /**

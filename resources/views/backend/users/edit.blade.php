@@ -116,6 +116,20 @@
 						<span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
 					</div>
 				</div>
+				<div class="form-group">
+					<div class="col-md-8 col-sm-8 col-xs-8">
+						<label>Active</label>
+						<br>
+						<div id="active" class="btn-group" data-toggle="buttons">
+							<label class="btn btn-default">
+								<input class="radio-gender" type="radio" name="active" value="1" @if( $user->is_active=== 1) {{"checked"}} @endif> Yes
+							</label>
+							<label class="btn btn-default">
+								<input type="radio" name="active" value="0" @if($user->is_active===0) {{"checked"}} @endif> No
+							</label>
+						</div>
+					</div>
+				</div>
 				<div class="form-group" style="margin-top: 15px">
 					<div class="col-md-8 col-sm-8 col-xs-8">
 						<label>Role </label>
@@ -163,9 +177,23 @@
 		});
 		$("body").on("change","input[name=gender]",function(e){
 			//add class checked
+			$(this).parent("label").removeClass();
 			$(this).parent("label").addClass("btn btn-primary active");
 			//remove class unckecked
 			$('input[name=gender]:not(:checked)').parent("label").removeClass('btn-primary').addClass("btn-default");
+		});
+		//set active
+		$(document).ready(function(){
+			var active =$('input[name=active]:checked').parent("label");
+			active.removeClass('btn-default');
+			active.addClass('btn-danger active');
+		});
+		$("body").on("change","input[name=active]",function(e){
+			//add class checked
+			$(this).parent("label").removeClass();
+			$(this).parent("label").addClass("btn btn-danger active");
+			//remove class unckecked
+			$('input[name=active]:not(:checked)').parent("label").removeClass('btn-danger').addClass("btn-default");
 		});
 		//upload image 
 		function handleFileSelect(event) {
@@ -198,11 +226,11 @@
 
 			var formData = new FormData();
 			formData.append("name", $("#name").val());
-			formData.append("id", $("#id").val());
 			formData.append("image", $('input[type=file]')[0].files[0]);
 			formData.append("oldImgSrc", $("img").data("path"));
 			formData.append("date", $("#date").val());
 			formData.append("gender", $('input[name=gender]:checked').val());
+			formData.append("active", $('input[name=active]:checked').val());
 			formData.append("email", $("#email").val());
 			formData.append("role", $("#role").val());
 			formData.append("changePass",0);
@@ -218,7 +246,7 @@
 				},
 				contentType: false,
 	    		processData: false,
-				url: "{{route('editPost')}}",
+				url: "",
 				data:formData,
 				success: function (result) {
 					if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}') {

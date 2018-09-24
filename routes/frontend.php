@@ -29,3 +29,4 @@ Route::get('/location','FoodOrderController@getLocations')->name('location');
 Route::get('/itemdetail','FoodOrderController@getDetail')->name('itemdetail');
 Route::get('','HomeController@Home');
 Route::get('Search','HomeController@Search');
+Route::get('index','FoodOrderController@Index2');
