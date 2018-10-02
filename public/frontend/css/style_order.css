@@ -9,6 +9,12 @@
   .wraper-right .header-right {
     background-color: grey;
     height: 30px; }
+    .wraper-right .header-right .navbar-default {
+      margin-top: 3px;
+      margin-bootom: 1px; }
+      .wraper-right .header-right .navbar-default .container-fluid {
+        padding: 0px;
+        margin: 0px; }
   .wraper-right .content-right {
     background-color: yellow;
     height: 500px; }

@@ -8,7 +8,13 @@
 	{{--================================= Son begin ===========================--}}
 	<div class="wraper-right col-sm-6">
 		<div class="header-right">
-			
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#">Lầu 3/Bàn</a></li>
+					</ul>
+				</div>
+			</nav>
 		</div>
 		<div class="content-right">
 			

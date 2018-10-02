@@ -4,8 +4,8 @@
 //Quang
 //================================================
 .wraper-left{
- background-color:orange;
- height:500px;
+	background-color:orange;
+	height:500px;
 }
 
 //Son
@@ -17,6 +17,23 @@
 	.header-right{
 		background-color:grey;
 		height: 30px;
+		.navbar {
+			position: relative;
+			min-height: 2px;
+			margin-bottom: 0px;
+			border: 1px solid transparent;
+		}
+		.navbar-default{
+			margin-top:3px;
+			margin-bottom:1px;
+		}
+		.container-fluid {
+			padding:0px;
+			margin:0px;
+			.nav li a{
+				padding:0px;
+			}
+		}
 	}
 	.content-right{
 		background-color:yellow;
