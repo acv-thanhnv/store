@@ -7,7 +7,15 @@
 	</div>
 	{{--================================= Son begin ===========================--}}
 	<div class="wraper-right col-sm-6">
-		
+		<div class="header-right">
+			
+		</div>
+		<div class="content-right">
+			
+		</div>
+		<div class="footer-right">
+			
+		</div>
 	</div>
 </div>
 @endsection

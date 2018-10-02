@@ -1,10 +1,10 @@
 //global===================
 
 
-//Quạng
+//Quang
 //================================================
 .wraper-left{
- background-color:yellow;
+ background-color:orange;
  height:500px;
 }
 
@@ -13,4 +13,17 @@
 .wraper-right{
 	background-color:blue;
 	height:500px;
+	padding:0px;
+	.header-right{
+		background-color:grey;
+		height: 30px;
+	}
+	.content-right{
+		background-color:yellow;
+		height: 500px;
+	}
+	.footer-right{
+		background-color:red;
+		height: 100px;
+	}
 }

@@ -31,4 +31,4 @@ Route::get('/location','FoodOrderController@getLocations')->name('location');
 Route::get('/itemdetail','FoodOrderController@getDetail')->name('itemdetail');
 Route::get('layout3', function () {
     return view('frontend/order3/index');
-});
+}); 

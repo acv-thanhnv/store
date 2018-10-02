@@ -1,9 +1,19 @@
 .wraper-left {
-  background-color: yellow;
+  background-color: orange;
   height: 500px; }
 
 .wraper-right {
   background-color: blue;
-  height: 500px; }
+  height: 500px;
+  padding: 0px; }
+  .wraper-right .header-right {
+    background-color: grey;
+    height: 30px; }
+  .wraper-right .content-right {
+    background-color: yellow;
+    height: 500px; }
+  .wraper-right .footer-right {
+    background-color: red;
+    height: 100px; }
 
 /*# sourceMappingURL=style_order.css.map */
