@@ -29,6 +29,6 @@ Route::get("map","HomeController@Map");
 Route::get('/foodorder/{idStore?}', 'FoodOrderController@index')->name('foodorder');
 Route::get('/location','FoodOrderController@getLocations')->name('location');
 Route::get('/itemdetail','FoodOrderController@getDetail')->name('itemdetail');
-Route::get('/layout3', function () {
-    return view('layouts/layout3');
+Route::get('layout3', function () {
+    return view('frontend/order3/index');
 });

@@ -1,12 +1,12 @@
-@extends("frontend.layout.layout3")
+@extends("layouts.layout3")
 @section('content')
 <div class="wraper">
 	{{--================================= Quang begin ===========================--}}
-	<div class="wraper-left">
+	<div class="wraper-left col-sm-6">
 		
 	</div>
 	{{--================================= Son begin ===========================--}}
-	<div class="wraper-right">
+	<div class="wraper-right col-sm-6">
 		
 	</div>
 </div>
