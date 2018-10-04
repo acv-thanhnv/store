@@ -14,27 +14,6 @@
 			display: inline; 
 			padding: 8px 12px;
 		}
-		.thumb {
-			width : 100px;
-			min-height: 100px;
-			margin: 0.2em -0.7em 0 0;
-			border-radius: 50%;
-		}
-		.remove_img_preview {
-			position:relative;
-			left: 100px;
-			top:-100px;
-			width: 15px;
-			background:black;
-			color:white;
-			border-radius:90px;
-			padding: 2px;
-			text-align:center;
-			cursor:pointer;
-		}
-		.remove_img_preview:before {
-			content:"\f057";
-		}
 		#success_message{
 			display:none;
 		}
@@ -358,7 +337,7 @@
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
         			//call parent and close modal
         			parent.$('#modal-add').iziModal('close');
-        			localStorage.setItem("Message","Add new type successful!");
+        			localStorage.setItem("Message","Food have been updated!");
         			parent.location.reload();
         		}else{
         			_commonShowError(result.data);

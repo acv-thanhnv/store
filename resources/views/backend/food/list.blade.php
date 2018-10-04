@@ -213,7 +213,7 @@
 		arrowKeys      :true,
 		iframe         : true,
 		iframeWidth    :500,
-		iframeURL      :""
+		iframeURL      :"google.com"
 	});
 	//Delete Food
 	$("body").on("click",".delete",function(e){
@@ -227,7 +227,7 @@
 			type          :"orange",
 			closeIcon     : true,
 			closeIconClass: 'fa fa-close',
-			content       : "Are You Sure? This Type and Related Data Will Be Deleted!",
+			content       : "Are You Sure? This Food and Related Data Will Be Deleted!",
 			buttons       : {
 				Save: {
 					text    : 'OK',
@@ -317,14 +317,12 @@
 		    loaderBg: '#9EC600'
 		});
 	}
-	// Show Property
-		$('#dataTable tbody').on('click', 'td.show_more', function () {
-			var row = $(this).closest("tr");
-			var table = $("#template_showMore").contents().clone();
-			console.log(table);
-			row.after(table);
-			$(this).toggleClass('show_prop');
-        } );
+	// // Show Property
+	// 	$('#dataTable tbody').on('click', 'td.show_more', function () {
+	// 		var row = $(this).closest("tr");
+	// 		$(row).next().toggle();
+	// 		// $(this).toggleClass('show_prop');
+ //        } );
 	//function dataTable
 	function dataTable()
 	{
