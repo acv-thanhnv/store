@@ -53,6 +53,17 @@
   .wraper-right .footer-right {
     bottom: 10px;
     background-color: grey;
-    height: 100px; }
+    height: 100px;
+    margin-right: 15px;
+    padding-top: 5px; }
+    .wraper-right .footer-right .dropdown-menu .line {
+      border: solid 0.5px grey;
+      opacity: 0.5;
+      width: 100%; }
+    .wraper-right .footer-right .send-order {
+      width: 100%; }
+    .wraper-right .footer-right .send-order button {
+      width: 100%;
+      margin: 0px 5px 0px 0px; }
 
 /*# sourceMappingURL=style_order.css.map */
