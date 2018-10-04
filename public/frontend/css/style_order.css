@@ -1,3 +1,6 @@
+.nopad {
+  padding: 0px; }
+
 .wraper-left {
   background-color: white;
   height: 600px;
@@ -37,21 +40,36 @@
   white-space: nowrap; }
 
 .wraper-right {
-  background-color: black;
   height: 500px;
   padding: 0px; }
   .wraper-right .header-right {
     width: 100%;
-    height: 45px;
-    background-color: grey; }
+    background-color: #0090da; }
+    .wraper-right .header-right .location-order {
+      padding-top: 4px; }
   .wraper-right .content-right {
+    width: 100%;
     background-color: white;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
+    margin-right: 5px;
     min-height: calc(100vh - 150px);
     max-height: calc(100vh - 150px); }
+    .wraper-right .content-right .image-order {
+      margin-top: 10px; }
+    .wraper-right .content-right .table > tbody > tr > td {
+      vertical-align: middle; }
+    .wraper-right .content-right .note-order {
+      font-style: italic;
+      opacity: 0.5;
+      margin-top: 5px;
+      font-size: 13px; }
+    .wraper-right .content-right .total-order {
+      float: right; }
   .wraper-right .footer-right {
     bottom: 10px;
+    background-color: white;
+    border-top: 1px solid #0090da;
     background-color: grey;
     height: 100px;
     margin-right: 15px;
