@@ -31,3 +31,6 @@ Route::get('layout3', function () {
     return view('frontend/order3/index');
 }); 
 
+Route::get("cashier", function () {
+    return view('frontend/order3/cashier');
+}); 
