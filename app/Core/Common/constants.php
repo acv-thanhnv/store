@@ -39,6 +39,7 @@ class RoleConst
     const PartyRole = 10;
     const PublicRole = 0;
     const SysAdminRole = 1;
+    const UserWaittingAccept = 3;
 }
 
 class UploadConst
@@ -71,6 +72,9 @@ class OrderConst{
 }
 class EntityProperty{
     const maxField = 10;
+}
+class StorageDisk{
+    const diskLocalName = "public";
 }
 class OrderStatusValue{
     const Waiter = 1;

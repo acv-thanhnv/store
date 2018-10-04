@@ -121,6 +121,19 @@
             //Other
             Route::get("Prop","FoodController@getProp")->name("getProp");
         });
+        //Group Store
+        Route::group(["prefix" => "Store"],function(){
+            Route::get("myStore","StoreController@getStore")->name("getStore");
+            //add
+            Route::get("addStore","StoreController@getAddStore")->name("addStore");
+            Route::post("addStore","StoreController@postAddStore");
+            //Edit
+            Route::get("editStore","StoreController@getEditStore")->name("editStore");
+            Route::post("editStore","StoreController@postEditStore")->name("postEditStore");
+            //Delete
+            Route::get("deleteStore","StoreController@deleteStore")->name("deleteStore");
+            Route::get("deleteAllStore","StoreController@deleteAllStore")->name("deleteAllStore");
+        });
         //Dashboard
         Route::group(["prefix" => "dashboard"],function(){
 

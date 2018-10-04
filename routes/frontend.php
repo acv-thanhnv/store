@@ -15,16 +15,14 @@
 /**
  * frontend module
  */
-Route::get('/frontend/home', 'HomeController@index')->name('home');
+//Route::get('/frontend/home', 'HomeController@index')->name('home');
 Route::get('/company/login', 'HomeController@apilogin')->name('apiloginform');
 Route::get('/frontend/test', 'HomeController@test')->name('test');
 
 Route::get('/order/{idStore?}', 'OrderController@index')->name('order');
-
+//Route::get('/foodorder', 'OrderController@index2');
 Route::get('listlocation','OrderController@getTables')->name('listlocation');
-Route::get('/order', 'OrderController@index')->name('order');
-Route::get("map","HomeController@Map");
-
+    Route::get('/order', 'OrderController@index')->name('order');
 
 Route::get('/foodorder/{idStore?}', 'FoodOrderController@index')->name('foodorder');
 Route::get('/location','FoodOrderController@getLocations')->name('location');
@@ -32,3 +30,4 @@ Route::get('/itemdetail','FoodOrderController@getDetail')->name('itemdetail');
 Route::get('layout3', function () {
     return view('frontend/order3/index');
 }); 
+

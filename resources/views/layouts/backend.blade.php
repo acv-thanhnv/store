@@ -41,6 +41,36 @@
             width: 60px;
             height: 60px;
         }
+        label.camera i{
+            font-size: 20px;
+            font-weight: bold;
+        }
+        label.camera{
+            font-weight: bold;
+        }
+        #preview .thumb {
+            width : 300px;
+            min-height: 100px;
+            height: 200px;
+            margin: 0.2em -0.7em 0 0;
+            border-radius: 20px;
+            box-shadow: 5px 5px 2px 5px #D7C7C7;
+        }
+        #preview .remove_img_preview {
+            position:relative;
+            left: 300px;
+            top:-200px;
+            width: 15px;
+            background:black;
+            color:white;
+            border-radius:90px;
+            padding: 2px;
+            text-align:center;
+            cursor:pointer;
+        }
+        #preview .remove_img_preview:before {
+            content:"\f057";
+        }
     </style>
 </head>
 <?php
@@ -76,7 +106,7 @@
                     <div class="menu_section">
                         <h3>General</h3>
                         <ul class="nav side-menu">
-                            <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                            <li><a><i class="fa fa-line-chart"></i> Tổng hợp <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <?php if(\App\Core\Helpers\AuthHelper::IsAccess('dashboardIndex')==true){ ?>
                                     <li>
@@ -93,15 +123,32 @@
                                     <li><a href="{{route('dashboardHistoryOrder')}}">History order</a></li><?php }?>
                                 </ul>
                             </li>
-                            <li><a><i class="fa fa-book"></i> Menu   <span class="fa fa-chevron-down"></span></a>
+                            <li><a><i class="fa fa-book"></i> Cửa hàng <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a href="{{route('getStore')}}">List</a>
+                                    </li>
+                                    <li><a href="{{route('editStore')}}">My Store</a>
+                                    </li>
+                                    <li><a href="{{route('addStore')}}">Add</a></li>
+                                </ul>
+                            </li>
+                            <li><a><i class="fa fa-table"></i> Thực đơn <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getMenu')==true){ ?>
-                                    <li><a href="{{route('getMenu')}}">List</a></li><?php }?>
+                                    <li><a href="{{route('getMenu')}}">Danh sách thực đơn</a></li><?php }?>
                                         <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getType')==true){ ?>
-                                    <li><a href="{{route('getType')}}">Type</a></li><?php }?>
+                                    <li><a href="{{route('getType')}}">Mẫu món ăn</a></li><?php }?>
                                         <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getFood')==true){ ?>
-                                    <li><a href="{{route('getFood')}}">Foods</a></li>
+                                    <li><a href="{{route('getFood')}}">Món ăn</a></li>
                                         <?php }?>
+                                </ul>
+                            </li>
+                            <!--User-->
+                            <li><a><i class="fa fa-user"></i> Nhân viên <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <?php if(\App\Core\Helpers\AuthHelper::IsAccess('backend.user.list')==true){ ?>
+                                    <li><a href="{{route('backend.user.list')}}">List</a></li>
+                                    <?php }?>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
@@ -139,14 +186,6 @@
                                 <ul class="nav child_menu">
                                     <?php if(\App\Core\Helpers\AuthHelper::IsAccess('table_template')==true){ ?>
                                     <li><a href="{{route('table_template')}}">Tables</a></li>
-                                        <?php }?>
-                                </ul>
-                            </li>
-                            <!--User-->
-                            <li><a><i class="fa fa-user"></i> User <span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <?php if(\App\Core\Helpers\AuthHelper::IsAccess('backend.user.list')==true){ ?>
-                                    <li><a href="{{route('backend.user.list')}}">List</a></li>
                                         <?php }?>
                                 </ul>
                             </li>
@@ -251,7 +290,9 @@
 <!-- Custom Theme Scripts -->
 @yield('lib_scripts')
 <script src="{{ asset('backend/template1/js/custom.js')}}"></script>
+<script src="{{ asset('js/lang/text.js')}}"></script>
 <script src="{{ asset('js/common.js')}}"></script>
+
 @yield('form_scripts')
 @stack("js")
 </html>
