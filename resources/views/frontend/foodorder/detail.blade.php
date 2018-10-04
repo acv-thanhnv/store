@@ -68,7 +68,7 @@
 	</div>
 	@endforeach
 	<div class="properties-detail">
-		
+		{{dd($properties)}}
 	</div>
 
 </div>
