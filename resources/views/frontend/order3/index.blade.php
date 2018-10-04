@@ -6,8 +6,8 @@
 	<div class="wraper-left col-sm-6">
 
 		<ul id="left-nav-tabs" class="nav nav-tabs">
-			<li><a href="#room">Room</a></li>
-			<li><a href="#menu">Menu</a></li>
+			<li><a href="#room">#Room</a></li>
+			<li><a href="#menu">#Menu</a></li>
 
 		</ul>
 
