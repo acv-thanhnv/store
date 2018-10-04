@@ -1,11 +1,4 @@
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-<style type="text/css">
-.table>tbody>tr>td, .table>tfoot>tr>td{
-  vertical-align: middle;
-}
-
-</style>
-<table id="cart" class="table table-hover table-condensed">
+<table id="cart" class="table table-hover">
   <thead>
     <tr>
       <th style="width:50%">Product</th>
@@ -18,12 +11,11 @@
   <tbody>
     <tr>
       <td data-th="Product">
-        <div class="row">
-          <div class="col-sm-4"><img src="http://placehold.it/100x100" alt="..." class="img-responsive" /></div>
+          <div class="col-sm-4 nopad image-order"><img src="http://placehold.it/100x100" alt="Image" class="img-responsive" /></div>
           <div class="col-sm-8">
-            <h4 class="nomargin">Product</h4>
-            <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-          </div>
+            <h5 class="nomargin">Thịt nguội xay ướp lạnh hello xin chao viet nam</h>
+              <br>
+            <span class="note-order fa fa-edit"> Ghi chú</span>
         </div>
       </td>
       <td data-th="Price">$1.99</td>
@@ -38,12 +30,11 @@
 
     <tr>
       <td data-th="Product">
-        <div class="row">
-          <div class="col-sm-4"><img src="http://placehold.it/100x100" alt="..." class="img-responsive" /></div>
+          <div class="col-sm-4 nopad image-order"><img src="http://placehold.it/100x100" alt="Image" class="img-responsive" /></div>
           <div class="col-sm-8">
-            <h4 class="nomargin">Product 1</h4>
-            <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-          </div>
+            <h5 class="nomargin">Thịt nguội xay ướp lạnh hello xin chao viet nam</h>
+              <br>
+            <span class="note-order fa fa-edit"> Ghi chú</span>
         </div>
       </td>
       <td data-th="Price">$1.99</td>
@@ -58,12 +49,11 @@
 
     <tr>
       <td data-th="Product">
-        <div class="row">
-          <div class="col-sm-4"><img src="http://placehold.it/100x100" alt="..." class="img-responsive" /></div>
+          <div class="col-sm-4 nopad image-order"><img src="http://placehold.it/100x100" alt="Image" class="img-responsive" /></div>
           <div class="col-sm-8">
-            <h4 class="nomargin">Product 1</h4>
-            <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-          </div>
+            <h5 class="nomargin">Thịt nguội xay ướp lạnh hello xin chao viet nam</h>
+              <br>
+            <span class="note-order fa fa-edit"> Ghi chú</span>
         </div>
       </td>
       <td data-th="Price">$1.99</td>
@@ -78,12 +68,11 @@
 
     <tr>
       <td data-th="Product">
-        <div class="row">
-          <div class="col-sm-4"><img src="http://placehold.it/100x100" alt="..." class="img-responsive" /></div>
+          <div class="col-sm-4 nopad image-order"><img src="http://placehold.it/100x100" alt="Image" class="img-responsive" /></div>
           <div class="col-sm-8">
-            <h4 class="nomargin">Product 1</h4>
-            <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-          </div>
+            <h5 class="nomargin">Thịt nguội xay ướp lạnh hello xin chao viet nam</h>
+              <br>
+            <span class="note-order fa fa-edit"> Ghi chú</span>
         </div>
       </td>
       <td data-th="Price">$1.99</td>
@@ -98,12 +87,11 @@
 
     <tr>
       <td data-th="Product">
-        <div class="row">
-          <div class="col-sm-4"><img src="http://placehold.it/100x100" alt="..." class="img-responsive" /></div>
+          <div class="col-sm-4 nopad image-order"><img src="http://placehold.it/100x100" alt="Image" class="img-responsive" /></div>
           <div class="col-sm-8">
-            <h4 class="nomargin">Product 1</h4>
-            <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-          </div>
+            <h5 class="nomargin">Thịt nguội xay ướp lạnh hello xin chao viet nam</h>
+              <br>
+            <span class="note-order fa fa-edit"> Ghi chú</span>
         </div>
       </td>
       <td data-th="Price">$1.99</td>
@@ -118,12 +106,11 @@
 
     <tr>
       <td data-th="Product">
-        <div class="row">
-          <div class="col-sm-4"><img src="http://placehold.it/100x100" alt="..." class="img-responsive" /></div>
+          <div class="col-sm-4 nopad image-order"><img src="http://placehold.it/100x100" alt="Image" class="img-responsive" /></div>
           <div class="col-sm-8">
-            <h4 class="nomargin">Product 1</h4>
-            <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-          </div>
+            <h5 class="nomargin">Thịt nguội xay ướp lạnh hello xin chao viet nam</h>
+              <br>
+            <span class="note-order fa fa-edit"> Ghi chú</span>
         </div>
       </td>
       <td data-th="Price">$1.99</td>
@@ -138,52 +125,11 @@
 
     <tr>
       <td data-th="Product">
-        <div class="row">
-          <div class="col-sm-4"><img src="http://placehold.it/100x100" alt="..." class="img-responsive" /></div>
+          <div class="col-sm-4 nopad image-order"><img src="http://placehold.it/100x100" alt="Image" class="img-responsive" /></div>
           <div class="col-sm-8">
-            <h4 class="nomargin">Product 1</h4>
-            <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-          </div>
-        </div>
-      </td>
-      <td data-th="Price">$1.99</td>
-      <td data-th="Quantity">
-        <input type="number" class="form-control text-center" value="1">
-      </td>
-      <td data-th="Subtotal" class="text-center">1.99</td>
-      <td class="actions" data-th="">
-        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
-      </td>
-    </tr>
-
-    <tr>
-      <td data-th="Product">
-        <div class="row">
-          <div class="col-sm-4"><img src="http://placehold.it/100x100" alt="..." class="img-responsive" /></div>
-          <div class="col-sm-8">
-            <h4 class="nomargin">Product 1</h4>
-            <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-          </div>
-        </div>
-      </td>
-      <td data-th="Price">$1.99</td>
-      <td data-th="Quantity">
-        <input type="number" class="form-control text-center" value="1">
-      </td>
-      <td data-th="Subtotal" class="text-center">1.99</td>
-      <td class="actions" data-th="">
-        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
-      </td>
-    </tr>
-
-    <tr>
-      <td data-th="Product">
-        <div class="row">
-          <div class="col-sm-4"><img src="http://placehold.it/100x100" alt="..." class="img-responsive" /></div>
-          <div class="col-sm-8">
-            <h4 class="nomargin">Product 1</h4>
-            <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-          </div>
+            <h5 class="nomargin">Thịt nguội xay ướp lạnh hello xin chao viet nam</h>
+              <br>
+            <span class="note-order fa fa-edit"> Ghi chú</span>
         </div>
       </td>
       <td data-th="Price">$1.99</td>
@@ -197,12 +143,9 @@
     </tr>
   </tbody>
   <tfoot>
-    <tr class="visible-xs">
-      <td class="text-center"><strong>Total 1.99</strong></td>
-    </tr>
     <tr>
-      <td colspan="2" class="hidden-xs"></td>
-      <td class="hidden-xs text-center"><strong>Total $1.99</strong></td>
+      <td><strong class="total-order">Total:</strong></td>
+      <td colspan="4"><strong class="total-order"> $1.99</strong></td>
     </tr>
   </tfoot>
 </table>

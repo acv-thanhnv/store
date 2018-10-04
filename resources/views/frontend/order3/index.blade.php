@@ -8,12 +8,10 @@
 	{{--================================= Son begin ===========================--}}
 	<div class="wraper-right col-sm-6">
 		<div class="header-right">
-			<ul class="nav nav-tabs">
+			<ul class="nav nav-tabs location-order">
 				<li class="active">
 					<a href="#">Bàn/Tầng</a>
 				</li>
-				<li><a href="#">Hello</a></li>
-				<li><a href="#">ABC</a></li>
 			</ul>
 		</div>
 		<div class="content-right">
@@ -26,13 +24,13 @@
 						<td>
 							<div class="btn-group dropup">
 								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ><span class="caret"></span><br><span class="glyphicon glyphicon-th" aria-hidden="true"></span></button>
-								<div class="dropdown-menu">
-									<a class="dropdown-item" href="#">Action</a>
-									<a class="dropdown-item" href="#">Another action</a>
-									<a class="dropdown-item" href="#">Something else here</a>
-									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="#">Separated link</a>
-								</div>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="#"><span class="fa fa-retweet"></span> Chuyển Bàn</a></li>
+									<li class="line"></li>
+									<li><a class="dropdown-item" href="#"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Ghép Bàn</a></li>
+									<li class="line"></li>
+									<li><a class="dropdown-item" href="#"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> Liên Hệ Thu Ngân</a></li>
+								</ul>
 							</div>
 						</td>
 						<td class="send-order">
