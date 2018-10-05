@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -10,7 +9,6 @@
     <link rel="icon" type="image/x-icon" href=""><!-- No Cache index -->
 
     <link href="{{asset('css/lib/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{ asset('frontend/css/style_order.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('backend/template1/modal/css/iziModal.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/toast.css')}}">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
