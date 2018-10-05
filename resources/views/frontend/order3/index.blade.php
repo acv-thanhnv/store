@@ -5,16 +5,15 @@
 @section('content')
 <div class="wraper">
 	{{--================================= Quang begin ===========================--}}
-	<script src="/js/lib/jquery-3.3.1.min.js"></script>
-	<div class="wraper-left col-sm-6">
+	<div class="wraper-left col-sm-6 nopad">
 
-		<ul id="left-nav-tabs" class="nav nav-tabs">
-			<li><a href="#room">#Room</a></li>
-			<li><a href="#menu">#Menu</a></li>
-
-		</ul>
-
-		<div class="tab-content">
+		<div id="left-nav-tabs" class="header-left">
+			<ul class="nav nav-tabs location-order">
+				<li class="active"><a data-toggle="tab" href="/layout3/#room">#Room</a></li>
+				<li><a data-toggle="tab" href="/layout3/#menu">#Menu</a></li>
+			</ul>
+		</div>
+		<div class="tab-content content-left">
 			<div id="home" class="tab-pane fade in active">
 				<br>
 				<div class="room">
@@ -22,16 +21,7 @@
 					<button class="btn btn-cat btn-danger">#Room</button>
 					<button class="btn btn-cat btn-danger">#Room</button>
 					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
+					<button class="btn btn-cat btn-danger">#More</button>
 				</div>
 				<br>
 				<div class="d-flex flex-row flex-wrap my-flex-container">
@@ -39,7 +29,7 @@
 						<script>
 							var i=1;
 							while (i<=30) {
-								document.write('<button class="btn btn-room btn-success">'+i+'</button>');
+								document.write('<button class="btn btn-room btn-success">Bàn '+i+'</button>');
 								i++;
 							}
 						</script>
@@ -53,41 +43,33 @@
 					<button class="btn btn-cat btn-danger">#Category</button>
 					<button class="btn btn-cat btn-danger">#Category</button>
 					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
+					<button class="btn btn-cat btn-danger">#More</button>
+					
 				</div>
 				<br>
-				<div class="d-flex flex-row flex-wrap my-flex-container food">
-					<div class="p-2 my-flex-item">
+				<div class="">
+					<div class="row">
+
 						<script>
 							var i=1;
 							while (i<=30) {
-								document.write('<img class="img-food" src="http://placehold.it/160x160" alt="">');
+								document.write('<center><div class="col-md-4 col-md-offset-1"><img class="img-food" src="http://placehold.it/160x160" alt=""><br>Món '+i+'<br>Giá '+i*1000+' VND</div></center>');
 								i++;
 							}
 						</script>
+
 					</div>
 				</div>
 			</div>
+
 		</div>
+		<!-- <div class="footer-left">
+			
+		</div> -->
+
+		
 
 	</div>
-
-	<script>
-		$(document).ready(function(){
-			$("#left-nav-tabs a").click(function(){
-				$(this).tab('show');
-			});
-		});
-	</script>
 
 </div>
 {{--================================= Son begin ===========================--}}
@@ -131,5 +113,20 @@
 @section('javascript')
 <script type="text/javascript">
 	//js here
+
+
+	//==============================Quang=========
+	//==============================Quang=========
+
+	$(document).ready(function(){
+		$("#left-nav-tabs a").click(function(){
+			$(this).tab('show');
+		});
+	});
+
+
+	//==============================Son=========
+	//==============================Son=========
+	
 </script>
 @endsection
