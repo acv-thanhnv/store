@@ -1,0 +1,38 @@
+//==============================
+.header-cashier{
+	background-color:yellow;
+	height:50px;
+	width:100%;
+}
+
+//==============================
+.content-cashier{
+	background-color: white;
+	height:400px;
+	width:100%;
+}
+
+//==============================
+.footer-cashier{
+	background-color:grey;
+	height: 300px;
+	width:100%;
+	.payment-detail{
+		width: 100%;
+	}
+	.text-left{
+		text-align: left;
+	}
+	.text-right{
+		text-align:right;
+	}
+	.colume1{
+		width: 300px;
+	}
+	.colume3{
+		width: 100px;
+	}
+	.colume4{
+		width: 200px;
+	}
+}
