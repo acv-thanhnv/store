@@ -5,18 +5,18 @@
 
 //Quang
 //================================================
-.wraper-left{
+.wraper-right{
 	background-color:white;
 	border-right: 2px solid grey;
 
-	.header-left{
+	.header-right{
 		width:100%;
-		background-color:#0090da;
+		background-color:#4bac4d;
 		.location-order{
 			padding-top:4px;
 		}
 	}
-	.content-left{
+	.content-right{
 		width:100%;
 		background-color:white;
 		overflow-y:auto;
@@ -32,7 +32,7 @@
 		}
 		.note-order{
 			font-style:italic;
-			opacity: 0.5;
+			opacity: 0.8;
 			margin-top:5px;
 			font-size:13px;
 		}
@@ -43,7 +43,7 @@
 			//position:fixed;
 		}
 	}
-	.footer-left{
+	.footer-right{
 		bottom:10px;
 		background-color:white;
 		border-top:1px solid #0090da;
@@ -124,28 +124,31 @@
 
 .padding-0{
     padding-right:0;
-    padding-left:0;
+    padding-right:0;
 }
 
 
 //Son
 ////================================================
-.wraper-right{
+.wraper-left{
 	height:500px;
 	padding:0px;
-	.header-right{
+	.header-left{
 		width:100%;
 		background-color:#0090da;
 		.location-order{
 			padding-top:4px;
 		}
+		.mymr {
+			margin-left: calc(100vh - 180px) !important;
+		}
 	}
-	.content-right{
+	.content-left{
 		width:100%;
 		background-color:white;
 		overflow-y:auto;
 		overflow-x:hidden;
-		margin-right:5px;
+		margin-left:5px;
 		min-height: calc(100vh - 150px);
 		max-height: calc(100vh - 150px);
 		.image-order{
@@ -161,18 +164,18 @@
 			font-size:13px;
 		}
 		.total-order{
-			float:right;
+			float:left;
 		}
 		thead{
 			//position:fixed;
 		}
 	}
-	.footer-right{
+	.footer-left{
 		bottom:10px;
 		background-color:white;
 		border-top:1px solid #0090da;
 		height: 100px;
-		margin-right:15px;
+		margin-left:15px;
 		padding-top:5px;
 		.dropdown-menu .line{
 			border:solid 0.5px grey;

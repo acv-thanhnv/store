@@ -27,6 +27,10 @@ Route::get('listlocation','OrderController@getTables')->name('listlocation');
 Route::get('/foodorder/{idStore?}', 'FoodOrderController@index')->name('foodorder');
 Route::get('/location','FoodOrderController@getLocations')->name('location');
 Route::get('/itemdetail','FoodOrderController@getDetail')->name('itemdetail');
+
+
+Route::view('/chef', 'frontend.chef3.index');
+
 Route::get('layout3', function () {
     return view('frontend/order3/index');
 }); 
