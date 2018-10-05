@@ -1,4 +1,7 @@
 @extends("layouts.layout3")
+@section('css')
+<link href="{{ asset('frontend/css/style_order.css') }}" rel="stylesheet">
+@endsection
 @section('content')
 <div class="wraper">
 	{{--================================= Quang begin ===========================--}}
