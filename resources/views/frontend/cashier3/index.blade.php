@@ -17,20 +17,18 @@
 			<tbody>
 				<tr>
 					<td valign="middle" class="colume1">
-						<div class="">
-							<div class="row">
-								<div class=''>
-									<div class="form-group">
-										<div class='input-group date' id='datetimepicker1'>
-											<input type='text' class="form-control" />
-											<span class="input-group-addon">
-												<span class="glyphicon glyphicon-calendar"></span>
-											</span>
-										</div>
+						<div class="row" style="padding:10px 15px;">
+							<div class=''>
+								<div class="form-group">
+									<div class='input-group date' id='datetimepicker1'>
+										<input type='text' class="form-control" />
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
 									</div>
 								</div>
-
 							</div>
+
 						</div>
 					</td>
 					<td></td>
@@ -49,7 +47,7 @@
 						</span>
 					</td>
 				</tr>
-				
+
 				<tr>
 					<td>
 						<textarea style="font-size:12px;padding-left:10px; width:100%;" rows="2" placeholder="Ghi chú" class=""></textarea>
@@ -72,24 +70,29 @@
 		</table>
 
 		<table style="width:100%;">
-			<tbody><tr>
-				<td valign="top">
+			<tbody>
 
-				</td>
-				<td width="30.3%" align="right" class="hidden-xs">
+				<tr>
+					<td valign="top">
 
-				</td>
-				<td width="30.3%" align="right">
-					<button style="margin-top:15px; padding:15px 15px 15px 15px;width:98%" class="btn btn-danger btn-lg btn-exgreen ng-binding" type="button" ng-click="save()">Thanh toán <br><span class="fa fa-shopping-cart"></span> </button>
-				</td>
-			</tr>
-		</tbody></table>
+					</td>
+					<td width="30.3%" align="right" class="hidden-xs">
+
+					</td>
+					<td width="30.3%" align="right">
+						<button style="margin-top:15px; padding:15px 15px 15px 15px;width:98%" class="btn btn-danger btn-lg btn-exgreen ng-binding" type="button" ng-click="save()">Thanh toán <br><span class="fa fa-shopping-cart"></span> </button>
+					</td>
+				</tr>
+			</tbody></table>
+		</div>
 	</div>
-</div>
-@endsection
-@section('javascript')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript">
-	$('#datetimepicker1').datepicker();
-</script>
-@endsection
+	@endsection
+	@section('javascript')
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$('#datetimepicker1').datetimepicker();
+		});
+	</script>
+	@endsection

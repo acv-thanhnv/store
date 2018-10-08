@@ -142,10 +142,4 @@
       </td>
     </tr>
   </tbody>
-  <tfoot>
-    <tr>
-      <td><strong class="total-order">Total:</strong></td>
-      <td colspan="4"><strong class="total-order"> $1.99</strong></td>
-    </tr>
-  </tfoot>
 </table>
