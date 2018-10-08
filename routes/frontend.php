@@ -31,7 +31,7 @@ Route::get('/itemdetail','FoodOrderController@getDetail')->name('itemdetail');
 
 Route::view('/chef', 'frontend.chef3.index');
 
-Route::get('layout3', function () {
+Route::get('order3', function () {
     return view('frontend/order3/index');
 }); 
 

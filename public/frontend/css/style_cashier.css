@@ -9,8 +9,8 @@
   width: 100%; }
 
 .footer-cashier {
-  background-color: grey;
-  height: 300px;
+  background-color: #e7ebee;
+  height: 280px;
   width: 100%; }
   .footer-cashier .payment-detail {
     width: 100%; }
@@ -19,7 +19,7 @@
   .footer-cashier .text-right {
     text-align: right; }
   .footer-cashier .colume1 {
-    width: 300px; }
+    width: 200px; }
   .footer-cashier .colume3 {
     width: 100px; }
   .footer-cashier .colume4 {
