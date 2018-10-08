@@ -30,3 +30,7 @@ Route::get('/itemdetail','FoodOrderController@getDetail')->name('itemdetail');
 Route::get('','HomeController@Home');
 Route::get('Search','HomeController@Search');
 Route::get('index','FoodOrderController@Index2');
+
+//Test template
+Route::get("template","FoodOrderController@template");
+Route::get("FoodDetail","FoodOrderController@FoodDetail");
