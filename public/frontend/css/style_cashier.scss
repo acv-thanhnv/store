@@ -11,14 +11,14 @@
 //==============================
 .content-cashier{
 	background-color: white;
-	min-height: calc(100vh - 330px);
-	max-height: calc(100vh - 330px);
+	height: calc(100vh - 330px);
 	width:100%;
 	overflow:auto;
 }
 
 //==============================
 .footer-cashier{
+	border-top: 1px dashed;
 	background-color: #e7ebee;
 	height: 280px;
 	width:100%;
