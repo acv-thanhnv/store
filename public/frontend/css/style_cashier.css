@@ -1,0 +1,34 @@
+.header-cashier {
+  background-color: #0072BC;
+  height: 50px;
+  width: 100%; }
+  .header-cashier .navbar-brand {
+    color: white; }
+
+.content-cashier {
+  background-color: white;
+  height: calc(100vh - 330px);
+  width: 100%;
+  overflow: auto; }
+
+.footer-cashier {
+  border-top: 1px dashed;
+  background-color: #e7ebee;
+  height: 280px;
+  width: 100%;
+  bottom: 0px;
+  position: fixed; }
+  .footer-cashier .payment-detail {
+    width: 100%; }
+  .footer-cashier .text-left {
+    text-align: left; }
+  .footer-cashier .text-right {
+    text-align: right; }
+  .footer-cashier .colume1 {
+    width: 200px; }
+  .footer-cashier .colume3 {
+    width: 100px; }
+  .footer-cashier .colume4 {
+    width: 200px; }
+
+/*# sourceMappingURL=style_cashier.css.map */
