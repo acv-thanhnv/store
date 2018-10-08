@@ -131,7 +131,6 @@
 //Son
 ////================================================
 .wraper-left{
-	height:500px;
 	padding:0px;
 	.header-left{
 		width:100%;
@@ -149,8 +148,8 @@
 		overflow-y:auto;
 		overflow-x:hidden;
 		margin-left:5px;
-		min-height: calc(100vh - 150px);
-		max-height: calc(100vh - 150px);
+		min-height: calc(100vh - 50px);
+		max-height: calc(100vh - 50px);
 		.image-order{
 			margin-top:10px;
 		}

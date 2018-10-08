@@ -10,7 +10,7 @@
 	<div class="wraper-left col-sm-6">
 		<div class="header-left">
 			<ul class="nav nav-tabs location-order">
-				<li><a style="margin-right: 360px !important"><strong>Chờ chế biến</strong></a></li>
+				<li><a><strong>Chờ chế biến</strong></a></li>
 				<li class="active"><a data-toggle="tab" href="#uu-tien">Ưu tiên</a></li>
 				<li><a data-toggle="tab" href="#tat-ca">Tất cả</a></li>
 			</ul>
@@ -54,7 +54,7 @@
 	<div class="wraper-right col-sm-6 nopad">
 		<div class="header-right">
 			<ul class="nav nav-tabs location-order">
-				<li class="active"><a data-toggle="tab" href="#cung-ung" style="margin-right: 360px !important"><strong>Đã xong/Chờ cung ứng</strong></a></li>
+				<li class="active"><a data-toggle="tab" href="#cung-ung"><strong>Đã xong/Chờ cung ứng</strong></a></li>
 				<li><a data-toggle="tab" href="#hoan-tac">Hoàn tác</a></li>
 			</ul>
 		</div>
