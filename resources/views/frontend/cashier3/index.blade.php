@@ -6,10 +6,10 @@
 
 @section('content')
 <div class="header-cashier col-md-12">
-	header
+	@include('frontend.cashier3.header')
 </div>
 <div class="content-cashier col-md-12">
-	content
+	@include('frontend.cashier3.content')
 </div>
 <div class="footer-cashier col-md-12">
 	<div class="group-input">
