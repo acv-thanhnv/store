@@ -87,6 +87,10 @@
 	<div class="footer-right">
 		<table>
 			<tbody>
+				<tr >
+					<td ><strong class="total-order" >Total:</strong></td>
+					<td ><strong class="total-order"> $1.99</strong></td>
+				</tr>
 				<tr class="action-order">
 					<td>
 						<div class="btn-group dropup">
