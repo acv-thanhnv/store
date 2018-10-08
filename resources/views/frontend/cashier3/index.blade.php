@@ -85,9 +85,6 @@
 			</tr>
 		</tbody></table>
 	</div>
-	<div class="action-cashier">
-
-	</div>
 </div>
 @endsection
 @section('javascript')
