@@ -1,22 +1,29 @@
 //==============================
 .header-cashier{
-	background-color:yellow;
+	background-color:#0072BC;
 	height:50px;
 	width:100%;
+	.navbar-brand{
+		color:white;
+	}
 }
 
 //==============================
 .content-cashier{
 	background-color: white;
-	height:400px;
+	min-height: calc(100vh - 330px);
+	max-height: calc(100vh - 330px);
 	width:100%;
+	overflow:auto;
 }
 
 //==============================
 .footer-cashier{
-	background-color:grey;
-	height: 300px;
+	background-color: #e7ebee;
+	height: 280px;
 	width:100%;
+	bottom:0px;
+	position:fixed;
 	.payment-detail{
 		width: 100%;
 	}
@@ -27,7 +34,7 @@
 		text-align:right;
 	}
 	.colume1{
-		width: 300px;
+		width: 200px;
 	}
 	.colume3{
 		width: 100px;

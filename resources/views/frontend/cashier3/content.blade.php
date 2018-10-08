@@ -40,7 +40,7 @@
 			</tr> -->
 			<script>
 				var i=1;
-				while (i<=6) {
+				while (i<=30) {
 					var money = (Math.floor(Math.random() * 69+10)*1000);
 					document.write('<tr> <td data-th=""> <input type="checkbox" value="'+i+'"> </td> <td data-th="invoice"> <div class="col-sm-12"> #DH 00'+i+' <br> <span class="note-order fa fa-edit"> Ghi chú</span> </div> </td> <td data-th="table">'+(Math.floor(Math.random() * 32)+1)+'</td> <td data-th="before_vat">'+money+'</td> <td data-th="discount"> <input type="number" class="form-control text-center" value="'+(Math.floor(Math.random() * 5))+'"> </td> <td data-th="tax"> <input type="number" class="form-control text-center" value="'+(Math.floor(Math.random() * 5)+10)+'"> </td> <td data-th="total">'+(money + (Math.floor(Math.random() * 10+10)*1000))+'</td> <td class="actions" data-th=""> <button class="btn btn-danger btn-sm"><i class="fa fa-angle-right"></i> In hóa đơn</button> <button class="btn btn-success btn-sm"><i class="fa fa-angle-double-right"></i> Hoàn thành</button> </td> </tr>');
 					i++;
