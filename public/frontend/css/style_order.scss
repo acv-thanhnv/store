@@ -2,6 +2,9 @@
 .nopad{
 	padding:0px;
 }
+.navbar{
+	margin-bottom: 10px;
+}
 
 //Quang
 //================================================
@@ -9,11 +12,18 @@
 	background-color:white;
 	.header-left{
 		width:100%;
-		background-color:#0090da;
+		background-color:#00A855;
 		.nav-tabs{
 			padding-top:4px;
+			
 		}
-
+		.nav-tabs>li>a{
+			background-color:#B3B3B3;
+			color: #4D4D4D;
+		}
+		.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+			background-color:#F0F8FF !important;
+		}
 		//search
 		.form-group {
 			margin-left:30px;
@@ -23,14 +33,14 @@
 
 		.form-control {
 			padding: 0px 10px 0 20px;
-			margin-top: 10px;
+			margin-top: 5px;
 			color: #333;
 			font-size: 14px;
 			font-weight: 500;
-			border: 2px solid #005E8C;
+			border: 2px solid #00DAC4;
 			-webkit-box-shadow: none;
 			box-shadow: none;
-			min-height:20px;
+			min-height:30px;
 			height: auto;
 			border-radius: 50px 0  0 50px !important;
 		}
@@ -44,16 +54,16 @@
 		#searchbtn
 		{ border:0;
 			padding: 0px 10px;
-			margin-top: 10px;
+			margin-top: 5px;
 			color: #fff;
 			background:#888;
 			font-size: 14px;
 			font-weight: 500;
-			border: 2px solid #005E8C;
+			border: 2px solid #00DAC4;
 			border-left: none;
 			-webkit-box-shadow: none;
 			box-shadow: none;
-			min-height:20px;
+			min-height:30px;
 			height: auto;
 			border-radius: 0 50px 50px 0 !important;
 		}
@@ -67,6 +77,24 @@
 		margin-right:5px;
 		min-height: calc(100vh - 50px);
 		max-height: calc(100vh - 50px);
+		#home{
+			.navbar-nav>li>a {
+				padding-top: 10px;
+				padding-bottom: 10px;
+			}
+			.navbar{
+				min-height:35px;
+			}
+		}
+		#menu{
+			.navbar-nav>li>a {
+				padding-top: 10px;
+				padding-bottom: 10px;
+			}
+			.navbar{
+				min-height:35px;
+			}
+		}
 		#table-list{
 			padding: 0px 10px;
 			.wrap-table {
@@ -75,7 +103,7 @@
 				margin: 5px;
 				border-radius:10px;
 				box-shadow:3px 3px #CCCCCC;
-				background-color:#808080;
+				background-color:#5C6FA2;
 				.table-name{
 					color:#CCCCCC;
 				}
@@ -84,13 +112,14 @@
 		.list-item{
 			padding:0px 10px;
 			.item-food{
-			
+
 				position:relative;
 				overflow:hidden;
 				height:200px;
 				padding: 10px;
-				box-shadow: 3px 3px #888888;
 				border-radius:10px;
+				border: 1px outset #A8AEB3;
+				margin: 4px;
 
 				img{
 					width:100%;
@@ -136,6 +165,9 @@
 			opacity:0.5;
 			width: 100%;
 		}
+		.option-order{
+			height:30px;
+		}
 	}
 	.content-right{
 		box-shadow:-5px 0px 5px #B3B3B3;
@@ -151,7 +183,8 @@
 		}
 		.image-order img{
 			border-radius:8px;
-			box-shadow: 0 0 3px 3px rgba(128,128,128, 0.8);
+			border:4px solid #A8A8A8;
+
 		}
 		.table>tbody>tr>td{
 			vertical-align: middle;
@@ -164,17 +197,29 @@
 	.footer-right{
 		box-shadow:-5px -5px 5px #B3B3B3;
 		bottom:0px;
-		background-color:#D9D9D9;
+		background-color:#F1B75F;
 		border-top:2px dotted #0090da;
 		height: 100px;
 		padding-right:10px;
 		padding-top:5px;
+		.note-order{
+			border-radius:5px;
+			width:100%;
+			height:80px;
+			margin: 0px 10px;
+		}
+		.total-order{
+			color:#030303;
+			background-color: #3CB2C7;
+			opacity: 0.6;
+			text-align:center;
+			padding: 5px; 
+			margin-bottom:3px;
+			width: 100%;
+			border-radius:10px;
+		}
 		.action-order{
-			.note-order{
-				border-radius:5px;
-				width:100%;
-				margin: 0px 10px;
-			}
+			
 			.send-order{
 				width:100px;
 			}

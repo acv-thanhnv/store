@@ -14,7 +14,7 @@
 				</li>
 				<li><a href="#menu" data-toggle="tab">Menu</a></li>
 
-				<li class="col-md-6">
+				<li class="col-md-6" style="margin-left:30px;">
 					<form action="#" method="#" role="search">
 						<div class="input-group">
 							<input class="form-control" placeholder="Search . . ." name="srch-term" id="ed-srch-term" type="text">
@@ -32,11 +32,8 @@
 		<div class="tab-content content-left">
 			<div id="home" class="tab-pane fade in active">
 				<div class="room">
-					<nav class="navbar navbar-light">
+					<nav class="navbar navbar-inverse">
 						<div class="container-fluid">
-							<div class="navbar-header">
-								<a class="navbar-brand" href="#"><span class="glyphicon glyphicon-signal" aria-hidden="true"></span></a>
-							</div>
 							<ul class="nav navbar-nav">
 								<li class="active"><a href="#">Tầng 1</a></li>
 								@for($i=2;$i<5;$i++)
@@ -58,7 +55,7 @@
 			</div>
 			<div id="menu" class="tab-pane fade">
 				<div class="category">
-					<nav class="navbar navbar-light">
+					<nav class="navbar navbar-inverse">
 						<div class="container-fluid">
 							<ul class="nav navbar-nav">
 								<li class="active"><a href="#">Khai vị</a></li>
@@ -74,11 +71,13 @@
 
 
 				<div class="list-item">
-					@for($i=0; $i<15; $i++)
-					<div class="col-md-3 item-food">
-						<img src="http://2sao.vietnamnetjsc.vn/images/2018/01/09/13/14/cua-rang-me.jpg" alt="" />
-						<h6 class="produc_name">Italian Source Mushroom Italian Source Mushroom Italian Source Mushroom</h6>
-						<h5><strong class="product_price">12.000 đ</strong></h5>
+					@for($i=1; $i<13; $i++)
+					<div class="col-md-3" style="padding: 0px">
+						<div class="item-food">
+							<img src="https://vcdn-vnexpress.vnecdn.net/2018/03/19/27067496-1187607254675485-941209378147836199-n-1521451453_680x0.jpg" alt="" />
+							<h6 class="produc_name">Italian Source Mushroom Italian Source Mushroom Italian Source Mushroom</h6>
+							<h5><strong class="product_price">12.000 đ</strong></h5>
+						</div>
 					</div>	
 					@endfor
 				</div>
@@ -97,18 +96,21 @@
 			<li class="active">
 				<a href="#">Bàn/Tầng</a>
 			</li>
-
+			<li style="float: right; margin-right: 10px;">
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					</button>
+					<ul class="dropdown-menu dropdown-menu-right" style="top:43px;right:-10px;">
+						<li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal"><span class="fa fa-retweet"></span> Chuyển Bàn</a></li>
+						<li class="line"></li>
+						<li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal2"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Ghép Bàn</a></li>
+						<li class="line"></li>
+						<li><a class="dropdown-item" href="#"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> Liên Hệ Thu Ngân</a></li>
+					</ul>
+				</div>
+			</li>
 		</ul>
-		{{-- <div class="btn-group dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ><span class="caret"></span><br><span class="glyphicon glyphicon-th" aria-hidden="true"></span></button>
-				<ul class="dropdown-menu">
-					<li><a class="dropdown-item" href="#"><span class="fa fa-retweet"></span> Chuyển Bàn</a></li>
-					<li class="line"></li>
-					<li><a class="dropdown-item" href="#"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Ghép Bàn</a></li>
-					<li class="line"></li>
-					<li><a class="dropdown-item" href="#"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> Liên Hệ Thu Ngân</a></li>
-				</ul>
-			</div> --}}
+
 	</div>
 	<div class="content-right">
 		@include('frontend.order3.entities')
@@ -116,14 +118,17 @@
 	<div class="footer-right">
 		<table style="width:100%;">
 			<tbody>
-				<tr>
-					<td class="col-md-8"></td>
-					<td class=" col-md-4 "><strong>Tổng Tiền: 100.000</strong></td>
-				</tr>
-				<tr class="action-order">
-					<td>
+				<tr style="height:30px;">
+					<td class="col-md-8" rowspan="2">
 						<textarea class="note-order col-md-8" placeholder="Ghi chú"></textarea>
 					</td>
+					<td class=" col-md-4 ">
+						<div class="total-order">
+							<strong>Tổng: 100.000.000.</strong>
+						</div>
+					</td>
+				</tr>
+				<tr class="action-order">
 					<td class="send-order col-md-4">
 						<button type="button" class="btn btn-danger">Gửi Thực Đơn<br><i class="fa fa-bell"></i></button>
 					</td>
@@ -131,6 +136,7 @@
 			</tbody>
 		</table>
 	</div>
+	@include('frontend.order3.table_manager')
 </div>
 </div>
 @endsection
