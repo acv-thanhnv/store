@@ -47,8 +47,9 @@
 
 				<div id="table-list">
 					@for($i=1;$i<30;$i++)
-					<div class="wrap-table col-sm-2 img-thumbnail" >
-						<span class="table-name">Bàn {{$i}}</span>
+					<div class="wrap-table col-sm-2 img-thumbnail text-center" >
+						<span class="table-name">Bàn</span><br>
+						<span class="table-name">{{$i}}</span>
 					</div>
 					@endfor
 				</div>
