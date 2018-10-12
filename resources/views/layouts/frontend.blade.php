@@ -2,138 +2,200 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
     <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-    <title>Ela - Bootstrap Admin Dashboard Template</title>
-    <!-- Bootstrap Core CSS -->
-    <link href="{{asset('frontend/css/bootstrap.min.css')}}" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="{{asset('frontend/css/helper.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/css/style1.css')}}" rel="stylesheet">
-    <!--User custom css-->
-    <style type="text/css">
-    	#slide{
-    		height: 100px;
-    		background: green;
-    		color: white;
-    	}
-    	#sidebar {
-    		background-color:#fff;
-    		height:100%;
-    		position:fixed;
-    		right:0;
-    		box-shadow: 1px 0 20px rgba(0, 0, 0, 0.08);
-    	}
-    </style>
-    @stack("cs")
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>Food Blog Template</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/core-img/favicon.ico">
+
+    <!-- Core Stylesheet -->
+    <link href="frontend/Customer/css/style.css" rel="stylesheet">
+
+    <!-- Responsive CSS -->
+    <link href="frontend/Customer/css/responsive.css" rel="stylesheet">
+    <!--Custom CSS-->
+    <link href="frontend/Customer/css/custom.css" rel="stylesheet">
+    @stack("css")
 </head>
 
-<body class="fix-header fix-sidebar">
-    <!-- Preloader - style you can find in spinners.css -->
-    <div class="preloader">
-        <svg class="circular" viewBox="25 25 50 50">
-			<circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
-    </div>
-    <!-- Main wrapper  -->
-    <div id="main-wrapper">
-        <!-- header header  -->
-        <div class="header">
-        	<!--Slide Show-->
-        		<div id="slide">
-        			this is slide show
-        		</div>
-            <nav class="navbar top-navbar navbar-expand-md navbar-light">
-            	<!--Slide bar-->
-            	<div class="navbar-collapse">
-            		<!-- toggle and nav items -->
-            		<ul class="navbar-nav pull-right mt-md-0">
-            			<!-- This is  -->
-            			<li class="nav-item"> 
-            				<a class="nav-link nav-toggler hidden-md-up text-muted  " href="javascript:void(0)">
-            					<i class="mdi mdi-menu"></i>
-            				</a> 
-            			</li>
-            			<li class="nav-item m-l-10"> 
-            				<a class="nav-link sidebartoggler hidden-sm-down text-muted  " href="javascript:void(0)">
-            					<i class="ti-menu"></i>
-            				</a> 
-            			</li>
-            			<!-- Messages -->
-            			<li class="nav-item dropdown mega-dropdown"> 
-            				<a class="nav-link dropdown-toggle text-muted  " href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            					<i class="fa fa-th-large"></i>
-            				</a>
-            				<div class="dropdown-menu animated zoomIn">
-            					<ul class="mega-dropdown-menu row">
-            						<li class="col-lg-3  m-b-30">
-            							<h4 class="m-b-20">CONTACT US</h4>
-            							<!-- Contact -->
-            							<form>
-            								<div class="form-group">
-            									<input type="text" class="form-control" id="exampleInputname1" placeholder="Enter Name"> 
-            								</div>
-         									<div class="form-group">
-         										<input type="email" class="form-control" placeholder="Enter email"> 
-         									</div>
-	   										<div class="form-group">
-	   											<textarea class="form-control" id="exampleTextarea" rows="3" placeholder="Message"></textarea>
-	   										</div>
-            								<button type="submit" class="btn btn-info">Submit
-            								</button>
-            							</form>
-            						</li>
-            					</ul>
-            				</div>
-            			</li>
-            			<!-- End Messages -->
-            		</ul>
-            	</div>
-                <!-- Logo -->
-               <div class="navbar-header">
-                	<a class="navbar-brand" href="index.html">
-                		<!-- Logo icon -->
-                		<b><img src="frontend/img/logo/logo.png" alt="homepage" class="dark-logo" /></b>
-                		<!--End Logo icon -->
-                		<!-- Logo text -->
-                		<span><img src="frontend/img/logo/logo-text.png" alt="homepage" class="dark-logo" /></span>
-                	</a>
+<body>
+
+    <!-- ****** Top Header Area Start ****** -->
+    <div class="top_header_area">
+        <div class="container-fluid">
+            <div class="row" style="align-items: center">
+                <!-- Menu Area -->
+                <div class="col-2 col-sm-6 col-lg-6 menu-mobile">
+                    <!--  Top Social bar start -->
+                    <nav class="navbar navbar-expand-md">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#food-nav" aria-controls="food-nav" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars" aria-hidden="true"></i></button>
+                        <!-- Menu Area Start -->
+                        <div class="collapse navbar-collapse justify-content-center" id="food-nav">
+                            <ul class="navbar-nav nav" id="yummy-nav">
+                                <li class="nav-item active">
+                                    <a class="nav-link active" data-toggle="pill" href="#home">Homes    </a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" data-toggle="pill" href="#top">Top Store</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#about">About</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#contact">Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
                 </div>
-                <!-- End Logo -->
-            </nav>
-        </div>
-        <!-- End header header -->
-        <!-- Right Sidebar  -->
-        <div class="left-sidebar" id="sidebar">
-            <!-- Sidebar scroll-->
-            <div class="scroll-sidebar">
+                <!-- End Menu Area -->
+                <div class="col-3 col-sm-2 col-lg-2 logo">
+                    <div class="logo_area text-center">
+                        <a href="index.html" class="yummy-logo">Gem's Store</a>
+                    </div>
+                </div>
+                <!--  Login Register Area -->
+                <div class="col-7 col-lg-4 col-sm-4">
+                    <div class="signup-search-area d-flex align-items-center justify-content-end">
+                        <div class="login_register_area d-flex">
+                            <div class="login">
+                                <a href="register.html">Sing in</a>
+                            </div>
+                            <div class="register">
+                                <a href="register.html">Sing up</a>
+                            </div>
+                        </div>
+                        <!-- Search Button Area -->
+                        <div class="search_button">
+                            <a class="searchBtn" href="#"><i class="fa fa-search" aria-hidden="true"></i></a>
+                        </div>
+                        <!-- Search Form -->
+                        <div class="search-hidden-form">
+                            <form action="#" method="get">
+                                <input type="search" name="search" id="search-anything" placeholder="Search Anything...">
+                                <input type="submit" value="" class="d-none">
+                                <span class="searchBtn"><i class="fa fa-times" aria-hidden="true"></i></span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- End Sidebar scroll-->
         </div>
-        <!-- End Right Sidebar  -->
     </div>
-    <!-- End Wrapper -->
+    <!-- ****** Top Header Area End ****** -->
+    <!-- ****** Content Start ****** -->
+    <section class="tab-content">
+        @yield("content")
+    </section>
+    <!-- ****** Content End ****** -->
+
+    <!-- ****** Instagram Area Start ****** -->
+    <section class="welcome-post-sliders owl-carousel" style="display: block">
+        @for($i=1; $i< 5; $i++)
+        <div class="welcome-single-slide">
+            <!-- Post Thumb -->
+            <img src="frontend/Customer/images/store/r{{$i}}.jpg" alt="">
+            <!-- Overlay Text -->
+            <div class="project_title">
+                <div class="post-date-commnents d-flex">
+                    <a href="#">May 19, 2017</a>
+                    <a href="#">5 Comment</a>
+                </div>
+                <a href="abc">
+                    <h5>“I’ve Come and I’m Gone”: A Tribute to Istanbul’s Street</h5>
+                </a>
+            </div>
+        </div>
+        @endfor
+    </section>
+    <!-- ****** Our Creative Portfolio Area End ****** -->
+
+    <!-- ****** Footer Social Icon Area Start ****** -->
+    <div class="social_icon_area clearfix">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="footer-social-area d-flex">
+                        <div class="single-icon">
+                            <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i><span>facebook</span></a>
+                        </div>
+                        <div class="single-icon">
+                            <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i><span>Twitter</span></a>
+                        </div>
+                        <div class="single-icon">
+                            <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i><span>GOOGLE+</span></a>
+                        </div>
+                        <div class="single-icon">
+                            <a href="#"><i class="fa fa-linkedin-square" aria-hidden="true"></i><span>linkedin</span></a>
+                        </div>
+                        <div class="single-icon">
+                            <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i><span>Instagram</span></a>
+                        </div>
+                        <div class="single-icon">
+                            <a href="#"><i class="fa fa-vimeo" aria-hidden="true"></i><span>VIMEO</span></a>
+                        </div>
+                        <div class="single-icon">
+                            <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i><span>YOUTUBE</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ****** Footer Social Icon Area End ****** -->
+
+    <!-- ****** Footer Menu Area Start ****** -->
+    <footer class="footer_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="footer-content">
+                        <!-- Logo Area Start -->
+                        <div class="footer-logo-area text-center">
+                            <a href="index.html" class="yummy-logo">
+                                Gem's Food
+                            </a>
+                        </div>
+                        <div class="newsletter-form">
+                            <form action="#" method="post">
+                                <input type="email" name="newsletter-email" id="question" placeholder="Any question? Send us now">
+                                <button type="submit"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Copywrite Text -->
+                    <div class="copy_right_text text-center">
+                        <p>Copyright @2018 All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://www.facebook.com/geminikids2705" target="_blank">Gemkids</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ****** Footer Menu Area End ****** -->
+
+    <!-- Jquery-3.2.1 js -->
+    <script src="frontend/Customer/js/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="frontend/Customer/js/popper.min.js"></script>
+    <!-- Bootstrap-4 js -->
+    <script src="frontend/Customer/js/bootstrap.min.js"></script>
+    <!-- All Plugins JS -->
+    <script src="frontend/Customer/js/plugins.js"></script>
+    <!-- Active JS -->
+    <script src="frontend/Customer/js/active.js"></script>
+    @stack("js")
 </body>
-</html>
-<!-- All Jquery -->
-<script src="{{asset('frontend/js/jquery.min.js')}}"></script>
-<!-- Bootstrap tether Core JavaScript -->
-<script src="{{asset('frontend/js/popper.min.js')}}"></script>
-<script src="{{asset('frontend/js/bootstrap.min.js')}}"></script>
-<!-- slimscrollbar scrollbar JavaScript -->
-<script src="{{asset('frontend/js/jquery.slimscroll.js')}}"></script>
-<!--Menu sidebar -->
-<script src="{{asset('frontend/js/sidebarmenu.js')}}"></script>
-<!--stickey kit -->
-<script src="{{asset('frontend/js/sticky-kit.min.js')}}"></script>
-<!--Custom JavaScript -->
-<script src="{{asset('frontend/js/custom.min.js')}}"></script>
-<!--Comon js-->
-<script src="{{asset('js/common.js')}}"></script>
-<!--User Custom-->
-@stack("js")

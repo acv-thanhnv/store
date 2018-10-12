@@ -1,0 +1,132 @@
+//custom variable
+$im : !important;
+//display 600px and lower
+//custom navbar
+#food-nav{
+	a.active{
+		color:#fc6c3f;
+	}
+	li.nav-item{
+		padding-right: 10px;
+		padding-left: 10px;
+	}
+}
+@media screen and (max-width: 1000px){
+}
+//
+@media only screen and (max-width: 600px) {
+	.header_area{
+		display: none;
+	}
+	.breadcumb-area .bradcumb-title h2{
+		font-size: 35px;
+	}
+	#food-nav{
+		position: absolute;
+		top: 35px;
+		left: -5px;
+		z-index: 3;
+		padding-left: 10px;
+		width: 150px;
+		background:#FFFFFF;
+		li.nav-item{
+			padding-right: 0px;
+		}
+
+	}
+	.menu-mobile{
+		padding-left: 5px;
+		.navbar-toggler{
+			width: 50px;
+		}
+	}
+	.logo{
+		padding:0px;
+		.yummy-logo{
+			font-size: 15px;
+		}
+	}
+}
+@media only screen and (min-width: 600px){
+	#food-nav li.nav-item{
+		padding: 0px;
+	}
+}
+//
+@media only screen and (min-width: 768px){
+	.logo_area .yummy-logo{
+		font-size: 20px;
+	}
+}
+//
+@media only screen and (min-width: 992px){
+	#food-nav li.nav-item{
+		padding: 0px 15px;
+	}
+}
+//
+@media only screen and (min-width: 1200px){
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+	height : 100%;
+	margin : 0;
+	padding: 0;
+}
+.top_header_area{
+	position: fixed;
+	top:0;
+	left:0;
+	background: #ffffff;
+	z-index: 3;
+}
+//Map
+.content-map{
+	margin-top: 40px;
+	#map {
+		margin-right: auto;
+		margin-left: auto;
+		border-radius: 20px;
+		height: 400px;
+		width: 100%;
+		margin-bottom: 10px;
+	}
+	.image{
+		height: 100px;
+		width: 200px;
+		border-radius: 10px;
+		box-shadow: 5px 10px 18px #D7C7C7;
+	}
+	.name{
+		padding-top: 15px;
+		color: red;
+		font-weight: bold;
+		font-size: 16px;
+	}
+	.link{
+		font-weight: bold;
+	}
+	.link a:hover{
+		text-decoration: none;
+	}
+}
+.content-map{
+	padding: 0px 20px
+}
+#portfolio{
+	display: block;
+	margin-top: 30px;
+}
+.popular-restaurant{
+	margin-top: 20px;
+}
+#question{
+	text-align-last: center;
+}
+//custom image slideshow
+.owl-carousel .owl-item img {
+    display: block;
+    width: 100%;
+    min-height: 120px;
+    height: 120px;
+}

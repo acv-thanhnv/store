@@ -61,7 +61,7 @@ class HomeController extends Controller
             }
         }
         $map = json_encode($store);
-        return view("frontend.home",["map" => $map,"store" => $store]);
+        return view("frontend.index",["map" => $map,"store" => $store]);
     }
     public function Search(Request $request)
     {

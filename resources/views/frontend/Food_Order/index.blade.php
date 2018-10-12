@@ -27,9 +27,12 @@
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/util.css">
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/main.css">
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/iziModal.min.css">
+	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/default.css" />
+	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/component.css" />
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/customer.css">
 <!--===============================================================================================-->
+	<script src="frontend/FoodOrder/js/modernizr.custom.js"></script>
 </head>
 <body class="animsition">
 	
@@ -158,11 +161,10 @@
 			
 			<div class="header-cart-content flex-w js-pscroll p-t-10 p-r-10">
 				<ul class="header-cart-wrapitem w-full">
-					@for($i=1;$i< 4;$i++)
+					@for($i=1;$i< 10;$i++)
 					<li class="header-cart-item flex-w flex-t m-b-12">
 						<div class="header-cart-item-img">
 							<img src="frontend/FoodOrder/images/food{{$i}}.jpg" alt="IMG">
-							<span class="fa remove_img_preview" title="remove"></span>
 						</div>
 
 						<div class="header-cart-item-txt">
@@ -180,43 +182,34 @@
 									<i class="fs-16 zmdi zmdi-plus"></i>
 								</div>
 								<span class="header-cart-item-info flex-c-m">
-									x $19.00
+									x 20k
 								</span>
-								<span class="total-item-money">
-									$19.000
-								</span>
-								<span class="delete-food-cart-mobile">
+								<span class="delete-food-cart">
 									<button class="btn btn-danger btn-sm">
 										<i class="fa fa-times"></i>
 									</button>
 								</span>
 							</div>
-							<span class="total-item-money-mobile">
-								Total: $19.000
-							</span>
+							<div class="progress">
+								<div class="progress-bar" style="width:50%;height: 10px"></div>
+							</div>
 						</div>
 					</li>
 					@endfor
-					<li class="header-cart-item flex-w flex-t m-b-12 description-food">
-						<span class="fa fa-pencil-square-o">
-							Note for food
-						</span>
-					</li>
 				</ul>
 				
-				<div class="w-full cart-total p-t-10">
-					<div class="header-cart-total w-full p-tb-40">
-						Total: $75.00
+				<div class="w-full cart-total p-t-5">
+					<div class="left">
+						<span class="note fa fa-pencil-square-o">Note</span>
+						<textarea cols="20" class="form-control"></textarea>
 					</div>
-
-					<div class="header-cart-buttons flex-w w-full">
-						<a href="shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
-							Order
-						</a>
-
-						<a href="shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
-							Check Out
-						</a>
+					<div class="right">
+						<span class="total-money">Total: 100k</span>
+						<div style="text-align: right" class="p-b-10 m-t-10">
+							<button class="btn btn-primary btn-order">
+								Order
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -224,11 +217,42 @@
 	</div>
 
 	<!-- Product -->
-	<section class="bg0 p-t-23 p-b-140 content">
+	<section class="bg0 p-b-140 content">
 		<div class="container">
-			<div class="flex-w flex-sb-m p-b-20 menu-type">
-				<!--Menu Type-->
-				<div class="flex-w flex-l-m filter-tope-group m-tb-10 menu-group">
+			<!--============== -->
+			<div class="flex-w flex-sb-m menu-type row" style="margin: 0px">
+				<!-- Filter For Mobile -->
+				<div class="filter-food" style="position: relative;width:100%">
+					<div class="dis-none panel-filter p-t-10">
+						<div class="wrap-filter bg6 row p-lr-10 form-group">
+							<div class="col-md-4 col-lg-4 col-sm-4 col-6 p-lr-5">
+								<label>Sort By</label>
+								<select class="form-control">
+									<option>Option 1</option>
+									<option>Option 2</option>
+									<option>Option 3</option>
+									<option>Option 4</option>
+									<option>Option 5</option>
+								</select>
+							</div>
+							<div class="col-md-4 col-lg-4 col-sm-4 col-6 p-lr-5">
+								<label>Price</label>
+								<select class="form-control">
+									<option>Option 1</option>
+									<option>Option 2</option>
+									<option>Option 3</option>
+									<option>Option 4</option>
+									<option>Option 5</option>
+								</select>
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-2 col-4 filter-search">
+								<button class="btn btn-danger form-control">Filter</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Desktop catogery-->
+				<div class="flex-w flex-l-m filter-tope-group m-tb-10 menu-group-desktop">
 					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5 how-active1" data-filter="*">
 						All Foods
 					</button>
@@ -249,9 +273,6 @@
 						Special Menu
 					</button>
 
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5" data-filter=".watches">
-						Customer Menu
-					</button>
 					<div class="dropdown more stext-106 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5">
 						<a class="dropdown-toggle"  data-toggle="dropdown">More
 							<span class="caret"></span></a>
@@ -262,22 +283,52 @@
 							</ul>
 					</div>
 				</div>
-				<div class="flex-w flex-c-m m-tb-10">
-					<div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
-						<i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
-						<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-						 Filter
+				<!--Mobile catogery-->
+				<div class="flex-c-m p-lr-0 catogery col-md-2 col-sm-2 col-1">
+					<div id="dl-menu" class="dl-menuwrapper">
+						<button class="btn-show-catogery dl-trigger	">
+							<i class="fa fa-tasks"></i>
+						</button>
+						<ul class="dl-menu">
+							<li>
+								<a href="#">Morning</a>
+							</li>
+							<li>
+								<a href="#">Dinner</a>
+							</li>
+							<li>
+								<a href="#">Special</a>
+							</li>
+							<li>
+								<a href="#">Custom</a>
+							</li>
+						</ul>
 					</div>
-
-					<div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
-						<i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
-						<i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-						Search
+				</div>
+				<div class="col-md-7 p-lr-0 col-7 col-sm-7 search-food">
+					<input type="text" class="form-control" placeholder="&#xF002; Search..." style="font-family:Arial, FontAwesome" id="search">
+					<i class="fa fa-times-circle-o clear-textbox dis-none"></i>
+				</div>
+				<div class="flex-w flex-m p-lr-0 filter col-md-3 col-sm-2 col-3">
+					<div class="flex-c-m stext-106 cl6 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-filter">
+						<button class="btn btn-default">
+							<i class="fa fa-filter"></i>
+							<span class="text-filter">Filter</span>
+						</button>
+					</div>
+					<div class="flex-c-m stext-106 cl6 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
+						<button class="btn btn-default">
+							<i class="fa fa-search"></i>
+							<span class="text-filter">Search</span>
+						</button>
+					</div>
+					<div class="cart-mobile-fixed dis-none icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-7 icon-header-noti  js-show-cart" data-notify="20">
+						<i class="zmdi zmdi-shopping-cart"></i>
 					</div>
 				</div>
 				
 				<!-- Search product -->
-				<div class="dis-none panel-search w-full p-t-10 p-b-15">
+				<div class="panel-search w-full p-t-10 p-b-15 dis-none">
 					<div class="bor8 dis-flex p-l-15">
 						<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
 							<i class="zmdi zmdi-search"></i>
@@ -285,195 +336,6 @@
 
 						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search...">
 					</div>	
-				</div>
-
-				<!-- Filter -->
-				<div class="dis-none panel-filter w-full p-t-10">
-					<div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
-						<div class="filter-col1 p-r-15 p-b-27">
-							<div class="mtext-102 cl2 p-b-15">
-								Sort By
-							</div>
-
-							<ul>
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										Default
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										Popularity
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										Average rating
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-										Newness
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										Price: Low to High
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										Price: High to Low
-									</a>
-								</li>
-							</ul>
-						</div>
-
-						<div class="filter-col2 p-r-15 p-b-27">
-							<div class="mtext-102 cl2 p-b-15">
-								Price
-							</div>
-
-							<ul>
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-										All
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$0.00 - $50.00
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$50.00 - $100.00
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$100.00 - $150.00
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$150.00 - $200.00
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$200.00+
-									</a>
-								</li>
-							</ul>
-						</div>
-
-						<div class="filter-col3 p-r-15 p-b-27">
-							<div class="mtext-102 cl2 p-b-15">
-								Color
-							</div>
-
-							<ul>
-								<li class="p-b-6">
-									<span class="fs-15 lh-12 m-r-6" style="color: #222;">
-										<i class="zmdi zmdi-circle"></i>
-									</span>
-
-									<a href="#" class="filter-link stext-106 trans-04">
-										Black
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<span class="fs-15 lh-12 m-r-6" style="color: #4272d7;">
-										<i class="zmdi zmdi-circle"></i>
-									</span>
-
-									<a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-										Blue
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<span class="fs-15 lh-12 m-r-6" style="color: #b3b3b3;">
-										<i class="zmdi zmdi-circle"></i>
-									</span>
-
-									<a href="#" class="filter-link stext-106 trans-04">
-										Grey
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<span class="fs-15 lh-12 m-r-6" style="color: #00ad5f;">
-										<i class="zmdi zmdi-circle"></i>
-									</span>
-
-									<a href="#" class="filter-link stext-106 trans-04">
-										Green
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<span class="fs-15 lh-12 m-r-6" style="color: #fa4251;">
-										<i class="zmdi zmdi-circle"></i>
-									</span>
-
-									<a href="#" class="filter-link stext-106 trans-04">
-										Red
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<span class="fs-15 lh-12 m-r-6" style="color: #aaa;">
-										<i class="zmdi zmdi-circle-o"></i>
-									</span>
-
-									<a href="#" class="filter-link stext-106 trans-04">
-										White
-									</a>
-								</li>
-							</ul>
-						</div>
-
-						<div class="filter-col4 p-b-27">
-							<div class="mtext-102 cl2 p-b-15">
-								Tags
-							</div>
-
-							<div class="flex-w p-t-4 m-r--5">
-								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Fashion
-								</a>
-
-								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Lifestyle
-								</a>
-
-								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Denim
-								</a>
-
-								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Streetstyle
-								</a>
-
-								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Crafts
-								</a>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 
@@ -674,6 +536,7 @@
 	<script src="frontend/FoodOrder/js/popper.min.js"></script>
 	<script src="frontend/FoodOrder/js/bootstrap.min.js"></script>
 	<script src="frontend/FoodOrder/js/iziModal.min.js"></script>
+	<script src="frontend/FoodOrder/js/jquery.dlmenu.js"></script>
 	<!--Filter Food-->
 	<script src="frontend/FoodOrder/js/isotope.pkgd.min.js"></script>
 	<script src="frontend/FoodOrder/js/main.js"></script>
@@ -688,9 +551,11 @@
 			var heightScroll = $(this).scrollTop();
 			var contentHight = $(document).height()-$("footer").height();
 			if(heightScroll>height && heightScroll< contentHight ){
-				$(".js-show-cart").addClass("mobile-fixed-cart");
+				$(".menu-type").addClass("fixed-catogery");
+				$(".menu-type .js-show-cart").css("display","block");
 			}else{
-				$(".js-show-cart").removeClass("mobile-fixed-cart");
+				$(".menu-type").removeClass("fixed-catogery");
+				$(".menu-type .js-show-cart").css("display","none");
 			}
 		});
 		//show modal food detail
@@ -729,6 +594,27 @@
 		$(document).on("click","div.js-hide-cart",function(e){
 			$("body").css("overflow","auto");
 		});
+		$("body").on('click','.btn-show-catogery',function(){
+			$("#mySidenav").toggleClass('show');
+		});
+		$(function() {
+			$( '#dl-menu' ).dlmenu();
+		});
+		//show clear text-box content if content more than 1 word
+		$("body").on("keyup","#search",function(){
+			var length = $(this).val().length;
+			if(length>0){
+				$(this).siblings("i").removeClass('dis-none');
+			}else{
+				$(this).siblings("i").addClass("dis-none");
+			}
+		})
+		//clear content of input search
+		$("body").on("click",".clear-textbox",function(){
+			$("#search").val("");
+			$(this).addClass("dis-none");
+			$("#search").focus();
+		})
 	</script>
 </body>
 </html>
