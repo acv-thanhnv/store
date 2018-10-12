@@ -8,129 +8,140 @@
 	<div class="wraper-left col-sm-6 nopad">
 
 		<div id="left-nav-tabs" class="header-left">
-			<ul class="nav nav-tabs location-order">
-				<li class="active"><a data-toggle="tab" href="/layout3/#room">#Room</a></li>
-				<li><a data-toggle="tab" href="/layout3/#menu">#Menu</a></li>
+			<ul class="nav nav-tabs">
+				<li class="active">
+					<a href="#home" data-toggle="tab">Table/Floor</a>
+				</li>
+				<li><a href="#menu" data-toggle="tab">Menu</a></li>
+
+				<li class="col-md-6" style="margin-left:30px;">
+					<form action="#" method="#" role="search">
+						<div class="input-group">
+							<input class="form-control" placeholder="Search . . ." name="srch-term" id="ed-srch-term" type="text">
+							<div class="input-group-btn">
+								<button type="submit" id="searchbtn">
+								search</button>
+							</div>
+						</div>
+					</form>
+				</li>
+
+				
 			</ul>
 		</div>
 		<div class="tab-content content-left">
 			<div id="home" class="tab-pane fade in active">
-				<br>
 				<div class="room">
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#Room</button>
-					<button class="btn btn-cat btn-danger">#More</button>
+					<nav class="navbar navbar-inverse">
+						<div class="container-fluid">
+							<ul class="nav navbar-nav">
+								<li class="active"><a href="#">Tầng 1</a></li>
+								@for($i=2;$i<5;$i++)
+								<li><a href="#">Tầng {{$i}}</a></li>
+								@endfor
+								<li><a href="#">More...</a></li> 
+							</ul>
+						</div>
+					</nav>
 				</div>
-				<br>
-				<div class="d-flex flex-row flex-wrap my-flex-container">
-					<div class="p-2 my-flex-item">
-						<script>
-							var i=1;
-							while (i<=30) {
-								document.write('<button class="btn btn-room btn-success">Bàn '+i+'</button>');
-								i++;
-							}
-						</script>
+
+				<div id="table-list">
+					@for($i=1;$i<30;$i++)
+					<div class="wrap-table col-sm-2 img-thumbnail" >
+						<span class="table-name">Bàn {{$i}}</span>
 					</div>
+					@endfor
 				</div>
 			</div>
 			<div id="menu" class="tab-pane fade">
-				<br>
 				<div class="category">
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#Category</button>
-					<button class="btn btn-cat btn-danger">#More</button>
+					<nav class="navbar navbar-inverse">
+						<div class="container-fluid">
+							<ul class="nav navbar-nav">
+								<li class="active"><a href="#">Khai vị</a></li>
+								@for($i=0; $i<3; $i++)
+								<li><a href="#">Đồ uống</a></li>
+								@endfor
+								<li><a href="#">More...</a></li> 
+							</ul>
+						</div>
+					</nav>
 					
 				</div>
-				<br>
-				<div class="">
-					<div class="row">
 
-						<script>
-							var i=1;
-							while (i<=30) {
-								document.write('<center><div class="col-md-4 col-md-offset-1"><img class="img-food" src="http://placehold.it/160x160" alt=""><br>Món '+i+'<br>Giá '+i*1000+' VND</div></center>');
-								i++;
-							}
-						</script>
 
-					</div>
+				<div class="list-item">
+					@for($i=1; $i<13; $i++)
+					<div class="col-md-3" style="padding: 0px">
+						<div class="item-food">
+							<img src="https://vcdn-vnexpress.vnecdn.net/2018/03/19/27067496-1187607254675485-941209378147836199-n-1521451453_680x0.jpg" alt="" />
+							<h6 class="produc_name">Italian Source Mushroom Italian Source Mushroom Italian Source Mushroom</h6>
+							<h5><strong class="product_price">12.000 đ</strong></h5>
+						</div>
+					</div>	
+					@endfor
 				</div>
 			</div>
-
 		</div>
-		<!-- <div class="footer-left">
-			
-		</div> -->
-
-		
 
 	</div>
+
+</div>
 
 </div>
 {{--================================= Son begin ===========================--}}
 <div class="wraper-right col-sm-6">
 	<div class="header-right">
-		<ul class="nav nav-tabs location-order">
+		<ul class="nav nav-tabs">
 			<li class="active">
 				<a href="#">Bàn/Tầng</a>
 			</li>
+			<li style="float: right; margin-right: 10px;">
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					</button>
+					<ul class="dropdown-menu dropdown-menu-right" style="top:43px;right:-10px;">
+						<li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal"><span class="fa fa-retweet"></span> Chuyển Bàn</a></li>
+						<li class="line"></li>
+						<li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal2"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Ghép Bàn</a></li>
+						<li class="line"></li>
+						<li><a class="dropdown-item" href="#"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> Liên Hệ Thu Ngân</a></li>
+					</ul>
+				</div>
+			</li>
 		</ul>
+
 	</div>
 	<div class="content-right">
 		@include('frontend.order3.entities')
 	</div>
 	<div class="footer-right">
-		<table>
+		<table style="width:100%;">
 			<tbody>
-				<tr >
-					<td ><strong class="total-order" >Total:</strong></td>
-					<td ><strong class="total-order"> $1.99</strong></td>
-				</tr>
-				<tr class="action-order">
-					<td>
-						<div class="btn-group dropup">
-							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ><span class="caret"></span><br><span class="glyphicon glyphicon-th" aria-hidden="true"></span></button>
-							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" href="#"><span class="fa fa-retweet"></span> Chuyển Bàn</a></li>
-								<li class="line"></li>
-								<li><a class="dropdown-item" href="#"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Ghép Bàn</a></li>
-								<li class="line"></li>
-								<li><a class="dropdown-item" href="#"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> Liên Hệ Thu Ngân</a></li>
-							</ul>
+				<tr style="height:30px;">
+					<td class="col-md-8" rowspan="2">
+						<textarea class="note-order col-md-8" placeholder="Ghi chú"></textarea>
+					</td>
+					<td class=" col-md-4 ">
+						<div class="total-order">
+							<strong>Tổng: 100.000.000.</strong>
 						</div>
 					</td>
-					<td class="send-order">
+				</tr>
+				<tr class="action-order">
+					<td class="send-order col-md-4">
 						<button type="button" class="btn btn-danger">Gửi Thực Đơn<br><i class="fa fa-bell"></i></button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
+	@include('frontend.order3.table_manager')
 </div>
 </div>
 @endsection
 @section('javascript')
 <script type="text/javascript">
 	//js here
-
-
-	//==============================Quang=========
-	//==============================Quang=========
-
-	$(document).ready(function(){
-		$("#left-nav-tabs a").click(function(){
-			$(this).tab('show');
-		});
-	});
-
-
-	//==============================Son=========
-	//==============================Son=========
-	
 </script>
 @endsection
