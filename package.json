@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "gentelella": "^1.4.0",
+        "node-sass": "^4.9.3",
         "vue-axios": "^2.1.2",
         "vue-router": "^3.0.1"
     }

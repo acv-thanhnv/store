@@ -1,43 +1,55 @@
-<table id="cart" class="table table-hover">
+<table class="table table-hover red-blue-table">
 	<thead>
 		<tr>
-			<th style="width:45%">Thực đơn</th>
-			<th style="width:20%">Số lượng</th>
-			<th style="width:10%">Bàn</th>
-			<th style="width:25%"></th>
+			<th colspan="2" style="width:40%">Hóa đơn</th>
+			<th colspan="2" style="width:60%">Bàn/Phòng/Tầng</th>
 		</tr>
 	</thead>
+	
 	<tbody>
-		<!-- <tr>
-			<td data-th="Product">
-		
-				<div class="col-sm-12">
-					<h5 class="nomargin">Món 123</h>
-						<br>
-						<span class="note-order fa fa-edit"> DH000001 - 05/10/2018 14:38 - Bởi Quang</span>
-					</div>
-				</td>
-				<td data-th="quantity">123
-					<br>
-					<span class="note-order fa fa-clock-o"> 2 giờ trước</span></td>
-					<td data-th="id">123</td>
-					<td class="actions" data-th="">
-						<button class="btn btn-danger btn-lg"><i class="fa fa-angle-right"></i></button>
-						<button class="btn btn-success btn-lg"><i class="fa fa-angle-double-right"></i></button>
-					</td>
-				</tr> -->
-				<script>
-					var i=1;
-					while (i<=30) {
-						document.write('<tr> <td data-th="Product"> <div class="col-sm-12"> <h5 class="nomargin">Món '+(Math.floor(Math.random() * 29)+1)+'</h> <br> <span class="note-order fa fa-edit"> DH000001 - 05/10/2018 14:38 - Bởi Quang</span> </div> </td> <td data-th="quantity">'+(Math.floor(Math.random() * 4)+1)+' <br> <span class="note-order fa fa-clock-o"> 2 giờ trước</span></td> <td data-th="id">'+(Math.floor(Math.random() * 29)+1)+'</td> <td class="actions" data-th=""> <button class="btn btn-danger btn-lg"><i class="fa fa-angle-right"></i></button> <button class="btn btn-success btn-lg"><i class="fa fa-angle-double-right"></i></button> </td> </tr>');
-						i++;
-					}
-				</script>
-			</tbody>
-			<tfoot>
-			<!-- <tr>
-				<td><strong class="total-order">Total:</strong></td>
-				<td colspan="4"><strong class="total-order"> $1.99</strong></td>
-			</tr> -->
-		</tfoot>
-	</table>
+		<tr class="t-header2">
+			<td colspan="2">
+				<button type="button" class="t-header2-collapse btn btn-primary">
+					<span>+</span> #HĐ 001
+				</button>
+			</td>
+			<td colspan="2">
+				<button type="button" class="btn btn-primary">
+					<span class="badge badge-secondary">B1</span>
+					<span class="badge badge-secondary">P202</span>
+					<span class="badge badge-secondary">T2</span>
+				</button>
+			</td>
+		</tr>
+		<tr class="t-header2-child">
+			<th style="width: 25%">Tên món</th>
+			<th style="width: 15%">Số lượng</th>
+			<th style="width: 35%">Trạng thái</th>
+			<th style="width: 25%"></th>
+		</tr>
+		<tr>
+			<td>Lorem Ipsum is simply dummy text of the printing and typesetting industry</td>
+			<td>1/2</td>
+			<td>
+				<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">1</span></button>
+				<button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">1</span></button>
+			</td>
+			<td>
+				<button class="btn-group-kitchen btn btn-success"><i class="fa fa-undo"></i></button>
+			</td>
+		</tr>
+	</tbody>
+
+</table>
+
+<script>
+	$('tr.t-header2').nextUntil('tr.t-header2').slideToggle(0, function(){
+
+	});
+	$('.t-header2-collapse').click(function(){
+		$(this).find('span:first-child').text(function(_, value){return value=='-'?'+':'-'});
+		$(this).parents('tr').nextUntil('tr.t-header2').slideToggle(100, function(){
+
+		});
+	});
+</script>
