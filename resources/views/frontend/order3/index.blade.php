@@ -14,13 +14,14 @@
 				</li>
 				<li><a href="#menu" data-toggle="tab">Menu</a></li>
 
-				<li class="col-md-6" style="margin-left:30px;">
+				<li class="col-md-7 col-sm-6" ">
 					<form action="#" method="#" role="search">
 						<div class="input-group">
 							<input class="form-control" placeholder="Search . . ." name="srch-term" id="ed-srch-term" type="text">
 							<div class="input-group-btn">
 								<button type="submit" id="searchbtn">
-								search</button>
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+							</button>
 							</div>
 						</div>
 					</form>
@@ -73,7 +74,7 @@
 
 				<div class="list-item">
 					@for($i=1; $i<13; $i++)
-					<div class="col-md-3" style="padding: 0px">
+					<div class="col-md-3 col-sm-4" style="padding: 0px">
 						<div class="item-food">
 							<img src="https://vcdn-vnexpress.vnecdn.net/2018/03/19/27067496-1187607254675485-941209378147836199-n-1521451453_680x0.jpg" alt="" />
 							<h6 class="produc_name">Italian Source Mushroom Italian Source Mushroom Italian Source Mushroom</h6>
@@ -123,14 +124,14 @@
 					<td class="col-md-8" rowspan="2">
 						<textarea class="note-order col-md-8" placeholder="Ghi chú"></textarea>
 					</td>
-					<td class=" col-md-4 ">
+					<td class="col-md-4 col-sm-6">
 						<div class="total-order">
 							<strong>Tổng: 100.000.000.</strong>
 						</div>
 					</td>
 				</tr>
 				<tr class="action-order">
-					<td class="send-order col-md-4">
+					<td class="send-order col-md-4 col-sm-6">
 						<button type="button" class="btn btn-danger">Gửi Thực Đơn<br><i class="fa fa-bell"></i></button>
 					</td>
 				</tr>
