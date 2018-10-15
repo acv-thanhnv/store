@@ -1,83 +1,17 @@
 @extends("layouts.frontend")
 @push("css")
-<style type="text/css">
-	.breadcumb-area{
-		height: 130px;
-		margin-top: 20px;
-	}
-	.header-map{
-		margin-bottom: 20px;
-	}
-	.breadcumb-area .bradcumb-title h2{
-		color: #fc6c3f7a;
-	}
-	.res-images{
-		min-height: 200px;
-		height: 200px;
-		width: 100%;
-	}
-	.archive-area{
-		margin-top: 30px;
-	}
-	.post-thumb img{
-		margin-bottom: 0px;
-	}
-	.post-meta{
-		justify-content: flex-end;
-	}
-	.res-name,.res-address{
-		width: 100%;
-		white-space: nowrap; 
-		overflow: hidden;
-		text-overflow: ellipsis;
-		padding-left: 5px;
-		display: block;
-		font-size: 15px;
-		font-family: Poppins-Regular;
-		color: #999;
-	}
-	.block2{
-		border       : 1px solid #e1e1e1;
-		border-radius: 5px;
-		box-shadow   : 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 4px 15px 0 rgba(0, 0, 0, 0.19);
-		margin-bottom: 10px;
-	}
-	.hov-img0 {
-		display: block;
-		overflow: hidden;
-	}
-	.block2-pic {
-		position: relative;
-	}
-	.hov-img0 img {
-		width: 100%;
-		transition: transform 0.9s ease;
-	}
-	.hov-img0:hover img {
-		transform: scale(1.1);
-	}
-	.single-post{
-		margin-bottom: 0px;
-	}
-	.res-detail .post-comment-share-area{
-		justify-content: flex-end;
-		padding-right: 5px;
-	}
-	.res-item{
-		padding-top: 10px;
-	}
-	.res-des a{
-		font-weight: 100;
-	}
-	.pagination-area .page-status{
-		margin-top:10px;
-	}
-</style>
+<link rel="stylesheet" type="text/css" href="frontend/Customer/css/cus-home.css">
 @endpush
 @section("content")
  <!-- ****** Home Area Start ****** -->
- <section class="content-map">
- 	<div id="map"></div>
+<section class="content-map">
+	<div class="col-md-7 col-10 col-sm-10 search-location">
+		<input type="text" autofocus="" name="name" class="form-control" id="search"
+		placeholder="&#xF002; Search locations...">
+		<i class="fa fa-times-circle-o clear-textbox dis-none"></i>
+	</div>
+ 	<div id="map">
+ 	</div>
  	<div class="breadcumb-area" style="background-image: url(frontend/Customer/images/bg3.jpg);">
  		<div class="container h-100">
             <div class="row h-100 align-items-center">
@@ -152,15 +86,29 @@
  			</div>
  		</div>
  	</section>
- </section>
+</section>
  <!-- ****** Home Area End ****** -->
+
+ <!-- ****** Map Template ****** -->
+<div style="display: none">
+	<div id="info_window" class="row">
+		<div class="col-md-6 col-sm-6 col-12">
+			<a class="link" href="#"><img class="image"></a>
+		</div>
+		<div class="col-md-6 col-sm-6 col-12" style="padding-right: 0px;">
+			<p class="name"></p>
+			<p><b>Address:</b> <span class="address"></span></p>
+			<p><a class="link" href="#">Go To Website</a></p>
+		</div>
+	</div>
+</div>
+
 @endsection
 @push("js")
 <!-- Map JS -->
 <script type="text/javascript">
     var locations =<?php echo $map?>;
-    var infowindow = null;
-    var map;
+    var infowindow = null,geocoder,map,markers=[],input,autocomplete,place,form_search;
     // Try HTML5 geolocation. get current user position
     function CurrentPosition(callback)
     {
@@ -178,7 +126,10 @@
     function initMap() {
         CurrentPosition(function(center){
             map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 19,
+                zoom: 16,
+                streetViewControl: false,
+                zoomControl:true,
+                mapTypeControl: false,
                 center: center,
                 styles: [{
                     "featureType": "landscape",
@@ -200,12 +151,54 @@
                 },
                 animation: google.maps.Animation.DROP,
             });
+            // Add circle overlay and bind to marker
+            var circle = new google.maps.Circle({
+            	map: map,
+				radius: 200,    // 200 mét
+				strokeColor:"#AA0000",
+				strokeOpacity:0.8,
+				strokeWeight:2,
+				fillColor:"#AA0000",
+				fillOpacity:0.4
+			});
+            circle.bindTo('center', currentPosition, 'position');
             infowindow = new google.maps.InfoWindow({
-                maxWidth: 300
+                maxWidth: 400,
+                maxHeight:400
             });
             for (var i = 0; i < locations.length; i++) {
                 createMarker(locations[i],i*200);
             }
+            /* Change markers on zoom */
+            google.maps.event.addListener(map, 'zoom_changed', function() {
+            	var zoom = map.getZoom();
+			    // iterate over markers and call setVisible
+			    for (i = 0; i < locations.length; i++) {
+			    	markers[i].setVisible(zoom >= 14);
+			    }
+			});
+			//Lay input ve
+    		input = document.getElementById('search');
+    		form_search = $(".search-location")[0];
+			//auto complete input
+			autocomplete = new google.maps.places.Autocomplete(input);
+			autocomplete.bindTo('bounds', map);
+			map.controls[google.maps.ControlPosition.TOP_LEFT].push(form_search);
+			//Tao su kien khi thay doi dia diem cua input
+			autocomplete.addListener('place_changed', function(){
+				place = autocomplete.getPlace();
+				if (!place.geometry) {
+					alert("Sr we could find your address, pleas try again baby!");
+					return;
+				}
+				// If the place has a geometry, then present it on a map.
+				if (place.geometry.viewport) {//if have view, present it
+					map.fitBounds(place.geometry.viewport);
+				} else {//if not present view with lat and long
+					map.setCenter(place.geometry.location);
+					map.setZoom(14);
+				}	
+			});
         })
     }
     function setIcon(url)
@@ -244,7 +237,7 @@
             position : {lat: location["lat"]*1, lng: location["lng"]*1},
             map      : map,
             icon     : setIcon("common_images/redStore.png"),
-            animation: google.maps.Animation.DROP,
+            animation: google.maps.Animation.BOUNCE,
             title    : location["name"],
             label    : {
                 text: location["name"],
@@ -259,10 +252,27 @@
 
             infowindow.open(map, this);
           });
+          //push marker to array
+          markers.push(marker);
       },timeout);
     }
+    //show clear text-box content if content more than 1 word
+    $("body").on("keyup","#search",function(){
+    	var length = $(this).val().length;
+    	if(length>0){
+    		$(this).siblings("i").removeClass('dis-none');
+    	}else{
+    		$(this).siblings("i").addClass("dis-none");
+    	}
+    })
+    //clear content of input search
+    $("body").on("click",".clear-textbox",function(){
+    	$("#search").val("");
+    	$(this).addClass("dis-none");
+    	$("#search").focus();
+    })
 </script>
 <script async defer
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcW21XZbz_N3NzUiwUSd-K_4vLCZSCM7I&callback=initMap">
+   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcW21XZbz_N3NzUiwUSd-K_4vLCZSCM7I&callback=initMap&libraries=places">
 </script>
 @endpush

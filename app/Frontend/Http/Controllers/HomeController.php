@@ -70,4 +70,8 @@ class HomeController extends Controller
                     ->get();
         return response()->json(['store' => $store]);
     }
+    public function Contact()
+    {
+        return view("frontend.contact");
+    }
 }

@@ -84,6 +84,7 @@ $im : !important;
 	}
 	.search-food input{
 		text-align:center;
+		padding-right: 5px;
 	}
 	.search-food input:focus{
 		text-align:left;
@@ -94,6 +95,7 @@ $im : !important;
 		.clear-textbox{
 			color: #ADAAAA $im;
 			cursor: pointer;
+			display: block;
 			position: absolute;
 			right: -7px;
 			width: 30px;
@@ -471,7 +473,7 @@ body.show-header-cart{
 	}
 	input.form-control{
 		border-radius: 20px;
-		padding: 3px;
+		padding: 3px 2rem 3px 3px;
 	}
 }
 //custom filter panel

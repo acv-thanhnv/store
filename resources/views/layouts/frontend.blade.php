@@ -6,6 +6,7 @@
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="{{asset('')}}">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Title -->
@@ -31,7 +32,7 @@
         <div class="container-fluid">
             <div class="row" style="align-items: center">
                 <!-- Menu Area -->
-                <div class="col-2 col-sm-6 col-lg-6 menu-mobile">
+                <div class="col-2 col-sm-3 col-md-6 col-lg-5 menu-mobile">
                     <!--  Top Social bar start -->
                     <nav class="navbar navbar-expand-md">
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#food-nav" aria-controls="food-nav" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars" aria-hidden="true"></i></button>
@@ -39,29 +40,29 @@
                         <div class="collapse navbar-collapse justify-content-center" id="food-nav">
                             <ul class="navbar-nav nav" id="yummy-nav">
                                 <li class="nav-item active">
-                                    <a class="nav-link active" data-toggle="pill" href="#home">Homes    </a>
+                                    <a class="nav-link active" href="">Homes    </a>
                                 </li>
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link" data-toggle="pill" href="#top">Top Store</a>
+                                    <a class="nav-link" href="#top">Top Store</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="pill" href="#about">About</a>
+                                    <a class="nav-link" href="#about">About</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="pill" href="#contact">Contact</a>
+                                    <a class="nav-link" href="contact">Contact</a>
                                 </li>
                             </ul>
                         </div>
                     </nav>
                 </div>
                 <!-- End Menu Area -->
-                <div class="col-3 col-sm-2 col-lg-2 logo">
+                <div class="col-3 col-sm-4 col-md-2 col-lg-2 logo">
                     <div class="logo_area text-center">
                         <a href="index.html" class="yummy-logo">Gem's Store</a>
                     </div>
                 </div>
                 <!--  Login Register Area -->
-                <div class="col-7 col-lg-4 col-sm-4">
+                <div class="col-7 col-lg-4 col-md-4 col-sm-5">
                     <div class="signup-search-area d-flex align-items-center justify-content-end">
                         <div class="login_register_area d-flex">
                             <div class="login">
@@ -96,24 +97,28 @@
     <!-- ****** Content End ****** -->
 
     <!-- ****** Instagram Area Start ****** -->
-    <section class="welcome-post-sliders owl-carousel" style="display: block">
-        @for($i=1; $i< 5; $i++)
-        <div class="welcome-single-slide">
-            <!-- Post Thumb -->
-            <img src="frontend/Customer/images/store/r{{$i}}.jpg" alt="">
-            <!-- Overlay Text -->
-            <div class="project_title">
-                <div class="post-date-commnents d-flex">
-                    <a href="#">May 19, 2017</a>
-                    <a href="#">5 Comment</a>
+    <div class="instargram_area owl-carousel section_padding_100_0 clearfix" id="portfolio" style="display: block">
+        @for($i=1; $i < 10; $i++)
+        <!-- Instagram Item -->
+        <div class="instagram_gallery_item">
+            <!-- Instagram Thumb -->
+            <img src="frontend/Customer/images/store/r{{$i}}.jpg" alt="Restaurant Images">
+            <!-- Hover -->
+            <div class="hover_overlay" title="60B Dinh Cong Ha">
+                <div class="yummy-table">
+                    <div class="yummy-table-cell">
+                        <div class="follow-me text-center">
+                            <span class="slide-name">Gem's Store</span>
+                            <span class="slide-address">60B Dinh Cong Ha, Hoang Mai, Ha Noi</span>
+                            <a href="template" target="blank" class="goto-res btn btn-danger btn-sm"><i class="fa fa-instagram" aria-hidden="true"></i> Go to restaurant
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <a href="abc">
-                    <h5>“I’ve Come and I’m Gone”: A Tribute to Istanbul’s Street</h5>
-                </a>
             </div>
         </div>
         @endfor
-    </section>
+    </div>
     <!-- ****** Our Creative Portfolio Area End ****** -->
 
     <!-- ****** Footer Social Icon Area Start ****** -->
