@@ -47,7 +47,7 @@
 @endsection
 @push("js")
 <script type="text/javascript">
-   var locations =<?php echo $arrCoor?>;
+   var locations =<?php echo $map?>;
    var infowindow = null;
    var map;
    // Try HTML5 geolocation. get current user position

@@ -73,17 +73,19 @@ class UserService extends BaseService implements UserServiceInterface
             SDB::table("users")
                 ->where("id", $obj->id)
                 ->update([
-                    "name" => $obj->name,
-                    "email" => $obj->email,
+                    "name"       => $obj->name,
+                    "email"      => $obj->email,
+                    "is_active"  => $obj->active,
                     "role_value" => $obj->role,
-                    "password" => $obj->pass
+                    "password"   => $obj->pass
                 ]);
         } else {
             SDB::table("users")
                 ->where("id", $obj->id)
                 ->update([
-                    "name" => $obj->name,
-                    "email" => $obj->email,
+                    "name"       => $obj->name,
+                    "email"      => $obj->email,
+                    "is_active"  => $obj->active,
                     "role_value" => $obj->role
                 ]);
         }

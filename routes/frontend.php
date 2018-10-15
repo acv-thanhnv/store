@@ -37,4 +37,11 @@ Route::get('order3', function () {
 
 Route::get("cashier", function () {
     return view('frontend/cashier3/index');
-}); 
+});
+Route::get("map","HomeController@Map"); 
+Route::get("/","HomeController@Home"); 
+Route::get("contact","HomeController@Contact"); 
+Route::get("template","FoodOrderController@template"); 
+Route::get("FoodDetail","FoodOrderController@FoodDetail"); 
+
+

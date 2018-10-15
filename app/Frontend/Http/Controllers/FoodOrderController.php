@@ -25,7 +25,14 @@ class FoodOrderController extends Controller
     {  
         return view('frontend.foodorder.index',["storeId" => $storeId]);
     }
-
+    public function template()
+    {
+        return view("frontend.Food_Order.index");
+    }
+    public function FoodDetail()
+    {
+        return view("frontend.Food_Order.food-detail");
+    }
     public function getLocations(Request $request)
     {   
         $storeId = $request->storeId;
