@@ -1,4 +1,4 @@
-<table id="thu-ngan" class="table table-hover red-blue-table" data-toggle="table">
+<table id="thu-ngan" class="table table-hover red-blue-table" data-toggle="table" responsive hover>
 	<thead>
 		<tr>
 			<th style="width: 5%"></th>
@@ -8,14 +8,13 @@
 			<th style="width: 10%">Thuế suất</th>
 			<th style="width: 15%">Chiết khấu</th>
 			<th style="width: 15%">Thành tiền</th>
-			<th style="width: 10%">Làm tròn</th>
-			<th style="width: 5%"></th>
+			<th style="width: 15%"></th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td><input id="invoice-check" type="checkbox" value="#HĐ 000"></td>
-			<td>#HĐ 000</td>
+			<td><input class="checkbox" type="checkbox" value="#HĐ 000"></td>
+			<td>#HĐ 000123456789</td>
 			<td>
 				<button type="button" class="btn btn-primary">
 					<span class="badge badge-secondary">B 16</span>
@@ -23,11 +22,10 @@
 					<span class="badge badge-secondary">T 2</span>
 				</button>
 			</td>
-			<td>999,000,000</td>
+			<td class="money">999,000,000,000</td>
 			<td>15</td>
 			<td>5</td>
-			<td>999,000,000</td>
-			<td>999,000,000</td>
+			<td class="money">999,000,000,000</td>
 			<td>
 				<button class="btn btn-success" data-toggle="modal" data-target="#hd000"><i class="fa fa-eye"></i></button>
 			</td>
@@ -42,7 +40,7 @@
 			$lamtron = ( ($thanhtien/1000-round($thanhtien/1000)>0)?(round($thanhtien/1000)+1):(round($thanhtien/1000)) )*1000;
 			@endphp
 			<td>
-				<input type="checkbox" value="#HĐ 00{{ $i }}">
+				<input class="checkbox" type="checkbox" value="#HĐ 00{{ $i }}">
 			</td>
 			<td>#HĐ 00{{ $i }}</td>
 			<td>
@@ -59,7 +57,6 @@
 			<td>{{ $thuesuat }}</td>
 			<td>{{ $chietkhau }}</td>
 			<td>{{ number_format($thanhtien) }}</td>
-			<td class="lamtron">{{ number_format($lamtron) }}</td>
 			<td>
 				<button class="btn btn-success" data-toggle="modal" data-target="#hd00{{ $i }}"><i class="fa fa-eye"></i></button>
 			</td>
@@ -94,14 +91,3 @@
 	</div>
 </div>
 @endfor
-
-<script>
-	$('#invoice-check').on('change', function () {
-		if (this.checked) {
-			var sure = confirm("Are you sure you want to uncheck it?");
-			var current = $('#total').val();
-			var add = $(this).parents(tr).find('td.lamtron').val();
-			$('#total').val(current+add);
-		}
-	});
-</script>

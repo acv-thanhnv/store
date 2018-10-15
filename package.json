@@ -21,7 +21,9 @@
     },
     "dependencies": {
         "gentelella": "^1.4.0",
+        "laravel-echo": "^1.4.0",
         "node-sass": "^4.9.3",
+        "pusher-js": "^4.3.1",
         "vue-axios": "^2.1.2",
         "vue-router": "^3.0.1"
     }
