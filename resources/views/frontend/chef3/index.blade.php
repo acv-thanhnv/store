@@ -45,40 +45,6 @@
 		
 	</div>
 
-	<script>
-		$(document).ready(function(){
-			$("#header-left a").click(function(){
-				$(this).tab('show');
-			});
-		});
-	</script>
-
-	<script>
-		function searchFor() {
-			var input, filter, table, tr, td, i, cl=false;
-			input = document.getElementById("search");
-			filter = input.value.toUpperCase();
-			cl = filter?true:false;
-			table = document.getElementById("cho-cung-ung");
-			tr = table.getElementsByTagName("tr");
-			for (i = 0; i < tr.length; i++) {
-				td = tr[i].getElementsByTagName("td")[1];
-				if (td) {
-					if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-						tr[i].style.display = "";
-					} else {
-						tr[i].style.display = "none";
-					}
-				}   
-			}
-			if (!cl) {
-				$('.t-header-child').nextUntil('.t-header').slideToggle(0, function(){});
-			}
-		}
-	</script>
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
-
 </div>
 
 </div>
@@ -86,5 +52,53 @@
 @section('javascript')
 <script type="text/javascript">
 	//js here
+	$(document).ready(function(){
+		$("#header-left a").click(function(){
+			$(this).tab('show');
+		});
+	});
+
+	function searchFor() {
+		var input, filter, table, tr, td, i, cl=false;
+		input = document.getElementById("search");
+		filter = input.value.toUpperCase();
+		cl = filter?true:false;
+		table = document.getElementById("cho-cung-ung");
+		tr = table.getElementsByTagName("tr");
+		for (i = 0; i < tr.length; i++) {
+			td = tr[i].getElementsByTagName("td")[1];
+			if (td) {
+				if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				} else {
+					tr[i].style.display = "none";
+				}
+			}   
+		}
+		if (!cl) {
+			$('.t-header-child').nextUntil('.t-header').slideToggle(0, function(){});
+		}
+	}
+
+	$('tr.t-header').nextUntil('tr.t-header').slideToggle(0, function(){
+
+	});
+	$('.t-header-collapse').click(function(){
+		$(this).find('span:first-child').text(function(_, value){return value=='-'?'+':'-'});
+		$(this).parents('tr').nextUntil('tr.t-header').slideToggle(100, function(){
+
+		});
+	});
+
+	$('tr.t-header2').nextUntil('tr.t-header2').slideToggle(0, function(){
+
+	});
+	$('.t-header2-collapse').click(function(){
+		$(this).find('span:first-child').text(function(_, value){return value=='-'?'+':'-'});
+		$(this).parents('tr').nextUntil('tr.t-header2').slideToggle(100, function(){
+
+		});
+	});
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 @endsection

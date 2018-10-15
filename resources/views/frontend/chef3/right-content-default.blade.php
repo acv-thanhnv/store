@@ -27,13 +27,13 @@
 		</tr>
 		<tr class="t-header-child">
 			<th style="width: 25%">Tên món</th>
-			<th style="width: 15%">Số lượng</th>
+			<th style="width: 15%">SL</th>
 			<th style="width: 40%">Trạng thái</th>
 			<th style="width: 20%"></th>
 		</tr>
 		@for ($j = 1; $j < 5; $j++)
 		<tr>
-			<td>Lorem Ipsum is simply dummy text of the printing and typesetting industry</td>
+			<td class="food food-right">Lorem Ipsum is simply dummy text of the printing and typesetting industry</td>
 			@php
 			$danau = rand(1,99);
 			$dangnau = rand(1,99);
@@ -55,16 +55,3 @@
 	</tbody>
 
 </table>
-
-<script src="http://store.dev/js/lib/jquery-3.3.1.min.js"></script>
-<script>
-	$('tr.t-header').nextUntil('tr.t-header').slideToggle(0, function(){
-
-	});
-	$('.t-header-collapse').click(function(){
-		$(this).find('span:first-child').text(function(_, value){return value=='-'?'+':'-'});
-		$(this).parents('tr').nextUntil('tr.t-header').slideToggle(100, function(){
-
-		});
-	});
-</script>
