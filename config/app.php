@@ -196,6 +196,10 @@ return [
          */
         App\Frontend\Providers\RouteServiceProvider::class,
         /**
+         * Manager
+         */
+        App\Manager\Providers\RouteServiceProvider::class,
+        /**
          * ImageResize
          */
         Intervention\Image\ImageServiceProvider::class,
