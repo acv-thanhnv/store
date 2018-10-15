@@ -1,8 +1,7 @@
 <div class="row">
 	<div class="col-md-12 w-100">
 		<button class="btn btn-danger btn-lg">Mã đơn:
-			<span class="badge badge-secondary">001</span>
-			<span class="badge badge-secondary">008</span>
+			<center><span id="invoice-id" class="badge badge-secondary"></span></center>
 		</button>
 		<!-- <button class="btn-group-cashier btn btn-danger btn-lg">Tổng tiền:
 			<span class="badge badge-secondary">100,000,000</span>
@@ -14,16 +13,19 @@
 			<span class="badge badge-secondary">5%</span>
 		</button> -->
 		<br>
+		<br>
+		<center>
+			<textarea name="" id="total" rows="9"></textarea>
+			<br>
+			<!-- <img src="/frontend/img/maid.png" style="height: 90%;width:90%" alt=""> -->
+		</center>
+		<br>
 		<button class="btn-group-cashier btn btn-primary btn-lg">
 			Thanh toán:
 			<br>
-			<span id="total">
-				999,000,000
-			</span>
+			<span id="payment-right"></span>
 		</button>
-		<center>
-			<img src="https://png2.kisspng.com/20180330/ehq/kisspng-miss-kobayashi-s-dragon-maid-chibi-anime-maid-5abdf71c8f5796.0766996015223990045871.png" style="height: 50%;width:50%" alt="">
-		</center>
+		<br>
 		<button class="btn-group-cashier btn btn-danger btn-lg">
 			In hóa đơn
 		</button>

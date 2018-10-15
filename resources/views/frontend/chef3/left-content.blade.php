@@ -10,7 +10,7 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>Lorem Ipsum is simply dummy text of the printing</td>
+			<td class="food food-left"><span>Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing</span></td>
 			<td>#HĐ 001</td>
 			<td>1</td>
 			<td>4</td>

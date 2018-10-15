@@ -41,15 +41,3 @@
 	</tbody>
 
 </table>
-
-<script>
-	$('tr.t-header2').nextUntil('tr.t-header2').slideToggle(0, function(){
-
-	});
-	$('.t-header2-collapse').click(function(){
-		$(this).find('span:first-child').text(function(_, value){return value=='-'?'+':'-'});
-		$(this).parents('tr').nextUntil('tr.t-header2').slideToggle(100, function(){
-
-		});
-	});
-</script>

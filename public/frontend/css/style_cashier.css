@@ -112,7 +112,7 @@ tr.t-header-child > th, tr.t-header2-child > th {
 
 .md-form > input {
   height: 41px;
-  width: 669px; }
+  width: 670px; }
 
 table, th, tr, td {
   text-align: center; }
@@ -136,7 +136,10 @@ table, th, tr, td {
     width: 100% !important; }
 
   .btn-group-cashier {
-    margin-top: 8px !important; } }
+    margin-top: 8px !important; }
+
+  .badge {
+    max-width: 210px !important; } }
 .btn-default, .red-blue-table, .red-blue-table > thead > tr, .red-blue-table > tbody > tr, .nav-tabs > li > a, .md-form > input, .navbar,
 .btn-primary,
 .btn-success,
@@ -164,6 +167,43 @@ table, th, tr, td {
 .w-100 button {
   width: 100% !important;
   margin: 4px; }
+
+td.invoice, td.money, td.food, .badge {
+  display: table-cell;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+td.invoice, td.money, td.food {
+  max-width: 100px; }
+
+.badge {
+  max-width: 275px; }
+
+td.invoice:hover, td.money:hover, td.food:hover, .badge:hover {
+  white-space: normal; }
+
+textarea {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  margin-left: 5px; }
+
+input[type=checkbox] {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2);
+  /* IE */
+  -moz-transform: scale(2);
+  /* FF */
+  -webkit-transform: scale(2);
+  /* Safari and Chrome */
+  -o-transform: scale(2);
+  /* Opera */
+  padding: 10px; }
+
+td.ta-right {
+  text-align: left; }
 
 .wraper-left {
   padding: 0px; }

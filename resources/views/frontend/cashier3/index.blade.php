@@ -39,15 +39,20 @@
 
 </div>
 
-<script>
+</div>
+
+</div>
+@endsection
+@section('javascript')
+
+<script type="text/javascript">
+	//js here
 	$(document).ready(function(){
 		$("#header-left a").click(function(){
 			$(this).tab('show');
 		});
 	});
-</script>
 
-<script>
 	function searchFor() {
 		var input, filter, table, tr, td, i, cl=false;
 		input = document.getElementById("search");
@@ -69,16 +74,47 @@
 			$('.t-header-child').nextUntil('.t-header').slideToggle(0, function(){});
 		}
 	}
+
+</script>
+
+<script>
+	$(document).ready(function(){
+
+    // code to read selected table row cell data (values).
+    $("#thu-ngan").on('click','.checkbox',function(){
+
+    	var isChecked = $(this).prop('checked');
+
+    	var currentTotal = $("#payment-right").text();
+    	var currentInvoices = $("#invoice-id").text();
+    	var currentRow=$(this).closest("tr");
+
+    	if (currentInvoices) var invoices = currentInvoices.split(",");
+    	else var invoices = [];
+
+    	var col1=currentRow.find("td:eq(1)").text();
+    	var col2=currentRow.find("td:eq(6)").text();
+    	var data=col1+"\n"+col2+"\n";
+
+    	if (isChecked) {
+    		invoices.push(col1);
+    		if (!currentTotal) currentTotal=parseInt(col2.replace(/,/g, ''));
+    		else currentTotal = parseInt(currentTotal.replace(/,/g, '')) +
+            parseInt(col2.replace(/,/g, ''));
+
+    	} else {
+    		var index = invoices.indexOf(col1);
+    		if (index > -1) {
+    			invoices.splice( index, 1 );
+    		}
+    		currentTotal = parseInt(currentTotal.split(',').join('')) -
+            parseInt(col2.split(',').join(''));
+    	}
+    	$("#invoice-id").text(invoices.toString());
+    	$("#payment-right").text(currentTotal.toLocaleString('us'));
+    });
+});
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
-
-</div>
-
-</div>
-@endsection
-@section('javascript')
-<script type="text/javascript">
-	//js here
-</script>
 @endsection
