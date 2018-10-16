@@ -25,7 +25,7 @@ class FoodOrderController extends Controller
     {  
         return view('frontend.foodorder.index',["storeId" => $storeId]);
     }
-    public function template()
+    public function getOrder()
     {
         return view("frontend.Food_Order.index");
     }

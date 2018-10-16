@@ -88,7 +88,8 @@
 
 #search {
   padding: 0.6rem 2.75rem 0.6rem  0.5rem;
-  font-family: Arial, FontAwesome; }
+  font-family: Arial, FontAwesome;
+  opacity: 0.8; }
 
 .pac-container {
   top: 55px !important; }

@@ -2,6 +2,8 @@
 
 namespace App\Frontend\Http\Controllers;
 use App\Api\V1\Services\Production\FoodService;
+use App\Core\Common\StorageConst;
+use App\Core\Common\StorageDisk;
 use App\Core\Dao\SDB;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
@@ -36,6 +38,26 @@ class HomeController extends Controller
     public function test(Request $request)
     {
         return view('frontend.testorder');
+    }
+    public function ClosestStore(Request $request)
+    {
+        $diskLocalName = "public";
+        $arrStore = SDB::table("store_store")->get();
+        $arrClosest = Array();
+        foreach($arrStore as $obj){
+            $distance = distance($obj->lat,$obj->lng,$request->lat,$request->lng,'M');
+            if($distance<=5000){//check distance between now with other store
+                //check avatar
+                if($obj->avatar==NULL){
+                    $obj->src = url('/')."/common_images/no-store.png";
+                }else{
+                    $obj->src = CommonHelper::getImageUrl($obj->avatar);
+                }
+                $obj->distance = $distance;
+                $arrClosest[]=[$obj];
+            }
+        }
+        return response()->json(["arrClosest" => $arrClosest]);
     }
     public function Map()
     {
@@ -73,5 +95,20 @@ class HomeController extends Controller
     public function Contact()
     {
         return view("frontend.contact");
+    }
+}
+function distance($lat1, $lon1, $lat2, $lon2, $unit) {
+
+    $theta = $lon1 - $lon2;
+    $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+    $dist = acos($dist);
+    $dist = rad2deg($dist);
+    $miles = $dist * 60 * 1.1515;
+    $unit = strtoupper($unit);
+
+    if ($unit == "K") {
+        return ($miles * 1.609344);
+    } else {
+        return $miles*1.609344*1000;
     }
 }

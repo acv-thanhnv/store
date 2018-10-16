@@ -5,7 +5,7 @@
 @section("content")
  <!-- ****** Home Area Start ****** -->
 <section class="content-map">
-	<div class="col-md-7 col-10 col-sm-10 search-location">
+	<div class="col-md-5 col-10 col-sm-10 search-location">
 		<input type="text" autofocus="" name="name" class="form-control" id="search"
 		placeholder="&#xF002; Search locations...">
 		<i class="fa fa-times-circle-o clear-textbox dis-none"></i>
@@ -25,43 +25,9 @@
  	</div>
  	<section class="archive-area section_padding_80">
  		<div class="container">
- 			<div class="row">
+ 			<div class="row closest-res">
 
  				<!-- Single Post -->
- 				@for($i=1;$i< 12;$i++)
- 				<div class="col-12 col-sm-6 col-md-6 col-lg-4 res-item">
- 					<div class="block2" data-wow-delay="0.1s">
-						<div class="block2-pic hov-img0 single-post wow fadeInUp">
-							<a href="template" target="blank">
-							<img src="frontend/Customer/images/store/r{{$i}}.jpg" alt="IMG-PRODUCT" class="res-images">
-							</a>
-						</div>
-
-						<div class="res-detail">
-							<div class="post-comment-share-area d-flex">
-                                    <!-- Post Favourite -->
-                                    <div class="post-favourite">
-                                        <a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i> 10</a>
-                                    </div>
-                                    <!-- Post Comments -->
-                                    <div class="post-comments">
-                                        <a href="#"><i class="fa fa-comment-o" aria-hidden="true"></i> 12</a>
-                                    </div>
-                                    <!-- Post Share -->
-                                    <div class="post-share">
-                                        <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
-                                    </div>
-                            </div>
-                            <div class="res-des">
-                            	<a href="template" target="blank">
-                            	<span class="res-name">Gem's Restaurant</span>
-                            	<span class="res-address">60B Dinh Cong Ha, Hoang Mai, Ha Noi</span>
-                            	</a>
-                            </div>
-						</div>
-					</div>
- 				</div>
- 				@endfor
 				<!-- Pagination -->
  				<div class="col-12">
  					<div class="pagination-area d-sm-flex mt-15">
@@ -89,6 +55,41 @@
 </section>
  <!-- ****** Home Area End ****** -->
 
+ <!-- ****** Closest Template ****** -->
+ <div id="closest-template" style="display: none">
+ 	<div class="col-12 col-sm-6 col-md-6 col-lg-4 res-item">
+ 		<div class="block2" data-wow-delay="0.1s">
+ 			<div class="block2-pic hov-img0 single-post wow fadeInUp">
+ 				<a href="" target="blank" class="res-link">
+ 					<img alt="IMG-PRODUCT" class="res-images">
+ 				</a>
+ 			</div>
+
+ 			<div class="res-detail">
+ 				<div class="post-comment-share-area d-flex">
+ 					<!-- Post Favourite -->
+ 					<div class="post-favourite">
+ 						<a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i> 10</a>
+ 					</div>
+ 					<!-- Post Comments -->
+ 					<div class="post-comments">
+ 						<a href="#"><i class="fa fa-comment-o" aria-hidden="true"></i> 12</a>
+ 					</div>
+ 					<!-- Post Share -->
+ 					<div class="post-share">
+ 						<a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
+ 					</div>
+ 				</div>
+ 				<div class="res-des">
+ 					<a href="template" target="blank">
+ 						<span class="res-name">Gem's Restaurant</span>
+ 						<span class="res-address">60B Dinh Cong Ha, Hoang Mai, Ha Noi</span>
+ 					</a>
+ 				</div>
+ 			</div>
+ 		</div>
+ 	</div>
+ </div>
  <!-- ****** Map Template ****** -->
 <div style="display: none">
 	<div id="info_window" class="row">
@@ -105,6 +106,38 @@
 
 @endsection
 @push("js")
+<!--Custom JS-->
+<script type="text/javascript">
+	$(document).ready(function(){
+		//get closest res
+		CurrentPosition(function(center){
+			$.ajax({
+				type: 'GET',
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url: "{{route('ClosestStore')}}?lat="+center.lat+"&&lng="+center.lng,
+				success: function (result) {
+					buildList(result);
+				}
+			});
+		});
+	});
+	//function build list
+	function buildList(data)
+	{
+		var c_temp = $(".closest-res");
+		$(c_temp).empty();
+		data.arrClosest.forEach(function(obj) {
+			var row = $("#closest-template").contents().clone();
+			$(row).find(".res-link").attr("href","{{route('Order')}}?storeId="+obj[0].id);
+			$(row).find(".res-images").attr("src",obj[0].src);
+			$(row).find(".res-name").text(obj[0].name);
+			$(row).find(".res-address").text(obj[0].address);
+		 	$(c_temp).append($(row));
+		});
+	}	
+</script>
 <!-- Map JS -->
 <script type="text/javascript">
     var locations =<?php echo $map?>;
@@ -131,12 +164,103 @@
                 zoomControl:true,
                 mapTypeControl: false,
                 center: center,
-                styles: [{
+                styles: [
+                	{
                     "featureType": "landscape",
                     "elementType": "labels",
                     "stylers": [
                     { "visibility": "off" }
-                    ]}
+                    ]},
+                    {
+                    	"featureType": "poi.attraction",
+                    	"elementType": "labels.icon",
+                    	"stylers": [
+                    	{
+                    		"visibility": "off"
+                    	}
+                    	]
+                    },
+                    {
+                    	"featureType": "poi.business",
+                    	"elementType": "labels.icon",
+                    	"stylers": [
+                    	{
+                    		"visibility": "off"
+                    	}
+                    	]
+                    },
+                    {
+                    	"featureType": "poi.government",
+                    	"elementType": "labels.icon",
+                    	"stylers": [
+                    	{
+                    		"visibility": "off"
+                    	}
+                    	]
+                    },
+                    {
+                    	"featureType": "poi.medical",
+                    	"elementType": "labels.icon",
+                    	"stylers": [
+                    	{
+                    		"visibility": "off"
+                    	}
+                    	]
+                    },
+                    {
+                    	"featureType": "poi.school",
+                    	"elementType": "labels.icon",
+                    	"stylers": [
+                    	{
+                    		"visibility": "off"
+                    	}
+                    	]
+                    },
+                    {
+                    	"featureType": "poi.sports_complex",
+                    	"elementType": "labels.icon",
+                    	"stylers": [
+                    	{
+                    		"visibility": "off"
+                    	}
+                    	]
+                    },
+                    {
+                    	"featureType": "road.highway.controlled_access",
+                    	"elementType": "labels.icon",
+                    	"stylers": [
+                    	{
+                    		"visibility": "off"
+                    	}
+                    	]
+                    },
+                    {
+                    	"featureType": "transit.station.airport",
+                    	"elementType": "labels.icon",
+                    	"stylers": [
+                    	{
+                    		"visibility": "off"
+                    	}
+                    	]
+                    },
+                    {
+                    	"featureType": "transit.station.bus",
+                    	"elementType": "labels.icon",
+                    	"stylers": [
+                    	{
+                    		"visibility": "off"
+                    	}
+                    	]
+                    },
+                    {
+                    	"featureType": "transit.station.rail",
+                    	"elementType": "labels.icon",
+                    	"stylers": [
+                    	{
+                    		"visibility": "off"
+                    	}
+                    	]
+                    }
                     ]
                 });
             currentPosition = new google.maps.Marker({
@@ -229,7 +353,7 @@
        $(content).find(".address").text(location["address"]);
        $(content).find(".description").text(location["description"]);
        $(content).find(".image").attr('src',location["src"]);
-       $(content).find(".link").attr('href',"{{route('foodorder')}}/"+location["id"]);
+       $(content).find(".link").attr('href',"{{route('Order')}}/"+location["id"]);
        //set timeout 
        window.setTimeout(function(){
           //create marker
