@@ -46,14 +46,14 @@ class HomeController extends Controller
         $arrClosest = Array();
         foreach($arrStore as $obj){
             $distance = distance($obj->lat,$obj->lng,$request->lat,$request->lng,'M');
-            if($distance<=5000){//check distance between now with other store
+            if($distance<=1000){//check distance between now with other store
                 //check avatar
                 if($obj->avatar==NULL){
                     $obj->src = url('/')."/common_images/no-store.png";
                 }else{
                     $obj->src = CommonHelper::getImageUrl($obj->avatar);
                 }
-                $obj->distance = $distance;
+                $obj->distance = (int) $distance;
                 $arrClosest[]=[$obj];
             }
         }
@@ -74,7 +74,7 @@ class HomeController extends Controller
     }
     public function Home()
     {
-        $store = SDB::table("store_store")->orderBy("id","desc")->get();
+        $store = SDB::table("store_store")->select()->get();
         foreach ($store as $obj) {
             if($obj->avatar==NULL){
                  $obj->src = url('/')."/common_images/no-store.png";

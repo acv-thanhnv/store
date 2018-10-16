@@ -24,72 +24,109 @@
         </div>
  	</div>
  	<section class="archive-area section_padding_80">
- 		<div class="container">
- 			<div class="row closest-res">
+ 		<div class="container-fluid">
+            <!-- Filter-->
+            <div class="row res-filter">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row res-filter-body">
+                                <div class="col-md-4 col-sm-4 col-lg-3 col-12">
+                                    <input type="text" name="" class="form-control" placeholder="Restaurant Name...">
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-lg-3 col-12">
+                                    <input type="text" name="" class="form-control" placeholder="Radius...">
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-lg-3 col-12">
+                                    <select class="form-control" >
+                                        <option selected>--Unit--</option>
+                                        <option>Km</option>
+                                        <option>Meters</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12 col-sm-12 filter-search col-lg-1 col-12">
+                                    <button type="button" class="btn btn-dark">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    		<div class="row closest-res">
 
- 				<!-- Single Post -->
-				<!-- Pagination -->
- 				<div class="col-12">
- 					<div class="pagination-area d-sm-flex mt-15">
- 						<nav aria-label="#">
- 							<ul class="pagination">
- 								<li class="page-item active">
- 									<a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
- 								</li>
- 								<li class="page-item"><a class="page-link" href="#">2</a></li>
- 								<li class="page-item"><a class="page-link" href="#">3</a></li>
- 								<li class="page-item">
- 									<a class="page-link" href="#">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
- 								</li>
- 							</ul>
- 						</nav>
- 						<div class="page-status">
- 							<p>Page 1 of 60 results</p>
- 						</div>
- 					</div>
- 				</div>
+    			<!-- Single Post -->
 
- 			</div>
+    		</div>
+            <!-- Pagination -->
+            <div class="col-12">
+                <div class="pagination-area d-sm-flex mt-15">
+                    <nav aria-label="#">
+                        <ul class="pagination">
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="page-status">
+                        <p>Page 1 of 60 results</p>
+                    </div>
+                </div>
+            </div>
  		</div>
  	</section>
 </section>
  <!-- ****** Home Area End ****** -->
 
- <!-- ****** Closest Template ****** -->
- <div id="closest-template" style="display: none">
- 	<div class="col-12 col-sm-6 col-md-6 col-lg-4 res-item">
- 		<div class="block2" data-wow-delay="0.1s">
- 			<div class="block2-pic hov-img0 single-post wow fadeInUp">
- 				<a href="" target="blank" class="res-link">
- 					<img alt="IMG-PRODUCT" class="res-images">
- 				</a>
- 			</div>
+<!-- ****** Closest Template ****** -->
+<div id="closest-template" style="display: none">
+	<div class="col-12 col-sm-6 col-md-6 col-lg-3 res-item">
+		<div class="block2" data-wow-delay="0.1s">
+        <div class="block2-pic hov-img0 single-post wow fadeInUp">
+				<a href="" target="blank" class="res-link">
+					<img alt="IMG-PRODUCT" class="res-images">
+				</a>
+			</div>
 
- 			<div class="res-detail">
- 				<div class="post-comment-share-area d-flex">
- 					<!-- Post Favourite -->
- 					<div class="post-favourite">
- 						<a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i> 10</a>
- 					</div>
- 					<!-- Post Comments -->
- 					<div class="post-comments">
- 						<a href="#"><i class="fa fa-comment-o" aria-hidden="true"></i> 12</a>
- 					</div>
- 					<!-- Post Share -->
- 					<div class="post-share">
- 						<a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
- 					</div>
- 				</div>
- 				<div class="res-des">
- 					<a href="template" target="blank">
- 						<span class="res-name">Gem's Restaurant</span>
- 						<span class="res-address">60B Dinh Cong Ha, Hoang Mai, Ha Noi</span>
- 					</a>
- 				</div>
- 			</div>
- 		</div>
- 	</div>
- </div>
+			<div class="res-detail">
+                <!-- Post Distance -->
+                <div class="post-meta d-flex">
+                    <div class="post-author-date-area d-flex">
+                        <!-- Post Author -->
+                        <div class="post-distance">
+                            <a href="#"></a>
+                        </div>
+                    </div>
+                    <!-- Post Comment & Share Area -->
+                    <div class="post-comment-share-area d-flex">
+                        <!-- Post Favourite -->
+                        <div class="post-favourite">
+                            <a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i> 10</a>
+                        </div>
+                        <!-- Post Comments -->
+                        <div class="post-comments">
+                            <a href="#"><i class="fa fa-comment-o" aria-hidden="true"></i> 12</a>
+                        </div>
+                        <!-- Post Share -->
+                        <div class="post-share">
+                            <a href="#"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </div>
+				<div class="res-des">
+					<a href="template" target="blank">
+						<span class="res-name">Gem's Restaurant</span>
+						<span class="res-address">60B Dinh Cong Ha, Hoang Mai, Ha Noi</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
  <!-- ****** Map Template ****** -->
 <div style="display: none">
 	<div id="info_window" class="row">
@@ -131,6 +168,7 @@
 		data.arrClosest.forEach(function(obj) {
 			var row = $("#closest-template").contents().clone();
 			$(row).find(".res-link").attr("href","{{route('Order')}}?storeId="+obj[0].id);
+            $(row).find(".post-distance a").text(obj[0].distance);
 			$(row).find(".res-images").attr("src",obj[0].src);
 			$(row).find(".res-name").text(obj[0].name);
 			$(row).find(".res-address").text(obj[0].address);

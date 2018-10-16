@@ -1,3 +1,7 @@
+@media only screen and (max-width: 992px) {
+  .res-filter .filter-search {
+    text-align: center;
+    padding-top: 10px; } }
 .breadcumb-area {
   height: 130px;
   margin-top: 20px; }
@@ -60,6 +64,9 @@
   justify-content: flex-end;
   padding-right: 5px; }
 
+.res-detail .res-distance {
+  display: flex; }
+
 .res-item {
   padding-top: 10px; }
 
@@ -96,5 +103,12 @@
 
 .dis-none {
   display: none !important; }
+
+.res-filter .card {
+  background: red; }
+.res-filter .res-filter-body {
+  display: flex;
+  justify-content: center;
+  align-items: center; }
 
 /*# sourceMappingURL=cus-home.css.map */
