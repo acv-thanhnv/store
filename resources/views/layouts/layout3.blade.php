@@ -24,7 +24,6 @@
     <script src="{{asset('js/lib/jquery-3.3.1.min.js')}}"></script>
     <script src="{{asset('js/lib/bootstrap.min.js')}}"></script>
     <script src="{{asset('backend/template1/modal/js/iziModal.min.js')}}"></script>
-    <script src="{{asset('frontend/js/order.js')}}"></script>
     @yield('javascript')
 </body>
 </html>

@@ -14,7 +14,7 @@
 				</li>
 				<li><a href="#menu" data-toggle="tab">Menu</a></li>
 
-				<li class="col-md-7 col-sm-6" ">
+				<li class="col-md-7 col-sm-6">
 					<form action="#" method="#" role="search">
 						<div class="input-group">
 							<input class="form-control" placeholder="Search . . ." name="srch-term" id="ed-srch-term" type="text">
@@ -115,7 +115,7 @@
 
 	</div>
 	<div class="content-right">
-		@include('frontend.order3.entities')
+		@include('frontend.order-manager.entities')
 	</div>
 	<div class="footer-right">
 		<table style="width:100%;">
@@ -138,11 +138,12 @@
 			</tbody>
 		</table>
 	</div>
-	@include('frontend.order3.table_manager')
+	@include('frontend.order-manager.table_manager')
 </div>
 </div>
 @endsection
 @section('javascript')
+	<script src="{{asset('frontend/js/order.js')}}"></script>
 <script type="text/javascript">
 	//js here
 </script>
