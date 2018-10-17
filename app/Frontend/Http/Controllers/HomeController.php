@@ -5,6 +5,7 @@ use App\Api\V1\Services\Production\FoodService;
 use App\Core\Common\StorageConst;
 use App\Core\Common\StorageDisk;
 use App\Core\Dao\SDB;
+use App\Frontend\Model\StoreModel;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
@@ -41,36 +42,30 @@ class HomeController extends Controller
     }
     public function ClosestStore(Request $request)
     {
-        $diskLocalName = "public";
-        $arrStore = SDB::table("store_store")->get();
-        $arrClosest = Array();
-        foreach($arrStore as $obj){
-            $distance = distance($obj->lat,$obj->lng,$request->lat,$request->lng,'M');
-            if($distance<=1000){//check distance between now with other store
-                //check avatar
-                if($obj->avatar==NULL){
-                    $obj->src = url('/')."/common_images/no-store.png";
-                }else{
-                    $obj->src = CommonHelper::getImageUrl($obj->avatar);
-                }
-                $obj->distance = (int) $distance;
-                $arrClosest[]=[$obj];
-            }
+        $page = $request->page;
+        if($page<1){
+            $page = 1;
         }
-        return response()->json(["arrClosest" => $arrClosest]);
-    }
-    public function Map()
-    {
-        $map = SDB::table("store_store")->get();
-        foreach ($map as $obj) {
+        $limit = 5;
+        $start = ($limit * $page) - $limit;
+        $diskLocalName = StorageDisk::diskLocalName;
+        $arrStore = SDB::select(SDB::raw("call get_distance($request->lat,$request->lng,$start,$limit)"));
+        $total = count($arrStore);
+        foreach($arrStore as $obj){
+            //check avatar
             if($obj->avatar==NULL){
-                 $obj->src = url('/')."/common_images/no-store.png";
+                $obj->src = url('/')."/common_images/no-store.png";
             }else{
                 $obj->src = CommonHelper::getImageUrl($obj->avatar);
             }
+            //custom distance
+            if($obj->distance_in_km<1){
+                $obj->distance_in_km = (sprintf('%.1f',$obj->distance_in_km)*1000)." Meters";
+            }else{
+                $obj->distance_in_km = sprintf('%.1f',$obj->distance_in_km) ." Km";
+            }
         }
-        $map = json_encode($map);
-        return view("frontend.mapApi",["map" => $map]); 
+        return response()->json(["arrStore" => $arrStore,"total" => $total]);
     }
     public function Home()
     {
@@ -97,6 +92,8 @@ class HomeController extends Controller
         return view("frontend.contact");
     }
 }
+
+//calculate distance between two point
 function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 
     $theta = $lon1 - $lon2;

@@ -31,17 +31,21 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row res-filter-body">
-                                <div class="col-md-4 col-sm-4 col-lg-3 col-12">
-                                    <input type="text" name="" class="form-control" placeholder="Restaurant Name...">
+                                <div class="col-md-2 col-sm-4 col-lg-2 col-12">
+                                    <select class="form-control" id="search-by">
+                                        <option value="0">--Search by--</option>
+                                        <option value="name">Restaurant</option>
+                                        <option value="radius">Radius</option>
+                                    </select>
                                 </div>
-                                <div class="col-md-4 col-sm-4 col-lg-3 col-12">
-                                    <input type="text" name="" class="form-control" placeholder="Radius...">
+                                <div class="col-md-4 col-sm-4 col-lg-4 col-12 input-search">
+                                    <input disabled name="search-key" class="form-control">
+                                    <i class="fa fa-times-circle-o clear-textbox-closest dis-none"></i>
                                 </div>
-                                <div class="col-md-4 col-sm-4 col-lg-3 col-12">
-                                    <select class="form-control" >
-                                        <option selected>--Unit--</option>
-                                        <option>Km</option>
-                                        <option>Meters</option>
+                                <div class="col-md-4 col-sm-4 col-lg-1 col-12 radius-select dis-none">
+                                    <select class="form-control" id="unit" >
+                                        <option value="km">Km</option>
+                                        <option value="m">Meters</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12 col-sm-12 filter-search col-lg-1 col-12">
@@ -59,22 +63,7 @@
     		</div>
             <!-- Pagination -->
             <div class="col-12">
-                <div class="pagination-area d-sm-flex mt-15">
-                    <nav aria-label="#">
-                        <ul class="pagination">
-                            <li class="page-item active">
-                                <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="page-status">
-                        <p>Page 1 of 60 results</p>
-                    </div>
+                <div id="pagination">
                 </div>
             </div>
  		</div>
@@ -148,33 +137,129 @@
 	$(document).ready(function(){
 		//get closest res
 		CurrentPosition(function(center){
+            //get data when load page
 			$.ajax({
 				type: 'GET',
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url: "{{route('ClosestStore')}}?lat="+center.lat+"&&lng="+center.lng,
+				url: "{{route('ClosestStore')}}?lat="+center.lat+"&&lng="+center.lng+"&&page=1",
 				success: function (result) {
-					buildList(result);
+                    console.log(result);
+					buildList(result.arrStore);
 				}
 			});
+            //load more
+            loadMore(center.lat,center.lng);
 		});
+        //display filter search restaurants
+        $(document).on("change","#search-by",function(){
+            var type = $(this).val();
+            if(type!=="0"){
+                $(".input-search input").prop('disabled', '');
+                if(type === "radius"){
+                    $(".radius-select").removeClass('dis-none');
+                    $(".input-search input").attr('placeholder', '\uf1d9 Search radius...');
+                }else{
+                    $(".radius-select").addClass('dis-none');
+                    $(".input-search input").attr('placeholder', '\uf0f4 Search restaurants...');
+                }
+            }else{
+                $(".input-search input").attr("placeholder","");
+                $(".input-search input").val("");
+                $(".input-search input").prop('disabled', 'disabled');
+            }
+        });
 	});
+    //show clear text-box content if content more than 1 word
+    $("body").on("keyup",".input-search input",function(){
+        var length = $(this).val().length;
+        if(length>0){
+            $(this).siblings("i").removeClass('dis-none');
+        }else{
+            $(this).siblings("i").addClass("dis-none");
+        }
+    })
+    //clear content of input search
+    $("body").on("click",".input-search .clear-textbox-closest",function(){
+        console.log(1);
+        $("input[name='search-key']").val("");
+        $(this).addClass("dis-none");
+        $("input[name='search-key']").focus();
+    })
 	//function build list
 	function buildList(data)
 	{
 		var c_temp = $(".closest-res");
 		$(c_temp).empty();
-		data.arrClosest.forEach(function(obj) {
+		data.forEach(function(obj) {
 			var row = $("#closest-template").contents().clone();
-			$(row).find(".res-link").attr("href","{{route('Order')}}?storeId="+obj[0].id);
-            $(row).find(".post-distance a").text(obj[0].distance);
-			$(row).find(".res-images").attr("src",obj[0].src);
-			$(row).find(".res-name").text(obj[0].name);
-			$(row).find(".res-address").text(obj[0].address);
+			$(row).find(".res-link").attr("href","{{route('Order')}}?storeId="+obj.id);
+            $(row).find(".post-distance a").text(obj.distance_in_km);
+			$(row).find(".res-images").attr("src",obj.src);
+			$(row).find(".res-name").text(obj.name);
+			$(row).find(".res-address").text(obj.address);
 		 	$(c_temp).append($(row));
 		});
-	}	
+	}
+    //load more when scroll
+    function loadMore(lat,lng){
+        // Biến dùng kiểm tra nếu đang gửi ajax thì ko thực hiện gửi thêm
+        var is_busy = false;
+        // Biến lưu trữ trang hiện tại
+        var page = 1;
+        // Biến lưu trữ rạng thái phân trang 
+        var stopped = false;
+        $(document).ready(function()
+        {    
+            // Khi kéo scroll thì xử lý
+            $(window).scroll(function() 
+            {
+                // ELement hiển thị chữ loadding
+                $loadding = $('#loadding');
+                // ELement hiển thị noi dung
+                $element = $('.tab-content').height();
+                console.log($(window).scrollTop());
+                console.log($element);
+                // Nếu màn hình đang ở dưới cuối thẻ thì thực hiện ajax
+                if($(window).scrollTop()+$(window).height() >= $element) 
+                {
+                    // Nếu đang gửi ajax thì ngưng
+                    if (is_busy == true){
+                        return false;
+                    }
+                    // Nếu hết dữ liệu thì ngưng
+                    if (stopped == true){
+                        return false;
+                    }
+                    // Thiết lập đang gửi ajax
+                    is_busy = true;
+                    // Tăng số trang lên 1
+                    page++;
+                    // Hiển thị loadding
+                    $loadding.removeClass('hidden');
+                    // Gửi Ajax
+                    $.ajax(
+                    {
+                        type        : 'GET',
+                        url         : '{{route("ClosestStore")}}',
+                        data        : {page : page,lat:lat,lng:lng},
+                        success     : function (data)
+                        {
+                            buildList(data.arrStore);
+                        }
+                    })
+                    .always(function()
+                    {
+                        // Sau khi thực hiện xong ajax thì ẩn hidden và cho trạng thái gửi ajax = false
+                        $loadding.addClass('hidden');
+                        is_busy = false;
+                    });
+                    return false;
+                }
+            });
+        });
+    }
 </script>
 <!-- Map JS -->
 <script type="text/javascript">
