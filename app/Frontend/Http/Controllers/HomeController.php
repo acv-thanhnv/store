@@ -2,12 +2,13 @@
 
 namespace App\Frontend\Http\Controllers;
 use App\Api\V1\Services\Production\FoodService;
+use App\Core\Common\CutomerConst;
 use App\Core\Common\StorageConst;
 use App\Core\Common\StorageDisk;
 use App\Core\Dao\SDB;
-use App\Frontend\Model\StoreModel;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
+use App\Frontend\Model\StoreModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,7 +49,8 @@ class HomeController extends Controller
         }
         $limit = 5;
         $start = ($limit * $page) - $limit;
-        $diskLocalName = StorageDisk::diskLocalName;
+        //$diskLocalName = StorageDisk::diskLocalName;
+        $diskLocalName = "public";
         $arrStore = SDB::select(SDB::raw("call get_distance($request->lat,$request->lng,$start,$limit)"));
         $total = count($arrStore);
         foreach($arrStore as $obj){
@@ -58,12 +60,12 @@ class HomeController extends Controller
             }else{
                 $obj->src = CommonHelper::getImageUrl($obj->avatar);
             }
-            //custom distance
-            if($obj->distance_in_km<1){
-                $obj->distance_in_km = (sprintf('%.1f',$obj->distance_in_km)*1000)." Meters";
-            }else{
-                $obj->distance_in_km = sprintf('%.1f',$obj->distance_in_km) ." Km";
-            }
+            // //custom distance
+            // if($obj->distance_in_km<1){
+            //     $obj->distance_in_km = (sprintf('%.1f',$obj->distance_in_km)*1000)." Meters";
+            // }else{
+            //     $obj->distance_in_km = sprintf('%.1f',$obj->distance_in_km) ." Km";
+            // }
         }
         return response()->json(["arrStore" => $arrStore,"total" => $total]);
     }
@@ -77,8 +79,14 @@ class HomeController extends Controller
                 $obj->src = CommonHelper::getImageUrl($obj->avatar);
             }
         }
+        $limit = CutomerConst::limit;
+        $paginate = SDB::table("store_store")->paginate(5);
         $map = json_encode($store);
-        return view("frontend.index",["map" => $map,"store" => $store]);
+        return view("frontend.index",[
+            "map"      => $map,
+            "store"    => $store,
+            "paginate" => $paginate
+        ]);
     }
     public function Search(Request $request)
     {

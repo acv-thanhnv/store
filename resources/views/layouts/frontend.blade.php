@@ -200,8 +200,8 @@
     <script src="frontend/Customer/js/bootstrap.min.js"></script>
     <!-- All Plugins JS -->
     <script src="frontend/Customer/js/plugins.js"></script>
-    <!-- Pagination JS -->
-    <script src="frontend/Customer/js/pagination.js"></script>
+    <!-- lazyload JS -->
+    <script src="frontend/Customer/js/lazyload.js"></script>
     <!-- Active JS -->
     <script src="frontend/Customer/js/active.js"></script>
     @stack("js")

@@ -59,12 +59,11 @@
     		<div class="row closest-res">
 
     			<!-- Single Post -->
-
+                
     		</div>
             <!-- Pagination -->
             <div class="col-12">
-                <div id="pagination">
-                </div>
+                {{ $paginate->links() }}
             </div>
  		</div>
  	</section>
@@ -204,61 +203,68 @@
 	}
     //load more when scroll
     function loadMore(lat,lng){
+        $('div.closest-res').infiniteScroll({
+          // options
+          path: function() {
+                var pageNumber = $(".page-item a[rel='next'].page-link");
+                return '{{route("ClosestStore")}}?lat='+lat+'&&lng='+lng+'&&page='+2;
+          },
+          append: 'div.closest-res',
+          history: false,
+        });
         // Biến dùng kiểm tra nếu đang gửi ajax thì ko thực hiện gửi thêm
         var is_busy = false;
         // Biến lưu trữ trang hiện tại
         var page = 1;
         // Biến lưu trữ rạng thái phân trang 
         var stopped = false;
-        $(document).ready(function()
-        {    
-            // Khi kéo scroll thì xử lý
-            $(window).scroll(function() 
-            {
-                // ELement hiển thị chữ loadding
-                $loadding = $('#loadding');
-                // ELement hiển thị noi dung
-                $element = $('.tab-content').height();
-                console.log($(window).scrollTop());
-                console.log($element);
-                // Nếu màn hình đang ở dưới cuối thẻ thì thực hiện ajax
-                if($(window).scrollTop()+$(window).height() >= $element) 
-                {
-                    // Nếu đang gửi ajax thì ngưng
-                    if (is_busy == true){
-                        return false;
-                    }
-                    // Nếu hết dữ liệu thì ngưng
-                    if (stopped == true){
-                        return false;
-                    }
-                    // Thiết lập đang gửi ajax
-                    is_busy = true;
-                    // Tăng số trang lên 1
-                    page++;
-                    // Hiển thị loadding
-                    $loadding.removeClass('hidden');
-                    // Gửi Ajax
-                    $.ajax(
-                    {
-                        type        : 'GET',
-                        url         : '{{route("ClosestStore")}}',
-                        data        : {page : page,lat:lat,lng:lng},
-                        success     : function (data)
-                        {
-                            buildList(data.arrStore);
-                        }
-                    })
-                    .always(function()
-                    {
-                        // Sau khi thực hiện xong ajax thì ẩn hidden và cho trạng thái gửi ajax = false
-                        $loadding.addClass('hidden');
-                        is_busy = false;
-                    });
-                    return false;
-                }
-            });
-        });
+        // $(document).ready(function()
+        // {    
+        //     // Khi kéo scroll thì xử lý
+        //     $(window).scroll(function() 
+        //     {
+        //         // ELement hiển thị chữ loadding
+        //         $loadding = $('#loadding');
+        //         // ELement hiển thị noi dung
+        //         $element = $('.tab-content').height();
+        //         // Nếu màn hình đang ở dưới cuối thẻ thì thực hiện ajax
+        //         if($(window).scrollTop()+$(window).height() >= $element) 
+        //         {
+        //             // Nếu đang gửi ajax thì ngưng
+        //             if (is_busy == true){
+        //                 return false;
+        //             }
+        //             // Nếu hết dữ liệu thì ngưng
+        //             if (stopped == true){
+        //                 return false;
+        //             }
+        //             // Thiết lập đang gửi ajax
+        //             is_busy = true;
+        //             // Tăng số trang lên 1
+        //             page++;
+        //             // Hiển thị loadding
+        //             $loadding.removeClass('hidden');
+        //             // Gửi Ajax
+        //             $.ajax(
+        //             {
+        //                 type        : 'GET',
+        //                 url         : '{{route("ClosestStore")}}',
+        //                 data        : {page : page,lat:lat,lng:lng},
+        //                 success     : function (data)
+        //                 {
+        //                     buildList(data.arrStore);
+        //                 }
+        //             })
+        //             .always(function()
+        //             {
+        //                 // Sau khi thực hiện xong ajax thì ẩn hidden và cho trạng thái gửi ajax = false
+        //                 $loadding.addClass('hidden');
+        //                 is_busy = false;
+        //             });
+        //             return false;
+        //         }
+        //     });
+        // });
     }
 </script>
 <!-- Map JS -->

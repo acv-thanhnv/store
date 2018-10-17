@@ -76,6 +76,9 @@ class EntityProperty{
 class StorageDisk{
     const diskLocalName = "public";
 }
+class CutomerConst{
+    const limit = 5;
+}
 class OrderStatusValue{
     const Waiter = 1;
     const Cheft = 2;
