@@ -47,12 +47,20 @@ class HomeController extends Controller
         if($page<1){
             $page = 1;
         }
-        $limit = 5;
+        $limit = CutomerConst::limit;
+        $q_name = $request->q_name;
+        $q_radius = $request->q_radius;
+        if($q_name==null){
+            $q_name = null;
+        }
+        if($q_radius==null){
+            $q_radius = 'null';
+        }
         $start = ($limit * $page) - $limit;
-        //$diskLocalName = StorageDisk::diskLocalName;
-        $diskLocalName = "public";
-        $arrStore = SDB::select(SDB::raw("call get_distance($request->lat,$request->lng,$start,$limit)"));
-        $total = count($arrStore);
+        $diskLocalName = StorageDisk::diskLocalName;
+        $arrStore = SDB::select(SDB::raw("call get_distance($request->lat,$request->lng,$start,$limit,'$q_name',$q_radius)"));
+        $total = count(SDB::select(SDB::raw("call get_distance($request->lat,$request->lng,0,10000000,'$q_name',$q_radius)")));
+        $numberPage = (int) ceil($total/$limit);
         foreach($arrStore as $obj){
             //check avatar
             if($obj->avatar==NULL){
@@ -60,14 +68,14 @@ class HomeController extends Controller
             }else{
                 $obj->src = CommonHelper::getImageUrl($obj->avatar);
             }
-            // //custom distance
-            // if($obj->distance_in_km<1){
-            //     $obj->distance_in_km = (sprintf('%.1f',$obj->distance_in_km)*1000)." Meters";
-            // }else{
-            //     $obj->distance_in_km = sprintf('%.1f',$obj->distance_in_km) ." Km";
-            // }
+            //custom distance
+            if($obj->distance_in_km<1){
+                $obj->distance_in_km = (sprintf('%.1f',$obj->distance_in_km)*1000)." Meters";
+            }else{
+                $obj->distance_in_km = sprintf('%.1f',$obj->distance_in_km) ." Km";
+            }
         }
-        return response()->json(["arrStore" => $arrStore,"total" => $total]);
+        return response()->json(["arrStore" => $arrStore,"numberPage" => $numberPage]);
     }
     public function Home()
     {
@@ -81,7 +89,8 @@ class HomeController extends Controller
         }
         $limit = CutomerConst::limit;
         $paginate = SDB::table("store_store")->paginate(5);
-        $map = json_encode($store);
+        $paginate = json_encode($paginate);
+        $map = json_encode($store); 
         return view("frontend.index",[
             "map"      => $map,
             "store"    => $store,

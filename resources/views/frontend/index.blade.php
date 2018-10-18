@@ -49,7 +49,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-12 col-sm-12 filter-search col-lg-1 col-12">
-                                    <button type="button" class="btn btn-dark">Search</button>
+                                    <button type="button" class="btn btn-dark btn-search">Search</button>
                                 </div>
                             </div>
                         </div>
@@ -57,14 +57,19 @@
                 </div>
             </div>
     		<div class="row closest-res">
-
-    			<!-- Single Post -->
-                
     		</div>
             <!-- Pagination -->
-            <div class="col-12">
-                {{ $paginate->links() }}
+            <div class="col-12 load-more">
+                <div class="page-load-status" style="display: none">
+                    <div class="infinite-scroll-request">
+                      <img src="common_images/loading.gif">
+                    </div>
+                    <p class="infinite-scroll-error">No more pages to load</p>
+                    <p class="infinite-scroll-last">Last page loaded</p>
+                </div>
+                <p class="infinite-scroll-last dis-none">Last page loaded</p>
             </div>
+        </div>
  		</div>
  	</section>
 </section>
@@ -134,22 +139,24 @@
 <!--Custom JS-->
 <script type="text/javascript">
 	$(document).ready(function(){
+        var $scroll;
+        var total = <?php echo $paginate ?>;
 		//get closest res
 		CurrentPosition(function(center){
             //get data when load page
-			$.ajax({
-				type: 'GET',
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url: "{{route('ClosestStore')}}?lat="+center.lat+"&&lng="+center.lng+"&&page=1",
-				success: function (result) {
-                    console.log(result);
-					buildList(result.arrStore);
-				}
-			});
-            //load more
-            loadMore(center.lat,center.lng);
+            $.ajax({
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('ClosestStore')}}?lat="+center.lat+"&&lng="+center.lng+"&&page=1",
+                success: function (result) {
+                    buildList(result.arrStore);
+                }
+            });
+            // search(center.lat,center.lng);
+            loadMore(center.lat,center.lng,'','',total.last_page);
+            search(center.lat,center.lng);
 		});
         //display filter search restaurants
         $(document).on("change","#search-by",function(){
@@ -165,6 +172,7 @@
                 }
             }else{
                 $(".input-search input").attr("placeholder","");
+                $(".radius-select").css("display","none");
                 $(".input-search input").val("");
                 $(".input-search input").prop('disabled', 'disabled');
             }
@@ -181,7 +189,6 @@
     })
     //clear content of input search
     $("body").on("click",".input-search .clear-textbox-closest",function(){
-        console.log(1);
         $("input[name='search-key']").val("");
         $(this).addClass("dis-none");
         $("input[name='search-key']").focus();
@@ -190,7 +197,6 @@
 	function buildList(data)
 	{
 		var c_temp = $(".closest-res");
-		$(c_temp).empty();
 		data.forEach(function(obj) {
 			var row = $("#closest-template").contents().clone();
 			$(row).find(".res-link").attr("href","{{route('Order')}}?storeId="+obj.id);
@@ -202,69 +208,62 @@
 		});
 	}
     //load more when scroll
-    function loadMore(lat,lng){
-        $('div.closest-res').infiniteScroll({
+    function loadMore(lat,lng,q_name,q_radius,total){
+        $scroll = $('.closest-res').infiniteScroll({
           // options
-          path: function() {
-                var pageNumber = $(".page-item a[rel='next'].page-link");
-                return '{{route("ClosestStore")}}?lat='+lat+'&&lng='+lng+'&&page='+2;
-          },
-          append: 'div.closest-res',
-          history: false,
+            status: '.page-load-status',
+            path: function() {
+                var pageNumber = this.pageIndex;
+                if(pageNumber<total){
+                    return '{{route("ClosestStore")}}?lat='+lat+'&&lng='+lng+'&&page='+(pageNumber+1)+'&&q_name='+q_name;
+                }
+            },
+            // load response as flat text
+            responseType: 'text',
+            history:false,
         });
-        // Biến dùng kiểm tra nếu đang gửi ajax thì ko thực hiện gửi thêm
-        var is_busy = false;
-        // Biến lưu trữ trang hiện tại
-        var page = 1;
-        // Biến lưu trữ rạng thái phân trang 
-        var stopped = false;
-        // $(document).ready(function()
-        // {    
-        //     // Khi kéo scroll thì xử lý
-        //     $(window).scroll(function() 
-        //     {
-        //         // ELement hiển thị chữ loadding
-        //         $loadding = $('#loadding');
-        //         // ELement hiển thị noi dung
-        //         $element = $('.tab-content').height();
-        //         // Nếu màn hình đang ở dưới cuối thẻ thì thực hiện ajax
-        //         if($(window).scrollTop()+$(window).height() >= $element) 
-        //         {
-        //             // Nếu đang gửi ajax thì ngưng
-        //             if (is_busy == true){
-        //                 return false;
-        //             }
-        //             // Nếu hết dữ liệu thì ngưng
-        //             if (stopped == true){
-        //                 return false;
-        //             }
-        //             // Thiết lập đang gửi ajax
-        //             is_busy = true;
-        //             // Tăng số trang lên 1
-        //             page++;
-        //             // Hiển thị loadding
-        //             $loadding.removeClass('hidden');
-        //             // Gửi Ajax
-        //             $.ajax(
-        //             {
-        //                 type        : 'GET',
-        //                 url         : '{{route("ClosestStore")}}',
-        //                 data        : {page : page,lat:lat,lng:lng},
-        //                 success     : function (data)
-        //                 {
-        //                     buildList(data.arrStore);
-        //                 }
-        //             })
-        //             .always(function()
-        //             {
-        //                 // Sau khi thực hiện xong ajax thì ẩn hidden và cho trạng thái gửi ajax = false
-        //                 $loadding.addClass('hidden');
-        //                 is_busy = false;
-        //             });
-        //             return false;
-        //         }
-        //     });
-        // });
+        $scroll.on( 'load.infiniteScroll', function( event, response ) {
+            // parse response into JSON data
+            var data = JSON.parse( response );
+            console.log(1);
+            buildList(data.arrStore);
+        });
+        // jQuery
+        $scroll.on( 'last.infiniteScroll', function( event, response, path ) {
+            $(".infinite-scroll-last").removeClass('dis-none');
+        });
+    }
+    //function search
+    function search(lat,lng){
+        $("body").on("click",".btn-search",function(){
+            $scroll.infiniteScroll('destroy');
+            var type = $("#search-by").val();
+            var key = $("input[name='search-key']").val();
+            switch(type){
+                case "0" : {
+                    alert("Nothing to search!");
+                    break;
+                }
+                case "name":{
+                    $.ajax({
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{route('ClosestStore')}}?lat="+lat+"&&lng="+lng+"&&page=1&&q_name="+key,
+                        success: function (result) {
+                            console.log(result);
+                            $(".closest-res").empty();
+                            buildList(result.arrStore);
+                        }
+                    });
+                    break;
+                }
+                case "radius":{
+                    break;
+                }
+            }
+        });
     }
 </script>
 <!-- Map JS -->
@@ -529,3 +528,20 @@
    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcW21XZbz_N3NzUiwUSd-K_4vLCZSCM7I&callback=initMap&libraries=places">
 </script>
 @endpush
+CREATE DEFINER=`sondeptrai`@`%` PROCEDURE `get_distance`(lat float,lng float,s int,l int,q_name varchar(100),q_radius float)
+BEGIN
+    select * from (SELECT store.*, 111.111 *DEGREES(ACOS(COS(RADIANS(lat))* COS(RADIANS(store.lat))* COS(RADIANS(lng - store.lng))
+         + SIN(RADIANS(lat))
+         * SIN(RADIANS(store.lat)))) AS distance_in_km
+          FROM store_store as store) as store
+          where
+                (q_name IS NULL OR
+                q_name ='' OR
+                store.`name` like (concat('%',q_name,'%'))
+            )
+            and (
+                q_radius IS NULL OR
+                store.distance_in_km <=q_radius
+            ) 
+        order by store.distance_in_km limit s,l;
+END
