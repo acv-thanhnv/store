@@ -75,7 +75,7 @@ class HomeController extends Controller
                 $obj->distance_in_km = sprintf('%.1f',$obj->distance_in_km) ." Km";
             }
         }
-        return response()->json(["arrStore" => $arrStore,"numberPage" => $numberPage]);
+        return response()->json(["arrStore" => $arrStore,"numberPage" => $numberPage,"page" => $page]);
     }
     public function Home()
     {

@@ -59,6 +59,9 @@
     		<div class="row closest-res">
     		</div>
             <!-- Pagination -->
+            <div class="pagination">
+                <a class="next" href="google.com" data-total="3">
+            </div>
             <div class="col-12 load-more">
                 <div class="page-load-status" style="display: none">
                     <div class="infinite-scroll-request">
@@ -138,9 +141,14 @@
 @push("js")
 <!--Custom JS-->
 <script type="text/javascript">
+    var ias = jQuery.ias({
+        container:  '.archive-area',
+        item:       '.closest-res',
+        pagination: '.pagination',
+        next:       '.pagination a.next'
+    });
 	$(document).ready(function(){
-        var $scroll;
-        var total = <?php echo $paginate ?>;
+        var nextUrl;
 		//get closest res
 		CurrentPosition(function(center){
             //get data when load page
@@ -154,8 +162,8 @@
                     buildList(result.arrStore);
                 }
             });
-            // search(center.lat,center.lng);
-            loadMore(center.lat,center.lng,'','',total.last_page);
+            // get initial nextURL
+            loadMore(center.lat,center.lng);
             search(center.lat,center.lng);
 		});
         //display filter search restaurants
@@ -178,6 +186,17 @@
             }
         });
 	});
+    //update next url
+    function updateNextURL(lat,lng,pageNumber,total,q_name) {
+        if(pageNumber<=total){
+            pageNumber++;
+            nextUrl = '{{route("ClosestStore")}}?lat='+lat+'&&lng='+lng+'&&page='+(pageNumber)+'&&q_name='+q_name;
+            console.log(nextUrl);
+        }else{
+            nextUrl= false;
+        }
+        
+    }
     //show clear text-box content if content more than 1 word
     $("body").on("keyup",".input-search input",function(){
         var length = $(this).val().length;
@@ -208,24 +227,24 @@
 		});
 	}
     //load more when scroll
-    function loadMore(lat,lng,q_name,q_radius,total){
+    function loadMore(lat,lng){
         $scroll = $('.closest-res').infiniteScroll({
           // options
             status: '.page-load-status',
             path: function() {
                 var pageNumber = this.pageIndex;
+                var total = $(".total").data("total");
+                var q_name = $("input[name='search-key']").val();
                 if(pageNumber<total){
-                    return '{{route("ClosestStore")}}?lat='+lat+'&&lng='+lng+'&&page='+(pageNumber+1)+'&&q_name='+q_name;
+                    return '{{route("ClosestStore")}}?lat='+lat+'&&lng='+lng+'&&page='+(pageNumber+1)+"&&q_name="+q_name;
                 }
             },
             // load response as flat text
             responseType: 'text',
-            history:false,
         });
         $scroll.on( 'load.infiniteScroll', function( event, response ) {
-            // parse response into JSON data
+            // // parse response into JSON data
             var data = JSON.parse( response );
-            console.log(1);
             buildList(data.arrStore);
         });
         // jQuery
@@ -236,7 +255,6 @@
     //function search
     function search(lat,lng){
         $("body").on("click",".btn-search",function(){
-            $scroll.infiniteScroll('destroy');
             var type = $("#search-by").val();
             var key = $("input[name='search-key']").val();
             switch(type){
@@ -252,7 +270,7 @@
                         },
                         url: "{{route('ClosestStore')}}?lat="+lat+"&&lng="+lng+"&&page=1&&q_name="+key,
                         success: function (result) {
-                            console.log(result);
+                            console.log("Vao search");
                             $(".closest-res").empty();
                             buildList(result.arrStore);
                         }
@@ -265,6 +283,7 @@
             }
         });
     }
+
 </script>
 <!-- Map JS -->
 <script type="text/javascript">
@@ -528,20 +547,3 @@
    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcW21XZbz_N3NzUiwUSd-K_4vLCZSCM7I&callback=initMap&libraries=places">
 </script>
 @endpush
-CREATE DEFINER=`sondeptrai`@`%` PROCEDURE `get_distance`(lat float,lng float,s int,l int,q_name varchar(100),q_radius float)
-BEGIN
-    select * from (SELECT store.*, 111.111 *DEGREES(ACOS(COS(RADIANS(lat))* COS(RADIANS(store.lat))* COS(RADIANS(lng - store.lng))
-         + SIN(RADIANS(lat))
-         * SIN(RADIANS(store.lat)))) AS distance_in_km
-          FROM store_store as store) as store
-          where
-                (q_name IS NULL OR
-                q_name ='' OR
-                store.`name` like (concat('%',q_name,'%'))
-            )
-            and (
-                q_radius IS NULL OR
-                store.distance_in_km <=q_radius
-            ) 
-        order by store.distance_in_km limit s,l;
-END

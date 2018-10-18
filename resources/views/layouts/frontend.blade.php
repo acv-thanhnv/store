@@ -202,6 +202,7 @@
     <script src="frontend/Customer/js/plugins.js"></script>
     <!-- lazyload JS -->
     <script src="frontend/Customer/js/lazyload.js"></script>
+    <script src="frontend/Customer/js/ias.js"></script>
     <!-- Active JS -->
     <script src="frontend/Customer/js/active.js"></script>
     @stack("js")
