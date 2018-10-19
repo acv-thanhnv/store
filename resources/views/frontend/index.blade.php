@@ -141,14 +141,7 @@
 @push("js")
 <!--Custom JS-->
 <script type="text/javascript">
-    // var ias = jQuery.ias({
-    //     container:  '.archive-area',
-    //     item:       '.closest-res',
-    //     pagination: '.pagination',
-    //     next:       '.pagination a.next'
-    // });
 	$(document).ready(function(){
-        var nextUrl;
 		//get closest res
 		CurrentPosition(function(center){
             //get data when load page
@@ -162,9 +155,6 @@
                     buildList(result.arrStore);
                 }
             });
-            // get initial nextURL
-            loadMore(center.lat,center.lng);
-            search(center.lat,center.lng);
 		});
         //display filter search restaurants
         $(document).on("change","#search-by",function(){
@@ -186,17 +176,6 @@
             }
         });
 	});
-    //update next url
-    function updateNextURL(lat,lng,pageNumber,total,q_name) {
-        if(pageNumber<=total){
-            pageNumber++;
-            nextUrl = '{{route("ClosestStore")}}?lat='+lat+'&&lng='+lng+'&&page='+(pageNumber)+'&&q_name='+q_name;
-            console.log(nextUrl);
-        }else{
-            nextUrl= false;
-        }
-        
-    }
     //show clear text-box content if content more than 1 word
     $("body").on("keyup",".input-search input",function(){
         var length = $(this).val().length;
