@@ -141,12 +141,12 @@
 @push("js")
 <!--Custom JS-->
 <script type="text/javascript">
-    var ias = jQuery.ias({
-        container:  '.archive-area',
-        item:       '.closest-res',
-        pagination: '.pagination',
-        next:       '.pagination a.next'
-    });
+    // var ias = jQuery.ias({
+    //     container:  '.archive-area',
+    //     item:       '.closest-res',
+    //     pagination: '.pagination',
+    //     next:       '.pagination a.next'
+    // });
 	$(document).ready(function(){
         var nextUrl;
 		//get closest res
@@ -233,8 +233,8 @@
             status: '.page-load-status',
             path: function() {
                 var pageNumber = this.pageIndex;
-                var total = $(".total").data("total");
-                var q_name = $("input[name='search-key']").val();
+                var total = 3;
+                // var q_name = $("input[name='search-key']").val();
                 if(pageNumber<total){
                     return '{{route("ClosestStore")}}?lat='+lat+'&&lng='+lng+'&&page='+(pageNumber+1)+"&&q_name="+q_name;
                 }
