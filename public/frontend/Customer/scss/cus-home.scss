@@ -4,10 +4,32 @@ $im : !important;
 @media only screen and (max-width: 992px) {
 	.res-filter{
 		.filter-search{
-			text-align: center;
 			padding-top: 10px;
+			text-align: center;
 		}
 	}
+}
+@media only screen and (max-width: 600px) {
+	.breadcumb-area{
+		display: none;
+	}
+	.res-filter-body{
+		.filter-type,.input-search,{
+			padding:0px ;
+		}
+		.radius-select{
+			padding-right: 0px;
+			padding-left: 0px;
+			padding-top: 10px;
+		}
+		.filter-search{
+			padding-right: 0px;
+			padding-left: 0px;
+		}
+	}
+}
+#search-by{
+	font-family: 'FontAwesome';
 }
 .breadcumb-area{
 	height: 130px;
@@ -118,22 +140,27 @@ $im : !important;
 		background:red;
 	}
 	.res-filter-body{
+		#search-by{
+			text-align: center;
+			text-align-last: center;
+		}
 		.radius-select select,#search-by{
 			padding: 0px;
 		}
 		.input-search input{
-			font-family:Arial, FontAwesome
+			font-family:Arial, FontAwesome;
+			padding-right: 35px;
 		}
 		.input-search{
 			position: relative;
 			.clear-textbox-closest{
 				display: block;
 				cursor: pointer;
-				width: 50px;
+				width: 15px;
 				height: 50px;
 				position: absolute;
 				top: 10px;
-				right: 5px;
+				right: 20px;
 				font-size: 20px;
 
 			}

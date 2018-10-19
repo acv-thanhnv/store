@@ -31,25 +31,25 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row res-filter-body">
-                                <div class="col-md-2 col-sm-4 col-lg-2 col-12">
+                                <div class="col-md-2 col-sm-3 col-lg-2 col-5 filter-type">
                                     <select class="form-control" id="search-by">
-                                        <option value="0">--Search by--</option>
+                                        <option value="0">&#xf0b0; Filter</option>
                                         <option value="name">Restaurant</option>
                                         <option value="radius">Radius</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4 col-sm-4 col-lg-4 col-12 input-search">
+                                <div class="col-md-5 col-sm-4 col-lg-4 col-7 input-search">
                                     <input disabled name="search-key" class="form-control">
                                     <i class="fa fa-times-circle-o clear-textbox-closest dis-none"></i>
                                 </div>
-                                <div class="col-md-4 col-sm-4 col-lg-1 col-12 radius-select dis-none">
+                                <div class="col-md-3 col-sm-4 col-lg-2 col-4 radius-select dis-none">
                                     <select class="form-control" id="unit" >
                                         <option value="km">Km</option>
                                         <option value="m">Meters</option>
                                     </select>
                                 </div>
-                                <div class="col-md-12 col-sm-12 filter-search col-lg-1 col-12">
-                                    <button type="button" class="btn btn-dark btn-search">Search</button>
+                                <div class="col-md-2 col-sm-12 filter-search col-lg-1 col-4">
+                                    <button type="button" class="btn btn-dark btn-search"><i class="fa fa-search"></i> Search</button>
                                 </div>
                             </div>
                         </div>
@@ -58,21 +58,12 @@
             </div>
     		<div class="row closest-res">
     		</div>
-            <!-- Pagination -->
-            <div class="pagination">
-                <a class="next" href="google.com" data-total="3">
-            </div>
+            <!-- show status -->
             <div class="col-12 load-more">
-                <div class="page-load-status" style="display: none">
-                    <div class="infinite-scroll-request">
-                      <img src="common_images/loading.gif">
-                    </div>
-                    <p class="infinite-scroll-error">No more pages to load</p>
-                    <p class="infinite-scroll-last">Last page loaded</p>
+                <div class="infinite-scroll-request">
+                  <img src="common_images/loading.gif">
                 </div>
-                <p class="infinite-scroll-last dis-none">Last page loaded</p>
             </div>
-        </div>
  		</div>
  	</section>
 </section>
@@ -127,12 +118,12 @@
 <div style="display: none">
 	<div id="info_window" class="row">
 		<div class="col-md-6 col-sm-6 col-12">
-			<a class="link" href="#"><img class="image"></a>
+			<a class="link" target="blank" href="#"><img class="image"></a>
 		</div>
 		<div class="col-md-6 col-sm-6 col-12" style="padding-right: 0px;">
 			<p class="name"></p>
 			<p><b>Address:</b> <span class="address"></span></p>
-			<p><a class="link" href="#">Go To Website</a></p>
+			<p><a class="link" target="blank" href="#">Go To Website</a></p>
 		</div>
 	</div>
 </div>
@@ -141,18 +132,26 @@
 @push("js")
 <!--Custom JS-->
 <script type="text/javascript">
+    var _page=1,_numberPage;
 	$(document).ready(function(){
+        isLoading();
 		//get closest res
 		CurrentPosition(function(center){
             //get data when load page
-            $.ajax({
-                type: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: "{{route('ClosestStore')}}?lat="+center.lat+"&&lng="+center.lng+"&&page=1",
-                success: function (result) {
-                    buildList(result.arrStore);
+            Ajax(center.lat,center.lng,'','',_page);
+            search(center.lat,center.lng);
+            $(window).scroll(function() {
+                var hT = $('.closest-res').offset().top,
+                hH = $('.closest-res').outerHeight(),
+                wH = $(window).height(),
+                wS = $(this).scrollTop();
+                var key=$("input[name='search-key']").val();
+                var unit = $(".radius-select:visible select").val();
+                if (wS > (hT+hH-wH)){
+                    _page++;
+                    if(_page<=_numberPage){
+                        Ajax(center.lat,center.lng,key,unit,_page);
+                    }
                 }
             });
 		});
@@ -164,14 +163,17 @@
                 if(type === "radius"){
                     $(".radius-select").removeClass('dis-none');
                     $(".input-search input").attr('placeholder', '\uf1d9 Search radius...');
+                    $(".input-search input").attr('type', 'number');
                 }else{
                     $(".radius-select").addClass('dis-none');
+                    $(".input-search input").attr('type', 'text');
                     $(".input-search input").attr('placeholder', '\uf0f4 Search restaurants...');
                 }
             }else{
                 $(".input-search input").attr("placeholder","");
-                $(".radius-select").css("display","none");
+                $(".radius-select").addClass('dis-none');
                 $(".input-search input").val("");
+                $(".clear-textbox-closest").addClass("dis-none");
                 $(".input-search input").prop('disabled', 'disabled');
             }
         });
@@ -205,58 +207,53 @@
 		 	$(c_temp).append($(row));
 		});
 	}
-    //load more when scroll
-    function loadMore(lat,lng){
-        $scroll = $('.closest-res').infiniteScroll({
-          // options
-            status: '.page-load-status',
-            path: function() {
-                var pageNumber = this.pageIndex;
-                var total = 3;
-                // var q_name = $("input[name='search-key']").val();
-                if(pageNumber<total){
-                    return '{{route("ClosestStore")}}?lat='+lat+'&&lng='+lng+'&&page='+(pageNumber+1)+"&&q_name="+q_name;
-                }
+    //function ajax
+    function Ajax(lat,lng,key,unit,page){
+        $.ajax({
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            // load response as flat text
-            responseType: 'text',
-        });
-        $scroll.on( 'load.infiniteScroll', function( event, response ) {
-            // // parse response into JSON data
-            var data = JSON.parse( response );
-            buildList(data.arrStore);
-        });
-        // jQuery
-        $scroll.on( 'last.infiniteScroll', function( event, response, path ) {
-            $(".infinite-scroll-last").removeClass('dis-none');
+            url: "{{route('ClosestStore')}}",
+            data: {lat:lat,lng:lng,key:key,unit:unit,page:page},
+            success: function (result) {
+                    _numberPage = result.numberPage;
+                    buildList(result.arrStore);
+            }
         });
     }
+    //load more when scroll
+    function isLoading(){
+        $(document).ajaxStart(function(){
+            console.log(1);
+            $(".infinite-scroll-request").show();
+        });
+        $(document).ajaxStop(function(){
+            $(".infinite-scroll-request").hide();
+        });
+    }
+   
     //function search
     function search(lat,lng){
         $("body").on("click",".btn-search",function(){
             var type = $("#search-by").val();
             var key = $("input[name='search-key']").val();
+            var unit = $("#unit").val();
             switch(type){
                 case "0" : {
                     alert("Nothing to search!");
                     break;
                 }
                 case "name":{
-                    $.ajax({
-                        type: 'GET',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: "{{route('ClosestStore')}}?lat="+lat+"&&lng="+lng+"&&page=1&&q_name="+key,
-                        success: function (result) {
-                            console.log("Vao search");
-                            $(".closest-res").empty();
-                            buildList(result.arrStore);
-                        }
-                    });
+                    _page=1;
+                    $(".closest-res").empty();
+                    Ajax(lat,lng,key,'',_page);
                     break;
                 }
                 case "radius":{
+                    _page=1;
+                    $(".closest-res").empty();
+                    Ajax(lat,lng,key,unit,_page);
                     break;
                 }
             }
@@ -479,7 +476,7 @@
        $(content).find(".address").text(location["address"]);
        $(content).find(".description").text(location["description"]);
        $(content).find(".image").attr('src',location["src"]);
-       $(content).find(".link").attr('href',"{{route('Order')}}/"+location["id"]);
+       $(content).find(".link").attr('href',"{{route('Order')}}?idStore="+location["id"]);
        //set timeout 
        window.setTimeout(function(){
           //create marker
@@ -526,4 +523,3 @@
    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcW21XZbz_N3NzUiwUSd-K_4vLCZSCM7I&callback=initMap&libraries=places">
 </script>
 @endpush
-https://infiniteajaxscroll.com/docs/overview.html

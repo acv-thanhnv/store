@@ -3,9 +3,11 @@
 namespace App\Frontend\Http\Controllers;
 use App\Api\V1\Services\Production\FoodService;
 use App\Core\Common\CutomerConst;
+use App\Core\Common\SDBStatusCode;
 use App\Core\Common\StorageConst;
 use App\Core\Common\StorageDisk;
 use App\Core\Dao\SDB;
+use App\Core\Entities\DataResultCollection;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
 use App\Frontend\Model\StoreModel;
@@ -30,31 +32,39 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-        return view('frontend.home');
-    }
-    public function apilogin(){
-        return view('frontend.api_login');
-    }
-    public function test(Request $request)
-    {
-        return view('frontend.testorder');
-    }
     public function ClosestStore(Request $request)
     {
+        $result =  new DataResultCollection();
         $page = $request->page;
+        $q_name;
+        $q_radius;
         if($page<1){
             $page = 1;
         }
         $limit = CutomerConst::limit;
-        $q_name = $request->q_name;
-        $q_radius = $request->q_radius;
-        if($q_name==null){
-            $q_name = null;
-        }
-        if($q_radius==null){
-            $q_radius = 'null';
+        $key = $request->key;
+        $unit = $request->unit;
+        switch ($unit) {
+            case 'm':
+                $q_name=null;
+                if($key==null){
+                    $q_radius ='null';
+                }else{
+                    $q_radius =(float) $key/1000;
+                }
+                break;
+            case 'km':
+                $q_name = null;
+                if($key==null){
+                    $q_radius ='null';
+                }else{
+                    $q_radius =(float) $key;
+                }
+                break;
+            default:
+                $q_radius = 'null';
+                $q_name = $key;  
+                break;
         }
         $start = ($limit * $page) - $limit;
         $diskLocalName = StorageDisk::diskLocalName;
@@ -75,11 +85,19 @@ class HomeController extends Controller
                 $obj->distance_in_km = sprintf('%.1f',$obj->distance_in_km) ." Km";
             }
         }
-        return response()->json(["arrStore" => $arrStore,"numberPage" => $numberPage,"page" => $page]);
+        $result->status = SDBStatusCode::OK;
+        $result->arrStore = $arrStore;
+        $result->numberPage = $numberPage;
+        $result->page = $page;
+        return ResponseHelper::JsonDataResult($result);
     }
     public function Home()
     {
-        $store = SDB::table("store_store")->select()->get();
+        $store = SDB::table("store_store")
+                        ->select()
+                        ->orderBy("priority","desc")
+                        ->take(10)
+                        ->get();
         foreach ($store as $obj) {
             if($obj->avatar==NULL){
                  $obj->src = url('/')."/common_images/no-store.png";
@@ -87,6 +105,7 @@ class HomeController extends Controller
                 $obj->src = CommonHelper::getImageUrl($obj->avatar);
             }
         }
+        
         $limit = CutomerConst::limit;
         $paginate = SDB::table("store_store")->paginate(5);
         $paginate = json_encode($paginate);
@@ -96,13 +115,6 @@ class HomeController extends Controller
             "store"    => $store,
             "paginate" => $paginate
         ]);
-    }
-    public function Search(Request $request)
-    {
-        $store = SDB::table("store_store")
-                    ->where("name","like",'%'.$request->key.'%')
-                    ->get();
-        return response()->json(['store' => $store]);
     }
     public function Contact()
     {

@@ -98,26 +98,26 @@
 
     <!-- ****** Instagram Area Start ****** -->
     <div class="instargram_area owl-carousel section_padding_100_0 clearfix" id="portfolio" style="display: block">
-        @for($i=1; $i < 10; $i++)
+        @foreach($store as $obj)
         <!-- Instagram Item -->
         <div class="instagram_gallery_item">
             <!-- Instagram Thumb -->
-            <img src="frontend/Customer/images/store/r{{$i}}.jpg" alt="Restaurant Images">
+            <img src="{{$obj->src}}" alt="Restaurant Images">
             <!-- Hover -->
             <div class="hover_overlay" title="60B Dinh Cong Ha">
                 <div class="yummy-table">
                     <div class="yummy-table-cell">
                         <div class="follow-me text-center">
-                            <span class="slide-name">Gem's Store</span>
-                            <span class="slide-address">60B Dinh Cong Ha, Hoang Mai, Ha Noi</span>
-                            <a href="template" target="blank" class="goto-res btn btn-danger btn-sm"><i class="fa fa-instagram" aria-hidden="true"></i> Go to restaurant
+                            <span class="slide-name">{{$obj->name}}</span>
+                            <span class="slide-address">{{$obj->address}}</span>
+                            <a href="{{route('Order')}}?idStore={{$obj->id}}" target="blank" class="goto-res btn btn-danger btn-sm"><i class="fa fa-instagram" aria-hidden="true"></i> Go to restaurant
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        @endfor
+        @endforeach
     </div>
     <!-- ****** Our Creative Portfolio Area End ****** -->
 
