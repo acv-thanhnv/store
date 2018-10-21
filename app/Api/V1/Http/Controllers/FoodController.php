@@ -28,8 +28,7 @@ class FoodController extends Controller
         return ResponseHelper::JsonDataResult($result);
     }
     public function listByMenu(Request $request,$menuId=null){
-        $storeId =   $request->input('storeId');
-
+        $storeId =   $request->input('idStore');
         $list = $this->service->getFoodByMenuId($menuId,$storeId);
         $result  = new DataResultCollection ();
         $result->status =  SDBStatusCode::OK;

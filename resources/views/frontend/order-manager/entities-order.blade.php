@@ -14,7 +14,7 @@
 			<td data-th="Product">
 				<div class="col-sm-4 nopad image-order"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMnrzprGAVUtl8Ojmn1licHEflA6dQymskF4HBbvmayeRVUfPS" alt="Image" class="img-responsive" /></div>
 				<div class="col-sm-8">
-					<h5 class="nomargin item-order-name">Humburger thịt bò mỹ Humburger thịt bò mỹ  Humburger thịt bò mỹ </h>
+					<h5 class="nomargin item-order-name">Humburger thịt bò mỹ Humburger thịt bò mỹ  Humburger thịt bò mỹ </h5>
 					</div>
 				</td>
 				<td data-th="Price">100.000đ</td>
