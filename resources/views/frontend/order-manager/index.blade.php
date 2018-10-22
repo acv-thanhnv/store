@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <div class="wraper">
-        {{--================================= Left ===========================--}}
+        {{--================================= Quang begin ===========================--}}
         <div class="wraper-left col-sm-6 nopad">
 
             <div id="left-nav-tabs" class="header-left">
@@ -61,12 +61,10 @@
                         <nav class="navbar navbar-inverse">
                             <div class="container-fluid">
                                 <ul class="nav navbar-nav" id="entity-menu">
-                                    <li class="item-menu"><a href="javascript:void(0);" item-menu-id="">Tất cả</a></li>
-                                    {{--content menu--}}
+                                    <li class="active"><a href="#">Tất cả</a></li>
+                                    @include('frontend.order-manager.menu')
                                     <li style="display: none"><a href="#">More...</a></li>
                                 </ul>
-                                {{--content menu include--}}
-                                @include('frontend.order-manager.menu')
                             </div>
                         </nav>
 
@@ -74,10 +72,8 @@
 
 
                     <div id="list-entities">
-                        {{--content entities--}}
+                        @include('frontend.order-manager.entities')
                     </div>
-                    {{--content entities include--}}
-                    @include('frontend.order-manager.entities')
                 </div>
             </div>
 
@@ -86,7 +82,7 @@
     </div>
 
     </div>
-    {{--================================= Right ===========================--}}
+    {{--================================= Son begin ===========================--}}
     <div class="wraper-right col-sm-6">
         <div class="header-right">
             <ul class="nav nav-tabs">
@@ -116,21 +112,6 @@
 
         </div>
         <div class="content-right">
-            <table id="cart" class="table table-hover">
-                <thead>
-                <tr>
-                    <th style="width:55%">Product</th>
-                    <th style="width:10%">Price</th>
-                    <th style="width:10%">Quantity</th>
-                    <th style="width:20%" class="text-center">Subtotal</th>
-                    <th style="width:5%"></th>
-                </tr>
-                </thead>
-                <tbody id="entities-order">
-                {{--content entities-order--}}
-                </tbody>
-            </table>
-            {{--content entities-order include--}}
             @include('frontend.order-manager.entities-order')
         </div>
         <div class="footer-right">
@@ -165,9 +146,14 @@
     <script type="text/javascript">
 
         var idStore = '{{$idStore}}';
+        var idMenu = 1;
+        //console.log(idStore);
+
         $(document).ready(function () {
             getMenuList(idStore);
             getEntities(idStore);
+            getEntitiesByMenu(idMenu, idStore);
+
         });
         //==================================================
         function getMenuList(idStore) {
@@ -196,6 +182,7 @@
         }
         //==================================================
         function getEntities(idStore){
+
             $.ajax({
                 url: '{{route('food/list-by-store')}}'+'/'+ idStore,
                 dataType: 'JSON',
@@ -203,6 +190,7 @@
                 data: {idStore: idStore},
                 success: function (data) {
                     genEntities(data);
+                    console.log(data);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log('Error ' + xhr.status + ' | ' + thrownError);
@@ -211,28 +199,17 @@
         }
         function genEntities(data){
             var listItem = $('#list-entities');
-            $(listItem).empty();
             data.data.forEach(function (obj) {
                 var listItemTemp =$('#list-entities-template').contents().clone();
-                $(listItemTemp).find('.entities_item'). attr('entities-id', obj.id);
-                $(listItemTemp).find('.entities_item'). attr('entities-name', obj.name);
-                $(listItemTemp).find('.entities_item'). attr('entities-image', obj.image);
-                $(listItemTemp).find('.entities_item'). attr('entities-price', obj.price);
+                console.log();
                 $(listItemTemp).find('img').attr('src',obj.image);
                 $(listItemTemp).find('h6').text(obj.name);
-                $(listItemTemp).find('h5').text(parseInt(obj.price));
+                $(listItemTemp).find('h5').text(obj.price);
 
                 $(listItem).append($(listItemTemp));
             })
         }
         //==================================================
-        //Click menu
-        $(document).on('click','.item-menu' ,function(){
-            var idMenu = $(this).find('a').attr('item-menu-id');
-            getEntitiesByMenu(idMenu,idStore);
-        })
-
-
         function getEntitiesByMenu(idMenu, idStore){
             $.ajax({
                 url: '{{route("food/list-by-menu")}}'+'/'+ idMenu,
@@ -240,7 +217,7 @@
                 type: 'GET',
                 data: {idMenu:idMenu, idStore: idStore},
                 success: function (data) {
-                    genEntities(data);
+                    console.log(data);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log('Error ' + xhr.status + ' | ' + thrownError);
@@ -248,6 +225,5 @@
             });
         }
         //==================================================
-
     </script>
 @endsection

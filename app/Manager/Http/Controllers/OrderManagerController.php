@@ -21,6 +21,7 @@ class OrderManagerController extends Controller
         return view('frontend.order-manager.index', ["idStore" => $idStore]);
     }
 
+
 //    public function getMenuListByStoreId(Request $request)
 //    {
 //        $idStore = $request->idStore;
@@ -43,9 +44,5 @@ class OrderManagerController extends Controller
 //        $entities = $this->foodService->getFoodByMenuId($idMenu,$idStore);
 //        return response()->json($entities);
 //    }
-    public function sendNotification($message = 'Hello')
-    {
-        event(new TestPusher('123'));
-    }
 
 }

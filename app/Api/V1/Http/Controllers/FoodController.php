@@ -42,6 +42,4 @@ class FoodController extends Controller
         $result->data = $list;
         return ResponseHelper::JsonDataResult($result);
     }
-
-
 }
