@@ -225,7 +225,6 @@
     //load more when scroll
     function isLoading(){
         $(document).ajaxStart(function(){
-            console.log(1);
             $(".infinite-scroll-request").show();
         });
         $(document).ajaxStop(function(){

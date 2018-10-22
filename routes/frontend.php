@@ -14,11 +14,15 @@
 /**
  * frontend module
  */
+// customer
 Route::get("map","HomeController@Map"); 
 Route::get("ClosestStore","HomeController@ClosestStore")->name("ClosestStore"); 
 Route::get("/","HomeController@Home"); 
 Route::get("Contact","HomeController@Contact"); 
-Route::get("Order","FoodOrderController@getOrder")->name("Order"); 
+//Order
+Route::get("Menu","FoodOrderController@getMenu")->name("Menu"); 
+Route::get("Food","FoodOrderController@getFood")->name("getFood"); 
+Route::get("Order","FoodOrderController@index")->name("Order"); 
 Route::get("FoodDetail","FoodOrderController@FoodDetail"); 
 
 

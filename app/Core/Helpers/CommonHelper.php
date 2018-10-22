@@ -178,5 +178,10 @@ class CommonHelper
         }
         return $str;
     }
+    //Convert to json
+    public static function toJson($obj){
+        $obj = json_encode($obj);
+        return $obj;
+    }
 
 }

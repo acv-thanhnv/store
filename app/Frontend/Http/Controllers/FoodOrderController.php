@@ -1,14 +1,21 @@
 <?php
 
 namespace App\Frontend\Http\Controllers;
+use App\Backend\Services\Interfaces\FoodServiceInterface;
+use App\Backend\Services\Interfaces\MenuServiceInterface;
+use App\Core\Common\FoodConst;
+use App\Core\Common\SDBStatusCode;
+use App\Core\Entities\DataResultCollection;
+use App\Core\Helpers\CommonHelper;
+use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Api\V1\Services\Interfaces\FoodServiceInterface;
 use Illuminate\Support\Facades\DB;
 class FoodOrderController extends Controller
 {   
 
     protected $foodService;
+    protected $menuService;
     /**
      * Create a new controller instance.
      *
@@ -16,18 +23,43 @@ class FoodOrderController extends Controller
      */
     
 
-    public function __construct(FoodServiceInterface $foodService)
+    public function __construct(FoodServiceInterface $foodService, MenuServiceInterface $menuService)
     {
         $this->foodService = $foodService;
+        $this->menuService = $menuService;
     }
 
-    public function index($storeId)
+    public function index(Request $request)
     {  
-        return view('frontend.foodorder.index',["storeId" => $storeId]);
+        $idStore = $request->idStore;
+        return view('frontend.foodorder.index',["idStore" => $idStore]);
+    }
+    public function getMenu(Request $request)
+    {
+        $result = new DataResultCollection();
+        $idStore = $request->idStore;
+        $arrMenu = $this->menuService->getMenu($idStore);
+        $result->status = SDBStatusCode::OK;
+        $result->data = $arrMenu;
+        return ResponseHelper::JsonDataResult($result);
+    }
+    public function getFood(Request $request)
+    {
+        $idStore = $request->idStore;
+        $total = FoodConst::foodPerPage;
+        $arrFood = $this->foodService->getFood($idStore,$total);
+        $result = new DataResultCollection();
+        $result->status = SDBStatusCode::OK;
+        $result->data = $arrFood;
+        return ResponseHelper::JsonDataResult($result);
+    }
+    public function getFoodByMenu(Request $request)
+    {
+        # code...
     }
     public function getOrder()
     {
-        return view("frontend.Food_Order.index");
+        return view("frontend.FoodOrder.index");
     }
     public function FoodDetail()
     {

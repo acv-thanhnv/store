@@ -20,6 +20,10 @@ class SDBStatusCode
     const ValidateError = 'ValidateError';
 }
 
+class FoodConst
+{
+    const foodPerPage = 10;
+}
 
 class ApiConst
 {
@@ -78,6 +82,7 @@ class StorageDisk{
 }
 class CutomerConst{
     const limit = 5;
+    const numberMenu = 5;
 }
 class OrderStatusValue{
     const Waiter = 1;

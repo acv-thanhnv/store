@@ -10,7 +10,8 @@ namespace App\Backend\Services\Interfaces;
 interface FoodServiceInterface
 {
 	//Food
-	public function getFood($idStore);//Lấy các món ăn về
+	public function getAllFood($idStore);//Lấy tất cả các món ăn về
+	public function getFood($idStore,$total);//Lấy các món ăn về
 	public function addFood($obj);//Thêm Món Ăn
 	public function addProp($obj);//Thêm thuộc tính
 	public function addPropValue($obj);//Thêm thuộc tính trog bảng property_value

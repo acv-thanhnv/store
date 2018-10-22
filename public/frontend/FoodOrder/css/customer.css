@@ -60,6 +60,7 @@
       right: -7px;
       width: 30px;
       top: 3px;
+      z-index: 100;
       font-size: 20px; }
 
   .fixed-catogery {
@@ -247,7 +248,8 @@
 
 .menu-group a.dropdown-item:hover {
   background-color: #D1D1D1; }
-.menu-group .more .dropdown-toggle {
+
+.more .dropdown-toggle {
   cursor: pointer; }
 
 .cart .header-cart {

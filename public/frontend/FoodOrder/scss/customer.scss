@@ -100,6 +100,7 @@ $im : !important;
 			right: -7px;
 			width: 30px;
 			top: 3px;
+			z-index: 100;
 			font-size: 20px;
 		}
 	}
@@ -300,10 +301,10 @@ $im : !important;
 	a.dropdown-item:hover{
 		background-color: #D1D1D1;
 	}
-	.more{
-		.dropdown-toggle{
-			cursor:pointer;
-		}
+}
+.more{
+	.dropdown-toggle{
+		cursor:pointer;
 	}
 }
 //custom cart item
