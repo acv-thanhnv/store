@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Manager\Http\Controllers;
-
+use App\Core\Events\TestPusher;
 use Illuminate\Http\Request;
 use App\Manager\Http\Controllers\Controller;
 use App\Api\V1\Services\Interfaces\FoodServiceInterface;
@@ -43,5 +43,9 @@ class OrderManagerController extends Controller
 //        $entities = $this->foodService->getFoodByMenuId($idMenu,$idStore);
 //        return response()->json($entities);
 //    }
+    public function sendNotification($message = 'Hello')
+    {
+        event(new TestPusher('123'));
+    }
 
 }
