@@ -395,4 +395,15 @@ body.show-header-cart {
     right: 0px;
     top: 40px; }
 
+.load-more .infinite-scroll-request {
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  .load-more .infinite-scroll-request img {
+    width: 100px;
+    height: 100px;
+    max-height: 100px; }
+
 /*# sourceMappingURL=customer.css.map */

@@ -490,3 +490,15 @@ body.show-header-cart{
 }
 .container{
 }
+.load-more .infinite-scroll-request{
+	img{
+		width: 100px;
+		height: 100px;
+		max-height: 100px;
+	}
+	margin-right: auto;
+	margin-left: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

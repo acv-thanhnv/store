@@ -161,41 +161,6 @@
 			
 			<div class="header-cart-content flex-w js-pscroll p-t-10 p-r-10">
 				<ul class="header-cart-wrapitem w-full">
-					@for($i=1;$i< 10;$i++)
-					<li class="header-cart-item flex-w flex-t m-b-12">
-						<div class="header-cart-item-img">
-							<img src="frontend/FoodOrder/images/food{{$i}}.jpg" alt="IMG">
-						</div>
-
-						<div class="header-cart-item-txt">
-							<span  class="header-cart-item-name hov-cl1 trans-04">
-								White Shirt Pleat aaaaaaaaaaaaaaaaaaaaaaaaa
-							</span>
-							<div class="wrap-num-product">
-								<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-									<i class="fs-16 zmdi zmdi-minus"></i>
-								</div>
-
-								<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
-
-								<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-									<i class="fs-16 zmdi zmdi-plus"></i>
-								</div>
-								<span class="header-cart-item-info flex-c-m">
-									x 20k
-								</span>
-								<span class="delete-food-cart">
-									<button class="btn btn-danger btn-sm">
-										<i class="fa fa-times"></i>
-									</button>
-								</span>
-							</div>
-							<div class="progress">
-								<div class="progress-bar" style="width:50%;height: 10px"></div>
-							</div>
-						</div>
-					</li>
-					@endfor
 				</ul>
 				
 				<div class="w-full cart-total p-t-5">
@@ -302,41 +267,14 @@
 				</div>
 			</div>
 
-			<div class="row isotope-grid list-food">
-				@for($i=1;$i< 15; $i++)
-				<div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 col-xl-2 food-item isotope-item watches" title="Food's Name Title">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-pic hov-img0 food-image">
-							<img src="frontend/FoodOrder/images/food{{$i}}.jpg" alt="IMG-PRODUCT" class="js-show-modal1 view-detail">
-
-							<a href="" class="block2-btn flex-c-m stext-103 cl2 bg0 bor2 hov-btn1 p-lr-15 trans-04 add_to_cart">
-								<i class="zmdi zmdi-shopping-cart cart-desktop">
-								</i> Add To Cart
-							</a>
-						</div>
-
-						<div class="block2-txt flex-w flex-t p-t-14 food-content">
-							<div class="block2-txt-child1 flex-col-l">
-								<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									Esprit Ruffle Shirt
-								</a>
-
-								<span class="stext-105 cl3">
-									$16.64
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				@endfor
+			<div class="row list-food">
 			</div>
-			<!-- Load more -->
-			<div class="flex-c-m flex-w w-full p-t-45">
-				<a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-					Load More
-				</a>
-			</div>
+			<!-- show status -->
+            <div class="col-12 load-more">
+                <div class="infinite-scroll-request">
+                  <img src="common_images/loading.gif">
+                </div>
+            </div>
 		</div>
 	</section>
 	<!-- Footer -->
@@ -516,12 +454,12 @@
 		</li>
 	</div>
 	<!--Template food -->
-	<div id="template-food">
+	<div id="template-food" style="display: none">
 		<div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 col-xl-2 food-item isotope-item watches" title="Food's Name Title">
 			<!-- Block2 -->
 			<div class="block2">
 				<div class="block2-pic hov-img0 food-image">
-					<img src="frontend/FoodOrder/images/food{{$i}}.jpg" alt="IMG-PRODUCT" class="js-show-modal1 view-detail">
+					<img src="" alt="IMG-PRODUCT" class="js-show-modal1 view-detail">
 
 					<a href="" class="block2-btn flex-c-m stext-103 cl2 bg0 bor2 hov-btn1 p-lr-15 trans-04 add_to_cart">
 						<i class="zmdi zmdi-shopping-cart cart-desktop">
@@ -531,17 +469,53 @@
 
 				<div class="block2-txt flex-w flex-t p-t-14 food-content">
 					<div class="block2-txt-child1 flex-col-l">
-						<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+						<a class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6 food-items-name">
 							Esprit Ruffle Shirt
 						</a>
 
-						<span class="stext-105 cl3">
+						<span class="stext-105 cl3 food-items-price">
 							$16.64
 						</span>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+	<!--Template Cart-->
+	<div id="template-cart" style="display: none">
+		<li class="header-cart-item flex-w flex-t m-b-12">
+			<div class="header-cart-item-img">
+				<img alt="IMG">
+			</div>
+
+			<div class="header-cart-item-txt">
+				<span  class="header-cart-item-name hov-cl1 trans-04">
+					White Shirt Pleat aaaaaaaaaaaaaaaaaaaaaaaaa
+				</span>
+				<div class="wrap-num-product">
+					<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+						<i class="fs-16 zmdi zmdi-minus"></i>
+					</div>
+
+					<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product">
+
+					<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+						<i class="fs-16 zmdi zmdi-plus"></i>
+					</div>
+					<span class="header-cart-item-info flex-c-m">
+						x 20k
+					</span>
+					<span class="delete-food-cart">
+						<button class="btn btn-danger btn-sm">
+							<i class="fa fa-times"></i>
+						</button>
+					</span>
+				</div>
+				<div class="progress">
+					<div class="progress-bar" style="width:50%;height: 10px"></div>
+				</div>
+			</div>
+		</li>
 	</div>
 </body>
 </html>
@@ -554,15 +528,20 @@
 <!--Filter Food-->
 <script src="frontend/FoodOrder/js/isotope.pkgd.min.js"></script>
 <script src="frontend/FoodOrder/js/main.js"></script>
+<!--Jquery confirm -->
+<script src="js/lib/jquery-confirm.js"></script>
 <!--Custom JS-->
 <script src="frontend/FoodOrder/js/custom.js"></script>
 <script type="text/javascript">
 	var numberMenu = '{{App\Core\Common\CutomerConst::numberMenu}}';
 	//function buildMenu
 	$(document).ready(function(){
+		// console.log(JSON.parse(localStorage.cart_items));
+		// localStorage.removeItem("cart_items");
 		var idStore = {!! $idStore !!};
 		buildMenu("{{route('Menu')}}",idStore,numberMenu);
-		buildFood("{{route('Food')}}",idStore);
+		buildFood("{{route('getFood')}}",idStore,1);
+		lazyLoad("{{route('getFood')}}",idStore);
 	})
 	//fixed cart for mobile
 	$( window ).scroll(function() {
