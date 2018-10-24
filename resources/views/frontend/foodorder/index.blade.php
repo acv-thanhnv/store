@@ -5,6 +5,9 @@
 	<meta charset="UTF-8">
 	<base href="{{asset('')}}">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="frontend/FoodOrder/js/jquery-3.2.1.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="images/icons/favicon.png"/>
 <!--===============================================================================================-->
@@ -427,8 +430,6 @@
 			</div>
 		</div>
 	</footer>
-
-
 	<!-- Back to top -->
 	<div class="btn-back-to-top" id="myBtn">
 		<span class="symbol-btn-back-to-top">
@@ -528,7 +529,6 @@
 	</div>
 </body>
 </html>
-<script src="frontend/FoodOrder/js/jquery-3.2.1.min.js"></script>
 <script src="frontend/FoodOrder/js/animsition.min.js"></script>
 <script src="frontend/FoodOrder/js/popper.min.js"></script>
 <script src="frontend/FoodOrder/js/bootstrap.min.js"></script>
@@ -551,6 +551,7 @@
 		if(now-localStorage.time > hour*60*60*1000){
 			localStorage.clear();
 		}
+		$("#table").select2();
 		var idStore = {!! $idStore !!};
 		countCart();//dem va hien thi so item trong gio hang
 		buildMenu("{{route('Menu')}}",idStore,numberMenu);

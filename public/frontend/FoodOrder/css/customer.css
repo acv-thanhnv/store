@@ -55,12 +55,11 @@
     .search-food .clear-textbox {
       color: #ADAAAA !important;
       cursor: pointer;
-      display: block;
       position: absolute;
       right: -7px;
       width: 30px;
       top: 3px;
-      z-index: 100;
+      z-index: 2;
       font-size: 20px; }
 
   .fixed-catogery {
@@ -132,7 +131,7 @@
   .select-table {
     display: inline;
     padding-left: 5px; }
-    .select-table select {
+    .select-table .select2-container {
       width: 65% !important; }
 
   .left {
@@ -422,6 +421,9 @@ body.show-header-cart {
     height: 100px;
     max-height: 100px; }
 
+.select-table .select2-container {
+  width: 65% !important;
+  text-align-last: center; }
 .select-table label {
   width: 30%;
   display: inline; }
