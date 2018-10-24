@@ -562,7 +562,6 @@
 	$(document).ready(function(){
 		var idStore = {!! $idStore !!};
 		buildMenu("{{route('Menu')}}",idStore,numberMenu);
-		buildFood("{{route('Food')}}",idStore);
 	})
 	//fixed cart for mobile
 	$( window ).scroll(function() {
