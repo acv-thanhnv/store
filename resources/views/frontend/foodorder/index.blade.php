@@ -29,6 +29,8 @@
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/iziModal.min.css">
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/default.css" />
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/component.css" />
+	<!--Jquery confirm -->
+	<link rel="stylesheet" type="text/css" href="css/lib/jquery-confirm.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/customer.css">
 <!--===============================================================================================-->
@@ -79,7 +81,7 @@
 
 					<!-- Icon header -->
 					<div class="wrap-icon-header flex-w flex-r-m">
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="2">
+						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart">
 							<i class="zmdi zmdi-shopping-cart"></i>
 						</div>
 					</div>
@@ -162,14 +164,21 @@
 			<div class="header-cart-content flex-w js-pscroll p-t-10 p-r-10">
 				<ul class="header-cart-wrapitem w-full">
 				</ul>
-				
-				<div class="w-full cart-total p-t-5">
-					<div class="left">
+				<div class="w-full cart-total p-t-5 row" style="margin-left: 0px">
+					<div class="col-lg-6 col-12 left">
 						<span class="note fa fa-pencil-square-o">Note</span>
-						<textarea cols="20" class="form-control"></textarea>
+						<div class="w-full p-t-5 p-b-10 select-table">
+							<label>Table:</label>
+							<select class="form-control" id="table">
+								<option>--Table--</option>
+								@foreach($arrTable as $obj)
+								<option value="{{$obj->id}}">{{$obj->name}}</option>
+								@endforeach
+							</select>
+						</div>
 					</div>
-					<div class="right">
-						<span class="total-money">Total: 100k</span>
+					<div class="col-lg-6 col-12 right">
+						<div class="total-money">Total: 100k</div>
 						<div style="text-align: right" class="p-b-10 m-t-10">
 							<button class="btn btn-primary btn-order">
 								Order
@@ -497,7 +506,7 @@
 						<i class="fs-16 zmdi zmdi-minus"></i>
 					</div>
 
-					<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product">
+					<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" min="0">
 
 					<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 						<i class="fs-16 zmdi zmdi-plus"></i>
@@ -536,9 +545,14 @@
 	var numberMenu = '{{App\Core\Common\CutomerConst::numberMenu}}';
 	//function buildMenu
 	$(document).ready(function(){
-		// console.log(JSON.parse(localStorage.cart_items));
-		// localStorage.removeItem("cart_items");
+		//set timeout local storage
+		var now = new Date().getTime();
+		var hour = '{{\App\Core\Common\CutomerConst::hour}}';
+		if(now-localStorage.time > hour*60*60*1000){
+			localStorage.clear();
+		}
 		var idStore = {!! $idStore !!};
+		countCart();//dem va hien thi so item trong gio hang
 		buildMenu("{{route('Menu')}}",idStore,numberMenu);
 		buildFood("{{route('getFood')}}",idStore,1);
 		lazyLoad("{{route('getFood')}}",idStore);
