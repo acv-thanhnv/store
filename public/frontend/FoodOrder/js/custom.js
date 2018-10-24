@@ -149,8 +149,10 @@ $(document).on("click",".js-show-cart",function(){
 	if (localStorage.cart_items) {
 		cart_items = JSON.parse(localStorage.cart_items);
 		sendItem(cart_items);
+		cal_total(cart_items);
 	}
 	if(cart_items.length===0){
+		$(".total-money").text("Total: 0");
 		$('.header-cart-wrapitem').text("Your cart is empty");
 	}
 })
@@ -225,4 +227,15 @@ function countCart(){
 		cart_total = cart_items.length;
 	}
 	$(".js-show-cart").attr("data-notify",cart_total);
+}
+//function calculate total
+function cal_total(data){
+	var total_money = 0;
+	data.forEach(function(obj){
+		var price = parseInt(obj.price);
+		var quantity = parseInt(obj.quantity);
+		var total = price*quantity;
+		total_money += total;
+	});
+	$(".total-money").text("Total: "+total_money);
 }

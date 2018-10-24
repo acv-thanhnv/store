@@ -181,10 +181,10 @@
 						</div>
 					</div>
 					<div class="col-lg-6 col-12 right">
-						<div class="total-money">Total: 100k</div>
+						<div class="total-money"></div>
 						<div style="text-align: right" class="p-b-10 m-t-10">
 							<button class="btn btn-primary btn-order">
-								Order
+								<i class="fa fa-paper-plane-o"></i> Order
 							</button>
 						</div>
 					</div>
