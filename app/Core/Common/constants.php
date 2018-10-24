@@ -22,7 +22,7 @@ class SDBStatusCode
 
 class FoodConst
 {
-    const foodPerPage = 10;
+    const foodPerPage = 8;
 }
 
 class ApiConst
@@ -83,6 +83,7 @@ class StorageDisk{
 class CutomerConst{
     const limit = 5;
     const numberMenu = 5;
+    const hour = 0.02;
 }
 class OrderStatusValue{
     const Waiter = 1;

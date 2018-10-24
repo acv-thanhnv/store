@@ -5,6 +5,7 @@ use App\Backend\Services\Interfaces\FoodServiceInterface;
 use App\Backend\Services\Interfaces\MenuServiceInterface;
 use App\Core\Common\FoodConst;
 use App\Core\Common\SDBStatusCode;
+use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
@@ -31,26 +32,40 @@ class FoodOrderController extends Controller
 
     public function index(Request $request)
     {  
-        $idStore = $request->idStore;
-        return view('frontend.foodorder.index',["idStore" => $idStore]);
+        $idStore  = $request->idStore;
+        $arrTable = SDB::table('store_location')
+                    ->where("store_id",$idStore)
+                    ->get();
+        return view('frontend.foodorder.index',[
+            "idStore"  => $idStore,
+            "arrTable" => $arrTable
+        ]);
     }
     public function getMenu(Request $request)
     {
-        $result = new DataResultCollection();
-        $idStore = $request->idStore;
-        $arrMenu = $this->menuService->getMenu($idStore);
-        $result->status = SDBStatusCode::OK;
-        $result->data = $arrMenu;
+        $result         = new DataResultCollection();
+        $idStore        = $request->idStore;
+        $arrMenu        = $this->menuService->getMenu($idStore);
+        $result->status = SDBStatusCode::OK;    
+        $result->data   = $arrMenu;               
         return ResponseHelper::JsonDataResult($result);
     }
     public function getFood(Request $request)
     {
         $idStore = $request->idStore;
-        $total = FoodConst::foodPerPage;
+        $total   = FoodConst::foodPerPage;
         $arrFood = $this->foodService->getFood($idStore,$total);
-        $result = new DataResultCollection();
+        foreach($arrFood as $obj){
+            //check avatar
+            if($obj->image==NULL){
+                $obj->src = url('/')."/common_images/no-store.png";
+            }else{
+                $obj->src = CommonHelper::getImageUrl($obj->image);
+            }
+        }
+        $result         = new DataResultCollection();
         $result->status = SDBStatusCode::OK;
-        $result->data = $arrFood;
+        $result->data   = $arrFood;
         return ResponseHelper::JsonDataResult($result);
     }
     public function getFoodByMenu(Request $request)
@@ -67,15 +82,15 @@ class FoodOrderController extends Controller
     }
     public function getLocations(Request $request)
     {   
-        $storeId = $request->storeId;
+        $storeId  = $request->storeId;
         $location = DB::table('store_location')->join('store_store', 'store_location.store_id', '=', 'store_store.id')->where('store_store.id', $storeId)->select('store_location.id', 'store_location.name')->get();
     return view('frontend.foodorder.table', ['location' => $location]);
     }
 
     public function getDetail(Request $request)
     {   
-        $id=$request->input('id');
-        $detail = DB::table('store_entities')->where('id',$id)->get();
+        $id         =$request->input('id');
+        $detail     = DB::table('store_entities')->where('id',$id)->get();
         $properties = DB::table('store_entities')
         ->join('store_entity_property_values', 'store_entity_property_values.entity_id', '=','store_entities.id')
         ->join('store_entity_properties', 'store_entity_properties.id', '=','store_entity_property_values.property_id')

@@ -5,6 +5,9 @@
 	<meta charset="UTF-8">
 	<base href="{{asset('')}}">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="frontend/FoodOrder/js/jquery-3.2.1.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="images/icons/favicon.png"/>
 <!--===============================================================================================-->
@@ -29,6 +32,8 @@
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/iziModal.min.css">
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/default.css" />
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/component.css" />
+	<!--Jquery confirm -->
+	<link rel="stylesheet" type="text/css" href="css/lib/jquery-confirm.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/customer.css">
 <!--===============================================================================================-->
@@ -79,7 +84,7 @@
 
 					<!-- Icon header -->
 					<div class="wrap-icon-header flex-w flex-r-m">
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="2">
+						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart">
 							<i class="zmdi zmdi-shopping-cart"></i>
 						</div>
 					</div>
@@ -161,53 +166,25 @@
 			
 			<div class="header-cart-content flex-w js-pscroll p-t-10 p-r-10">
 				<ul class="header-cart-wrapitem w-full">
-					@for($i=1;$i< 10;$i++)
-					<li class="header-cart-item flex-w flex-t m-b-12">
-						<div class="header-cart-item-img">
-							<img src="frontend/FoodOrder/images/food{{$i}}.jpg" alt="IMG">
-						</div>
-
-						<div class="header-cart-item-txt">
-							<span  class="header-cart-item-name hov-cl1 trans-04">
-								White Shirt Pleat aaaaaaaaaaaaaaaaaaaaaaaaa
-							</span>
-							<div class="wrap-num-product">
-								<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-									<i class="fs-16 zmdi zmdi-minus"></i>
-								</div>
-
-								<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
-
-								<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-									<i class="fs-16 zmdi zmdi-plus"></i>
-								</div>
-								<span class="header-cart-item-info flex-c-m">
-									x 20k
-								</span>
-								<span class="delete-food-cart">
-									<button class="btn btn-danger btn-sm">
-										<i class="fa fa-times"></i>
-									</button>
-								</span>
-							</div>
-							<div class="progress">
-								<div class="progress-bar" style="width:50%;height: 10px"></div>
-							</div>
-						</div>
-					</li>
-					@endfor
 				</ul>
-				
-				<div class="w-full cart-total p-t-5">
-					<div class="left">
+				<div class="w-full cart-total p-t-5 row" style="margin-left: 0px">
+					<div class="col-lg-6 col-12 left">
 						<span class="note fa fa-pencil-square-o">Note</span>
-						<textarea cols="20" class="form-control"></textarea>
+						<div class="w-full p-t-5 p-b-10 select-table">
+							<label>Table:</label>
+							<select class="form-control" id="table">
+								<option>--Table--</option>
+								@foreach($arrTable as $obj)
+								<option value="{{$obj->id}}">{{$obj->name}}</option>
+								@endforeach
+							</select>
+						</div>
 					</div>
-					<div class="right">
-						<span class="total-money">Total: 100k</span>
+					<div class="col-lg-6 col-12 right">
+						<div class="total-money"></div>
 						<div style="text-align: right" class="p-b-10 m-t-10">
 							<button class="btn btn-primary btn-order">
-								Order
+								<i class="fa fa-paper-plane-o"></i> Order
 							</button>
 						</div>
 					</div>
@@ -302,41 +279,14 @@
 				</div>
 			</div>
 
-			<div class="row isotope-grid list-food">
-				@for($i=1;$i< 15; $i++)
-				<div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 col-xl-2 food-item isotope-item watches" title="Food's Name Title">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-pic hov-img0 food-image">
-							<img src="frontend/FoodOrder/images/food{{$i}}.jpg" alt="IMG-PRODUCT" class="js-show-modal1 view-detail">
-
-							<a href="" class="block2-btn flex-c-m stext-103 cl2 bg0 bor2 hov-btn1 p-lr-15 trans-04 add_to_cart">
-								<i class="zmdi zmdi-shopping-cart cart-desktop">
-								</i> Add To Cart
-							</a>
-						</div>
-
-						<div class="block2-txt flex-w flex-t p-t-14 food-content">
-							<div class="block2-txt-child1 flex-col-l">
-								<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									Esprit Ruffle Shirt
-								</a>
-
-								<span class="stext-105 cl3">
-									$16.64
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				@endfor
+			<div class="row list-food">
 			</div>
-			<!-- Load more -->
-			<div class="flex-c-m flex-w w-full p-t-45">
-				<a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-					Load More
-				</a>
-			</div>
+			<!-- show status -->
+            <div class="col-12 load-more">
+                <div class="infinite-scroll-request">
+                  <img src="common_images/loading.gif">
+                </div>
+            </div>
 		</div>
 	</section>
 	<!-- Footer -->
@@ -480,8 +430,6 @@
 			</div>
 		</div>
 	</footer>
-
-
 	<!-- Back to top -->
 	<div class="btn-back-to-top" id="myBtn">
 		<span class="symbol-btn-back-to-top">
@@ -516,12 +464,12 @@
 		</li>
 	</div>
 	<!--Template food -->
-	<div id="template-food">
+	<div id="template-food" style="display: none">
 		<div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 col-xl-2 food-item isotope-item watches" title="Food's Name Title">
 			<!-- Block2 -->
 			<div class="block2">
 				<div class="block2-pic hov-img0 food-image">
-					<img src="frontend/FoodOrder/images/food{{$i}}.jpg" alt="IMG-PRODUCT" class="js-show-modal1 view-detail">
+					<img src="" alt="IMG-PRODUCT" class="js-show-modal1 view-detail">
 
 					<a href="" class="block2-btn flex-c-m stext-103 cl2 bg0 bor2 hov-btn1 p-lr-15 trans-04 add_to_cart">
 						<i class="zmdi zmdi-shopping-cart cart-desktop">
@@ -531,11 +479,11 @@
 
 				<div class="block2-txt flex-w flex-t p-t-14 food-content">
 					<div class="block2-txt-child1 flex-col-l">
-						<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+						<a class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6 food-items-name">
 							Esprit Ruffle Shirt
 						</a>
 
-						<span class="stext-105 cl3">
+						<span class="stext-105 cl3 food-items-price">
 							$16.64
 						</span>
 					</div>
@@ -543,9 +491,44 @@
 			</div>
 		</div>
 	</div>
+	<!--Template Cart-->
+	<div id="template-cart" style="display: none">
+		<li class="header-cart-item flex-w flex-t m-b-12">
+			<div class="header-cart-item-img">
+				<img alt="IMG">
+			</div>
+
+			<div class="header-cart-item-txt">
+				<span  class="header-cart-item-name hov-cl1 trans-04">
+					White Shirt Pleat aaaaaaaaaaaaaaaaaaaaaaaaa
+				</span>
+				<div class="wrap-num-product">
+					<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+						<i class="fs-16 zmdi zmdi-minus"></i>
+					</div>
+
+					<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" min="0">
+
+					<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+						<i class="fs-16 zmdi zmdi-plus"></i>
+					</div>
+					<span class="header-cart-item-info flex-c-m">
+						x 20k
+					</span>
+					<span class="delete-food-cart">
+						<button class="btn btn-danger btn-sm">
+							<i class="fa fa-times"></i>
+						</button>
+					</span>
+				</div>
+				<div class="progress">
+					<div class="progress-bar" style="width:50%;height: 10px"></div>
+				</div>
+			</div>
+		</li>
+	</div>
 </body>
 </html>
-<script src="frontend/FoodOrder/js/jquery-3.2.1.min.js"></script>
 <script src="frontend/FoodOrder/js/animsition.min.js"></script>
 <script src="frontend/FoodOrder/js/popper.min.js"></script>
 <script src="frontend/FoodOrder/js/bootstrap.min.js"></script>
@@ -554,14 +537,26 @@
 <!--Filter Food-->
 <script src="frontend/FoodOrder/js/isotope.pkgd.min.js"></script>
 <script src="frontend/FoodOrder/js/main.js"></script>
+<!--Jquery confirm -->
+<script src="js/lib/jquery-confirm.js"></script>
 <!--Custom JS-->
 <script src="frontend/FoodOrder/js/custom.js"></script>
 <script type="text/javascript">
 	var numberMenu = '{{App\Core\Common\CutomerConst::numberMenu}}';
 	//function buildMenu
 	$(document).ready(function(){
+		//set timeout local storage
+		var now = new Date().getTime();
+		var hour = '{{\App\Core\Common\CutomerConst::hour}}';
+		if(now-localStorage.time > hour*60*60*1000){
+			localStorage.clear();
+		}
+		$("#table").select2();
 		var idStore = {!! $idStore !!};
+		countCart();//dem va hien thi so item trong gio hang
 		buildMenu("{{route('Menu')}}",idStore,numberMenu);
+		buildFood("{{route('getFood')}}",idStore,1);
+		lazyLoad("{{route('getFood')}}",idStore);
 	})
 	//fixed cart for mobile
 	$( window ).scroll(function() {
