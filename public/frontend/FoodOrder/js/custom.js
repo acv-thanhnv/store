@@ -165,6 +165,7 @@ $(document).on('click','.btn-num-product-down', function(){
 		var index = $(this).parent('div.wrap-num-product').data('id');
 		var cart_index = cart_items.findIndex(item => item.id === index);
 		cart_items[cart_index].quantity--;
+		cal_total(cart_items);
 		localStorage.cart_items = JSON.stringify(cart_items);
 	}
 });
@@ -176,6 +177,7 @@ $(document).on('click','.btn-num-product-up', function(){
 	var index = $(this).parent('div.wrap-num-product').data('id');
 	var cart_index = cart_items.findIndex(item => item.id === index);
 	cart_items[cart_index].quantity++;
+	cal_total(cart_items);
 	localStorage.cart_items = JSON.stringify(cart_items);
 });
 $(document).on("change","input.num-product",function(){
@@ -183,6 +185,7 @@ $(document).on("change","input.num-product",function(){
 	var index = $(this).parent('div.wrap-num-product').data('id');
 	var cart_index = cart_items.findIndex(item => item.id === index);
 	cart_items[cart_index].quantity= numProduct;
+	cal_total(cart_items);
 	localStorage.cart_items = JSON.stringify(cart_items);
 })
 //clear cart item
@@ -205,6 +208,7 @@ $(document).on("click","span.delete-food-cart",function(){
 					$(row).remove();
 					var cart_index = cart_items.findIndex(item => item.id === index);
 					cart_items.splice(cart_index,1);
+					cal_total(cart_items);
 					localStorage.cart_items = JSON.stringify(cart_items);
 					cart_total--;
 					$(".js-show-cart").attr("data-notify",cart_total);

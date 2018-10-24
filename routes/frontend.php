@@ -22,7 +22,8 @@ Route::get("Contact","HomeController@Contact");
 //Order
 Route::get("Menu","FoodOrderController@getMenu")->name("Menu"); 
 Route::get("Food","FoodOrderController@getFood")->name("getFood"); 
-Route::get("Order","FoodOrderController@index")->name("Order"); 
+Route::get("Order","FoodOrderController@getOrder")->name("Order"); 
+Route::post("sendOrder","FoodOrderController@sendOrder")->name("sendOrder"); 
 Route::get("FoodDetail","FoodOrderController@FoodDetail"); 
 
 

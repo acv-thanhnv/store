@@ -30,7 +30,7 @@ class FoodOrderController extends Controller
         $this->menuService = $menuService;
     }
 
-    public function index(Request $request)
+    public function getOrder(Request $request)
     {  
         $idStore  = $request->idStore;
         $arrTable = SDB::table('store_location')
@@ -72,9 +72,9 @@ class FoodOrderController extends Controller
     {
         # code...
     }
-    public function getOrder()
+    public function sendOrder(Request $request)
     {
-        return view("frontend.FoodOrder.index");
+        dd($request->cart_items);
     }
     public function FoodDetail()
     {

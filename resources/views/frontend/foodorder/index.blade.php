@@ -632,4 +632,19 @@
 		$(this).addClass("dis-none");
 		$("#search").focus();
 	})
+	//function order
+	$(document).on("click",".btn-order",function(){
+		console.log(cart_items);
+		$.ajax({
+			type: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			url: '{{route("sendOrder")}}',
+			data:{cart_items:cart_items},
+			success: function (data) {
+
+			}
+		});
+	})
 </script>
