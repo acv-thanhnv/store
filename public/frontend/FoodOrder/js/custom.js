@@ -103,12 +103,12 @@ $("body").on("click",".add_to_cart",function(e){
     		localStorage.time = time;
     	}
     	var obj = {id:id,image:image,name:name,price:price,quantity:quantity};
+    	//check local storage
     	if (localStorage.cart_items) {
     		cart_items = JSON.parse(localStorage.cart_items);
     		var cart_index = cart_items.findIndex(item => item.id === obj.id);
     		if (cart_index<0) {
     			cart_items.push(obj);
-    			cart_update.push(obj);
     			cart_total++;
 			}else{
 				cart_items[cart_index].quantity++;
@@ -126,6 +126,14 @@ $("body").on("click",".add_to_cart",function(e){
 			sendItem(cart_items);
             localStorage.cart_items = JSON.stringify(cart_items);
         }
+        //check update
+    	var cart_index = cart_update.findIndex(item => item.id === obj.id);
+    	if (cart_index<0) {
+			cart_update.push(obj);
+		}else{
+			cart_update[cart_index].quantity++;
+		}
+		console.log(cart_update);
         //change total items of cart
         $(".js-show-cart").attr("data-notify",cart_total);
 	} else {

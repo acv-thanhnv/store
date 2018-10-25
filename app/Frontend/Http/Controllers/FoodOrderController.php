@@ -88,15 +88,7 @@ class FoodOrderController extends Controller
             $order_detail['quantity']    = $obj['quantity'];
             SDB::table('store_order_detail')->insert($order_detail);
         }
-        // $arrOrder = CommonHelper::toJson(SDB::table('store_order_detail')
-        //                 ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
-        //                 ->join('store_order','store_order.id','=','store_order_detail.order_id')
-        //                 ->where('order_id',$idOrder)
-        //                 ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price',
-        //                     'store_order.location_id')
-        //                 ->get());
-
-        // return $arrOrder;
+        return $idOrder;
     }
     public function FoodDetail()
     {
