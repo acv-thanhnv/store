@@ -1,4 +1,5 @@
-var _page =1,_numberPage,quantity=1,cart_items=[],cart_total=0;
+var _page =1,_numberPage,quantity=1,cart_items=[];
+var cart_total=0,cart_update=[];
 $(".infinite-scroll-request").hide();
 //function lazy load food
 function lazyLoad(url,idStore){
@@ -107,6 +108,7 @@ $("body").on("click",".add_to_cart",function(e){
     		var cart_index = cart_items.findIndex(item => item.id === obj.id);
     		if (cart_index<0) {
     			cart_items.push(obj);
+    			cart_update.push(obj);
     			cart_total++;
 			}else{
 				cart_items[cart_index].quantity++;
@@ -242,4 +244,22 @@ function cal_total(data){
 		total_money += total;
 	});
 	$(".total-money").text("Total: "+total_money);
+}
+//function order
+function Order(url,idStore){
+	$(document).on("click",".btn-order",function(){
+		var table = $("#table").val();
+		var discription = null;
+		$.ajax({
+			type: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			url: url,
+			data:{cart_items:cart_items,idStore:idStore,table:table,discription:discription},
+			success: function (data) {
+				console.log(data);
+			}
+		});
+	})
 }

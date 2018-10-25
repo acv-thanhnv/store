@@ -34,8 +34,8 @@ class FoodOrderController extends Controller
     {  
         $idStore  = $request->idStore;
         $arrTable = SDB::table('store_location')
-                    ->where("store_id",$idStore)
-                    ->get();
+        ->where("store_id",$idStore)
+        ->get();
         return view('frontend.foodorder.index',[
             "idStore"  => $idStore,
             "arrTable" => $arrTable
@@ -74,17 +74,44 @@ class FoodOrderController extends Controller
     }
     public function sendOrder(Request $request)
     {
-        dd($request->cart_items);
+        $order["ip_address"]     = $request->ip();
+        $order["store_id"]       = $request->idStore;
+        $order["location_id"]    = $request->table;
+        $cart_items              = $request->cart_items;
+        $order["description"]    = $request->description;
+        $order["datetime_order"] = CommonHelper::dateNow();
+        //create new order
+        $idOrder = SDB::table('store_order')->insertGetId($order);
+        $order_detail['order_id'] = $idOrder;
+        foreach($cart_items as $obj){
+            $order_detail['entities_id'] = $obj['id'];
+            $order_detail['quantity']    = $obj['quantity'];
+            SDB::table('store_order_detail')->insert($order_detail);
+        }
+        // $arrOrder = CommonHelper::toJson(SDB::table('store_order_detail')
+        //                 ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
+        //                 ->join('store_order','store_order.id','=','store_order_detail.order_id')
+        //                 ->where('order_id',$idOrder)
+        //                 ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price',
+        //                     'store_order.location_id')
+        //                 ->get());
+
+        // return $arrOrder;
     }
     public function FoodDetail()
     {
         return view("frontend.Food_Order.food-detail");
     }
+
     public function getLocations(Request $request)
     {   
         $storeId  = $request->storeId;
-        $location = DB::table('store_location')->join('store_store', 'store_location.store_id', '=', 'store_store.id')->where('store_store.id', $storeId)->select('store_location.id', 'store_location.name')->get();
-    return view('frontend.foodorder.table', ['location' => $location]);
+        $location = DB::table('store_location')
+                    ->join('store_store', 'store_location.store_id', '=', 'store_store.id')
+                    ->where('store_store.id', $storeId)
+                    ->select('store_location.id', 'store_location.name')
+                    ->get();
+        return view('frontend.foodorder.table', ['location' => $location]);
     }
 
     public function getDetail(Request $request)
@@ -100,6 +127,5 @@ class FoodOrderController extends Controller
 
         return view('frontend.foodorder.detail', ['detail'=>$detail,'properties'=>$properties] );
     }
-
 
 }

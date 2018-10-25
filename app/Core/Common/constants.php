@@ -83,7 +83,7 @@ class StorageDisk{
 class CutomerConst{
     const limit = 5;
     const numberMenu = 5;
-    const hour = 0.02;
+    const hour = 24;
 }
 class OrderStatusValue{
     const Waiter = 1;

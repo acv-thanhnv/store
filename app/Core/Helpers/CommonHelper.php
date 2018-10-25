@@ -8,8 +8,9 @@ namespace App\Core\Helpers;
  */
 use App\Core\Common\OrderConst;
 use App\Core\Dao\SDB;
-use Illuminate\Support\Facades\Route;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Session;
 class CommonHelper
@@ -182,6 +183,10 @@ class CommonHelper
     public static function toJson($obj){
         $obj = json_encode($obj);
         return $obj;
+    }
+    public static function dateNow(){
+        $now = Carbon::now('Asia/Ho_Chi_Minh');
+        return $now;
     }
 
 }
