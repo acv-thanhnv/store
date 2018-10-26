@@ -69,6 +69,7 @@ class OrderConst{
 
     const OrderChannelToChef = "to-chef";
     const OrderChefEventName = "order.chef";
+    const OrderStatusEventName = "order-status";
 
     const TypeDelete = "delete";
     const TypeAdd = "add";

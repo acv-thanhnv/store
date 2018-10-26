@@ -522,7 +522,11 @@
 					</span>
 				</div>
 				<div class="progress">
-					<div class="progress-bar" style="width:50%;height: 10px"></div>
+					<div class="progress-bar" style="width:50%;height: 10px">
+					</div>
+				</div>
+				<div>
+					Status:<span class="status-food" data-status='0'>Wait Accept Order</span>
 				</div>
 			</div>
 		</li>
@@ -539,6 +543,8 @@
 <script src="frontend/FoodOrder/js/main.js"></script>
 <!--Jquery confirm -->
 <script src="js/lib/jquery-confirm.js"></script>
+<!--Pusher-->
+<script src="https://js.pusher.com/4.3/pusher.min.js"></script>
 <!--Custom JS-->
 <script src="frontend/FoodOrder/js/custom.js"></script>
 <script type="text/javascript">
@@ -546,19 +552,45 @@
 	//function buildMenu
 	$(document).ready(function(){
 		//set timeout local storage
-		var now = new Date().getTime();
+		var now = new Date().getTime();	
 		var hour = '{{\App\Core\Common\CutomerConst::hour}}';
 		if(now-localStorage.time > hour*60*60*1000){
 			localStorage.clear();
 		}
 		$("#table").select2();
 		var idStore = {!! $idStore !!};
+		//create access token
+		if(localStorage.access_token){
+			var access_token = localStorage.access_token;
+		}else{
+			var access_token = '{{$access_token}}';
+			localStorage.access_token = access_token;
+		}
+		var channel_name = access_token+'_'+'{{\App\Core\Common\OrderConst::OrderStatusEventName}}';
+		console.log(channel_name);
 		countCart();//dem va hien thi so item trong gio hang
 		buildMenu("{{route('Menu')}}",idStore,numberMenu);
 		buildFood("{{route('getFood')}}",idStore,1);
 		lazyLoad("{{route('getFood')}}",idStore);
-		Order("{{route('sendOrder')}}",idStore);
+		Order("{{route('sendOrder')}}",idStore,access_token);
+		PusherEvent(channel_name);
 	})
+
+	//pusher event
+	function PusherEvent(channel_name){
+		// Enable pusher logging - don't include this in production
+		Pusher.logToConsole = true;
+
+		var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
+                cluster: '{{env('PUSHER_APP_CLUSTER')}}',
+                encrypted: true
+            });
+	    var channel = pusher.subscribe(channel_name);
+	    var eventName = "{{\App\Core\Common\OrderConst::OrderStatusEventName}}";
+        channel.bind(eventName, function(data){
+        	console.log(data);
+        });
+	}
 	//fixed cart for mobile
 	$( window ).scroll(function() {
 		var height = $(".wrap-header-mobile" ).height()+$(".menu-type" ).height();

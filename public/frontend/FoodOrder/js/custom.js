@@ -1,5 +1,5 @@
 var _page =1,_numberPage,quantity=1,cart_items=[];
-var cart_total=0,cart_update=[];
+var cart_total=0,status=0;
 $(".infinite-scroll-request").hide();
 //function lazy load food
 function lazyLoad(url,idStore){
@@ -102,13 +102,12 @@ $("body").on("click",".add_to_cart",function(e){
     		var time = new Date().getTime();
     		localStorage.time = time;
     	}
-    	var obj = {id:id,image:image,name:name,price:price,quantity:quantity};
+    	var obj = {id:id,image:image,name:name,price:price,quantity:quantity,status:0};
     	if (localStorage.cart_items) {
     		cart_items = JSON.parse(localStorage.cart_items);
     		var cart_index = cart_items.findIndex(item => item.id === obj.id);
     		if (cart_index<0) {
     			cart_items.push(obj);
-    			cart_update.push(obj);
     			cart_total++;
 			}else{
 				cart_items[cart_index].quantity++;
@@ -246,20 +245,76 @@ function cal_total(data){
 	$(".total-money").text("Total: "+total_money);
 }
 //function order
-function Order(url,idStore){
+function Order(url,idStore,access_token){
 	$(document).on("click",".btn-order",function(){
 		var table = $("#table").val();
+		var orderId=null;
 		var discription = null;
+		var cart_update = [];
+		cart_items.forEach(function(obj){
+			if(obj.status===0){
+				cart_update.push(obj);
+			}
+		});
+		if(localStorage.orderId){
+			orderId = localStorage.getItem('orderId');
+		}
 		$.ajax({
 			type: 'POST',
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
 			url: url,
-			data:{cart_items:cart_items,idStore:idStore,table:table,discription:discription},
+			data:{
+				cart_items:cart_update,
+				idStore:idStore,
+				table:table,
+				discription:discription,
+				orderId:orderId,
+				access_token:access_token
+			},
 			success: function (data) {
-				console.log(data);
+				localStorage.orderId = data;
 			}
 		});
 	})
 }
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=base64:oWoXxbESewyssuSZP6FHqew2V1T5A040soe9A2WPfes=
+APP_DEBUG=true
+APP_URL=http://localhost/Store/public
+
+LOG_CHANNEL=stack
+
+DB_CONNECTION=mysql
+DB_HOST=192.168.3.144
+DB_PORT=3306
+DB_DATABASE=store	
+DB_USERNAME=sondeptrai
+DB_PASSWORD=123456
+
+BROADCAST_DRIVER=pusher
+CACHE_DRIVER=file
+QUEUE_CONNECTION=sync
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+
+PUSHER_APP_ID="631855"
+PUSHER_APP_KEY="4f5dd81b5671af6c6fb2"
+PUSHER_APP_SECRET="e1dc3d8c27ea59a9484a"
+PUSHER_APP_CLUSTER=ap1
+
+MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"

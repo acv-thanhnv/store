@@ -7,6 +7,8 @@ use App\Core\Common\FoodConst;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
+use App\Core\Events\OrderPusherEvent;
+use App\Core\Events\OrderStatusPusherEvent;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
@@ -32,13 +34,15 @@ class FoodOrderController extends Controller
 
     public function getOrder(Request $request)
     {  
-        $idStore  = $request->idStore;
-        $arrTable = SDB::table('store_location')
+        $idStore      = $request->idStore;
+        $arrTable     = SDB::table('store_location')
         ->where("store_id",$idStore)
         ->get();
+        $access_token = md5(CommonHelper::dateNow());
         return view('frontend.foodorder.index',[
-            "idStore"  => $idStore,
-            "arrTable" => $arrTable
+            "idStore"      => $idStore,
+            "arrTable"     => $arrTable,
+            'access_token' => $access_token
         ]);
     }
     public function getMenu(Request $request)
@@ -74,29 +78,44 @@ class FoodOrderController extends Controller
     }
     public function sendOrder(Request $request)
     {
-        $order["ip_address"]     = $request->ip();
+        $orderId                 = $request->orderId;
+        $ip                      = $request->ip();
+        $access_token            = $request->access_token;
+        $order["access_token"]   = $request->access_token;
         $order["store_id"]       = $request->idStore;
         $order["location_id"]    = $request->table;
         $cart_items              = $request->cart_items;
         $order["description"]    = $request->description;
         $order["datetime_order"] = CommonHelper::dateNow();
-        //create new order
-        $idOrder = SDB::table('store_order')->insertGetId($order);
-        $order_detail['order_id'] = $idOrder;
+        if($orderId===null){
+            //create new order
+            $orderId = SDB::table('store_order')->insertGetId($order);
+            $order_detail['order_id'] = $orderId;
+        } else {
+            $order_detail['order_id'] = $orderId;
+        }
         foreach($cart_items as $obj){
             $order_detail['entities_id'] = $obj['id'];
             $order_detail['quantity']    = $obj['quantity'];
+            $order_detail['status']      = 1;
             SDB::table('store_order_detail')->insert($order_detail);
         }
-        // $arrOrder = CommonHelper::toJson(SDB::table('store_order_detail')
-        //                 ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
-        //                 ->join('store_order','store_order.id','=','store_order_detail.order_id')
-        //                 ->where('order_id',$idOrder)
-        //                 ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price',
-        //                     'store_order.location_id')
-        //                 ->get());
-
-        // return $arrOrder;
+        $arrOrder = SDB::table('store_order_detail')
+                    ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
+                    ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price')
+                    ->where('order_id',$orderId)
+                    ->get();
+        foreach($arrOrder as $obj){
+            if($obj->image==NULL){
+                $obj->src = url('/')."/common_images/no-store.png";
+            }else{
+                $obj->src = CommonHelper::getImageUrl($obj->image);
+            }
+        }
+        //
+        //call pusher when order, status food change
+        event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrder));
+        return $orderId;
     }
     public function FoodDetail()
     {
