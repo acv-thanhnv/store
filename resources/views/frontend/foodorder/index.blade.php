@@ -588,7 +588,10 @@
 	    var channel = pusher.subscribe(channel_name);
 	    var eventName = "{{\App\Core\Common\OrderConst::OrderStatusEventName}}";
         channel.bind(eventName, function(data){
-        	console.log(data);
+        	localStorage.removeItem(cart_items);
+        	cart_items = data.arrOrder;
+        	localStorage.cart_items = JSON.stringify(cart_items);
+        	console.log(cart_items);
         });
 	}
 	//fixed cart for mobile
