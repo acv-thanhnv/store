@@ -574,6 +574,7 @@
 		lazyLoad("{{route('getFood')}}",idStore);
 		Order("{{route('sendOrder')}}",idStore,access_token);
 		PusherEvent(channel_name);
+		deleteCartItem('{{route("deleteCartItem")}}');//delete item from cart
 	})
 
 	//pusher event

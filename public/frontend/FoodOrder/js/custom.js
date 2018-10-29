@@ -103,7 +103,8 @@ $("body").on("click",".add_to_cart",function(e){
 		localStorage.time = time;
     	var obj = {
     		entities_id:entities_id,src:src,name:name,price:price,
-    		quantity:quantity,status:0,status_name:'Ready to order!'
+    		quantity:quantity,status:0,status_name:'Ready to order',
+    		cooked:0
     	};
     	if (localStorage.cart_items) {//check if isset local storage
     		cart_items = JSON.parse(localStorage.cart_items);
@@ -159,9 +160,11 @@ function sendItem(obj){
 		}
 		//set progess bar
 		switch(item.status){
-			case 0: percent_bar = 30;
+			case 0: percent_bar = 35;
 					break;
-			case 1: percent_bar = 50;
+			case 0.5 : percent_bar = 50;
+					break;
+			case 1: percent_bar = 60;
 					break;
 			case 2: percent_bar = 100;
 					break;
@@ -186,7 +189,7 @@ $(document).on("click",".js-show-cart",function(){
 //function change quantity item
 $(document).on('click','.btn-num-product-down', function(){
 	var numProduct = Number($(this).next().val());
-	var cooked = Number($(this).parents('.wrap-num-product').siblings('.cooked').data('cooked'));
+	var cooked = Number($(this).parents('.header-cart-item-txt').find('.cooked').data('cooked'));
 	if(numProduct > 1 && numProduct>cooked) {//product must large than cooked
 		numProduct--;
 		if(numProduct===1){//if num product ==1 not allow to down
@@ -196,7 +199,8 @@ $(document).on('click','.btn-num-product-down', function(){
 		var cart_index = cart_items.findIndex(item => item.entities_id === index);
 		$(this).next().val(numProduct);
 		cart_items[cart_index].quantity--;
-		cart_items[cart_index].status=0;
+		cart_items[cart_index].status = 0.5;
+		cart_items[cart_index].status_name = 'Processing';
 		cal_total(cart_items);
 		localStorage.cart_items = JSON.stringify(cart_items);
 	}else{
@@ -214,14 +218,14 @@ $(document).on('click','.btn-num-product-up', function(){
 	var index = $(this).parent('div.wrap-num-product').data('id');
 	var cart_index = cart_items.findIndex(item => item.entities_id === index);
 	cart_items[cart_index].quantity++;
-	cart_items[cart_index].status=0;
+	cart_items[cart_index].status = 0.5;
+	cart_items[cart_index].status_name = 'Processing';
 	cal_total(cart_items);
 	localStorage.cart_items = JSON.stringify(cart_items);
 });
 $(document).on("change","input.num-product",function(){
 	var numProduct = $(this).val();
 	var cooked = Number($(this).parents('.header-cart-item-txt').find('.cooked').data('cooked'));
-	console.log(cooked);
 	var index                       = $(this).parent('div.wrap-num-product').data('id');
 	var cart_index                  = cart_items.findIndex(item => item.entities_id === index);
 	if(numProduct>1){//allow num product >1 to down 
@@ -234,37 +238,56 @@ $(document).on("change","input.num-product",function(){
 		$(this).val(cart_items[cart_index].quantity);
 	}else{
 		cart_items[cart_index].quantity = numProduct;
-		cart_items[cart_index].status   = 0;
+		cart_items[cart_index].status   = 0.5;
+		cart_items[cart_index].status_name   = 'Processing';
 		cal_total(cart_items);
 		localStorage.cart_items = JSON.stringify(cart_items);
 	}
 })
 //clear cart item
-$(document).on("click","span.delete-food-cart",function(){
-	var row = $(this).parents("li.header-cart-item");
-	var index = $(row).find(".wrap-num-product").data("id");
-	$.confirm({
-		title         : '<p class="text-danger">Warning</p>',
-		icon          : 'fa fa-exclamation-circle',
-		columnClass   : 'col-lg-5 col-md-8 col-12',
-		type          : "red",
-		closeIcon     : true,
-		closeIconClass: 'fa fa-close',
-		content       : "Are You Sure? This Food Item Will Be Deleted!",
-		buttons       : {
-			Save: {
-				text    : 'OK',
-				btnClass: 'btn btn-primary',
-				action  : function (){
-					$(row).remove();
-					var cart_index = cart_items.findIndex(item => item.id === index);
-					cart_items.splice(cart_index,1);
-					cal_total(cart_items);
-					localStorage.cart_items = JSON.stringify(cart_items);
-					cart_total--;
-					$(".js-show-cart").attr("data-notify",cart_total);
-					if(cart_total===0){
-						$('.header-cart-wrapitem').text("Your cart is empty");
+function deleteCartItem(url){
+	$(document).on("click","span.delete-food-cart",function(){
+		var row = $(this).parents("li.header-cart-item");
+		var index = $(row).find(".wrap-num-product").data("id");
+		$.confirm({
+			title         : '<p class="text-danger">Warning</p>',
+			icon          : 'fa fa-exclamation-circle',
+			columnClass   : 'col-lg-5 col-md-8 col-12',
+			type          : "red",
+			closeIcon     : true,
+			closeIconClass: 'fa fa-close',
+			content       : "Are You Sure? This Food Item Will Be Deleted!",
+			buttons       : {
+				Save: {
+					text    : 'OK',
+					btnClass: 'btn btn-primary',
+					action  : function (){
+						var cart_index = cart_items.findIndex(item => item.entities_id === index);
+						if(cart_items[cart_index].cooked===0){
+							$(row).remove();
+							$.ajax({
+								type: 'POST',
+								headers: {
+									'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+								},
+								url: url,
+								data:{
+									id:cart_items[cart_index].id
+								},
+								success: function (data) {
+									alert("Food have been delete successfull");
+									cart_items.splice(cart_index,1);
+									cal_total(cart_items);
+									localStorage.cart_items = JSON.stringify(cart_items);
+									cart_total--;
+									$(".js-show-cart").attr("data-notify",cart_total);
+									if(cart_total===0){
+										$('.header-cart-wrapitem').text("Your cart is empty");
+									}
+								}
+							})
+					}else{
+						alert("Sry , your food have been cood, you can't delete this food!");
 					}
 				}
 			},
@@ -274,7 +297,8 @@ $(document).on("click","span.delete-food-cart",function(){
 			}
 		}
 	});
-})
+						})
+}
 //count cart item
 function countCart(){
 	if(localStorage.cart_items){
@@ -303,7 +327,7 @@ function Order(url,idStore,access_token){
 		var cart_update = [];
 		cart_items = JSON.parse(localStorage.cart_items);
 		cart_items.forEach(function(obj){
-			if(obj.status===0){
+			if(obj.status<1){
 				cart_update.push(obj);
 			}
 		});

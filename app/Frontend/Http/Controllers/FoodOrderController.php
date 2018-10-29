@@ -128,30 +128,11 @@ class FoodOrderController extends Controller
     {
         return view("frontend.Food_Order.food-detail");
     }
-
-    public function getLocations(Request $request)
-    {   
-        $storeId  = $request->storeId;
-        $location = DB::table('store_location')
-                    ->join('store_store', 'store_location.store_id', '=', 'store_store.id')
-                    ->where('store_store.id', $storeId)
-                    ->select('store_location.id', 'store_location.name')
-                    ->get();
-        return view('frontend.foodorder.table', ['location' => $location]);
+    public function deleteCartItem(Request $request)
+    {
+        $id = $request->id;
+        SDB::table('store_order_detail')
+        ->where('id',$id)
+        ->delete();
     }
-
-    public function getDetail(Request $request)
-    {   
-        $id         =$request->input('id');
-        $detail     = DB::table('store_entities')->where('id',$id)->get();
-        $properties = DB::table('store_entities')
-        ->join('store_entity_property_values', 'store_entity_property_values.entity_id', '=','store_entities.id')
-        ->join('store_entity_properties', 'store_entity_properties.id', '=','store_entity_property_values.property_id')
-        ->select('store_entities.id','store_entities.name','store_entities.price','store_entity_properties.property_label','store_entity_property_values.value')
-        ->where('store_entities.id',$id)
-        ->get();
-
-        return view('frontend.foodorder.detail', ['detail'=>$detail,'properties'=>$properties] );
-    }
-
 }

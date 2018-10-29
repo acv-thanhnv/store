@@ -26,5 +26,6 @@ Route::get("Order","FoodOrderController@getOrder")->name("Order");
 Route::post("sendOrder","FoodOrderController@sendOrder")->name("sendOrder"); 
 Route::get("FoodDetail","FoodOrderController@FoodDetail"); 
 Route::get("getCartItems","FoodOrderController@getCartItems")->name('getCartItems'); 
+Route::post("deleteCartItem","FoodOrderController@deleteCartItem")->name('deleteCartItem'); 
 
 
