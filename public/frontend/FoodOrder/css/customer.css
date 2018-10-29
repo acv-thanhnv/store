@@ -432,4 +432,15 @@ body.show-header-cart {
   display: inline;
   width: 70%; }
 
+.disabled {
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  opacity: .65; }
+
+.disabled:hover {
+  background: none !important;
+  color: black; }
+
 /*# sourceMappingURL=customer.css.map */

@@ -98,7 +98,13 @@ class FoodOrderController extends Controller
             $order_detail['entities_id'] = $obj['entities_id'];
             $order_detail['quantity']    = $obj['quantity'];
             $order_detail['status']      = 1;
-            SDB::table('store_order_detail')->insert($order_detail);
+            if(isset($obj["id"])){
+                SDB::table('store_order_detail')
+                ->where('id',$obj['id'])
+                ->update(['quantity' => $obj['quantity'],'status' => 1]);
+            }else{
+                SDB::table('store_order_detail')->insert($order_detail);
+            }
         }
         $arrOrder = SDB::table('store_order_detail')
                     ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')

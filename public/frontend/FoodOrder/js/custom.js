@@ -101,17 +101,19 @@ $("body").on("click",".add_to_cart",function(e){
     	//set time out for cart
 		var time = new Date().getTime();
 		localStorage.time = time;
-    	var obj = {entities_id:entities_id,src:src,name:name,price:price,quantity:quantity,status:0,status_name:'Đang xác nhận!'};
+    	var obj = {
+    		entities_id:entities_id,src:src,name:name,price:price,
+    		quantity:quantity,status:0,status_name:'Ready to order!'
+    	};
     	if (localStorage.cart_items) {//check if isset local storage
     		cart_items = JSON.parse(localStorage.cart_items);
     		var cart_index = cart_items.findIndex(item => item.entities_id === obj.entities_id);
     		if (cart_index<0) {//neu ko ton tai id va status
-    			if((cart_items.findIndex(item => item.entities_id === obj.entities_id))<0){//neu ko co id 
-    				cart_total++;
-    			}	
+    			cart_total++;
     			cart_items.push(obj);
 			}else{
 				cart_items[cart_index].quantity++;
+				cart_items[cart_index].status = 0;
 			}
 			sendItem(cart_items);
 			localStorage.cart_items = JSON.stringify(cart_items);
@@ -146,10 +148,20 @@ function sendItem(obj){
 		var row = $('#template-cart').contents().clone();
 		$(row).find(".header-cart-item-name").text(item.name);
 		$(row).find(".num-product").val(item.quantity);
+		//check if num-product ==1 no allow to down num-product
+		if(item.quantity===1){
+			$(row).find('.btn-num-product-down').addClass('disabled');
+		}
 		$(row).find(".header-cart-item-img img").attr("src",item.src);
 		$(row).find(".header-cart-item-info").text(item.price);
 		$(row).find(".wrap-num-product").attr('data-id',item.entities_id);
-		$(row).find(".status-food").text(item.status_name);
+		$(row).find(".progress-bar").text(item.status_name);
+		$(row).find(".cooked").attr('data-cooked',item.cooked);
+		//check cooked
+		if(item.cooked>0){
+			$(row).find('.cooked').text(item.cooked);
+			$(row).find('.cooked').attr('data-cooked',item.cooked);
+		}
 		//set progess bar
 		switch(item.status){
 			case 0: percent_bar = 30;
@@ -167,13 +179,11 @@ function sendItem(obj){
 $(document).on("click",".js-show-cart",function(){
 	var show_cart_items;
 	if (localStorage.cart_items) {
-		show_cart_items = JSON.parse(localStorage.cart_items);
-		show_cart_items = groupFood(show_cart_items);
-		console.log(show_cart_items);
-		sendItem(show_cart_items);
-		cal_total(show_cart_items);
+		cart_items = JSON.parse(localStorage.cart_items);
+		sendItem(cart_items);
+		cal_total(cart_items);
 	}
-	if(show_cart_items.length===0){
+	if(cart_items.length===0){
 		$(".total-money").text("Total: 0");
 		$('.header-cart-wrapitem').text("Your cart is empty");
 	}
@@ -194,34 +204,57 @@ function groupFood(data){
 //function change quantity item
 $(document).on('click','.btn-num-product-down', function(){
 	var numProduct = Number($(this).next().val());
-	if(numProduct > 0) {
+	var cooked = Number($(this).parents('.wrap-num-product').siblings('.cooked').data('cooked'));
+	if(numProduct > 1 && numProduct>cooked) {//product must large than cooked
 		numProduct--;
-		$(this).next().val(numProduct);
+		if(numProduct===1){//if num product ==1 not allow to down
+			$(this).addClass('disabled');
+		}
 		var index = $(this).parent('div.wrap-num-product').data('id');
-		var cart_index = cart_items.findIndex(item => item.id === index);
+		var cart_index = cart_items.findIndex(item => item.entities_id === index);
+		$(this).next().val(numProduct);
 		cart_items[cart_index].quantity--;
+		cart_items[cart_index].status=0;
 		cal_total(cart_items);
 		localStorage.cart_items = JSON.stringify(cart_items);
+	}else{
+		alert("Sr you food have been cooked, you not allow to reduce it");
 	}
 });
 
 $(document).on('click','.btn-num-product-up', function(){
 	var numProduct = Number($(this).prev().val());
 	numProduct++;
+	if(numProduct>1){//allow num product >1 to down 
+			$(this).siblings(".btn-num-product-down").removeClass('disabled');
+	}
 	$(this).prev().val(numProduct);
 	var index = $(this).parent('div.wrap-num-product').data('id');
-	var cart_index = cart_items.findIndex(item => item.id === index);
+	var cart_index = cart_items.findIndex(item => item.entities_id === index);
 	cart_items[cart_index].quantity++;
+	cart_items[cart_index].status=0;
 	cal_total(cart_items);
 	localStorage.cart_items = JSON.stringify(cart_items);
 });
 $(document).on("change","input.num-product",function(){
 	var numProduct = $(this).val();
-	var index = $(this).parent('div.wrap-num-product').data('id');
-	var cart_index = cart_items.findIndex(item => item.id === index);
-	cart_items[cart_index].quantity= numProduct;
-	cal_total(cart_items);
-	localStorage.cart_items = JSON.stringify(cart_items);
+	var cooked = Number($(this).parents('.wrap-num-product').siblings('.cooked').data('cooked'));
+	var index                       = $(this).parent('div.wrap-num-product').data('id');
+	var cart_index                  = cart_items.findIndex(item => item.entities_id === index);
+	if(numProduct>1){//allow num product >1 to down 
+		$(this).siblings(".btn-num-product-down").removeClass('disabled');
+	}else{
+		$(this).siblings(".btn-num-product-down").addClass('disabled');
+	}
+	if(numProduct<cooked){//check how food have been cooked, if product less than cooked, not allow
+		alert('Sry we have cooked '+cooked+' foods, so you can\'t reduct less than cooked');
+		$(this).val(cart_items[cart_index].quantity);
+	}else{
+		cart_items[cart_index].quantity = numProduct;
+		cart_items[cart_index].status   = 0;
+		cal_total(cart_items);
+		localStorage.cart_items = JSON.stringify(cart_items);
+	}
 })
 //clear cart item
 $(document).on("click","span.delete-food-cart",function(){
@@ -313,10 +346,18 @@ function Order(url,idStore,access_token){
 				access_token:access_token
 			},
 			success: function (data) {
+				//set table fixed
+				var table = $('#table').val();
+				localStorage.table = table;
 				localStorage.orderId = data;
 			}
 		});
 		}
 	})
 }
-
+//function set table
+function setTable(){
+	if(localStorage.table){
+		$("#table").val(localStorage.table).trigger('change');
+	}
+}

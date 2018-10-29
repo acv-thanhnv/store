@@ -493,7 +493,7 @@
 	</div>
 	<!--Template Cart-->
 	<div id="template-cart" style="display: none">
-		<li class="header-cart-item flex-w flex-t m-b-12">
+		<li class="header-cart-item flex-w flex-t m-b-10">
 			<div class="header-cart-item-img">
 				<img alt="IMG">
 			</div>
@@ -522,11 +522,11 @@
 					</span>
 				</div>
 				<div class="progress">
-					<div class="progress-bar" style="width:50%;height: 10px">
+					<div class="progress-bar" data-status='0' style="width:50%;height: 15px">
 					</div>
 				</div>
 				<div>
-					Status:<span class="status-food" data-status='0'></span>
+					Cooked:<span data-cooked = '0' class="cooked">0</span>
 				</div>
 			</div>
 		</li>
@@ -567,6 +567,7 @@
 			localStorage.access_token = access_token;
 		}
 		var channel_name = access_token+'_'+'{{\App\Core\Common\OrderConst::OrderStatusEventName}}';
+		setTable();
 		countCart();//dem va hien thi so item trong gio hang
 		buildMenu("{{route('Menu')}}",idStore,numberMenu);
 		buildFood("{{route('getFood')}}",idStore,1);
