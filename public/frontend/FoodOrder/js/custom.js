@@ -134,11 +134,6 @@ $("body").on("click",".add_to_cart",function(e){
 		alert('Sr we have some errors, please try againt!');
 	}
 });
-//function check update and quantity
-function check_quantity(element, index, array) {
-	return (element.entities_id == this.entities_id && element.status == this.status)
-	//trả về true nếu tìm được phần tử có cùng id và status
-}
 //function send icon to cart
 function sendItem(obj){
 	var cart = $('.header-cart-wrapitem');
@@ -188,19 +183,6 @@ $(document).on("click",".js-show-cart",function(){
 		$('.header-cart-wrapitem').text("Your cart is empty");
 	}
 })
-//function group food by id
-function groupFood(data){
-	//group food by entities_id
-	for(var i =0;i< data.length-1;i++){
-		for(var j=i+1;j<data.length;j++){
-			if(data[i].entities_id===data[j].entities_id){
-				data[i].quantity+= data[j].quantity;
-				data.splice(j,1);
-			}
-		}
-	}
-	return data;
-}
 //function change quantity item
 $(document).on('click','.btn-num-product-down', function(){
 	var numProduct = Number($(this).next().val());
@@ -238,7 +220,8 @@ $(document).on('click','.btn-num-product-up', function(){
 });
 $(document).on("change","input.num-product",function(){
 	var numProduct = $(this).val();
-	var cooked = Number($(this).parents('.wrap-num-product').siblings('.cooked').data('cooked'));
+	var cooked = Number($(this).parents('.header-cart-item-txt').find('.cooked').data('cooked'));
+	console.log(cooked);
 	var index                       = $(this).parent('div.wrap-num-product').data('id');
 	var cart_index                  = cart_items.findIndex(item => item.entities_id === index);
 	if(numProduct>1){//allow num product >1 to down 
@@ -296,7 +279,6 @@ $(document).on("click","span.delete-food-cart",function(){
 function countCart(){
 	if(localStorage.cart_items){
 		var show_total = JSON.parse(localStorage.cart_items);
-		show_total = groupFood(show_total);
 		cart_total = show_total.length;
 	}
 	$(".js-show-cart").attr("data-notify",cart_total);
