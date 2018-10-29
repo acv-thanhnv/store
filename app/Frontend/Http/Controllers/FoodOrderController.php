@@ -95,14 +95,15 @@ class FoodOrderController extends Controller
             $order_detail['order_id'] = $orderId;
         }
         foreach($cart_items as $obj){
-            $order_detail['entities_id'] = $obj['id'];
+            $order_detail['entities_id'] = $obj['entities_id'];
             $order_detail['quantity']    = $obj['quantity'];
             $order_detail['status']      = 1;
             SDB::table('store_order_detail')->insert($order_detail);
         }
         $arrOrder = SDB::table('store_order_detail')
                     ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
-                    ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price')
+                    ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
+                    ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
                     ->where('order_id',$orderId)
                     ->get();
         foreach($arrOrder as $obj){

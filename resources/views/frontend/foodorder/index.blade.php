@@ -526,7 +526,7 @@
 					</div>
 				</div>
 				<div>
-					Status:<span class="status-food" data-status='0'>Wait Accept Order</span>
+					Status:<span class="status-food" data-status='0'></span>
 				</div>
 			</div>
 		</li>
@@ -567,7 +567,6 @@
 			localStorage.access_token = access_token;
 		}
 		var channel_name = access_token+'_'+'{{\App\Core\Common\OrderConst::OrderStatusEventName}}';
-		console.log(channel_name);
 		countCart();//dem va hien thi so item trong gio hang
 		buildMenu("{{route('Menu')}}",idStore,numberMenu);
 		buildFood("{{route('getFood')}}",idStore,1);
@@ -591,7 +590,6 @@
         	localStorage.removeItem(cart_items);
         	cart_items = data.arrOrder;
         	localStorage.cart_items = JSON.stringify(cart_items);
-        	console.log(cart_items);
         });
 	}
 	//fixed cart for mobile

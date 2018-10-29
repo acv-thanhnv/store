@@ -92,29 +92,31 @@ $("body").on("click",".add_to_cart",function(e){
 	// localStorage.removeItem("cart_items");
 	//check local storage
 	if (typeof(Storage) !== "undefined") {
-    	var image = $(this).siblings("img").attr("src");
+    	var src = $(this).siblings("img").attr("src");
     	var parent = $(this).parent("div.food-image");
-    	var id = $(parent).parent("div.block2").data("id");
+    	var entities_id = $(parent).parent("div.block2").data("id");
     	var food_content = $(parent).siblings("div.food-content");
     	var name = $(food_content).find("a.food-items-name").text();
     	var price = parseInt($(food_content).find("span.food-items-price").text());
     	//set time out for cart
 		var time = new Date().getTime();
 		localStorage.time = time;
-    	var obj = {id:id,image:image,name:name,price:price,quantity:quantity,status:0};
-    	if (localStorage.cart_items) {
+    	var obj = {entities_id:entities_id,src:src,name:name,price:price,quantity:quantity,status:0,status_name:'Đang xác nhận!'};
+    	if (localStorage.cart_items) {//check if isset local storage
     		cart_items = JSON.parse(localStorage.cart_items);
-    		var cart_index = cart_items.findIndex(check_quantity(),obj);
-    		if (cart_index<0) {
+    		var cart_index = cart_items.findIndex(item => item.entities_id === obj.entities_id);
+    		if (cart_index<0) {//neu ko ton tai id va status
+    			if((cart_items.findIndex(item => item.entities_id === obj.entities_id))<0){//neu ko co id 
+    				cart_total++;
+    			}	
     			cart_items.push(obj);
-    			cart_total++;
 			}else{
 				cart_items[cart_index].quantity++;
 			}
 			sendItem(cart_items);
 			localStorage.cart_items = JSON.stringify(cart_items);
         } else {
-        	var cart_index = cart_items.findIndex(item => item.id === obj.id);
+        	var cart_index = cart_items.findIndex(item => item.entities_id === obj.entities_id);
         	if (cart_index<0) {
         		cart_total++;
     			cart_items.push(obj);
@@ -132,35 +134,63 @@ $("body").on("click",".add_to_cart",function(e){
 });
 //function check update and quantity
 function check_quantity(element, index, array) {
-	return (element.id == this.id) &&(element.status==this.status) ;
+	return (element.entities_id == this.entities_id && element.status == this.status)
 	//trả về true nếu tìm được phần tử có cùng id và status
 }
 //function send icon to cart
 function sendItem(obj){
 	var cart = $('.header-cart-wrapitem');
+	var percent_bar;
 	$(cart).empty();
 	obj.forEach(function(item){
 		var row = $('#template-cart').contents().clone();
 		$(row).find(".header-cart-item-name").text(item.name);
 		$(row).find(".num-product").val(item.quantity);
-		$(row).find(".header-cart-item-img img").attr("src",item.image);
+		$(row).find(".header-cart-item-img img").attr("src",item.src);
 		$(row).find(".header-cart-item-info").text(item.price);
-		$(row).find(".wrap-num-product").attr('data-id',item.id);
+		$(row).find(".wrap-num-product").attr('data-id',item.entities_id);
+		$(row).find(".status-food").text(item.status_name);
+		//set progess bar
+		switch(item.status){
+			case 0: percent_bar = 30;
+					break;
+			case 1: percent_bar = 50;
+					break;
+			case 2: percent_bar = 100;
+					break;
+		}
+		$(row).find(".progress-bar").css("width",percent_bar+"%");
 		$(cart).append($(row));
 	});
 }
 //function show cart
 $(document).on("click",".js-show-cart",function(){
+	var show_cart_items;
 	if (localStorage.cart_items) {
-		cart_items = JSON.parse(localStorage.cart_items);
-		sendItem(cart_items);
-		cal_total(cart_items);
+		show_cart_items = JSON.parse(localStorage.cart_items);
+		show_cart_items = groupFood(show_cart_items);
+		console.log(show_cart_items);
+		sendItem(show_cart_items);
+		cal_total(show_cart_items);
 	}
-	if(cart_items.length===0){
+	if(show_cart_items.length===0){
 		$(".total-money").text("Total: 0");
 		$('.header-cart-wrapitem').text("Your cart is empty");
 	}
 })
+//function group food by id
+function groupFood(data){
+	//group food by entities_id
+	for(var i =0;i< data.length-1;i++){
+		for(var j=i+1;j<data.length;j++){
+			if(data[i].entities_id===data[j].entities_id){
+				data[i].quantity+= data[j].quantity;
+				data.splice(j,1);
+			}
+		}
+	}
+	return data;
+}
 //function change quantity item
 $(document).on('click','.btn-num-product-down', function(){
 	var numProduct = Number($(this).next().val());
@@ -232,8 +262,9 @@ $(document).on("click","span.delete-food-cart",function(){
 //count cart item
 function countCart(){
 	if(localStorage.cart_items){
-		cart_items = JSON.parse(localStorage.cart_items);
-		cart_total = cart_items.length;
+		var show_total = JSON.parse(localStorage.cart_items);
+		show_total = groupFood(show_total);
+		cart_total = show_total.length;
 	}
 	$(".js-show-cart").attr("data-notify",cart_total);
 }
@@ -255,6 +286,7 @@ function Order(url,idStore,access_token){
 		var orderId     =null;
 		var discription = null;
 		var cart_update = [];
+		cart_items = JSON.parse(localStorage.cart_items);
 		cart_items.forEach(function(obj){
 			if(obj.status===0){
 				cart_update.push(obj);
