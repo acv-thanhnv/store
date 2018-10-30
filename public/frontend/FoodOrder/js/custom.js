@@ -89,7 +89,6 @@ function buildFood(url,idStore,page){
 //add item to cart
 $("body").on("click",".add_to_cart",function(e){
 	e.preventDefault();
-	// localStorage.removeItem("cart_items");
 	//check local storage
 	if (typeof(Storage) !== "undefined") {
     	var src = $(this).siblings("img").attr("src");
@@ -101,12 +100,15 @@ $("body").on("click",".add_to_cart",function(e){
     	//set time out for cart
 		var time = new Date().getTime();
 		localStorage.time = time;
+		//show alert change
+		showAlert();
     	var obj = {
     		entities_id:entities_id,src:src,name:name,price:price,
     		quantity:quantity,status:0,status_name:'Ready to order',
     		cooked:0
     	};
     	if (localStorage.cart_items) {//check if isset local storage
+    		console.log("Cos local storage");
     		cart_items = JSON.parse(localStorage.cart_items);
     		var cart_index = cart_items.findIndex(item => item.entities_id === obj.entities_id);
     		if (cart_index<0) {//neu ko ton tai id va status
@@ -114,11 +116,12 @@ $("body").on("click",".add_to_cart",function(e){
     			cart_items.push(obj);
 			}else{
 				cart_items[cart_index].quantity++;
-				cart_items[cart_index].status = 0;
+				cart_items[cart_index].status = 0.5;
+				cart_items[cart_index].status_name = 'Processing';
 			}
 			sendItem(cart_items);
-			localStorage.cart_items = JSON.stringify(cart_items);
-        } else {
+            localStorage.cart_items = JSON.stringify(cart_items);
+        }else {
         	var cart_index = cart_items.findIndex(item => item.entities_id === obj.entities_id);
         	if (cart_index<0) {
         		cart_total++;
@@ -160,7 +163,7 @@ function sendItem(obj){
 		}
 		//set progess bar
 		switch(item.status){
-			case 0: percent_bar = 35;
+			case 0: percent_bar = 45;
 					break;
 			case 0.5 : percent_bar = 50;
 					break;
@@ -175,7 +178,8 @@ function sendItem(obj){
 }
 //function show cart
 $(document).on("click",".js-show-cart",function(){
-	var show_cart_items;
+	//show alert if isset change
+	checkAlert();
 	if (localStorage.cart_items) {
 		cart_items = JSON.parse(localStorage.cart_items);
 		sendItem(cart_items);
@@ -192,6 +196,7 @@ $(document).on('click','.btn-num-product-down', function(){
 	var cooked = Number($(this).parents('.header-cart-item-txt').find('.cooked').data('cooked'));
 	if(numProduct > 1 && numProduct>cooked) {//product must large than cooked
 		numProduct--;
+		showAlert();
 		if(numProduct===1){//if num product ==1 not allow to down
 			$(this).addClass('disabled');
 		}
@@ -214,6 +219,7 @@ $(document).on('click','.btn-num-product-up', function(){
 	if(numProduct>1){//allow num product >1 to down 
 			$(this).siblings(".btn-num-product-down").removeClass('disabled');
 	}
+	showAlert();//show alert change
 	$(this).prev().val(numProduct);
 	var index = $(this).parent('div.wrap-num-product').data('id');
 	var cart_index = cart_items.findIndex(item => item.entities_id === index);
@@ -242,6 +248,7 @@ $(document).on("change","input.num-product",function(){
 		cart_items[cart_index].status_name   = 'Processing';
 		cal_total(cart_items);
 		localStorage.cart_items = JSON.stringify(cart_items);
+		showAlert();
 	}
 })
 //clear cart item
@@ -352,10 +359,14 @@ function Order(url,idStore,access_token){
 				access_token:access_token
 			},
 			success: function (data) {
+				$('.js-panel-cart').removeClass('show-header-cart');//close cart
 				//set table fixed
 				var table = $('#table').val();
-				localStorage.table = table;
-				localStorage.orderId = data;
+				localStorage.table = table;//set table for local
+				localStorage.orderId = data;//set orderId for local
+				//clear local alert change
+				localStorage.removeItem('hasAlert');
+				hideAlert();
 			}
 		});
 		}
@@ -365,5 +376,21 @@ function Order(url,idStore,access_token){
 function setTable(){
 	if(localStorage.table){
 		$("#table").val(localStorage.table).trigger('change');
+	}
+}
+//function show alert when food have change
+function showAlert(){
+	localStorage.hasAlert = 1;
+	$(".cart-items").addClass("has-alert");
+	$('.alert-change').removeClass('dis-none');
+}
+function hideAlert(){
+	$(".cart-items").removeClass("has-alert");
+	$('.alert-change').addClass('dis-none');
+}
+function checkAlert(){
+	if(localStorage.hasAlert){
+		$(".cart-items").addClass("has-alert");
+		$('.alert-change').removeClass('dis-none');
 	}
 }

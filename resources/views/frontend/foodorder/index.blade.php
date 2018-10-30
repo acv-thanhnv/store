@@ -165,9 +165,14 @@
 			</div>
 			
 			<div class="header-cart-content flex-w js-pscroll p-t-10 p-r-10">
-				<ul class="header-cart-wrapitem w-full">
-				</ul>
-				<div class="w-full cart-total p-t-5 row" style="margin-left: 0px">
+				<div class="cart-items" >
+					<ul class="header-cart-wrapitem w-full">
+					</ul>
+					<div class="alert alert-warning alert-change dis-none">
+						<strong>Warning!</strong> You just update orders, press <a class="alert-link btn-order">Order</a> to save changes 
+					</div>
+				</div>
+				<div class="w-full cart-total p-t-5 row" style="margin-left: 0px;">
 					<div class="col-lg-6 col-12 left">
 						<span class="note fa fa-pencil-square-o">Note</span>
 						<div class="w-full p-t-5 p-b-10 select-table">
@@ -566,6 +571,8 @@
 			var access_token = '{{$access_token}}';
 			localStorage.access_token = access_token;
 		}
+		//show alert change
+		checkAlert();
 		var channel_name = access_token+'_'+'{{\App\Core\Common\OrderConst::OrderStatusEventName}}';
 		setTable();
 		countCart();//dem va hien thi so item trong gio hang

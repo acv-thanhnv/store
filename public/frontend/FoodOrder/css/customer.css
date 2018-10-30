@@ -137,8 +137,17 @@
   .left {
     border-right: none !important; }
 
-  .cart .header-cart-wrapitem {
-    height: 75% !important; }
+  .cart .cart-items.has-alert .header-cart-wrapitem {
+    height: calc(100% - 60px) !important; }
+  .cart .cart-items.has-alert .alert-change {
+    height: 60px !important;
+    padding: 0.25em !important; }
+
+  .cart .cart-items {
+    height: calc(100% - 120px) !important; }
+
+  .cart-total {
+    height: 120px !important; }
 
   .right {
     padding-top: 10px; } }
@@ -170,7 +179,16 @@
 
   .select-table {
     display: inline;
-    padding-left: 5px; } }
+    padding-left: 5px; }
+
+  .cart .cart-items {
+    height: calc(100% - 125px) !important; }
+
+  .cart-total {
+    height: 125px !important; }
+
+  .left {
+    border-right: 0px; } }
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
   .logo-mobile {
@@ -200,7 +218,10 @@
     justify-content: center; }
 
   .select-table {
-    display: block !important; } }
+    display: block !important; }
+
+  .left {
+    border-right: 3px solid #ccc; } }
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
   #food-detail {
@@ -290,11 +311,20 @@
   height: 100%; }
 .cart .header-cart-content {
   flex-grow: 0;
-  height: 100%; }
-.cart .header-cart-wrapitem {
-  height: 85%;
+  height: 92%; }
+.cart .cart-items.has-alert .header-cart-wrapitem {
+  height: calc(100% - 60px);
   overflow-y: scroll;
   flex-grow: 0; }
+.cart .cart-items.has-alert .alert-change {
+  height: 60px; }
+.cart .cart-items {
+  width: 100%;
+  height: 89%; }
+  .cart .cart-items .header-cart-wrapitem {
+    height: 100%;
+    overflow-y: scroll;
+    flex-grow: 0; }
 .cart .header-cart-item-info {
   display: inline;
   padding-top: 6px;
@@ -348,8 +378,8 @@ body.show-header-cart {
 .note {
   color: green; }
 
-.left {
-  border-right: 3px solid #ccc; }
+.btn-order {
+  cursor: pointer; }
 
 .content {
   margin-top: 75px; }
@@ -422,7 +452,7 @@ body.show-header-cart {
     max-height: 100px; }
 
 .select-table .select2-container {
-  width: 65% !important;
+  width: 64% !important;
   text-align-last: center; }
 .select-table label {
   width: 30%;

@@ -27,7 +27,6 @@
     /*[ Back to top ]
     ===========================================================*/
     var windowH = $(window).height()/2;
-
     $(window).on('scroll',function(){
         if ($(this).scrollTop() > windowH) {
             $("#myBtn").css('display','flex');

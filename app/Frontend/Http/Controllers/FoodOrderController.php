@@ -78,21 +78,34 @@ class FoodOrderController extends Controller
     }
     public function sendOrder(Request $request)
     {
-        $orderId                 = $request->orderId;
-        $ip                      = $request->ip();
-        $access_token            = $request->access_token;
-        $order["access_token"]   = $request->access_token;
-        $order["store_id"]       = $request->idStore;
-        $order["location_id"]    = $request->table;
-        $cart_items              = $request->cart_items;
-        $order["description"]    = $request->description;
-        $order["datetime_order"] = CommonHelper::dateNow();
+        $orderId                  = $request->orderId;
+        $ip                       = $request->ip();
+        $access_token             = $request->access_token;
+        $order["access_token"]    = $request->access_token;
+        $order["store_id"]        = $request->idStore;
+        $order["location_id"]     = $request->table;
+        $cart_items               = $request->cart_items;
+        $order["description"]     = $request->description;
+        $order["datetime_order"]  = CommonHelper::dateNow();
+        $order["datetime_update"] = CommonHelper::dateNow();
         if($orderId===null){
             //create new order
-            $orderId = SDB::table('store_order')->insertGetId($order);
+            $orderId                  = SDB::table('store_order')
+                                            ->insertGetId($order);
             $order_detail['order_id'] = $orderId;
         } else {
             $order_detail['order_id'] = $orderId;
+            //get status of order
+            $order_status = SDB::table('store_order')
+                            ->where('id',$orderId)
+                            ->select('status')
+                            ->get();
+            if($order_status[0]->status===2){//check if food have been cooked, update time 
+                $datetime_update = CommonHelper::dateNow();
+                SDB::table('store_order')
+                ->where('id',$orderId)
+                ->update(['datetime_update' => $datetime_update]);
+            }
         }
         foreach($cart_items as $obj){
             $order_detail['entities_id'] = $obj['entities_id'];
