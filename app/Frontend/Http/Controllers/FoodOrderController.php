@@ -100,7 +100,7 @@ class FoodOrderController extends Controller
                             ->where('id',$orderId)
                             ->select('status')
                             ->get();
-            if($order_status[0]->status===2){//check if food have been cooked, update time 
+            if($order_status[0]->status===3){//check if food have been cooked, update time 
                 $datetime_update = CommonHelper::dateNow();
                 SDB::table('store_order')
                 ->where('id',$orderId)
@@ -137,9 +137,21 @@ class FoodOrderController extends Controller
         event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrder));
         return $orderId;
     }
-    public function FoodDetail()
+    public function FoodDetail(Request $request)
     {
-        return view("frontend.Food_Order.food-detail");
+        $entities_id = $request->entities_id;
+        $foodDetail = SDB::table('store_entities')
+            ->where('id',$entities_id)
+            ->get();
+        foreach($foodDetail as $obj){
+            //check avatar
+            if($obj->image==NULL){
+                $obj->src = url('/')."/common_images/no-store.png";
+            }else{
+                $obj->src = CommonHelper::getImageUrl($obj->image);
+            }
+        }
+        return view("frontend.FoodOrder.food-detail",["foodDetail" => $foodDetail[0]]);
     }
     public function deleteCartItem(Request $request)
     {

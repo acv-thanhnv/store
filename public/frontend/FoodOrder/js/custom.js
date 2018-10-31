@@ -108,16 +108,17 @@ $("body").on("click",".add_to_cart",function(e){
     		cooked:0
     	};
     	if (localStorage.cart_items) {//check if isset local storage
-    		console.log("Cos local storage");
     		cart_items = JSON.parse(localStorage.cart_items);
     		var cart_index = cart_items.findIndex(item => item.entities_id === obj.entities_id);
     		if (cart_index<0) {//neu ko ton tai id va status
     			cart_total++;
     			cart_items.push(obj);
 			}else{
+				if(cart_items[cart_index].status===1){//check if food have been orderd
+					cart_items[cart_index].status = 0.5;
+					cart_items[cart_index].status_name = 'Processing';
+				}
 				cart_items[cart_index].quantity++;
-				cart_items[cart_index].status = 0.5;
-				cart_items[cart_index].status_name = 'Processing';
 			}
 			sendItem(cart_items);
             localStorage.cart_items = JSON.stringify(cart_items);
@@ -362,6 +363,7 @@ function Order(url,idStore,access_token){
 				$('.js-panel-cart').removeClass('show-header-cart');//close cart
 				//set table fixed
 				var table = $('#table').val();
+				$("#table").prop("disabled",true);//disable if user have order
 				localStorage.table = table;//set table for local
 				localStorage.orderId = data;//set orderId for local
 				//clear local alert change
@@ -393,4 +395,14 @@ function checkAlert(){
 		$(".cart-items").addClass("has-alert");
 		$('.alert-change').removeClass('dis-none');
 	}
+}
+//show food by menu
+function getFoodByMenu(idStore){
+	$(document).on("click",'.menu-items',function(){
+		var menu_id = $(this).data("filter");
+		//remove other menu items active and add active in this menu
+		$('.menu-items').removeClass('how-active1');
+		$(this).addClass('how-active1');
+		
+	})
 }

@@ -268,6 +268,12 @@ $im : !important;
 	.left{
 		border-right:3px solid #ccc;
 	}
+	.cart .cart-items{
+		height: calc(100% - 96px) $im;
+	}
+	.cart-total{
+		height: 96px $im;
+	}
 } 
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */

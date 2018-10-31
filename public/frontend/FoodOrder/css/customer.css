@@ -221,7 +221,13 @@
     display: block !important; }
 
   .left {
-    border-right: 3px solid #ccc; } }
+    border-right: 3px solid #ccc; }
+
+  .cart .cart-items {
+    height: calc(100% - 96px) !important; }
+
+  .cart-total {
+    height: 96px !important; } }
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
   #food-detail {

@@ -187,7 +187,10 @@
 					</div>
 					<div class="col-lg-6 col-12 right">
 						<div class="total-money"></div>
-						<div style="text-align: right" class="p-b-10 m-t-10">
+						<div style="text-align: center" class="p-b-10 m-t-10">
+							<button class="btn btn-danger btn-pay">
+								<i class="fa fa-paypal"></i> Pay
+							</button>
 							<button class="btn btn-primary btn-order">
 								<i class="fa fa-paper-plane-o"></i> Order
 							</button>
@@ -235,7 +238,7 @@
 				</div>
 				<!--Desktop catogery-->
 				<div class="flex-w flex-l-m filter-tope-group m-tb-10 menu-group-desktop">
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5 how-active1" data-filter="*">
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5 how-active1 menu-items" data-filter="*">
 						All Foods
 					</button>
 				</div>
@@ -571,11 +574,15 @@
 			var access_token = '{{$access_token}}';
 			localStorage.access_token = access_token;
 		}
+		if(localStorage.orderId){
+			$("#table").prop("disabled",true);//disable if user have order
+		}
 		//show alert change
 		checkAlert();
 		var channel_name = access_token+'_'+'{{\App\Core\Common\OrderConst::OrderStatusEventName}}';
 		setTable();
 		countCart();//dem va hien thi so item trong gio hang
+		getFoodByMenu(idStore);
 		buildMenu("{{route('Menu')}}",idStore,numberMenu);
 		buildFood("{{route('getFood')}}",idStore,1);
 		lazyLoad("{{route('getFood')}}",idStore);
@@ -630,6 +637,11 @@
 	});
 	$('#food-detail').iziModal(
 	{
+		onOpening: function(modal){
+			var entities_id =$(event.target).parents(".block2").data("id");//get Id, get button then get id
+			$(".iziModal-iframe").attr("src","{{route('FoodDetail')}}?entities_id="+entities_id);
+			//set url iframe
+		},
 		onClosed: function(modal){
 			$(".iziModal-iframe").attr("src","");
 		},
@@ -644,7 +656,7 @@
 		transitionOut  :"bounceOutUp",
 		arrowKeys      :true,
 		iframe         :true,
-		iframeURL      :"FoodDetail"
+		iframeURL      :""
 	});
 	//prevent scroll when cart is opened
 	$(document).on("click","div.js-show-cart",function(e){
