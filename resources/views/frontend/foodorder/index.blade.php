@@ -431,6 +431,7 @@
         });
 
         //submit to chef
+
         $(document).on("click", ".order-submit", function () {
             var item = $('#list-item-order').find('.row-item-order');
             var storeId = _storeId;

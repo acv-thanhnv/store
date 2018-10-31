@@ -199,7 +199,7 @@ class FoodController extends Controller
             //if isset:update else add Property
             if($arrProp!=NULL){
                 foreach ($arrProp as $objProp) {
-                    // dd($objProp);
+
                     if($objProp->label!=NULL){
                         //get property
                         $prop["property_name"]  = CommonHelper::changeTitle($objProp->label);

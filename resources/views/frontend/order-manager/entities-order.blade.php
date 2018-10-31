@@ -1,35 +1,41 @@
-<table id="cart" class="table table-hover">
-	<thead>
-		<tr>
-			<th style="width:55%">Product</th>
-			<th style="width:10%">Price</th>
-			<th style="width:10%">Quantity</th>
-			<th style="width:20%" class="text-center">Subtotal</th>
-			<th style="width:5%"></th>
-		</tr>
-	</thead>
-	<tbody>
-		@for($i=1;$i<15;$i++)
-		<tr>
-			<td data-th="Product">
-				<div class="col-sm-4 nopad image-order"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMnrzprGAVUtl8Ojmn1licHEflA6dQymskF4HBbvmayeRVUfPS" alt="Image" class="img-responsive" /></div>
-				<div class="col-sm-8">
-					<h5 class="nomargin item-order-name">Humburger thịt bò mỹ Humburger thịt bò mỹ  Humburger thịt bò mỹ </h5>
-					</div>
-				</td>
-				<td data-th="Price">100.000đ</td>
-				<td class="quantity-order" data-th="Quantity" style="">
-					<input type="number" class="form-control text-center" value="1" >
-					<div class="updown-quantity" style="width:15px; float: left;font-size: 12px; margin-top:2px;">
-						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-						<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-					</div>
-				</td>
-				<td data-th="Subtotal" class="text-center">1.99</td>
-				<td class="actions" data-th="">
-					<button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
-				</td>
-			</tr>
-			@endfor
-		</tbody>
-	</table>
+<style>
+    #order_null{
+        width: 100%;
+        margin: 15px 45%;
+    }
+    #add_new_order{
+        font-size: 60px;
+        opacity: 0.5;
+    }
+    .add_order_text{
+        text-align: center;
+        width: 200px;
+        opacity: 0.5;
+    }
+
+</style>
+<table style="display:  none">
+    <tbody id="entities-order-template">
+    <tr class="entities-row-order">
+        <td class="entities_order_id text-center">
+            Mã12345
+        </td>
+        <td class="entities_order_time text-center">20/10/2018 16:40PM</td>
+        <td class="entities_order_status text-center">Chưa xác nhận</td>
+        <td class="entities_order_action text-center">
+            <button class="btn btn-info btn-sm show_detail"><span class="glyphicon glyphicon-eye-open"
+                                                                  aria-hidden="true"></span></button>
+            <button class="btn btn-secondary btn-sm delete_order"><span class="glyphicon glyphicon-trash"
+                                                                        aria-hidden="true"></span></button>
+            <button class="btn btn-danger btn-sm send_order"><span class="glyphicon glyphicon-share-alt"
+                                                                   aria-hidden="true"></span></button>
+        </td>
+    </tr>
+
+    {{--<div id="order_null">--}}
+        {{--<span class="glyphicon glyphicon-plus-sign" id="add_new_order" aria-hidden="true"></span>--}}
+        {{--<br>--}}
+        {{--<span class="add_order_text">Thêm Order</span>--}}
+    {{--</div>--}}
+    </tbody>
+</table>
