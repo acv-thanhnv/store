@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <div class="wraper">
-        {{--================================= Quang begin ===========================--}}
+        {{--================================= Left ===========================--}}
         <div class="wraper-left col-sm-6 nopad">
 
             <div id="left-nav-tabs" class="header-left">
@@ -36,35 +36,31 @@
                     <div class="room">
                         <nav class="navbar navbar-inverse">
                             <div class="container-fluid">
-                                <ul class="nav navbar-nav">
-                                    <li class="active"><a href="#">Tầng 1</a></li>
-                                    @for($i=2;$i<5;$i++)
-                                        <li><a href="#">Tầng {{$i}}</a></li>
-                                    @endfor
-                                    <li><a href="#">More...</a></li>
+                                <ul class="nav navbar-nav" id="floors">
+                                    {{--content floor--}}
                                 </ul>
+                                {{--content floor include--}}
+                                @include('frontend.order-manager.floors')
                             </div>
                         </nav>
                     </div>
 
                     <div id="table-list">
-                        @for($i=1;$i<30;$i++)
-                            <div class="wrap-table col-sm-2 img-thumbnail text-center">
-                                <span class="table-name">Bàn</span><br>
-                                <span class="table-name">{{$i}}</span>
-                            </div>
-                        @endfor
+                        {{--content TABLE--}}
                     </div>
+                    {{--content TABLE INCLUDE--}}
+                    @include('frontend.order-manager.tables')
                 </div>
                 <div id="menu" class="tab-pane fade">
                     <div class="category">
                         <nav class="navbar navbar-inverse">
                             <div class="container-fluid">
                                 <ul class="nav navbar-nav" id="entity-menu">
-                                    <li class="active"><a href="#">Tất cả</a></li>
-                                    @include('frontend.order-manager.menu')
-                                    <li style="display: none"><a href="#">More...</a></li>
+                                    {{--content menu--}}
+
                                 </ul>
+                                {{--content menu include--}}
+                                @include('frontend.order-manager.menu')
                             </div>
                         </nav>
 
@@ -72,8 +68,10 @@
 
 
                     <div id="list-entities">
-                        @include('frontend.order-manager.entities')
+                        {{--content entities--}}
                     </div>
+                    {{--content entities include--}}
+                    @include('frontend.order-manager.entities')
                 </div>
             </div>
 
@@ -82,12 +80,12 @@
     </div>
 
     </div>
-    {{--================================= Son begin ===========================--}}
+    {{--================================= Right ===========================--}}
     <div class="wraper-right col-sm-6">
         <div class="header-right">
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a href="#">Bàn/Tầng</a>
+                    <a href="#"><span id="table-id">Bàn</span>/<span id="floor-id">Tầng</span></a>
                 </li>
                 <li style="float: right; margin-right: 10px;">
                     <div class="dropdown">
@@ -96,7 +94,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" style="top:43px;right:-10px;">
                             <li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal"><span
-                                            class="fa fa-retweet"></span> Chuyển Bàn</a></li>
+                                            class="glyphicon glyphicon-retweet"></span> Chuyển Bàn</a></li>
                             <li class="line"></li>
                             <li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal2"><span
                                             class="glyphicon glyphicon-link" aria-hidden="true"></span> Ghép Bàn</a>
@@ -112,30 +110,40 @@
 
         </div>
         <div class="content-right">
-            @include('frontend.order-manager.entities-order')
-        </div>
-        <div class="footer-right">
-            <table style="width:100%;">
-                <tbody>
-                <tr style="height:30px;">
-                    <td class="col-md-8" rowspan="2">
-                        <textarea class="note-order col-md-8" placeholder="Ghi chú"></textarea>
-                    </td>
-                    <td class="col-md-4 col-sm-6">
-                        <div class="total-order">
-                            <strong>Tổng: 100.000.000.</strong>
-                        </div>
-                    </td>
+            <table id="tbl_list_order" class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="order_id text-center">Mã order</th>
+                    <th class="order_time text-center">Thời gian</th>
+                    <th class="order_status text-center">Trạng thái</th>
+                    <th class="order_detail text-center">Hành động</th>
                 </tr>
-                <tr class="action-order">
-                    <td class="send-order col-md-4 col-sm-6">
-                        <button type="button" class="btn btn-danger">Gửi Thực Đơn<br><i class="fa fa-bell"></i></button>
-                    </td>
-                </tr>
+                </thead>
+                <tbody id="entities-order">
+                {{--content entities-order--}}
                 </tbody>
             </table>
-        </div>
+            {{--content entities-order include--}}
+            @include('frontend.order-manager.entities-order')
 
+            <table class="table table-hover" id="tbl_list_order_detail" style="display: none">
+                <thead>
+                <tr class="order_detail_header">
+                    <th class="order_detail_image text-center">Image</th>
+                    <th class="order_detail_name text-center">Name</th>
+                    <th class="order_detail_price text-center">Price</th>
+                    <th class="order_detail_quantity text-center">Quantity</th>
+                    <th class="order_detail_subtotal text-center">Subtotal</th>
+                    <th class="order_detail_action text-center">Action</th>
+                </tr>
+                </thead>
+                <tbody id="entities-detail">
+                {{--//content entities-detail--}}
+                </tbody>
+            </table>
+            {{--//content entities-detail include--}}
+            @include('frontend.order-manager.entities-detail')
+        </div>
         @include('frontend.order-manager.table_manager')
 
     </div>
@@ -146,20 +154,18 @@
     <script type="text/javascript">
 
         var idStore = '{{$idStore}}';
-        var idMenu = 1;
-        //console.log(idStore);
-
         $(document).ready(function () {
             getMenuList(idStore);
             getEntities(idStore);
-            getEntitiesByMenu(idMenu, idStore);
-
+            getFloors(idStore);
+            getTableByFloor(null, idStore);
         });
-        //==================================================
+
+        //====================GET MENU==============================
         function getMenuList(idStore) {
 
             $.ajax({
-                url: '{{route("food/list-menu-by-store")}}'+'/'+ idStore,
+                url: '{{route("food/list-menu-by-store")}}' + '/' + idStore,
                 dataType: 'JSON',
                 type: 'GET',
                 data: {idStore: idStore},
@@ -171,59 +177,240 @@
                 },
             });
         }
-        function genMenuList(data){
+
+        function genMenuList(data) {
             var itemMenu = $('#entity-menu');
             data.data.forEach(function (obj) {
-                var itemMenuTemp =$('#entity-menu-template').contents().clone();
+                var itemMenuTemp = $('#entity-menu-template').contents().clone();
                 $(itemMenuTemp).find('a').text(obj.name);
-                $(itemMenuTemp).find('a').attr('item-menu-id',obj.id);
+                $(itemMenuTemp).find('a').attr('item-menu-id', obj.id);
                 $(itemMenu).append($(itemMenuTemp));
             })
         }
-        //==================================================
-        function getEntities(idStore){
 
+        //========================GET ENTITIES==========================
+        function getEntities(idStore) {
             $.ajax({
-                url: '{{route('food/list-by-store')}}'+'/'+ idStore,
+                url: '{{route('food/list-by-store')}}' + '/' + idStore,
                 dataType: 'JSON',
                 type: 'GET',
                 data: {idStore: idStore},
                 success: function (data) {
                     genEntities(data);
-                    console.log(data);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log('Error ' + xhr.status + ' | ' + thrownError);
                 },
             });
         }
-        function genEntities(data){
+
+        function genEntities(data) {
             var listItem = $('#list-entities');
+            $(listItem).empty();
             data.data.forEach(function (obj) {
-                var listItemTemp =$('#list-entities-template').contents().clone();
-                console.log();
-                $(listItemTemp).find('img').attr('src',obj.image);
+                var listItemTemp = $('#list-entities-template').contents().clone();
+                $(listItemTemp).find('.entities_item').attr('entities-id', obj.id);
+                $(listItemTemp).find('.entities_item').attr('entities-name', obj.name);
+                $(listItemTemp).find('.entities_item').attr('entities-image', obj.image);
+                $(listItemTemp).find('.entities_item').attr('entities-price', obj.price);
+                $(listItemTemp).find('img').attr('src', obj.image);
                 $(listItemTemp).find('h6').text(obj.name);
-                $(listItemTemp).find('h5').text(obj.price);
+                $(listItemTemp).find('h5').text(parseInt(obj.price));
 
                 $(listItem).append($(listItemTemp));
             })
         }
-        //==================================================
-        function getEntitiesByMenu(idMenu, idStore){
+
+        //=====================GET ENTITIES BY MENU==========================
+        //Click menu
+        $(document).on('click', '.item-menu', function () {
+            var idMenu = $(this).find('a').attr('item-menu-id');
+            getEntitiesByMenu(idMenu, idStore);
+        })
+
+
+        function getEntitiesByMenu(idMenu, idStore) {
             $.ajax({
-                url: '{{route("food/list-by-menu")}}'+'/'+ idMenu,
+                url: '{{route("food/list-by-menu")}}' + '/' + idMenu,
                 dataType: 'JSON',
                 type: 'GET',
-                data: {idMenu:idMenu, idStore: idStore},
+                data: {idMenu: idMenu, idStore: idStore},
                 success: function (data) {
-                    console.log(data);
+                    genEntities(data);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log('Error ' + xhr.status + ' | ' + thrownError);
                 },
             });
         }
-        //==================================================
+
+        //======================GET FLOOR============================
+        function getFloors(idStore) {
+            $.ajax({
+                url: '{{route("food/list-floor-by-store")}}',
+                dataType: 'JSON',
+                type: 'GET',
+                data: {idStore: idStore},
+                success: function (data) {
+                    genFloors(data);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error ' + xhr.status + ' | ' + thrownError);
+                },
+            })
+        }
+
+        function genFloors(data) {
+            var itemFloor = $('#floors');
+            data.data.forEach(function (obj) {
+                var itemFloorTemp = $('#floors-template').contents().clone();
+                $(itemFloorTemp).find('a').text(obj.name);
+                $(itemFloorTemp).find('a').attr('item-floor-id', obj.id);
+                $(itemFloor).append($(itemFloorTemp));
+            })
+        }
+
+        //======================GET TABLE============================
+        function getTable() {
+            $.ajax({
+                url: '{{route("food/list-floor-by-store")}}',
+                dataType: 'JSON',
+                type: 'GET',
+                data: {idStore: idStore},
+                success: function (data) {
+                    genFloors(data);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error ' + xhr.status + ' | ' + thrownError);
+                },
+            })
+        }
+
+        //======================GET TABLE BY FLOOR============================
+        $(document).on('click', '.item-floor', function () {
+            var idFloor = $(this).find('a').attr('item-floor-id');
+            getTableByFloor(idFloor, idStore);
+        })
+
+        function getTableByFloor(idFloor, idStore) {
+            $.ajax({
+                url: '{{route("food/list-location-by-floor")}}',
+                dataType: 'JSON',
+                type: 'GET',
+                data: {idFloor: idFloor, idStore: idStore},
+                success: function (data) {
+                    genTableByFloor(data)
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error ' + xhr.status + ' | ' + thrownError);
+                },
+            })
+        }
+
+        function genTableByFloor(data) {
+            var itemTable = $('#table-list');
+            $(itemTable).empty();
+            data.data.forEach(function (obj) {
+                var itemTableTemp = $('#table-list-template').contents().clone();
+                $(itemTableTemp).find('.table-name').text(obj.name);
+                $(itemTableTemp).find('.table-name').attr('item-table-id', obj.id);
+                $(itemTable).append($(itemTableTemp));
+            })
+        }
+
+        //======================click table=========================
+        $(document).on("click", ".wrap-table", function () {
+            var idTable = $(this).find(".table-name").attr('item-table-id');
+            $.ajax({
+                url: '{{route("food/get-location")}}',
+                dataType: 'JSON',
+                type: 'GET',
+                data: {idLocation: idTable, idStore: idStore},
+                success: function (data) {
+                    data.data.forEach(function (obj) {
+                        $('#table-id').text(obj.location_name);
+                        $('#floor-id').text(obj.floor_name);
+                    })
+                },
+                err: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error ' + xhr.status + ' | ' + thrownError);
+                }
+            })
+            $.ajax({
+                url: '{{route("food/list-order-by-location")}}',
+                dataType: 'JSON',
+                type: 'GET',
+                data: {idLocation: idTable, idStore: idStore},
+                success: function (data) {
+                    genOrderbyLocation(data);
+                    console.log(data);
+                },
+                err: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error ' + xhr.status + ' | ' + thrownError);
+                }
+            })
+
+        });
+
+        function genOrderbyLocation(data) {
+            var itemOrder = $('#entities-order');
+            $(itemOrder).empty();
+            data.data.forEach(function (obj) {
+                //set entities-order
+                var itemOrderTemp = $('#entities-order-template').contents().clone();
+                $(itemOrderTemp).find('.entities_order_id').text(obj.id);
+                $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', obj.id);
+                $(itemOrderTemp).find('.entities_order_time').text(obj.datetime_order);
+                if (obj.status == 1) {
+                    $(itemOrderTemp).find('.entities_order_status').text('Chưa xác nhận');
+                }
+                else if (obj.status == 2) {
+                    $(itemOrderTemp).find('.entities_order_status').text('Đã xác nhận');
+                    $(itemOrderTemp).find('.delete_order').addClass('disabled');
+                }
+
+                $(itemOrder).append($(itemOrderTemp));
+            })
+        }
+
+        //======================click show detail=========================
+        $(document).on('click', '.show_detail', function () {
+            var table = $('#tbl_list_order_detail');
+            $("<tr><td>acv</td></tr>").appendTo($(this).parents('.entities-row-order'));
+            //$(this).parents('.entities-row-order').appendTo('</tr><tr><td>acv</td>');
+            $('#tbl_list_order_detail').css({'display': 'block'})
+
+            var idOrder = $(this).parents('.entities-row-order').find('.entities_order_id').attr('entities_order_id');
+            $.ajax({
+                url: '{{route("food/get-order-detail")}}',
+                dataType: 'JSON',
+                type: 'GET',
+                data: {idOrder: idOrder},
+                success: function (data) {
+                    //console.log(data);
+                    genTableOrderDetail(data);
+                },
+                err: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error ' + xhr.status + ' | ' + thrownError);
+                }
+            })
+
+        })
+
+        function genTableOrderDetail(data) {
+            var itemOrderDetail = $('#entities-detail');
+            $(itemOrderDetail).empty();
+            data.data.forEach(function (obj) {
+                var itemOrderDetailTemp = $('#entities-detail-template').contents().clone();
+
+                $(itemOrderDetailTemp).find('.order_detail_image>img').attr('src', obj.image);
+                $(itemOrderDetailTemp).find('.name-detail').text(obj.name);
+                $(itemOrderDetailTemp).find('.order_detail_price').text(parseInt(obj.price));
+                $(itemOrderDetailTemp).find('.quantity-detail').val(obj.quantity);
+
+                $(itemOrderDetail).append(itemOrderDetailTemp);
+            })
+        }
+
     </script>
 @endsection
