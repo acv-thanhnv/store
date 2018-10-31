@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Core\Common\SDBStatusCode;
 use Validator;
+use App\Core\Events\OrderPusherEvent;
 
 class DevController extends Controller
 {
@@ -86,9 +87,7 @@ class DevController extends Controller
     }
     public function test()
     {
-        $data=DB::table('sys_translation')->simplePaginate(15,null,'page',4);
-        $this->devService->test();
-        print_r($data);
+        event(new OrderPusherEvent(1, 2, 3,4, 5,6,7,8, 9));
        // $this->devService->generationTranslateScript('validation','validation');
     }
 
