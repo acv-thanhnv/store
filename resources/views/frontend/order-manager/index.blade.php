@@ -150,7 +150,8 @@
             getMenuList(idStore);
             getEntities(idStore);
             getFloors(idStore);
-            getTableByFloor(null, idStore);
+            getTable(idStore);
+            //getTableByFloor(null, idStore);
         });
 
         //====================GET MENU==============================
@@ -265,16 +266,29 @@
         //======================GET TABLE============================
         function getTable() {
             $.ajax({
-                url: '{{route("food/list-floor-by-store")}}',
+                url: '{{route("food/get-location")}}',
                 dataType: 'JSON',
                 type: 'GET',
                 data: {idStore: idStore},
                 success: function (data) {
-                    genFloors(data);
+                    console.log(data);
+                    genTable(data);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log('Error ' + xhr.status + ' | ' + thrownError);
                 },
+            })
+        }
+
+        function genTable(data){
+            var itemTable = $('#table-list');
+            $(itemTable).empty();
+            data.data.forEach(function (obj) {
+                var itemTableTemp = $('#table-list-template').contents().clone();
+                $(itemTableTemp).find('.table-name').text(obj.name);
+                $(itemTableTemp).find('.table-name').attr('item-table-id', obj.id);
+                console.log($(itemTableTemp).find('.table-name').attr('item-table-id'));
+                $(itemTable).append($(itemTableTemp));
             })
         }
 
@@ -345,16 +359,10 @@
         function genOrderbyLocation(data) {
             var itemOrder = $('#entities-order');
             $(itemOrder).empty();
-            var itemOrderDetail = $('#entities-row-detail');
-            //$(itemOrderDetail).empty();
+
             data.data.forEach(function (obj) {
                 //set entities-order
                 var itemOrderTemp = $('#entities-order-template').contents().clone();
-                obj.detail.forEach(function(itemDetail){
-                    var rowDetail = $("#entities-detail-template").contents().clone();
-                    $(rowDetail).find(".order_detail_name").text(itemDetail.name);
-                    $(itemOrderTemp).find(".entities-row-detail").append($(rowDetail));
-                });
                 $(itemOrderTemp).find('.entities_order_id').text(obj.id);
                 $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', obj.id);
                 $(itemOrderTemp).find('.entities_order_time').text(obj.datetime_order);
@@ -367,6 +375,11 @@
                 }
                 $(itemOrder).append($(itemOrderTemp));
 
+                obj.detail.forEach(function(itemDetail){
+                    var rowDetail = $("#entities-detail-template").contents().clone();
+                    $(rowDetail).find(".order_detail_name").text(itemDetail.name);
+                    $(itemOrderTemp).find(".entities-row-detail").append($(rowDetail));
+                });
             })
         }
         // function genOrderbyLocation(data) {
@@ -375,6 +388,7 @@
         //     data.data.forEach(function (obj) {
         //         //set entities-order
         //         var itemOrderTemp = $('#entities-order-template').contents().clone();
+        //
         //         $(itemOrderTemp).find('.entities_order_id').text(obj.id);
         //         $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', obj.id);
         //         $(itemOrderTemp).find('.entities_order_time').text(obj.datetime_order);
@@ -386,20 +400,18 @@
         //             $(itemOrderTemp).find('.delete_order').addClass('disabled');
         //         }
         //
+        //         var itemOrderDetail = $('.entities-row-detail');
+        //         $(itemOrderDetail).empty();
         //         obj.detail.forEach(function (detail) {
-        //             console.log(detail);
-        //             var itemOrderDetail = $('.entities-row-detail');
-        //             $(itemOrderDetail).empty();
-        //             var itemOrderDetailTemp = $('.entities-row-detail-template').contents().clone();
-        //             // $(itemOrderDetailTemp).find('.order_detail_image>img').attr('src', detail.image);
-        //             //console.log($(itemOrderDetailTemp).find('.name-detail'));
-        //             $(itemOrderDetailTemp).find('.name-detail').text(detail.name);
-        //             // $(itemOrderDetailTemp).find('.order_detail_price').text(parseInt(detail.price));
-        //             // $(itemOrderDetailTemp).find('.quantity-detail').val(detail.quantity);
         //
-        //             $(itemOrderDetail).append(itemOrderDetailTemp);
+        //             var itemOrderDetailTemp = $('#entities-detail-template').contents().clone();
+        //             $(itemOrderDetailTemp).find('.order_detail_image>img').attr('src', detail.image);
+        //             $(itemOrderDetailTemp).find('.name-detail').text(detail.name);
+        //             $(itemOrderDetailTemp).find('.order_detail_price').text(parseInt(detail.price));
+        //             $(itemOrderDetailTemp).find('.quantity-detail').val(detail.quantity);
+        //
+        //             $(itemOrderTemp).find(itemOrderDetail).append(itemOrderDetailTemp);
         //         })
-        //             console.log('-------------');
         //         $(itemOrder).append($(itemOrderTemp));
         //     })
         // }
@@ -407,26 +419,8 @@
 
         //======================click show detail=========================
         $(document).on('click', '.show_detail', function () {
-            var table = $('#tbl_list_order_detail');
-            //$("<tr><td>acv</td></tr>").appendTo($(this).parents('.entities-row-order'));
-            //$(this).parents('.entities-row-order').appendTo('</tr><tr><td>acv</td>');
-            $('#tbl_list_order_detail').css({'display': 'block'})
-
-            var idOrder = $(this).parents('.entities-row-order').find('.entities_order_id').attr('entities_order_id');
-            {{--$.ajax({--}}
-                {{--url: '{{route("food/get-order-detail")}}',--}}
-                {{--dataType: 'JSON',--}}
-                {{--type: 'GET',--}}
-                {{--data: {idOrder: idOrder},--}}
-                {{--success: function (data) {--}}
-                    {{--//console.log(data);--}}
-                    {{--genTableOrderDetail(data);--}}
-                {{--},--}}
-                {{--err: function (xhr, ajaxOptions, thrownError) {--}}
-                    {{--console.log('Error ' + xhr.status + ' | ' + thrownError);--}}
-                {{--}--}}
-            {{--})--}}
-
+            var show= $(this).parents('.entities-row-order').find('.entities-row-detail');
+            $(show).toggleClass('show');
         })
 
 

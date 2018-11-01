@@ -65,9 +65,8 @@ class FoodController extends Controller
     }
 
     public function getLocation(Request $request){
-        $idLocation = $request->idLocation;
         $idStore = $request->idStore;
-        $list = $this->service->getLocation($idLocation, $idStore);
+        $list = $this->service->getLocation($idStore);
         $result = new DataResultCollection();
         $result->status = SDBStatusCode::OK;
         $result->data=$list;

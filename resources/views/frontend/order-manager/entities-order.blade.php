@@ -31,11 +31,9 @@
                     <button class="btn btn-danger btn-sm send_order"><span class="glyphicon glyphicon-share-alt"
                      aria-hidden="true"></span></button>
                  </div>
-                 <div class="entities-row-detail">
+                 <div class="entities-row-detail" style="display: none">
                 
                 </div>
             </div>
-
-
         </div>
     </div>
