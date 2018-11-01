@@ -20,6 +20,10 @@ class SDBStatusCode
     const ValidateError = 'ValidateError';
 }
 
+class FoodConst
+{
+    const foodPerPage = 12;
+}
 
 class ApiConst
 {
@@ -65,6 +69,7 @@ class OrderConst{
 
     const OrderChannelToChef = "to-chef";
     const OrderChefEventName = "order.chef";
+    const OrderStatusEventName = "order-status";
 
     const TypeDelete = "delete";
     const TypeAdd = "add";
@@ -75,6 +80,11 @@ class EntityProperty{
 }
 class StorageDisk{
     const diskLocalName = "public";
+}
+class CutomerConst{
+    const limit = 5;
+    const numberMenu = 5;
+    const hour = 2;
 }
 class OrderStatusValue{
     const Waiter = 1;
