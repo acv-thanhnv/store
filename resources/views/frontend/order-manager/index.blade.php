@@ -111,7 +111,6 @@
         </div>
         <div class="content-right">
                 <div id="entities-order">
-
                 </div>
 
             {{--content entities-order include--}}
@@ -346,13 +345,16 @@
         function genOrderbyLocation(data) {
             var itemOrder = $('#entities-order');
             $(itemOrder).empty();
-
             var itemOrderDetail = $('#entities-row-detail');
             //$(itemOrderDetail).empty();
             data.data.forEach(function (obj) {
-
                 //set entities-order
                 var itemOrderTemp = $('#entities-order-template').contents().clone();
+                obj.detail.forEach(function(itemDetail){
+                    var rowDetail = $("#entities-detail-template").contents().clone();
+                    $(rowDetail).find(".order_detail_name").text(itemDetail.name);
+                    $(itemOrderTemp).find(".entities-row-detail").append($(rowDetail));
+                });
                 $(itemOrderTemp).find('.entities_order_id').text(obj.id);
                 $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', obj.id);
                 $(itemOrderTemp).find('.entities_order_time').text(obj.datetime_order);
@@ -364,17 +366,6 @@
                     $(itemOrderTemp).find('.delete_order').addClass('disabled');
                 }
                 $(itemOrder).append($(itemOrderTemp));
-
-                obj.detail.forEach(function (detail) {
-                        var itemOrderDetailTemp = $('#entities-detail-template').contents().clone();
-                        $(itemOrderDetailTemp).find('.order_detail_image>img').attr('src', detail.image);
-                        $(itemOrderDetailTemp).find('.name-detail').text(detail.name);
-                        $(itemOrderDetailTemp).find('.order_detail_price').text(parseInt(detail.price));
-                        $(itemOrderDetailTemp).find('.quantity-detail').val(detail.quantity);
-
-                        $(itemOrderDetail).append(itemOrderDetailTemp);
-
-                })
 
             })
         }
