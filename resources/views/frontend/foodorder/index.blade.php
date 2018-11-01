@@ -32,6 +32,8 @@
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/iziModal.min.css">
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/default.css" />
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/component.css" />
+	<!--Toast css-->
+	<link rel="stylesheet" type="text/css" href="css/toast.css">
 	<!--Jquery confirm -->
 	<link rel="stylesheet" type="text/css" href="css/lib/jquery-confirm.css">
 <!--===============================================================================================-->
@@ -573,6 +575,8 @@
 <script src="js/lib/jquery-confirm.js"></script>
 <!--Pusher-->
 <script src="https://js.pusher.com/4.3/pusher.min.js"></script>
+<!--Toast JS-->
+<script type="text/javascript" src="js/toast.js"></script>
 <!--Custom JS-->
 <script src="frontend/FoodOrder/js/custom.js"></script>
 <script type="text/javascript">

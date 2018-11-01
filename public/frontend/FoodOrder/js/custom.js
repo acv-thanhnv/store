@@ -164,7 +164,10 @@ $("body").on("click",".add_to_cart",function(e){
         //change total items of cart
         $(".js-show-cart").attr("data-notify",cart_total);
 	} else {
-		alert('Sr we have some errors, please try againt!');
+		$.alert({
+			title: 'Error!',
+			content: 'Sorry, your brower do not suppost this technology!',
+		});
 	}
 });
 //function send icon to cart
@@ -216,7 +219,7 @@ $(document).on("click",".js-show-cart",function(){
 	}
 	if(cart_items.length===0){
 		$(".total-money").text("Total: 0");
-		$('.header-cart-wrapitem').text("Your cart is empty");
+		$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
 	}
 })
 //function change quantity item
@@ -241,7 +244,7 @@ $(document).on('click','.btn-num-product-down', function(){
 			cal_total(cart_items);
 			localStorage.cart_items = JSON.stringify(cart_items);
 		}else {
-			alert("Sr you food have been cooked, you not allow to reduce it");
+			notify('Error','error','Sorry, your food have beenn cooked, you cannot change quantity lower than cooked','#BE1E1E');
 		}
 	}
 });
@@ -275,7 +278,8 @@ $(document).on("change","input.num-product",function(){
 		$(this).siblings(".btn-num-product-down").addClass('disabled');
 	}
 	if(numProduct<cooked){//check how food have been cooked, if product less than cooked, not allow
-		alert('Sry we have cooked '+cooked+' foods, so you can\'t reduct less than cooked');
+		var message = 'Sorry but we have cooked '+cooked+' foods, so you can\'t reduct less than cooked';
+		notify('Error','error',message,'#C42D2D');
 		$(this).val(cart_items[cart_index].quantity);
 	}else{
 		cart_items[cart_index].quantity = numProduct;
@@ -319,19 +323,24 @@ function deleteCartItem(url){
 									id:cart_items[cart_index].id
 								},
 								success: function (data) {
-									alert("Food have been delete successfull");
+									notify('Success','success',"You food item have been deleted successfull!",'#41E345');
 									cart_items.splice(cart_index,1);
 									cal_total(cart_items);
 									localStorage.cart_items = JSON.stringify(cart_items);
 									cart_total--;
 									$(".js-show-cart").attr("data-notify",cart_total);
 									if(cart_total===0){
-										$('.header-cart-wrapitem').text("Your cart is empty");
+										$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
+										localStorage.removeItem('hasAlert');
+										hideAlert();
 									}
+								},
+								error:function(){
+									notify('Error','error','Oh maybe something went wrong, please order againt!','#F4A950');
 								}
 							})
 					}else{
-						alert("Sry , your food have been cood, you can't delete this food!");
+						notify('Error','error','Sorry your food have been cooked, you cannot delete it','#DA3C3C');
 					}
 				}
 			},
@@ -369,7 +378,9 @@ function Order(url,idStore,access_token){
 		var orderId     =null;
 		var discription = null;
 		var cart_update = [];
-		cart_items = JSON.parse(localStorage.cart_items);
+		if(localStorage.cart_items){
+			cart_items = JSON.parse(localStorage.cart_items);
+		}
 		cart_items.forEach(function(obj){
 			if(obj.status<1){
 				cart_update.push(obj);
@@ -379,7 +390,15 @@ function Order(url,idStore,access_token){
 			orderId = localStorage.getItem('orderId');
 		}
 		if(cart_update.length===0){
-			alert('nothing to order');
+			$.alert({
+				title         : '<p class="text-danger">Warning</p>',
+				icon          : 'fa fa-exclamation-circle',
+				columnClass   : 'col-lg-5 col-md-8 col-12',
+				type          : "red",
+				closeIcon     : true,
+				closeIconClass: 'fa fa-close',
+				content       : "Nothing to order!",
+			});
 		}else{
 			$.ajax({
 			type: 'POST',
@@ -397,6 +416,7 @@ function Order(url,idStore,access_token){
 			},
 			success: function (data) {
 				$('.js-panel-cart').removeClass('show-header-cart');//close cart
+				notify('Success','success','You order have been updated!','#2AB143');
 				//set table fixed
 				var table = $('#table').val();
 				$("#table").prop("disabled",true);//disable if user have order
@@ -405,6 +425,9 @@ function Order(url,idStore,access_token){
 				//clear local alert change
 				localStorage.removeItem('hasAlert');
 				hideAlert();
+			},
+			error: function(jqXHR){
+				notify('Error','error','Oh maybe something went wrong, please order againt!','#F4A950');
 			}
 		});
 		}
@@ -437,7 +460,10 @@ function getFoodByMenu(idStore,url){
 	$(document).on("click",'.menu-items',function(e){
 		e.preventDefault();
 		_menu_id = $(this).data("filter");
-		_page=1;
+		_page    =1;
+		_sort_by = null;
+		_key     = null;
+		_price   = null;
 		$(".list-food").empty();
 		//remove other menu items active and add active in this menu
 		$('.menu-items').removeClass('how-active1');
@@ -449,18 +475,22 @@ function getFoodByMenu(idStore,url){
 function search(idStore,url){
 	$(document).on('change','input[name="search-product"]',function(){
 		$(".list-food").empty();
-		_key = $(this).val();
-		_page = 1;
+		_key     = $(this).val();
+		_page    = 1;
 		_menu_id = null;
+		_sort_by = null;
+		_price   =  null;
 		buildFood(url,idStore,_page,null,_key,null,null);
 
 	});
 	//search for mobile
 	$(document).on('change','#search',function(){
 		$(".list-food").empty();
-		_key = $(this).val();
-		_page = 1;
+		_key     = $(this).val();
+		_page    = 1;
 		_menu_id = null;
+		_sort_by = null;
+		_price   =  null;
 		buildFood(url,idStore,_page,null,_key,null,null);
 
 	});
@@ -480,8 +510,27 @@ function filter(idStore,url){
 	$(document).on("click",'.btn-filter',function(){
 		$(".list-food").empty();
 		_sort_by = $("#sort-by").val();
-		_price = $("#price").val();
-		_page = 1;
+		_price   = $("#price").val();
+		_page    = 1;
+		_key     = null;
+		_menu_id = null;
 		buildFood(url,idStore,_page,null,null,_sort_by,_price);
 	})
+}
+//function alert notify
+function notify(headingContent,icon,content,bgColor){
+	$.toast({
+	    text: content,
+	    heading: headingContent,
+	    icon: icon,
+	    showHideTransition: 'plain',
+	    allowToastClose: true,
+	    hideAfter: 2000,
+	    bgColor:bgColor,
+	    stack: 5,
+	    position: 'top-right',
+	    textAlign: 'left',
+	    loader : true,
+	    loaderBg: '#279056'
+	});
 }

@@ -480,7 +480,7 @@ body.show-header-cart{
 .alert-change .btn-order{
 	cursor: pointer;
 	color: white $im;
-	padding: .15rem .5rem $im;
+	padding: .15rem .2rem $im;
 }
 .content{
 	margin-top: 75px;
@@ -621,4 +621,9 @@ body.show-header-cart{
 		font-size: 30px;
 		font-weight: bold;
 	}
+}
+.no-cart-items{
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
 }
