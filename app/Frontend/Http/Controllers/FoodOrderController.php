@@ -57,8 +57,15 @@ class FoodOrderController extends Controller
     public function getFood(Request $request)
     {
         $idStore = $request->idStore;
+        $menu_id = $request->menu_id;
         $total   = FoodConst::foodPerPage;
-        $arrFood = $this->foodService->getFood($idStore,$total);
+        if($menu_id ==null){
+            $arrFood = $this->foodService->getFood($idStore,$total);
+        }else{
+            $arrFood = SDB::table('store_entities')
+                    ->where('menu_id',$menu_id)
+                    ->paginate($total);
+        }
         foreach($arrFood as $obj){
             //check avatar
             if($obj->image==NULL){
@@ -74,7 +81,28 @@ class FoodOrderController extends Controller
     }
     public function getFoodByMenu(Request $request)
     {
-        # code...
+        $menu_id = $request->menu_id;
+        $idStore = $request->idStore;
+        $total   = FoodConst::foodPerPage;
+        if($menu_id =='*'){
+            $arrFood = $this->foodService->getFood($idStore,$total);
+        }else{
+            $arrFood = SDB::table('store_entities')
+                    ->where('menu_id',$menu_id)
+                    ->paginate($total);
+        }
+        foreach($arrFood as $obj){
+            //check avatar
+            if($obj->image==NULL){
+                $obj->src = url('/')."/common_images/no-store.png";
+            }else{
+                $obj->src = CommonHelper::getImageUrl($obj->image);
+            }
+        }
+        $result         = new DataResultCollection();
+        $result->status = SDBStatusCode::OK;
+        $result->data   = $arrFood;
+        return ResponseHelper::JsonDataResult($result);
     }
     public function sendOrder(Request $request)
     {
