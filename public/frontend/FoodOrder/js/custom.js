@@ -403,6 +403,23 @@ function getFoodByMenu(idStore){
 		//remove other menu items active and add active in this menu
 		$('.menu-items').removeClass('how-active1');
 		$(this).addClass('how-active1');
-		
+		$.ajax({
+			type: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			url: url,
+			data:{idStore:idStore,menu_id:menu_id},
+			success: function (data) {
+				$('.js-panel-cart').removeClass('show-header-cart');//close cart
+				//set table fixed
+				var table = $('#table').val();
+				$("#table").prop("disabled",true);//disable if user have order
+				localStorage.table = table;//set table for local
+				localStorage.orderId = data;//set orderId for local
+				//clear local alert change
+				localStorage.removeItem('hasAlert');
+				hideAlert();
+			}
 	})
 }
