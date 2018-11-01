@@ -74,7 +74,7 @@
 
 <div style="display: none">
     <div id="entities-detail-template">
-        <div class="entities-row-detail-template ">
+        <div>
             <div class="order_detail_image text-center">
                 <img src="" alt="Image" class="img-detail"/>
             </div>
