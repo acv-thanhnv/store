@@ -347,9 +347,10 @@
             var itemOrder = $('#entities-order');
             $(itemOrder).empty();
 
-            var itemOrderDetail = $('#entities-row-detail');
-            //$(itemOrderDetail).empty();
+
             data.data.forEach(function (obj) {
+                var itemOrderDetail = $('#entities-row-detail');
+                $(itemOrderDetail).empty();
 
                 //set entities-order
                 var itemOrderTemp = $('#entities-order-template').contents().clone();
@@ -366,7 +367,7 @@
                 $(itemOrder).append($(itemOrderTemp));
 
                 obj.detail.forEach(function (detail) {
-                        var itemOrderDetailTemp = $('#entities-detail-template').contents().clone();
+                        var itemOrderDetailTemp = $('.entities-detail-template').contents().clone();
                         $(itemOrderDetailTemp).find('.order_detail_image>img').attr('src', detail.image);
                         $(itemOrderDetailTemp).find('.name-detail').text(detail.name);
                         $(itemOrderDetailTemp).find('.order_detail_price').text(parseInt(detail.price));

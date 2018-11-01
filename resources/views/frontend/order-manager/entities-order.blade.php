@@ -31,8 +31,8 @@
                 <button class="btn btn-danger btn-sm send_order"><span class="glyphicon glyphicon-share-alt"
                                                                        aria-hidden="true"></span></button>
             </div>
-            <div id="entities-row-detail">
-                ABC
+            <div class="entities-row-detail">
+
             </div>
         </div>
 
