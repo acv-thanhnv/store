@@ -15,12 +15,12 @@
 		<br>
 		<br>
 		<center>
-			<textarea name="" id="total" rows="9"></textarea>
-			<br>
-			<!-- <img src="/frontend/img/maid.png" style="height: 90%;width:90%" alt=""> -->
+			<!-- <textarea name="" id="total" rows="2"></textarea>
+			<br> -->
+			<img src="/frontend/img/maid.png" style="height: 90%;width:90%" alt="">
 		</center>
 		<br>
-		<button class="btn-group-cashier btn btn-primary btn-lg">
+		<button id="thanh-toan-tat-ca" class="btn-group-cashier btn btn-primary btn-lg">
 			Thanh toán:
 			<br>
 			<span id="payment-right"></span>
