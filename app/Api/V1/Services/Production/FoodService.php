@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 
 class FoodService extends BaseService implements FoodServiceInterface
 {
+    //====================get food===============
     public function getFoodByStoreId($storeId = null)
     {
         $list = SDB::table("view_entity_infor")
@@ -30,15 +31,17 @@ class FoodService extends BaseService implements FoodServiceInterface
         return $this->buildFoodListByStoreId($list, $storeId);
     }
 
-    public function getFoodByMenuId($menuId = null,$storeId = null)
+    //===================get food by menu========================
+    public function getFoodByMenuId($menuId = null, $storeId = null)
     {
         $list = SDB::table("view_entity_infor")
-            ->whereRaw("? IS NOT NULL AND store_id = ?  AND (? IS NULL OR ? ='' OR ? = menu_id)",[$storeId,$storeId,$menuId,$menuId,$menuId])
+            ->whereRaw("? IS NOT NULL AND store_id = ?  AND (? IS NULL OR ? ='' OR ? = menu_id)", [$storeId, $storeId, $menuId, $menuId, $menuId])
             ->select('*')
             ->get();
-        return $this->buildFoodListByMenu($list, $menuId,$storeId);
+        return $this->buildFoodListByMenu($list, $menuId, $storeId);
     }
 
+    //===================get menu========================
     public function getMenuList($storeId = null)
     {
         $list = SDB::table("store_menu")
@@ -48,7 +51,86 @@ class FoodService extends BaseService implements FoodServiceInterface
         return $list;
     }
 
+    //===================get floor========================
+    public function getFloorsByStore($idStore)
+    {
+        $list = SDB::table('store_floor')
+            ->where('store_id', $idStore)
+            ->get();
+        return $list;
+    }
 
+    //===================get location========================
+    public function getLocationbyFloor($idFloor, $idStore)
+    {
+        if ($idFloor != null) {
+            $list = SDB::table('store_location')
+                ->select('*')
+                ->where('floor_id', $idFloor)
+                ->where('store_id', $idStore)
+                ->get();
+        } else {
+            $list = SDB::table('store_location')
+                ->select('*')
+                ->where('store_id', $idStore)
+                ->get();
+        }
+        return $list;
+    }
+
+    //===================get location========================
+    public function getLocation($idLocation, $idStore)
+    {
+        $list = SDB::table('store_location')
+            ->select('*', 'store_location.name as location_name', 'store_floor.name as floor_name')
+            ->join('store_floor', 'store_location.floor_id', '=', 'store_floor.id')
+            ->where('store_location.store_id', $idStore)
+            ->where('store_location.id', $idLocation)
+            ->get();
+        return $list;
+    }
+
+    //===================get Order by location========================
+    public function getOrderByLocation($idLocation, $idStore)
+    {
+        $list = SDB::table('store_order')
+            ->select('*','store_order.id', 'store_order.datetime_order', 'store_order.status', 'store_location.name as location_name')
+            ->join('store_location', 'store_order.location_id', '=', 'store_location.id')
+            ->join('store_order_detail', 'store_order.id', '=', 'store_order_detail.order_id')
+            ->join ('store_entities','store_order_detail.entities_id','=','store_entities.id')
+            ->where('store_order.store_id', $idStore)
+            ->where('store_order.location_id', $idLocation)
+            ->get();
+
+        $order = SDB::table('store_order')
+            ->select('*','store_order.id', 'store_order.datetime_order', 'store_order.status', 'store_location.name as location_name')
+            ->join('store_location', 'store_order.location_id', '=', 'store_location.id')
+            ->where('store_order.store_id', $idStore)
+            ->where('store_order.location_id', $idLocation)
+            ->get();
+
+        foreach($order as $order_detail){
+            $order_detail ->detail = SDB::table('store_order_detail')
+                ->join ('store_entities','store_order_detail.entities_id','=','store_entities.id')
+                ->where('store_order_detail.order_id','=', $order_detail->id)
+                ->get();
+        };
+
+        return $order;
+    }
+
+    //===================get Order detail========================
+    public function getOrderDetail($idOrder)
+    {
+        $list = SDB::table('store_order_detail')
+            ->join('store_entities', 'store_order_detail.entities_id', '=', 'store_entities.id')
+            ->where('store_order_detail.order_id', $idOrder)
+            ->get();
+        return $list;
+    }
+
+
+    //==========================================
     protected function buildFoodListByStoreId($foodList, $storeId)
     {
         $listEntity = SDB::table("store_entities")
@@ -86,8 +168,8 @@ class FoodService extends BaseService implements FoodServiceInterface
     protected function buildFoodListByMenu($foodList, $menuId, $storeId)
     {
         $listEntity = SDB::table("store_entities")
-            ->join('store_menu','store_menu.id','=','store_entities.menu_id')
-            ->whereRaw("? IS NOT NULL AND store_menu.store_id = ?  AND (? IS NULL OR ?='' OR ? = store_entities.menu_id)",[$storeId,$storeId,$menuId,$menuId,$menuId])
+            ->join('store_menu', 'store_menu.id', '=', 'store_entities.menu_id')
+            ->whereRaw("? IS NOT NULL AND store_menu.store_id = ?  AND (? IS NULL OR ?='' OR ? = store_entities.menu_id)", [$storeId, $storeId, $menuId, $menuId, $menuId])
             ->select('store_entities.*')
             ->get();
         $result = array();
