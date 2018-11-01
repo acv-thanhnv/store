@@ -150,7 +150,10 @@
     height: 120px !important; }
 
   .right {
-    padding-top: 10px; } }
+    padding-top: 10px; }
+
+  #template-errors .fa-wifi {
+    font-size: 250px !important; } }
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
   .logo-mobile a {
@@ -384,8 +387,10 @@ body.show-header-cart {
 .note {
   color: green; }
 
-.btn-order {
-  cursor: pointer; }
+.alert-change .btn-order {
+  cursor: pointer;
+  color: white !important;
+  padding: 0.15rem 0.5rem !important; }
 
 .content {
   margin-top: 75px; }
@@ -478,5 +483,27 @@ body.show-header-cart {
 .disabled:hover {
   background: none !important;
   color: black; }
+
+#template-errors div {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center; }
+#template-errors .error-message {
+  font-size: 20px; }
+#template-errors p {
+  font-size: 30px; }
+#template-errors .fa-wifi {
+  font-size: 300px; }
+
+.dl-menuopen a.how-active1 {
+  background: #a72929; }
+
+.content-no-data {
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto; }
+  .content-no-data .no-data-message {
+    font-size: 30px;
+    font-weight: bold; }
 
 /*# sourceMappingURL=customer.css.map */

@@ -169,7 +169,7 @@
 					<ul class="header-cart-wrapitem w-full">
 					</ul>
 					<div class="alert alert-warning alert-change dis-none">
-						<strong>Warning!</strong> You just update orders, press <a class="alert-link btn-order">Order</a> to save changes 
+						<strong>Warning!</strong> You just update orders, press <a class="btn btn-primary btn-sm btn-order">Order</a> to save changes 
 					</div>
 				</div>
 				<div class="w-full cart-total p-t-5 row" style="margin-left: 0px;">
@@ -203,6 +203,18 @@
 
 	<!-- Product -->
 	<section class="bg0 p-b-140 content">
+		<!--Template show errors-->
+		<div id="template-errors" class="dis-none">
+			<div>
+				<span class="fa fa-wifi"></span>
+				<p>
+					Cannot Connect to a Local Network
+				</p>
+				<div class="error-message">
+					Please sure you have connect internet, check your connection and refresh page
+				</div>
+			</div>
+		</div>
 		<div class="container">
 			<!--============== -->
 			<div class="flex-w flex-sb-m menu-type row" style="margin: 0px">
@@ -294,6 +306,12 @@
                 <div class="infinite-scroll-request">
                   <img src="common_images/loading.gif">
                 </div>
+            </div>
+            <div id="no-data" class="dis-none">
+            	<div class="content-no-data">
+            		<img src="common_images/no-data.png" style="width: 250px">
+            		<p class="no-data-message">Opp, no data found</p>
+            	</div>
             </div>
 		</div>
 	</section>
@@ -462,7 +480,7 @@
 	<!--Template menu mobile -->
 	<div id="template-menu-mobile">
 		<li>
-			<a href="#"></a>
+			<a href="#" class="menu-items"></a>
 		</li>
 	</div>
 	<!--Template menu show more-->
@@ -539,6 +557,7 @@
 			</div>
 		</li>
 	</div>
+	<!--template no data-->
 </body>
 </html>
 <script src="frontend/FoodOrder/js/animsition.min.js"></script>
@@ -596,9 +615,6 @@
 
 	//pusher event
 	function PusherEvent(channel_name){
-		// Enable pusher logging - don't include this in production
-		Pusher.logToConsole = true;
-
 		var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
                 cluster: '{{env('PUSHER_APP_CLUSTER')}}',
                 encrypted: true

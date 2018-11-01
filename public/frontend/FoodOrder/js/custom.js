@@ -57,6 +57,11 @@ function buildMenu(url,idStore,numberMenu){
 				var row = $("#template-menu").contents().clone()[3];
 				$(menu).append($(row));
 			}
+			var row_mobile = $("#template-menu-mobile").contents().clone()[1];
+			$(row_mobile).find("a").text('All');
+			$(row_mobile).find("a").attr('data-filter','');
+			$(row_mobile).find("a").addClass('how-active1');
+			$(menu_mobile).append($(row_mobile));
 		//menu for mobile
 		data.data.forEach(function(obj){
 			var row_mobile = $("#template-menu-mobile").contents().clone()[1];
@@ -64,6 +69,11 @@ function buildMenu(url,idStore,numberMenu){
 			$(row_mobile).find("a").attr('data-filter', obj.id);
 			$(menu_mobile).append($(row_mobile));
 		}); 
+		},
+		error: function(jqXHR){
+			$(".content .container").empty();
+			$("#template-errors").removeClass('dis-none');
+			console.log(jqXHR);
 		}
 	});
 }
@@ -81,8 +91,9 @@ function buildFood(url,idStore,page,menu_id,key,orderKey,price){
 		},
 		success: function (data) {
 			if(data.data.data.length===0){
-				$(".list-food").text("No data");
+				$("#no-data").removeClass("dis-none");
 			}else {
+				$("#no-data").addClass("dis-none");
 				_numberPage = data.data.last_page;
 				var food = $(".list-food");
 				data.data.data.forEach(function(obj){
@@ -94,6 +105,12 @@ function buildFood(url,idStore,page,menu_id,key,orderKey,price){
 					$(food).append($(row));
 				});
 			}
+		},
+		error: function(jqXHR){
+			_page= 1;
+			$(".content .container").empty();
+			$("#template-errors").removeClass('dis-none');
+			console.log(jqXHR);
 		}
 	});
 }
@@ -206,22 +223,26 @@ $(document).on("click",".js-show-cart",function(){
 $(document).on('click','.btn-num-product-down', function(){
 	var numProduct = Number($(this).next().val());
 	var cooked = Number($(this).parents('.header-cart-item-txt').find('.cooked').data('cooked'));
-	if(numProduct > 1 && numProduct>cooked) {//product must large than cooked
-		numProduct--;
-		showAlert();
-		if(numProduct===1){//if num product ==1 not allow to down
-			$(this).addClass('disabled');
+	if(numProduct > 1) {//product must large than cooked
+		if(numProduct>cooked){
+			numProduct--;
+			showAlert();
+			if(numProduct===1){//if num product ==1 not allow to down
+				$(this).addClass('disabled');
+			}
+			var index = $(this).parent('div.wrap-num-product').data('id');
+			var cart_index = cart_items.findIndex(item => item.entities_id === index);
+			$(this).next().val(numProduct);
+			cart_items[cart_index].quantity--;
+			if(cart_items[cart_index].status===1){//check if food have been orderd
+				cart_items[cart_index].status = 0.5;
+				cart_items[cart_index].status_name = 'Processing';
+			}
+			cal_total(cart_items);
+			localStorage.cart_items = JSON.stringify(cart_items);
+		}else {
+			alert("Sr you food have been cooked, you not allow to reduce it");
 		}
-		var index = $(this).parent('div.wrap-num-product').data('id');
-		var cart_index = cart_items.findIndex(item => item.entities_id === index);
-		$(this).next().val(numProduct);
-		cart_items[cart_index].quantity--;
-		cart_items[cart_index].status = 0.5;
-		cart_items[cart_index].status_name = 'Processing';
-		cal_total(cart_items);
-		localStorage.cart_items = JSON.stringify(cart_items);
-	}else{
-		alert("Sr you food have been cooked, you not allow to reduce it");
 	}
 });
 
@@ -236,8 +257,10 @@ $(document).on('click','.btn-num-product-up', function(){
 	var index = $(this).parent('div.wrap-num-product').data('id');
 	var cart_index = cart_items.findIndex(item => item.entities_id === index);
 	cart_items[cart_index].quantity++;
-	cart_items[cart_index].status = 0.5;
-	cart_items[cart_index].status_name = 'Processing';
+	if(cart_items[cart_index].status===1){//check if food have been orderd
+		cart_items[cart_index].status = 0.5;
+		cart_items[cart_index].status_name = 'Processing';
+	}
 	cal_total(cart_items);
 	localStorage.cart_items = JSON.stringify(cart_items);
 });
@@ -256,8 +279,10 @@ $(document).on("change","input.num-product",function(){
 		$(this).val(cart_items[cart_index].quantity);
 	}else{
 		cart_items[cart_index].quantity = numProduct;
-		cart_items[cart_index].status   = 0.5;
-		cart_items[cart_index].status_name   = 'Processing';
+		if(cart_items[cart_index].status===1){//check if food have been orderd
+			cart_items[cart_index].status = 0.5;
+			cart_items[cart_index].status_name = 'Processing';
+		}
 		cal_total(cart_items);
 		localStorage.cart_items = JSON.stringify(cart_items);
 		showAlert();
@@ -423,6 +448,15 @@ function getFoodByMenu(idStore,url){
 //function search
 function search(idStore,url){
 	$(document).on('change','input[name="search-product"]',function(){
+		$(".list-food").empty();
+		_key = $(this).val();
+		_page = 1;
+		_menu_id = null;
+		buildFood(url,idStore,_page,null,_key,null,null);
+
+	});
+	//search for mobile
+	$(document).on('change','#search',function(){
 		$(".list-food").empty();
 		_key = $(this).val();
 		_page = 1;
