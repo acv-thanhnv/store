@@ -61,6 +61,16 @@ class FoodService extends BaseService implements FoodServiceInterface
     }
 
     //===================get location========================
+    public function getLocation($idStore)
+    {
+        $list = SDB::table('store_location')
+            ->select('*')
+            ->join('store_order', 'store_location.id', '=', 'store_order.location_id')
+            ->where('store_location.store_id', $idStore)
+            ->get();
+        return $list;
+    }
+    //===================get location by floor========================
     public function getLocationbyFloor($idFloor, $idStore)
     {
         if ($idFloor != null) {
@@ -78,30 +88,10 @@ class FoodService extends BaseService implements FoodServiceInterface
         return $list;
     }
 
-    //===================get location========================
-    public function getLocation($idLocation, $idStore)
-    {
-        $list = SDB::table('store_location')
-            ->select('*', 'store_location.name as location_name', 'store_floor.name as floor_name')
-            ->join('store_floor', 'store_location.floor_id', '=', 'store_floor.id')
-            ->where('store_location.store_id', $idStore)
-            ->where('store_location.id', $idLocation)
-            ->get();
-        return $list;
-    }
 
     //===================get Order by location========================
     public function getOrderByLocation($idLocation, $idStore)
     {
-        $list = SDB::table('store_order')
-            ->select('*','store_order.id', 'store_order.datetime_order', 'store_order.status', 'store_location.name as location_name')
-            ->join('store_location', 'store_order.location_id', '=', 'store_location.id')
-            ->join('store_order_detail', 'store_order.id', '=', 'store_order_detail.order_id')
-            ->join ('store_entities','store_order_detail.entities_id','=','store_entities.id')
-            ->where('store_order.store_id', $idStore)
-            ->where('store_order.location_id', $idLocation)
-            ->get();
-
         $order = SDB::table('store_order')
             ->select('*','store_order.id', 'store_order.datetime_order', 'store_order.status', 'store_location.name as location_name')
             ->join('store_location', 'store_order.location_id', '=', 'store_location.id')

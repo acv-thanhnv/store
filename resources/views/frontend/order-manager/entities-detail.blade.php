@@ -72,14 +72,13 @@
     }
 </style>
 
-<div style="display: none">
-    <div id="entities-detail-template">
-        <div>
+    <div id="entities-detail-template" style="display: none">
+        <div class="row-order-detail">
             <div class="order_detail_image text-center">
                 <img src="" alt="Image" class="img-detail"/>
             </div>
             <div class="order_detail_name">
-                <h5 class="name-detail">Thịt bò mỹ hun khói kèm sốt gia vị đặc biệt(HOT)</h5>
+                <h5 class="name-detail"></h5>
             </div>
             <div class="order_detail_price text-center">5.000.000</div>
             <div class="order_detail_quantity text-center">
@@ -96,4 +95,3 @@
             </div>
         </div>
     </div>
-</div>
