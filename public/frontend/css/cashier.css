@@ -2,6 +2,10 @@
   padding: 0px;
 }
 
+.hidden {
+  display: none;
+}
+
 .wraper-right {
   background-color: white;
   border-right: 2px solid grey;
@@ -157,11 +161,13 @@ tr.t-header2-child > th {
 
 .md-form > input {
   height: 41px;
-  width: 156px;
+  width: 414px;
 }
 
 table,
-th {
+th,
+tr,
+td {
   text-align: center;
 }
 
@@ -175,12 +181,12 @@ th {
   color: #fff;
 }
 
-.tab-pane.fade.in.active {
+.tab-pane {
   margin-right: 9px;
   margin-top: 8px;
 }
 
-.right-kitchen.tab-pane.fade.in.active {
+.right-cashier.tab-pane.in.active {
   margin-left: 9px;
 }
 
@@ -189,14 +195,19 @@ th {
     width: 100% !important;
   }
 
-  .btn-group-kitchen {
+  .btn-group-cashier {
     margin-top: 8px !important;
+  }
+
+  .badge {
+    max-width: 210px !important;
   }
 }
 
 .btn-default,
-.table,
-tr,
+.red-blue-table,
+.red-blue-table > thead > tr,
+.red-blue-table > tbody > tr,
 .nav-tabs > li > a,
 .md-form > input,
 .navbar,
@@ -225,23 +236,60 @@ tr,
   box-shadow: 0 8px 6px -8px black;
 }
 
-td.food {
+.w-100 button {
+  width: 100% !important;
+  margin: 4px;
+}
+
+td.invoice,
+td.money,
+td.food,
+.badge {
   display: table-cell;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-td.food:hover {
+td.invoice,
+td.money,
+td.food {
+  max-width: 100px;
+}
+
+.badge {
+  max-width: 275px;
+}
+
+td.invoice:hover,
+td.money:hover,
+td.food:hover,
+.badge:hover {
   white-space: normal;
 }
 
-td.food.food-left {
-  max-width: 150px;
+textarea {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  margin-left: 5px;
 }
 
-td.food.food-right {
-  max-width: 150px;
+input[type=checkbox] {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2);
+  /* IE */
+  -moz-transform: scale(2);
+  /* FF */
+  -webkit-transform: scale(2);
+  /* Safari and Chrome */
+  -o-transform: scale(2);
+  /* Opera */
+  padding: 10px;
+}
+
+td.ta-right {
+  text-align: left;
 }
 
 .wraper-left {

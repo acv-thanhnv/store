@@ -1,4 +1,4 @@
-<table id="thu-ngan" class="table table-hover red-blue-table" data-toggle="table" responsive hover>
+<table class="table table-hover red-blue-table" data-toggle="table" responsive hover>
 	<thead>
 		<tr>
 			<th style="width: 5%"></th>
@@ -79,15 +79,11 @@
 </div>
 
 @for ($i = 1; $i < 30; $i++)
-<!-- Modal -->
 <div class="modal fade" id="hd00{{ $i }}" role="dialog">
 	<div class="modal-dialog">
-
-		<!-- Modal content-->
 		<div class="modal-content">
 			@include('frontend.cashier3.modal')
 		</div>
-
 	</div>
 </div>
 @endfor

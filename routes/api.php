@@ -12,6 +12,21 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your Api!
 |
 */
+Route::group(['prefix' => 'api/v1', 'name' => 'api_v1.'], function () {
+	Route::get('/store/{storeId}/customer2cashier.json', 'CashierController@showInvoicesPushedByCustomer');
+	Route::get('/store/{storeId}/cashier.json', 'CashierController@showInvoicesByStore');
+	Route::get('/store/{storeId}/order/{orderId}/cashier_detail.json', 'CashierController@showInvoiceDetails');
+	Route::get('/store/{storeId}/chef.json', 'KitchenController@showFoodByStore');
+	Route::get('/store/{storeId}/chef/order.json', 'KitchenController@listOrder');
+	Route::get('/store/{storeId}/chef/{orderId}.json', 'KitchenController@showFoodByOrder');
+	Route::get('/store/{storeId}/order/{orderId}.json', 'KitchenController@listFoodByOrder');
+	Route::get('/store/{storeId}/chef_queue.json', 'KitchenController@showFoodQueue');
+	Route::get('/store/{storeId}/chef_location.json', 'KitchenController@showOrderLocationByStore');
+	Route::get('/store/{storeId}/chef_order_detail.json', 'KitchenController@showOrderDetail');
+	Route::get('/store/{storeId}/order/{orderId}/test.json', 'KitchenController@showPriorityByOrder');
+	Route::get('/{storeId}/{orderId}/test', 'KitchenController@test');
+});
+
 Route::match(array('GET','POST'),'/api/v1/auth/login', 'Auth\UserController@login')->name('api_v1_login_call');
 
 Route::get('/api/v1/food/list-by-store/{storeId?}', 'FoodController@listByStore')->name('food/list-by-store');
@@ -19,7 +34,6 @@ Route::get('/api/v1/food/list-by-menu/{menuId?}', 'FoodController@listByMenu')->
 Route::get('/api/v1/food/list-menu-by-store/{storeId?}', 'FoodController@listMenu')->name('food/list-menu-by-store');
 
 Route::group(['middleware' => [ 'auth:api' ]],function (){
-    Route::match(array('GET','POST'),'/api/v1/auth/logout', 'Auth\UserController@logout')->name('api_v1_logout_call');
+	Route::match(array('GET','POST'),'/api/v1/auth/logout', 'Auth\UserController@logout')->name('api_v1_logout_call');
 });
 Route::get('/api/v1/food/order', 'OrderController@order')->name('food/order');
-
