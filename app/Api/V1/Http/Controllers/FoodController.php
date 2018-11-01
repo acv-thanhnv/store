@@ -28,8 +28,7 @@ class FoodController extends Controller
         return ResponseHelper::JsonDataResult($result);
     }
     public function listByMenu(Request $request,$menuId=null){
-        $storeId =   $request->input('storeId');
-
+        $storeId =   $request->input('idStore');
         $list = $this->service->getFoodByMenuId($menuId,$storeId);
         $result  = new DataResultCollection ();
         $result->status =  SDBStatusCode::OK;
@@ -41,6 +40,56 @@ class FoodController extends Controller
         $result  = new DataResultCollection ();
         $result->status =  SDBStatusCode::OK;
         $result->data = $list;
+        return ResponseHelper::JsonDataResult($result);
+    }
+
+    public function listFloors(Request $request)
+    {
+        $idStore=$request->idStore;
+        $list = $this->service->getFloorsByStore($idStore);
+        $result = new DataResultCollection();
+        $result->status = SDBStatusCode::OK;
+        $result->data=$list;
+        return ResponseHelper::JsonDataResult($result);
+    }
+
+    public function listTableByFloor(Request $request)
+    {
+        $idFloor = $request->idFloor;
+        $idStore = $request->idStore;
+        $list = $this->service->getLocationbyFloor($idFloor,$idStore);
+        $result = new DataResultCollection();
+        $result->status = SDBStatusCode::OK;
+        $result->data=$list;
+        return ResponseHelper::JsonDataResult($result);
+    }
+
+    public function getLocation(Request $request){
+        $idLocation = $request->idLocation;
+        $idStore = $request->idStore;
+        $list = $this->service->getLocation($idLocation, $idStore);
+        $result = new DataResultCollection();
+        $result->status = SDBStatusCode::OK;
+        $result->data=$list;
+        return ResponseHelper::JsonDataResult($result);
+    }
+
+    public function getOrderByLocation(Request $request){
+        $idLocation = $request->idLocation;
+        $idStore = $request->idStore;
+        $list = $this->service->getOrderByLocation($idLocation, $idStore);
+        $result = new DataResultCollection();
+        $result->status = SDBStatusCode::OK;
+        $result->data=$list;
+        return ResponseHelper::JsonDataResult($result);
+    }
+
+    public function getOrderDetail(Request $request){
+        $idOrder = $request->idOrder;
+        $list = $this->service->getOrderDetail($idOrder);
+        $result = new DataResultCollection();
+        $result->status = SDBStatusCode::OK;
+        $result->data=$list;
         return ResponseHelper::JsonDataResult($result);
     }
 }

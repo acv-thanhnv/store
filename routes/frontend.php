@@ -14,7 +14,6 @@
 /**
  * frontend module
  */
-// customer
 Route::get("map","HomeController@Map"); 
 Route::get("ClosestStore","HomeController@ClosestStore")->name("ClosestStore"); 
 Route::get("/","HomeController@Home"); 
