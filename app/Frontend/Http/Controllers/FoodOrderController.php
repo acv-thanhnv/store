@@ -57,14 +57,24 @@ class FoodOrderController extends Controller
     public function getFood(Request $request)
     {
         $idStore = $request->idStore;
+        $key = $request->key;
+        if($key==null){
+            $key = '';
+        }
         $menu_id = $request->menu_id;
         $total   = FoodConst::foodPerPage;
         if($menu_id ==null){
-            $arrFood = $this->foodService->getFood($idStore,$total);
+            $arrFood = SDB::table('store_entities')
+                        ->join('store_menu','store_menu.id','=','store_entities.menu_id')
+                        ->where('store_menu.store_id',$idStore)
+                        ->where('store_entities.name','like','%'.$key.'%')
+                        ->select('store_entities.*')
+                        ->orderby('store_entities.id','desc')
+                        ->paginate($total);
         }else{
             $arrFood = SDB::table('store_entities')
-                    ->where('menu_id',$menu_id)
-                    ->paginate($total);
+                        ->where('menu_id',$menu_id)
+                        ->paginate($total);
         }
         foreach($arrFood as $obj){
             //check avatar
@@ -79,16 +89,88 @@ class FoodOrderController extends Controller
         $result->data   = $arrFood;
         return ResponseHelper::JsonDataResult($result);
     }
-    public function getFoodByMenu(Request $request)
+    public function OrderBy(Request $request)
     {
-        $menu_id = $request->menu_id;
         $idStore = $request->idStore;
+        $price   = $request->price;
+        $sortBy  = $request->sortBy;
+        $orderKey;
+        $value;
         $total   = FoodConst::foodPerPage;
-        if($menu_id =='*'){
-            $arrFood = $this->foodService->getFood($idStore,$total);
-        }else{
+        switch ($sortBy) {
+            case 'name':
+                $orderKey = 'store_entities.'.$sortBy;
+                $value    = "asc";
+                break;
+            case 'lth':
+                $orderKey = 'store_entities.price';
+                $value    = "asc";
+                break;
+            case 'htl':
+                $orderKey = 'store_entities.price';
+                $value    = "desc";
+                break;
+            case 'other':
+                switch ($price) {
+                    case 'l50':
+                        $arrFood = SDB::table('store_entities')
+                                    ->join('store_menu','store_menu.id','=','store_entities.menu_id')
+                                    ->where('store_menu.store_id',$idStore)
+                                    ->where('store_entities.price','<=',50000)
+                                    ->select('store_entities.*')
+                                    ->orderby('store_entities.price','asc')
+                                    ->paginate($total);
+                        break;
+                    case '50-100' :
+                        $arrFood = SDB::table('store_entities')
+                                    ->join('store_menu','store_menu.id','=','store_entities.menu_id')
+                                    ->where('store_menu.store_id',$idStore)
+                                    ->whereBetween('store_entities.price',[50000,100000])
+                                    ->select('store_entities.*')
+                                    ->orderby('store_entities.price','asc')
+                                    ->paginate($total);
+                        break;
+                    case '100-300' :                        $arrFood = SDB::table('store_entities')
+                                    ->join('store_menu','store_menu.id','=','store_entities.menu_id')
+                                    ->where('store_menu.store_id',$idStore)
+                                    ->whereBetween('store_entities.price',[101000,300000])
+                                    ->select('store_entities.*')
+                                    ->orderby('store_entities.price','asc')
+                                    ->paginate($total);
+                        break;
+                    case '300h' :
+                        $arrFood = SDB::table('store_entities')
+                                    ->join('store_menu','store_menu.id','=','store_entities.menu_id')
+                                    ->where('store_menu.store_id',$idStore)
+                                    ->where('store_entities.price','>',300000)
+                                    ->select('store_entities.*')
+                                    ->orderby('store_entities.price','asc')
+                                    ->paginate($total);
+                        break;
+                    default:
+                        $price='1';
+                        $arrFood = SDB::table('store_entities')
+                                    ->join('store_menu','store_menu.id','=','store_entities.menu_id')
+                                    ->where('store_menu.store_id',$idStore)
+                                    ->select('store_entities.*')
+                                    ->orderby('store_entities.price','asc')
+                                    ->paginate($total);
+                        break;
+                }
+                $orderKey = 'store_entities.price';
+                $value    = "desc";
+                break;
+            default:
+                $orderKey = 'store_entities.id';
+                $value = "desc";
+                break;
+        }
+        if($price==null){
             $arrFood = SDB::table('store_entities')
-                    ->where('menu_id',$menu_id)
+                    ->join('store_menu','store_menu.id','=','store_entities.menu_id')
+                    ->where('store_menu.store_id',$idStore)
+                    ->select('store_entities.*')
+                    ->orderby($orderKey,$value)
                     ->paginate($total);
         }
         foreach($arrFood as $obj){

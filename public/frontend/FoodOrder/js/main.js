@@ -179,6 +179,8 @@
     });
 
     $('.js-show-search').on('click',function(){
+        console.log(1);
+        $("#search-product").focus();
         $(this).toggleClass('show-search');
         $('.panel-search').slideToggle(400);
 

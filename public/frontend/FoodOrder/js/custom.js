@@ -1,8 +1,8 @@
 var _page =1,_numberPage,quantity=1,cart_items=[];
-var cart_total=0,status=0,_menu_id;
+var cart_total=0,status=0,_menu_id,_key,_sort_by,_price;
 $(".infinite-scroll-request").hide();
 //function lazy load food
-function lazyLoad(url,idStore){
+function lazyLoad(url,urlOrder,idStore){
 	$(window).scroll(function() {
 		var hT = $('.list-food').offset().top,
 		hH = $('.list-food').outerHeight(),
@@ -17,7 +17,11 @@ function lazyLoad(url,idStore){
 				$(document).ajaxStop(function(){
 					$(".infinite-scroll-request").hide();
 				});
-				buildFood(url,idStore,_page);
+				if(_sort_by==null){
+					buildFood(url,idStore,_page,_menu_id,_key,null,null);
+				}else {
+					buildFood(urlOrder,idStore,_page,_menu_id,_key,_sort_by,_price);
+				}
 			}
 		}
 	});
@@ -64,17 +68,32 @@ function buildMenu(url,idStore,numberMenu){
 	});
 }
 //function buildFood
-function buildFood(url,idStore,page){
+function buildFood(url,idStore,page,menu_id,key,orderKey,price){
 	$.ajax({
 		type: 'GET',
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		},
 		url: url,
-		data:{idStore:idStore,page:page},
+		data:{
+			idStore:idStore,page:page,menu_id:_menu_id,
+			key:_key,sortBy:_sort_by,price:_price
+		},
 		success: function (data) {
-			_numberPage = data.data.last_page;
-			buildFoodFromJson(data.data.data);
+			if(data.data.data.length===0){
+				$(".list-food").text("No data");
+			}else {
+				_numberPage = data.data.last_page;
+				var food = $(".list-food");
+				data.data.data.forEach(function(obj){
+					var row = $("#template-food").contents().clone();
+					$(row).find(".view-detail").attr('src',obj.src);
+					$(row).find(".block2").attr('data-id',obj.id);
+					$(row).find(".food-items-name").text(obj.name);
+					$(row).find(".food-items-price").text(obj.price);
+					$(food).append($(row));
+				});
+			}
 		}
 	});
 }
@@ -393,36 +412,42 @@ function getFoodByMenu(idStore,url){
 	$(document).on("click",'.menu-items',function(e){
 		e.preventDefault();
 		_menu_id = $(this).data("filter");
+		_page=1;
+		$(".list-food").empty();
 		//remove other menu items active and add active in this menu
 		$('.menu-items').removeClass('how-active1');
 		$(this).addClass('how-active1');
-		$.ajax({
-			type: 'GET',
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			},
-			url: url,
-			data:{menu_id:_menu_id,idStore:idStore},
-			success: function (result) {
-				if(result.data.data.length===0){
-					$('.list-food').text('Sr this menu don\'t have food, we will update it as soon as we can');
-				}else{
-					$(".list-food").empty();
-					buildFoodFromJson(result.data.data);
-				}
-			}
-		})
+		buildFood(url,idStore,_page,_menu_id,null,null,null);
 	});
 }
-//function buildFoodFromJson
-function buildFoodFromJson(data){
-	var food = $(".list-food");
-	data.forEach(function(obj){
-		var row = $("#template-food").contents().clone();
-		$(row).find(".view-detail").attr('src',obj.src);
-		$(row).find(".block2").attr('data-id',obj.id);
-		$(row).find(".food-items-name").text(obj.name);
-		$(row).find(".food-items-price").text(obj.price);
-		$(food).append($(row));
+//function search
+function search(idStore,url){
+	$(document).on('change','input[name="search-product"]',function(){
+		$(".list-food").empty();
+		_key = $(this).val();
+		_page = 1;
+		_menu_id = null;
+		buildFood(url,idStore,_page,null,_key,null,null);
+
 	});
+}
+//event when change sort by filter
+$(document).on("change","#sort-by",function(){
+	var value = $(this).val();
+	if(value=='other'){
+		$("#price").prop("disabled",false);
+	}else {
+		$("#price").prop("disabled",true);
+		$("#price").val("");
+	}
+});
+//function filter
+function filter(idStore,url){
+	$(document).on("click",'.btn-filter',function(){
+		$(".list-food").empty();
+		_sort_by = $("#sort-by").val();
+		_price = $("#price").val();
+		_page = 1;
+		buildFood(url,idStore,_page,null,null,_sort_by,_price);
+	})
 }

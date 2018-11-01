@@ -212,26 +212,26 @@
 						<div class="wrap-filter bg6 row p-lr-10 form-group">
 							<div class="col-md-4 col-lg-4 col-sm-4 col-6 p-lr-5">
 								<label>Sort By</label>
-								<select class="form-control">
-									<option>Option 1</option>
-									<option>Option 2</option>
-									<option>Option 3</option>
-									<option>Option 4</option>
-									<option>Option 5</option>
+								<select class="form-control" id="sort-by">
+									<option value="">Default</option>
+									<option value="name">Name</option>
+									<option value="lth">Price:Low to High</option>
+									<option value="htl">Price:High to Low</option>
+									<option value="other">Price:Other</option>
 								</select>
 							</div>
 							<div class="col-md-4 col-lg-4 col-sm-4 col-6 p-lr-5">
 								<label>Price</label>
-								<select class="form-control">
-									<option>Option 1</option>
-									<option>Option 2</option>
-									<option>Option 3</option>
-									<option>Option 4</option>
-									<option>Option 5</option>
+								<select class="form-control" id="price" disabled="">
+									<option value="">All</option>
+									<option value="l50">Lower 50.000</option>
+									<option value="50-100">50.000-100.000</option>
+									<option value="100-300">100.000-300.000</option>
+									<option value="300h">300.000 and Higher</option>
 								</select>
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-2 col-4 filter-search">
-								<button class="btn btn-danger form-control">Filter</button>
+								<button class="btn btn-danger form-control btn-filter">Filter</button>
 							</div>
 						</div>
 					</div>
@@ -282,7 +282,7 @@
 							<i class="zmdi zmdi-search"></i>
 						</button>
 
-						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search...">
+						<input autofocus="" id="search-product" class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search...">
 					</div>	
 				</div>
 			</div>
@@ -549,6 +549,7 @@
 <!--Filter Food-->
 <script src="frontend/FoodOrder/js/isotope.pkgd.min.js"></script>
 <script src="frontend/FoodOrder/js/main.js"></script>
+<script src="frontend/FoodOrder/js/lazyload.js"></script>
 <!--Jquery confirm -->
 <script src="js/lib/jquery-confirm.js"></script>
 <!--Pusher-->
@@ -583,9 +584,11 @@
 		setTable();
 		countCart();//dem va hien thi so item trong gio hang
 		getFoodByMenu(idStore,"{{route('getFood')}}");
+		search(idStore,"{{route('getFood')}}");//search food
+		filter(idStore,"{{route('OrderBy')}}");//filter food
 		buildMenu("{{route('Menu')}}",idStore,numberMenu);
-		buildFood("{{route('getFood')}}",idStore,1);
-		lazyLoad("{{route('getFood')}}",idStore);
+		buildFood("{{route('getFood')}}",idStore,1,null,null,null);
+		lazyLoad("{{route('getFood')}}","{{route('OrderBy')}}",idStore);
 		Order("{{route('sendOrder')}}",idStore,access_token);
 		PusherEvent(channel_name);
 		deleteCartItem('{{route("deleteCartItem")}}');//delete item from cart

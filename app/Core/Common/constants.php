@@ -22,7 +22,7 @@ class SDBStatusCode
 
 class FoodConst
 {
-    const foodPerPage = 8;
+    const foodPerPage = 12;
 }
 
 class ApiConst
