@@ -18,4 +18,14 @@ interface FoodServiceInterface
 
     public function getMenuList($storeId);
 
+    public function getFloorsByStore($idStore);
+
+    public function getLocationbyFloor($idFloor, $idStore);
+
+    public function getLocation($idLocation, $idStore);
+
+    public function getOrderByLocation($idLocation, $idStore);
+
+    public function getOrderDetail($idOrder);
+
 }
