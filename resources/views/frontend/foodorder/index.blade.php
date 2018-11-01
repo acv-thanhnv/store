@@ -238,7 +238,7 @@
 				</div>
 				<!--Desktop catogery-->
 				<div class="flex-w flex-l-m filter-tope-group m-tb-10 menu-group-desktop">
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5 how-active1 menu-items" data-filter="*">
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5 how-active1 menu-items" data-filter="">
 						All Foods
 					</button>
 				</div>
@@ -468,7 +468,7 @@
 	<!--Template menu show more-->
 	<div id="template-menu-show" style="display: none">
 		<li class="li-items">
-			<a href="#" class="dropdown-item"></a>
+			<a href="#" class="dropdown-item menu-items"></a>
 		</li>
 	</div>
 	<!--Template food -->
@@ -582,7 +582,7 @@
 		var channel_name = access_token+'_'+'{{\App\Core\Common\OrderConst::OrderStatusEventName}}';
 		setTable();
 		countCart();//dem va hien thi so item trong gio hang
-		getFoodByMenu(idStore);
+		getFoodByMenu(idStore,"{{route('getFood')}}");
 		buildMenu("{{route('Menu')}}",idStore,numberMenu);
 		buildFood("{{route('getFood')}}",idStore,1);
 		lazyLoad("{{route('getFood')}}",idStore);

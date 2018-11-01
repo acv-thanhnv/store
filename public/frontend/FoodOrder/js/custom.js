@@ -1,5 +1,5 @@
 var _page =1,_numberPage,quantity=1,cart_items=[];
-var cart_total=0,status=0;
+var cart_total=0,status=0,_menu_id;
 $(".infinite-scroll-request").hide();
 //function lazy load food
 function lazyLoad(url,idStore){
@@ -73,16 +73,8 @@ function buildFood(url,idStore,page){
 		url: url,
 		data:{idStore:idStore,page:page},
 		success: function (data) {
-			var food = $(".list-food");
 			_numberPage = data.data.last_page;
-			data.data.data.forEach(function(obj){
-				var row = $("#template-food").contents().clone();
-				$(row).find(".view-detail").attr('src',obj.src);
-				$(row).find(".block2").attr('data-id',obj.id);
-				$(row).find(".food-items-name").text(obj.name);
-				$(row).find(".food-items-price").text(obj.price);
-				$(food).append($(row));
-			});
+			buildFoodFromJson(data.data.data);
 		}
 	});
 }
@@ -397,12 +389,40 @@ function checkAlert(){
 	}
 }
 //show food by menu
-function getFoodByMenu(idStore){
-	$(document).on("click",'.menu-items',function(){
-		var menu_id = $(this).data("filter");
+function getFoodByMenu(idStore,url){
+	$(document).on("click",'.menu-items',function(e){
+		e.preventDefault();
+		_menu_id = $(this).data("filter");
 		//remove other menu items active and add active in this menu
 		$('.menu-items').removeClass('how-active1');
 		$(this).addClass('how-active1');
-		
-	})
+		$.ajax({
+			type: 'GET',
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			url: url,
+			data:{menu_id:_menu_id,idStore:idStore},
+			success: function (result) {
+				if(result.data.data.length===0){
+					$('.list-food').text('Sr this menu don\'t have food, we will update it as soon as we can');
+				}else{
+					$(".list-food").empty();
+					buildFoodFromJson(result.data.data);
+				}
+			}
+		})
+	});
+}
+//function buildFoodFromJson
+function buildFoodFromJson(data){
+	var food = $(".list-food");
+	data.forEach(function(obj){
+		var row = $("#template-food").contents().clone();
+		$(row).find(".view-detail").attr('src',obj.src);
+		$(row).find(".block2").attr('data-id',obj.id);
+		$(row).find(".food-items-name").text(obj.name);
+		$(row).find(".food-items-price").text(obj.price);
+		$(food).append($(row));
+	});
 }
