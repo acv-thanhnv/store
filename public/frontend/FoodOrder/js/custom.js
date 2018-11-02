@@ -90,11 +90,11 @@ function buildFood(url,idStore,page,menu_id,key,orderKey,price){
 			key:_key,sortBy:_sort_by,price:_price
 		},
 		success: function (data) {
+			_numberPage = data.data.last_page;
 			if(data.data.data.length===0){
 				$("#no-data").removeClass("dis-none");
 			}else {
 				$("#no-data").addClass("dis-none");
-				_numberPage = data.data.last_page;
 				var food = $(".list-food");
 				data.data.data.forEach(function(obj){
 					var row = $("#template-food").contents().clone();
@@ -107,10 +107,9 @@ function buildFood(url,idStore,page,menu_id,key,orderKey,price){
 			}
 		},
 		error: function(jqXHR){
-			_page= 1;
+			_page= _page--;
 			$(".content .container").empty();
 			$("#template-errors").removeClass('dis-none');
-			console.log(jqXHR);
 		}
 	});
 }
@@ -323,7 +322,7 @@ function deleteCartItem(url){
 									id:cart_items[cart_index].id
 								},
 								success: function (data) {
-									notify('Success','success',"You food item have been deleted successfull!",'#41E345');
+									notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
 									cart_items.splice(cart_index,1);
 									cal_total(cart_items);
 									localStorage.cart_items = JSON.stringify(cart_items);
@@ -422,6 +421,7 @@ function Order(url,idStore,access_token){
 				$("#table").prop("disabled",true);//disable if user have order
 				localStorage.table = table;//set table for local
 				localStorage.orderId = data;//set orderId for local
+				$(".btn-pay").removeClass("disabled");
 				//clear local alert change
 				localStorage.removeItem('hasAlert');
 				hideAlert();
@@ -432,6 +432,28 @@ function Order(url,idStore,access_token){
 		});
 		}
 	})
+}
+//function pay
+function Pay(){
+	$(document).on("click",".btn-pay",function(){
+		if(localStorage.orderId){
+			var orderId = localStorage.orderId;
+			$.ajax({
+			type: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			url: url,
+			data:{orderId},
+			success: function (data) {
+				notify('Success','success','Your bill is being paid!','#2AB143');
+			},
+			error: function(jqXHR){
+				notify('Error','error','Oh maybe something went wrong, please try againt!','#F4A950');
+			}
+			});
+		}
+	});
 }
 //function set table
 function setTable(){

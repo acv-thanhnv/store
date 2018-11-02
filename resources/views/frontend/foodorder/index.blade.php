@@ -190,7 +190,7 @@
 					<div class="col-lg-6 col-12 right">
 						<div class="total-money"></div>
 						<div style="text-align: center" class="p-b-10 m-t-10">
-							<button class="btn btn-danger btn-pay">
+							<button class="btn btn-danger btn-pay disabled">
 								<i class="fa fa-paypal"></i> Pay
 							</button>
 							<button class="btn btn-primary btn-order">
@@ -469,9 +469,9 @@
 	</div>
 	<!--Template Menu-->
 	<div id="template-menu" style="display: none">
-		<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5 menu-items" data-filter="">
+		<button class="stext-275 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5 menu-items" data-filter="">
 		</button>
-		<div class="dropdown more stext-106 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5">
+		<div class="dropdown more stext-275 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5">
 			<a class="dropdown-toggle"  data-toggle="dropdown">More
 				<span class="caret"></span>
 			</a>
@@ -600,6 +600,7 @@
 		}
 		if(localStorage.orderId){
 			$("#table").prop("disabled",true);//disable if user have order
+			$(".btn-pay").removeClass('disabled');//disable if user have order
 		}
 		//show alert change
 		checkAlert();

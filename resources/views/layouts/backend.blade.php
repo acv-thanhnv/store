@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -125,11 +125,10 @@
                             </li>
                             <li><a><i class="fa fa-book"></i> Cửa hàng <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <li><a href="{{route('getStore')}}">List</a>
+                                    <li><a href="{{route('getStore')}}">Table/Floor</a>
                                     </li>
                                     <li><a href="{{route('editStore')}}">My Store</a>
                                     </li>
-                                    <li><a href="{{route('addStore')}}">Add</a></li>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-table"></i> Thực đơn <span class="fa fa-chevron-down"></span></a>
