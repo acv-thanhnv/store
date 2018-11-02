@@ -64,9 +64,9 @@ class FoodService extends BaseService implements FoodServiceInterface
     public function getLocation($idStore)
     {
         $list = SDB::table('store_location')
-            ->select('*')
-            ->join('store_order', 'store_location.id', '=', 'store_order.location_id')
-            ->where('store_location.store_id', $idStore)
+            ->select('*', 'store_location.name as location_name', 'store_location.id as location_id', 'store_floor.id as floor_id', 'store_floor.name as floor_name')
+            ->join('store_floor', 'store_location.floor_id','=', 'store_floor.id')
+            ->where('store_floor.store_id', $idStore)
             ->get();
         return $list;
     }
