@@ -271,7 +271,6 @@
                 type: 'GET',
                 data: {idStore: idStore},
                 success: function (data) {
-                    console.log(data);
                     genTable(data);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -285,9 +284,11 @@
             $(itemTable).empty();
             data.data.forEach(function (obj) {
                 var itemTableTemp = $('#table-list-template').contents().clone();
-                $(itemTableTemp).find('.table-name').text(obj.name);
-                $(itemTableTemp).find('.table-name').attr('item-table-id', obj.id);
-                console.log($(itemTableTemp).find('.table-name').attr('item-table-id'));
+                $(itemTableTemp).find('.table-name').text(obj.location_name);
+                $(itemTableTemp).find('.table-name').attr('item-table-id', obj.location_id);
+                $(itemTableTemp).find('.table-name').attr('item-table-name', obj.location_name);
+                $(itemTableTemp).find('.table-name').attr('item-floor-id', obj.floor_id);
+                $(itemTableTemp).find('.table-name').attr('item-floor-name', obj.floor_name);
                 $(itemTable).append($(itemTableTemp));
             })
         }
@@ -327,27 +328,19 @@
         //======================click table=========================
         $(document).on("click", ".wrap-table", function () {
             var idTable = $(this).find(".table-name").attr('item-table-id');
-            $.ajax({
-                url: '{{route("food/get-location")}}',
-                dataType: 'JSON',
-                type: 'GET',
-                data: {idLocation: idTable, idStore: idStore},
-                success: function (data) {
-                    data.data.forEach(function (obj) {
-                        $('#table-id').text(obj.location_name);
-                        $('#floor-id').text(obj.floor_name);
-                    })
-                },
-                err: function (xhr, ajaxOptions, thrownError) {
-                    console.log('Error ' + xhr.status + ' | ' + thrownError);
-                }
-            })
+            var nameTable = $(this).find(".table-name").attr('item-table-name');
+            var nameFloor = $(this).find(".table-name").attr('item-floor-name');
+            //set location to order
+            $('#table-id').text(nameTable);
+            $('#floor-id').text(nameFloor);
+
             $.ajax({
                 url: '{{route("food/list-order-by-location")}}',
                 dataType: 'JSON',
                 type: 'GET',
                 data: {idLocation: idTable, idStore: idStore},
                 success: function (data) {
+                    console.log(data);
                     genOrderbyLocation(data);
                 },
                 err: function (xhr, ajaxOptions, thrownError) {
@@ -382,41 +375,6 @@
                 });
             })
         }
-        // function genOrderbyLocation(data) {
-        //     var itemOrder = $('#entities-order');
-        //     $(itemOrder).empty();
-        //     data.data.forEach(function (obj) {
-        //         //set entities-order
-        //         var itemOrderTemp = $('#entities-order-template').contents().clone();
-        //
-        //         $(itemOrderTemp).find('.entities_order_id').text(obj.id);
-        //         $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', obj.id);
-        //         $(itemOrderTemp).find('.entities_order_time').text(obj.datetime_order);
-        //         if (obj.status == 1) {
-        //             $(itemOrderTemp).find('.entities_order_status').text('Chưa xác nhận');
-        //         }
-        //         else if (obj.status == 2) {
-        //             $(itemOrderTemp).find('.entities_order_status').text('Đã xác nhận');
-        //             $(itemOrderTemp).find('.delete_order').addClass('disabled');
-        //         }
-        //
-        //         var itemOrderDetail = $('.entities-row-detail');
-        //         $(itemOrderDetail).empty();
-        //         obj.detail.forEach(function (detail) {
-        //
-        //             var itemOrderDetailTemp = $('#entities-detail-template').contents().clone();
-        //             $(itemOrderDetailTemp).find('.order_detail_image>img').attr('src', detail.image);
-        //             $(itemOrderDetailTemp).find('.name-detail').text(detail.name);
-        //             $(itemOrderDetailTemp).find('.order_detail_price').text(parseInt(detail.price));
-        //             $(itemOrderDetailTemp).find('.quantity-detail').val(detail.quantity);
-        //
-        //             $(itemOrderTemp).find(itemOrderDetail).append(itemOrderDetailTemp);
-        //         })
-        //         $(itemOrder).append($(itemOrderTemp));
-        //     })
-        // }
-
-
         //======================click show detail=========================
         $(document).on('click', '.show_detail', function () {
             var show= $(this).parents('.entities-row-order').find('.entities-row-detail');
