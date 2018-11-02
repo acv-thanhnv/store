@@ -18,22 +18,20 @@
 </style>
 <div style="display:  none">
     <div id="entities-order-template">
-        <div class="entities-row-order">
-            <div class="entities_order_id text-center" style="display: inline">
-            </div>
-            <div class="entities_order_time text-center" style="display: inline"></div>
-            <div class="entities_order_status text-center" style="display: inline"></div>
-            <div class="entities_order_action text-center" style="display: inline">
+        <div class="entities-row-order row">
+            <div class="col-md-1 entities_order_id"></div>
+            <div class="col-md-5 entities_order_time"></div>
+            <div class="col-md-3 entities_order_status"></div>
+            <div class="col-md-3 entities_order_action">
                 <button class="btn btn-info btn-sm show_detail"><span class="glyphicon glyphicon-eye-open"
                   aria-hidden="true"></span></button>
                   <button class="btn btn-secondary btn-sm delete_order"><span class="glyphicon glyphicon-trash"
                     aria-hidden="true"></span></button>
                     <button class="btn btn-danger btn-sm send_order"><span class="glyphicon glyphicon-share-alt"
-                     aria-hidden="true"></span></button>
-                 </div>
-                 <div class="entities-row-detail" style="display: none">
-                
-                </div>
+                       aria-hidden="true"></span></button>
             </div>
         </div>
+        <div class="entities-row-detail" style="display: none">
+        </div>
+    </div>
     </div>

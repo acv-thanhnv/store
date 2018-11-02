@@ -602,6 +602,9 @@
 			$("#table").prop("disabled",true);//disable if user have order
 			$(".btn-pay").removeClass('disabled');//disable if user have order
 		}
+		if(localStorage.idStore!=idStore){
+			localStorage.clear();
+		}
 		//show alert change
 		checkAlert();
 		var channel_name = access_token+'_'+'{{\App\Core\Common\OrderConst::OrderStatusEventName}}';

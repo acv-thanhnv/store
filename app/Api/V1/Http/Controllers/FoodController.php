@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Api\V1\Http\Controllers;
+use App\Api\V1\Services\Interfaces\FoodServiceInterface;
 use App\Api\V1\Services\Interfaces\OrderServiceInterface;
 use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
-use App\Api\V1\Services\Interfaces\FoodServiceInterface;
+use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Events\OrderPusherEvent;
 use App\Core\Helpers\CommonHelper;
@@ -58,6 +59,13 @@ class FoodController extends Controller
         $idFloor = $request->idFloor;
         $idStore = $request->idStore;
         $list = $this->service->getLocationbyFloor($idFloor,$idStore);
+        foreach($list as $obj){
+            $obj->arrOrder = SDB::table('store_order as order')
+                            ->where('order.location_id',$obj->id)
+                            ->where('order.store_id',$idStore)
+                            ->get();
+
+        }
         $result = new DataResultCollection();
         $result->status = SDBStatusCode::OK;
         $result->data=$list;
@@ -66,7 +74,15 @@ class FoodController extends Controller
 
     public function getLocation(Request $request){
         $idStore = $request->idStore;
-        $list = $this->service->getLocation($idStore);
+        $idFloor = $request->idFloor;
+        $list = $this->service->getLocation($idStore,$idFloor);
+        foreach($list as $obj){
+            $obj->arrOrder = SDB::table('store_order as order')
+                            ->where('order.location_id',$obj->id)
+                            ->where('order.store_id',$idStore)
+                            ->get();
+
+        }
         $result = new DataResultCollection();
         $result->status = SDBStatusCode::OK;
         $result->data=$list;
@@ -77,15 +93,6 @@ class FoodController extends Controller
         $idLocation = $request->idLocation;
         $idStore = $request->idStore;
         $list = $this->service->getOrderByLocation($idLocation, $idStore);
-        $result = new DataResultCollection();
-        $result->status = SDBStatusCode::OK;
-        $result->data=$list;
-        return ResponseHelper::JsonDataResult($result);
-    }
-
-    public function getOrderDetail(Request $request){
-        $idOrder = $request->idOrder;
-        $list = $this->service->getOrderDetail($idOrder);
         $result = new DataResultCollection();
         $result->status = SDBStatusCode::OK;
         $result->data=$list;

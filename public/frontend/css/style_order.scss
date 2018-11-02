@@ -1,4 +1,5 @@
 //global===================
+$im:!important;
 .nopad {
   padding: 0px;
 }
@@ -153,6 +154,18 @@
     max-height: calc(100vh - 46px);
 
 
+  }
+}
+.have-order{
+  background-color: red $im;
+  .table-name{
+    color: white $im;
+  }
+}
+.have-update{
+  background-color: #EEA045 $im;
+  .table-name{
+    color: white $im;
   }
 }
 

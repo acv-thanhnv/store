@@ -89,8 +89,7 @@ class CommonHelper
         return base_path().'/resources/export_templates/';
     }
     public static function getOrderEventName($storeId,$orderChannel){
-        /*$hash = md5 ($storeId);*/
-        $hash = $storeId;
+        $hash = md5 ($storeId);
         return $hash."-".$orderChannel;
     }
 

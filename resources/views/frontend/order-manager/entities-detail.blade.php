@@ -73,23 +73,18 @@
 </style>
 
     <div id="entities-detail-template" style="display: none">
-        <div class="row-order-detail">
-            <div class="order_detail_image text-center">
-                <img src="" alt="Image" class="img-detail"/>
+        <div class="row-order-detail row">
+            <div class="col-md-2 order_detail_image">
+                 <img src="" alt="Image" class="img-detail"/>
             </div>
-            <div class="order_detail_name">
+            <div class="col-md-4 order_detail_name">
                 <h5 class="name-detail"></h5>
             </div>
-            <div class="order_detail_price text-center">5.000.000</div>
-            <div class="order_detail_quantity text-center">
-                <input type="number" class="quantity-detail form-control text-center" value="1">
-                <div class="updown-quantity">
-                    <span class="glyphicon glyphicon-plus up-quantity" aria-hidden="true"></span>
-                    <span class="glyphicon glyphicon-minus down-quantity" aria-hidden="true"></span>
-                </div>
+            <div class="col-md-2 order_detail_price"></div>
+            <div class="col-md-3 order_detail_quantity">
+                 <input type="number" class="quantity-detail form-control text-center" value="1">
             </div>
-            <div class="order_detail_subtotal text-center">500.000.000</div>
-            <div class="order_detail_action text-cent20er">
+            <div class="col-md-1 order_detail_action">
                 <button class="btn btn-danger btn-sm delete-order-detail"><i class="glyphicon glyphicon-trash"></i>
                 </button>
             </div>

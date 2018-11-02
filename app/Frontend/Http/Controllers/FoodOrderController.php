@@ -7,6 +7,7 @@ use App\Core\Common\FoodConst;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
+use App\Core\Events\Customer2OrderManagerPusher;
 use App\Core\Events\OrderPusherEvent;
 use App\Core\Events\OrderStatusPusherEvent;
 use App\Core\Helpers\CommonHelper;
@@ -36,8 +37,10 @@ class FoodOrderController extends Controller
     {  
         $idStore      = $request->idStore;
         $arrTable     = SDB::table('store_location')
-        ->where("store_id",$idStore)
-        ->get();
+                        ->join('store_floor', 'store_location.floor_id','=', 'store_floor.id')
+                        ->where('store_floor.store_id', $idStore)
+                        ->select('store_location.*')
+                        ->get();
         $access_token = md5(CommonHelper::dateNow());
         return view('frontend.foodorder.index',[
             "idStore"      => $idStore,
@@ -188,6 +191,7 @@ class FoodOrderController extends Controller
     }
     public function sendOrder(Request $request)
     {
+        $idStore                  = $request->idStore;
         $orderId                  = $request->orderId;
         $ip                       = $request->ip();
         $access_token             = $request->access_token;
@@ -197,7 +201,6 @@ class FoodOrderController extends Controller
         $cart_items               = $request->cart_items;
         $order["description"]     = $request->description;
         $order["datetime_order"]  = CommonHelper::dateNow();
-        $order["datetime_update"] = CommonHelper::dateNow();
         if($orderId===null){
             //create new order
             $orderId                  = SDB::table('store_order')
@@ -210,11 +213,11 @@ class FoodOrderController extends Controller
                             ->where('id',$orderId)
                             ->select('status')
                             ->get();
-            if($order_status[0]->status===3){//check if food have been cooked, update time 
+            if($order_status[0]->status!=0){//check if food have been ordered, update time 
                 $datetime_update = CommonHelper::dateNow();
                 SDB::table('store_order')
                 ->where('id',$orderId)
-                ->update(['datetime_update' => $datetime_update]);
+                ->update(['datetime_update' => $datetime_update,'status' => 1]);
             }
         }
         foreach($cart_items as $obj){
@@ -229,6 +232,8 @@ class FoodOrderController extends Controller
                 SDB::table('store_order_detail')->insert($order_detail);
             }
         }
+        //call event send to Order
+        event(new Customer2OrderManagerPusher($idStore,$orderId));
         $arrOrder = SDB::table('store_order_detail')
                     ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
                     ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')

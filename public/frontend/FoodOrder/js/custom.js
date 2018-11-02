@@ -158,6 +158,7 @@ $("body").on("click",".add_to_cart",function(e){
 				cart_items[cart_index].quantity++;
 			}
 			sendItem(cart_items);
+			localStorage.idStore = $("#idStore").data("id");
             localStorage.cart_items = JSON.stringify(cart_items);
         }
         //change total items of cart
