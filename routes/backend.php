@@ -121,6 +121,34 @@
             //Other
             Route::get("Prop","FoodController@getProp")->name("getProp");
         });
+        //Group Table
+        Route::group(["prefix" => "Table"],function(){
+            Route::get("myTable","TableController@getMyTable")->name("getTable");
+            //add
+            Route::get("addTable","TableController@getAddTable")->name("addTable");
+            Route::post("addTable","TableController@postAddTable");
+            //Edit
+            Route::get("editTable","TableController@getEditTable")->name("editTable");
+            Route::post("editTable","TableController@postEditTable")->name("postEditTable");
+            //Delete
+            Route::get("deleteTable","TableController@deleteTable")->name("deleteTable");
+            Route::get("deleteAllTable","TableController@deleteAllTable")->name("deleteAllTable");
+        });
+
+        //Group Floor
+        Route::group(["prefix" => "Floor"],function(){
+            Route::get("myFloor","FloorController@getMyFloor")->name("getFloor");
+            //add
+            Route::get("addFloor","FloorController@getAddFloor")->name("addFloor");
+            Route::post("addFloor","FloorController@postAddFloor");
+            //Edit
+            Route::get("editFloor","FloorController@getEditFloor")->name("editFloor");
+            Route::post("editFloor","FloorController@postEditFloor")->name("postEditFloor");
+            //Delete
+            Route::get("deleteFloor","FloorController@deleteFloor")->name("deleteFloor");
+            Route::get("deleteAllFloor","FloorController@deleteAllFloor")->name("deleteAllFloor");
+        });
+
         //Group Store
         Route::group(["prefix" => "Store"],function(){
             Route::get("myStore","StoreController@getStore")->name("getStore");
