@@ -32,6 +32,8 @@
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/iziModal.min.css">
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/default.css" />
 	<link rel="stylesheet" type="text/css" href="frontend/FoodOrder/css/component.css" />
+	<!--Toast css-->
+	<link rel="stylesheet" type="text/css" href="css/toast.css">
 	<!--Jquery confirm -->
 	<link rel="stylesheet" type="text/css" href="css/lib/jquery-confirm.css">
 <!--===============================================================================================-->
@@ -169,7 +171,7 @@
 					<ul class="header-cart-wrapitem w-full">
 					</ul>
 					<div class="alert alert-warning alert-change dis-none">
-						<strong>Warning!</strong> You just update orders, press <a class="alert-link btn-order">Order</a> to save changes 
+						<strong>Warning!</strong> You just update orders, press <a class="btn btn-primary btn-sm btn-order">Order</a> to save changes 
 					</div>
 				</div>
 				<div class="w-full cart-total p-t-5 row" style="margin-left: 0px;">
@@ -188,7 +190,7 @@
 					<div class="col-lg-6 col-12 right">
 						<div class="total-money"></div>
 						<div style="text-align: center" class="p-b-10 m-t-10">
-							<button class="btn btn-danger btn-pay">
+							<button class="btn btn-danger btn-pay disabled">
 								<i class="fa fa-paypal"></i> Pay
 							</button>
 							<button class="btn btn-primary btn-order">
@@ -203,6 +205,18 @@
 
 	<!-- Product -->
 	<section class="bg0 p-b-140 content">
+		<!--Template show errors-->
+		<div id="template-errors" class="dis-none">
+			<div>
+				<span class="fa fa-wifi"></span>
+				<p>
+					Cannot Connect to a Local Network
+				</p>
+				<div class="error-message">
+					Please sure you have connect internet, check your connection and refresh page
+				</div>
+			</div>
+		</div>
 		<div class="container">
 			<!--============== -->
 			<div class="flex-w flex-sb-m menu-type row" style="margin: 0px">
@@ -294,6 +308,12 @@
                 <div class="infinite-scroll-request">
                   <img src="common_images/loading.gif">
                 </div>
+            </div>
+            <div id="no-data" class="dis-none">
+            	<div class="content-no-data">
+            		<img src="common_images/no-data.png" style="width: 250px">
+            		<p class="no-data-message">Opp, no data found</p>
+            	</div>
             </div>
 		</div>
 	</section>
@@ -449,9 +469,9 @@
 	</div>
 	<!--Template Menu-->
 	<div id="template-menu" style="display: none">
-		<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5 menu-items" data-filter="">
+		<button class="stext-275 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5 menu-items" data-filter="">
 		</button>
-		<div class="dropdown more stext-106 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5">
+		<div class="dropdown more stext-275 cl6 hov1 bor3 trans-04 m-r-20 m-tb-5">
 			<a class="dropdown-toggle"  data-toggle="dropdown">More
 				<span class="caret"></span>
 			</a>
@@ -462,7 +482,7 @@
 	<!--Template menu mobile -->
 	<div id="template-menu-mobile">
 		<li>
-			<a href="#"></a>
+			<a href="#" class="menu-items"></a>
 		</li>
 	</div>
 	<!--Template menu show more-->
@@ -539,6 +559,7 @@
 			</div>
 		</li>
 	</div>
+	<!--template no data-->
 </body>
 </html>
 <script src="frontend/FoodOrder/js/animsition.min.js"></script>
@@ -554,6 +575,8 @@
 <script src="js/lib/jquery-confirm.js"></script>
 <!--Pusher-->
 <script src="https://js.pusher.com/4.3/pusher.min.js"></script>
+<!--Toast JS-->
+<script type="text/javascript" src="js/toast.js"></script>
 <!--Custom JS-->
 <script src="frontend/FoodOrder/js/custom.js"></script>
 <script type="text/javascript">
@@ -577,6 +600,7 @@
 		}
 		if(localStorage.orderId){
 			$("#table").prop("disabled",true);//disable if user have order
+			$(".btn-pay").removeClass('disabled');//disable if user have order
 		}
 		//show alert change
 		checkAlert();
@@ -596,9 +620,6 @@
 
 	//pusher event
 	function PusherEvent(channel_name){
-		// Enable pusher logging - don't include this in production
-		Pusher.logToConsole = true;
-
 		var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
                 cluster: '{{env('PUSHER_APP_CLUSTER')}}',
                 encrypted: true
