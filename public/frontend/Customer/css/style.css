@@ -635,7 +635,7 @@ li {
     justify-content: space-between;
 }
 
-.post-author a,
+.post-distance a,
 .post-date a,
 .post-favourite a,
 .post-comments a,
@@ -644,7 +644,7 @@ li {
     font-size: 14px;
 }
 
-.post-author a:hover,
+.post-distance a:hover,
 .post-date a:hover,
 .post-favourite a:hover,
 .post-comments a:hover,
@@ -657,13 +657,13 @@ li {
     margin-right: 15px;
 }
 
-.post-author a {
+.post-distance a {
     margin-right: 30px;
     position: relative;
     z-index: 1;
 }
 
-.post-author a:after {
+.post-distance a:after {
     width: 2px;
     height: 60%;
     content: '';

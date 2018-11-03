@@ -2,5 +2,7 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/frontend/css/chef.css": "/frontend/css/chef.css",
-    "/js/chef/chef.js": "/js/chef/chef.js"
+    "/frontend/css/cashier.css": "/frontend/css/cashier.css",
+    "/frontend/js/chef/chef.js": "/frontend/js/chef/chef.js",
+    "/frontend/js/cashier/cashier.js": "/frontend/js/cashier/cashier.js"
 }

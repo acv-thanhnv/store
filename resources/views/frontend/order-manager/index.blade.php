@@ -110,39 +110,31 @@
 
         </div>
         <div class="content-right">
-            <table id="tbl_list_order" class="table table-hover">
-                <thead>
-                <tr>
-                    <th class="order_id text-center">Mã order</th>
-                    <th class="order_time text-center">Thời gian</th>
-                    <th class="order_status text-center">Trạng thái</th>
-                    <th class="order_detail text-center">Hành động</th>
-                </tr>
-                </thead>
-                <tbody id="entities-order">
-                {{--content entities-order--}}
-                </tbody>
-            </table>
+                <div id="entities-order">
+                </div>
+
             {{--content entities-order include--}}
             @include('frontend.order-manager.entities-order')
-
-            <table class="table table-hover" id="tbl_list_order_detail" style="display: none">
-                <thead>
-                <tr class="order_detail_header">
-                    <th class="order_detail_image text-center">Image</th>
-                    <th class="order_detail_name text-center">Name</th>
-                    <th class="order_detail_price text-center">Price</th>
-                    <th class="order_detail_quantity text-center">Quantity</th>
-                    <th class="order_detail_subtotal text-center">Subtotal</th>
-                    <th class="order_detail_action text-center">Action</th>
-                </tr>
-                </thead>
-                <tbody id="entities-detail">
-                {{--//content entities-detail--}}
-                </tbody>
-            </table>
-            {{--//content entities-detail include--}}
             @include('frontend.order-manager.entities-detail')
+
+            {{--<div class="table table-hover" id="tbl_list_order_detail" style="display: block">--}}
+                {{--<div class="wrap_order_detail_header">--}}
+                {{--<div class="order_detail_header">--}}
+                    {{--<div class="order_detail_image text-center">Image</div>--}}
+                    {{--<div class="order_detail_name text-center">Name</div>--}}
+                    {{--<div class="order_detail_price text-center">Price</div>--}}
+                    {{--<div class="order_detail_quantity text-center">Quantity</div>--}}
+                    {{--<div class="order_detail_subtotal text-center">Subtotal</div>--}}
+                    {{--<div class="order_detail_action text-center">Action</div>--}}
+                {{--</div>--}}
+                {{--</div>--}}
+                {{--<div id="entities-detail">--}}
+                {{--//content entities-detail--}}
+                {{--</div>--}}
+            {{--</div>--}}
+            {{--//content entities-detail include--}}
+            {{--@include('frontend.order-manager.entities-detail')--}}
+
         </div>
         @include('frontend.order-manager.table_manager')
 
@@ -158,7 +150,8 @@
             getMenuList(idStore);
             getEntities(idStore);
             getFloors(idStore);
-            getTableByFloor(null, idStore);
+            getTable(idStore);
+            //getTableByFloor(null, idStore);
         });
 
         //====================GET MENU==============================
@@ -273,16 +266,30 @@
         //======================GET TABLE============================
         function getTable() {
             $.ajax({
-                url: '{{route("food/list-floor-by-store")}}',
+                url: '{{route("food/get-location")}}',
                 dataType: 'JSON',
                 type: 'GET',
                 data: {idStore: idStore},
                 success: function (data) {
-                    genFloors(data);
+                    genTable(data);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log('Error ' + xhr.status + ' | ' + thrownError);
                 },
+            })
+        }
+
+        function genTable(data){
+            var itemTable = $('#table-list');
+            $(itemTable).empty();
+            data.data.forEach(function (obj) {
+                var itemTableTemp = $('#table-list-template').contents().clone();
+                $(itemTableTemp).find('.table-name').text(obj.location_name);
+                $(itemTableTemp).find('.table-name').attr('item-table-id', obj.location_id);
+                $(itemTableTemp).find('.table-name').attr('item-table-name', obj.location_name);
+                $(itemTableTemp).find('.table-name').attr('item-floor-id', obj.floor_id);
+                $(itemTableTemp).find('.table-name').attr('item-floor-name', obj.floor_name);
+                $(itemTable).append($(itemTableTemp));
             })
         }
 
@@ -321,29 +328,20 @@
         //======================click table=========================
         $(document).on("click", ".wrap-table", function () {
             var idTable = $(this).find(".table-name").attr('item-table-id');
-            $.ajax({
-                url: '{{route("food/get-location")}}',
-                dataType: 'JSON',
-                type: 'GET',
-                data: {idLocation: idTable, idStore: idStore},
-                success: function (data) {
-                    data.data.forEach(function (obj) {
-                        $('#table-id').text(obj.location_name);
-                        $('#floor-id').text(obj.floor_name);
-                    })
-                },
-                err: function (xhr, ajaxOptions, thrownError) {
-                    console.log('Error ' + xhr.status + ' | ' + thrownError);
-                }
-            })
+            var nameTable = $(this).find(".table-name").attr('item-table-name');
+            var nameFloor = $(this).find(".table-name").attr('item-floor-name');
+            //set location to order
+            $('#table-id').text(nameTable);
+            $('#floor-id').text(nameFloor);
+
             $.ajax({
                 url: '{{route("food/list-order-by-location")}}',
                 dataType: 'JSON',
                 type: 'GET',
                 data: {idLocation: idTable, idStore: idStore},
                 success: function (data) {
-                    genOrderbyLocation(data);
                     console.log(data);
+                    genOrderbyLocation(data);
                 },
                 err: function (xhr, ajaxOptions, thrownError) {
                     console.log('Error ' + xhr.status + ' | ' + thrownError);
@@ -351,10 +349,10 @@
             })
 
         });
-
         function genOrderbyLocation(data) {
             var itemOrder = $('#entities-order');
             $(itemOrder).empty();
+
             data.data.forEach(function (obj) {
                 //set entities-order
                 var itemOrderTemp = $('#entities-order-template').contents().clone();
@@ -368,49 +366,22 @@
                     $(itemOrderTemp).find('.entities_order_status').text('Đã xác nhận');
                     $(itemOrderTemp).find('.delete_order').addClass('disabled');
                 }
-
                 $(itemOrder).append($(itemOrderTemp));
+
+                obj.detail.forEach(function(itemDetail){
+                    var rowDetail = $("#entities-detail-template").contents().clone();
+                    $(rowDetail).find(".order_detail_name").text(itemDetail.name);
+                    $(itemOrderTemp).find(".entities-row-detail").append($(rowDetail));
+                });
             })
         }
-
         //======================click show detail=========================
         $(document).on('click', '.show_detail', function () {
-            var table = $('#tbl_list_order_detail');
-            $("<tr><td>acv</td></tr>").appendTo($(this).parents('.entities-row-order'));
-            //$(this).parents('.entities-row-order').appendTo('</tr><tr><td>acv</td>');
-            $('#tbl_list_order_detail').css({'display': 'block'})
-
-            var idOrder = $(this).parents('.entities-row-order').find('.entities_order_id').attr('entities_order_id');
-            $.ajax({
-                url: '{{route("food/get-order-detail")}}',
-                dataType: 'JSON',
-                type: 'GET',
-                data: {idOrder: idOrder},
-                success: function (data) {
-                    //console.log(data);
-                    genTableOrderDetail(data);
-                },
-                err: function (xhr, ajaxOptions, thrownError) {
-                    console.log('Error ' + xhr.status + ' | ' + thrownError);
-                }
-            })
-
+            var show= $(this).parents('.entities-row-order').find('.entities-row-detail');
+            $(show).toggleClass('show');
         })
 
-        function genTableOrderDetail(data) {
-            var itemOrderDetail = $('#entities-detail');
-            $(itemOrderDetail).empty();
-            data.data.forEach(function (obj) {
-                var itemOrderDetailTemp = $('#entities-detail-template').contents().clone();
 
-                $(itemOrderDetailTemp).find('.order_detail_image>img').attr('src', obj.image);
-                $(itemOrderDetailTemp).find('.name-detail').text(obj.name);
-                $(itemOrderDetailTemp).find('.order_detail_price').text(parseInt(obj.price));
-                $(itemOrderDetailTemp).find('.quantity-detail').val(obj.quantity);
-
-                $(itemOrderDetail).append(itemOrderDetailTemp);
-            })
-        }
 
     </script>
 @endsection

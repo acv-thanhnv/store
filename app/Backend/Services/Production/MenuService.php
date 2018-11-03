@@ -24,6 +24,7 @@ class MenuService extends BaseService implements MenuServiceInterface
     {
     	$arrMenu = SDB::table("store_menu")
     				->where("store_id",$idStore)
+                    ->orderby("priority","desc")
                     ->orderby("id","desc")
     				->get();
     	return $arrMenu;

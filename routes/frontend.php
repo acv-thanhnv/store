@@ -11,34 +11,21 @@
 |
 */
 
-
 /**
  * frontend module
  */
-//Route::get('/frontend/home', 'HomeController@index')->name('home');
-Route::get('/company/login', 'HomeController@apilogin')->name('apiloginform');
-Route::get('/frontend/test', 'HomeController@test')->name('test');
-
-Route::get('/order/{idStore?}', 'OrderController@index')->name('order');
-//Route::get('/foodorder', 'OrderController@index2');
-Route::get('listlocation','OrderController@getTables')->name('listlocation');
-    Route::get('/order', 'OrderController@index')->name('order');
-
-Route::get('/foodorder/{idStore?}', 'FoodOrderController@index')->name('foodorder');
-Route::get('/location','FoodOrderController@getLocations')->name('location');
-Route::get('/itemdetail','FoodOrderController@getDetail')->name('itemdetail');
-
-
-Route::view('/chef', 'frontend.chef3.index');
-
-
-Route::get("cashier", function () {
-    return view('frontend/cashier3/index');
-});
 Route::get("map","HomeController@Map"); 
+Route::get("ClosestStore","HomeController@ClosestStore")->name("ClosestStore"); 
 Route::get("/","HomeController@Home"); 
-Route::get("contact","HomeController@Contact"); 
-Route::get("template","FoodOrderController@template"); 
-Route::get("FoodDetail","FoodOrderController@FoodDetail"); 
+Route::get("Contact","HomeController@Contact"); 
+//Order
+Route::get("Menu","FoodOrderController@getMenu")->name("Menu");//get all menu 
+Route::get("Food","FoodOrderController@getFood")->name("getFood"); //get food
+Route::get("Order","FoodOrderController@getOrder")->name("Order"); //get order page index
+Route::post("sendOrder","FoodOrderController@sendOrder")->name("sendOrder"); 
+Route::get("FoodDetail","FoodOrderController@FoodDetail")->name("FoodDetail"); //get food detail
+Route::get("OrderBy","FoodOrderController@OrderBy")->name("OrderBy");//filter order by
+Route::get("getCartItems","FoodOrderController@getCartItems")->name('getCartItems'); 
+Route::post("deleteCartItem","FoodOrderController@deleteCartItem")->name('deleteCartItem'); 
 
 
