@@ -8,41 +8,11 @@
     #entities-detail-template {
         width: 100%;
     }
-
-    .order_detail_image {
-        width: 25%;
-    }
-
-    .order_detail_name {
-        width: 25%;
-    }
-
-    .order_detail_name h5 {
-        height: 46px;
-        width: 100%;
-        margin-bottom: 0px !important;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
+    .order_detail_name{
+        white-space: nowrap; 
         overflow: hidden;
+        text-overflow: ellipsis;
     }
-
-    .order_detail_price {
-        width: 15%;
-    }
-
-    .order_detail_quantity {
-        width: 10%;
-    }
-
-    .order_detail_subtotal {
-        width: 20%;
-    }
-
-    .order_detail_action {
-        width: 5%;
-    }
-
     .name-detail {
         margin-top: 0px;
     }
@@ -63,12 +33,58 @@
     }
 
     .quantity-detail {
-        width: 35px;
-        float: left;
-        padding: 6px 0px;
+        width: 28px;
+        height: 28px;
+        text-align: center;
+        padding:0px;
+        display: inline;
     }
+    .row-order-detail{
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-    .delete-order-detail {
+    }
+    .order_detail_quantity{
+        padding: 0px;
+        display: flex;
+        align-items: center;
+    }
+    .has_change{
+        font-size: 18px;
+        font-weight: bold;
+        padding-left: 5px;
+        display: none;
+        color: #df9537;
+    }
+    /*hide up and down*/
+    input[type='number'] {
+        -moz-appearance:textfield;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+    .num-product-up{
+        padding-left: 5px;
+    }
+    .num-product-up,.num-product-down{
+        width: 20px;
+        height: 20px;
+    }
+    .num-product-up:hover,.num-product-down:hover{
+        cursor: pointer;
+    }
+    /* food status*/
+    .food_status_1{
+        background-color: #f0ad4e;
+    }
+    .food_status_2{
+        background-color: #337ab7;
+    }
+    .food_status_3{
+        background-color: #5cb85c;
     }
 </style>
 
@@ -77,12 +93,18 @@
             <div class="col-md-2 order_detail_image">
                  <img src="" alt="Image" class="img-detail"/>
             </div>
-            <div class="col-md-4 order_detail_name">
+            <div class="col-md-3 order_detail_name">
                 <h5 class="name-detail"></h5>
             </div>
+            <div class="col-md-2">
+                <span class="label food_status"></span>
+            </div>
             <div class="col-md-2 order_detail_price"></div>
-            <div class="col-md-3 order_detail_quantity">
-                 <input type="number" class="quantity-detail form-control text-center" value="1">
+            <div class="col-md-2 order_detail_quantity">
+                <span class="num-product-down"><i class="fa fa-minus"></i></span>
+                <input type="number" class="quantity-detail form-control text-center" value="1">
+                <span class="num-product-up"><i class="fa fa-plus"></i></span>
+                <span class="fa fa-star-o has_change"></span>
             </div>
             <div class="col-md-1 order_detail_action">
                 <button class="btn btn-danger btn-sm delete-order-detail"><i class="glyphicon glyphicon-trash"></i>

@@ -28,7 +28,6 @@
                         </form>
                     </li>
 
-
                 </ul>
             </div>
             <div class="tab-content content-left">
@@ -101,8 +100,10 @@
                                             class="glyphicon glyphicon-link" aria-hidden="true"></span> Ghép Bàn</a>
                             </li>
                             <li class="line"></li>
-                            <li><a class="dropdown-item" href="#"><span class="glyphicon glyphicon-phone-alt"
-                                                                        aria-hidden="true"></span> Liên Hệ Thu Ngân</a>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> Liên Hệ Thu Ngân
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -111,11 +112,11 @@
 
         </div>
         <div class="content-right">
-                <div class="row">
-                    <div class="col-md-1">Id</div>
-                    <div class="col-md-5">Datetime</div>
-                    <div class="col-md-3">Status</div>
-                    <div class="col-md-3">Action</div>
+                <div class="row order-header">
+                    <div class="col-md-1 order-id">Id</div>
+                    <div class="col-md-4 order-date">Datetime</div>
+                    <div class="col-md-4 order-status">Status</div>
+                    <div class="col-md-3 order-action">Action</div>
                 </div>
                 <div id="entities-order">
                 </div>
@@ -172,6 +173,8 @@
         channel.bind(eventName, function(data){
             $('*[location-id="'+data.location_id+'"]').removeClass('have-order');//remove class order, add class update
             $('*[location-id="'+data.location_id+'"]').addClass("have-update");
+            //get order and append
+            getOrderByLocation(data.location_id,idStore);
         });
     }
     //====================GET MENU==============================
@@ -307,9 +310,9 @@
             var order_data = $(itemTableTemp)[1];
             var have_update =0;
             obj.arrOrder.forEach(function(orderItem){
-                //nếu order đó cập nhập thì time order sẽ khác time update, lúc đó cập nhập color bàn
-                if(orderItem.datetime_order!=orderItem.datetime_update){
-                    have_update =1;
+                //nếu trong bàn đó có các order chưa xác nhận hoặc cập nhập món thì hiện cập nhập
+                if(orderItem.status<2){
+                    have_update = 1;
                 }
             });
             if(obj.arrOrder.length>0){
@@ -345,7 +348,10 @@
         //set location to order
         $('#table-id').text(nameTable);
         $('#floor-id').text(nameFloor);
+        getOrderByLocation(idTable,idStore);
 
+    });
+    function getOrderByLocation(idTable,idStore){
         $.ajax({
             url: '{{route("food/list-order-by-location")}}',
             dataType: 'JSON',
@@ -358,8 +364,7 @@
                 console.log('Error ' + xhr.status + ' | ' + thrownError);
             }
         })
-
-    });
+    }
     function genOrderbyLocation(data) {
         var itemOrder = $('#entities-order');
         $(itemOrder).empty();
@@ -370,7 +375,8 @@
             $(itemOrderTemp).find('.entities_order_id').text(obj.id);
             $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', obj.id);
             $(itemOrderTemp).find('.entities_order_time').text(obj.datetime_order);
-            $(itemOrderTemp).find('.entities_order_status').text(obj.status_name);
+            $(itemOrderTemp).find('.entities_order_status_content').text(obj.status_name);
+            $(itemOrderTemp).find('.entities_order_status_content').addClass("status_"+obj.status);
             $(itemOrder).append($(itemOrderTemp));
 
             obj.detail.forEach(function(itemDetail){
@@ -381,6 +387,13 @@
                 $(rowDetail).find(".order_detail_price").text(itemDetail.price);
                 $(rowDetail).find(".img-detail").attr("src",itemDetail.image);
                 $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
+                $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
+                if(itemDetail.has_update===1){
+                    $(rowDetail).find(".has_change").css('display','block');
+                }
+                $(rowDetail).find(".food_status").text(itemDetail.status_name);
+                $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
+                $(rowDetail).find(".delete-order-detail").attr('data-order-detail',itemDetail.id);
                 var row = $(itemOrderTemp)[3]; 
                 $(row).append($(rowDetail));
             });
@@ -392,5 +405,151 @@
         $(show).toggleClass('show');
     })
 
+    //======================change quantity of food=========================
+    $(document).on('click','.num-product-down',function(){
+        var num_product = $(this).next('.quantity-detail').val();
+        if(num_product>1){
+            num_product--;
+            $(this).next('.quantity-detail').val(num_product);
+            $(this).next(".has_change").css('display','block');
+        }
+    });
+
+    $(document).on('click','.num-product-up',function(){
+        var num_product = $(this).prev('.quantity-detail').val();
+        num_product++;
+        $(this).prev('.quantity-detail').val(num_product);
+        $(this).next(".has_change").css('display','block');
+    });
+
+    $(document).on('change','.quantity-detail',function(){
+        var old_num_product = $(this).data('num_product');
+        var num_product = $(this).val();
+        if(num_product>0){
+            $(this).val(num_product);
+            $(this).siblings(".has_change").css('display','block');
+        }else {
+            alert('sr your quantity must larger than 1')
+            $(this).val(old_num_product);
+        }
+    });
+
+    //======================send order=========================
+    $(document).on('click','.send_order',function(){
+        var orderId = parseInt($(this).parents('.entities_order_action').siblings('.entities_order_id').text());
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '{{route("Order2Chef")}}',
+            dataType: 'JSON',
+            type: 'POST',
+            data: {orderId: orderId},
+            success: function (data) {
+                notify('Success','success','Order was successfully send to chef !','#398717')
+            },
+            err: function (xhr, ajaxOptions, thrownError) {
+                console.log('Error ' + xhr.status + ' | ' + thrownError);
+            }
+        })
+    });
+
+    //======================delete order=========================
+    $(document).on('click','.delete_order',function(){
+        var orderId = parseInt($(this).parents('.entities_order_action').siblings('.entities_order_id').text());
+        var row = $(this).parents('.entities-row-order');
+        $.confirm({
+            title         : '<p class="text-danger">Warning</p>',
+            icon          : 'fa fa-exclamation-circle',
+            boxWidth: '30%',
+            useBootstrap: false,
+            type          : "red",
+            closeIcon     : true,
+            closeIconClass: 'fa fa-close',
+            content       : "Are You Sure? This Order Will Be Deleted!",
+            buttons       : {
+                Save: {
+                    text    : 'OK',
+                    btnClass: 'btn btn-primary',
+                    action  : function (){
+                        $(row).remove();
+                        $.ajax({
+                            url: '{{route("deleteOrder")}}',
+                            dataType: 'JSON',
+                            type: 'GET',
+                            data: {orderId: orderId},
+                            success: function (data) {
+                                notify('Success','success','This order was successfully deleted !','#398717')
+                            },
+                            err: function (xhr, ajaxOptions, thrownError) {
+                                console.log('Error ' + xhr.status + ' | ' + thrownError);
+                            }
+                        })
+                    }
+                },
+                cancel: {
+                    text    : ' Cancel',
+                    btnClass: 'btn btn-default'
+                }
+            }
+        });
+    });
+    //======================delete food item of each order=========================
+    $(document).on('click','.delete-order-detail',function(){
+        var idOrderDetail = $(this).data('order-detail');
+        var row = $(this).parents('.row-order-detail');
+        $.confirm({
+            title         : '<p class="text-danger">Warning</p>',
+            icon          : 'fa fa-exclamation-circle',
+            boxWidth: '30%',
+            useBootstrap: false,
+            type          : "red",
+            closeIcon     : true,
+            closeIconClass: 'fa fa-close',
+            content       : "Are You Sure? This Food Item Will Be Deleted!",
+            buttons       : {
+                Save: {
+                    text    : 'OK',
+                    btnClass: 'btn btn-primary',
+                    action  : function (){
+                        $(row).remove();
+                        $.ajax({
+                            url: '{{route("deleteFoodOrderDetail")}}',
+                            type: 'GET',
+                            data: {idOrderDetail: idOrderDetail},
+                            success: function (data) {
+                                notify('Success','success','This food item was successfully deleted !','#398717');
+                            },
+                            err: function (xhr, ajaxOptions, thrownError) {
+                                console.log('Error ' + xhr.status + ' | ' + thrownError);
+                            }
+                        })
+                    }
+                },
+                cancel: {
+                    text    : ' Cancel',
+                    btnClass: 'btn btn-default'
+                }
+            }
+        });
+    });
+
+    //======================function notify=========================
+    function notify(headingContent,icon,content,bgColor){
+        $.toast({
+            text: content,
+            heading: headingContent,
+            icon: icon,
+            showHideTransition: 'plain',
+            allowToastClose: true,
+            hideAfter: 2000,
+            bgColor:bgColor,
+            stack: 5,
+            position: 'top-right',
+            textAlign: 'left',
+            loader : true,
+            loaderBg: '#279056'
+        });
+    }
 </script>
 @endsection

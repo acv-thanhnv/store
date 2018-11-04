@@ -213,21 +213,27 @@ class FoodOrderController extends Controller
                             ->where('id',$orderId)
                             ->select('status')
                             ->get();
-            if($order_status[0]->status!=0){//check if food have been ordered, update time 
+            //nếu order đã nấu xong thì khi thêm món mới cập nhập time update của order
+            if($order_status[0]->status==3){
                 $datetime_update = CommonHelper::dateNow();
                 SDB::table('store_order')
                 ->where('id',$orderId)
-                ->update(['datetime_update' => $datetime_update,'status' => 1]);
+                ->update(['datetime_update' => $datetime_update]);
             }
+            //Cập nhập status của order
+            SDB::table('store_order')
+                ->where('id',$orderId)
+                ->update(['status' => 1]);
         }
         foreach($cart_items as $obj){
             $order_detail['entities_id'] = $obj['entities_id'];
             $order_detail['quantity']    = $obj['quantity'];
             $order_detail['status']      = 1;
+            //nếu món ăn đó đã được order rồi thì cập nhập số lượng cũng như tình trạng món
             if(isset($obj["id"])){
                 SDB::table('store_order_detail')
                 ->where('id',$obj['id'])
-                ->update(['quantity' => $obj['quantity'],'status' => 1]);
+                ->update(['quantity' => $obj['quantity'],'has_update' => 1]);
             }else{
                 SDB::table('store_order_detail')->insert($order_detail);
             }

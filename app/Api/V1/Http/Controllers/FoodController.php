@@ -8,6 +8,7 @@ use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Events\OrderPusherEvent;
+use App\Core\Events\OrderStatusPusherEvent;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
@@ -80,6 +81,7 @@ class FoodController extends Controller
             $obj->arrOrder = SDB::table('store_order as order')
                             ->where('order.location_id',$obj->id)
                             ->where('order.store_id',$idStore)
+                            ->orderby('order.id','asc')
                             ->get();
 
         }
@@ -97,5 +99,55 @@ class FoodController extends Controller
         $result->status = SDBStatusCode::OK;
         $result->data=$list;
         return ResponseHelper::JsonDataResult($result);
+    }
+
+    public function Order2Chef(Request $request)
+    {
+        $orderId = $request->orderId;
+        $arrOrder = SDB::table('store_order')
+                    ->where('id',$orderId)
+                    ->select('access_token','store_id')
+                    ->get();
+        $access_token = $arrOrder[0]->access_token;
+        $idStore      = $arrOrder[0]->store_id;
+        //update status of order
+        SDB::table('store_order')
+        ->where('id',$orderId)
+        ->update(['status'=>2]);
+        //update status of food
+        SDB::table('store_order_detail')
+        ->where('order_id',$orderId)
+        ->where('status','<',2)
+        ->update(['status'=>2]);
+        //get array of order
+        $arrOrderDetail = SDB::table('store_order_detail')
+                            ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
+                            ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
+                            ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
+                            ->where('order_id',$orderId)
+                            ->get();
+        foreach($arrOrderDetail as $obj){
+            if($obj->image==NULL){
+                $obj->src = url('/')."/common_images/no-store.png";
+            }else{
+                $obj->src = CommonHelper::getImageUrl($obj->image);
+            }
+        }
+        //call event get status 
+        event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrderDetail));
+    }
+
+    public function deleteFoodOrderDetail(Request $request)
+    {
+        SDB::table('store_order_detail')
+        ->where('id',$request->idOrderDetail)
+        ->delete();
+    }
+
+    public function deleteOrder(Request $request)
+    {
+        SDB::table('store_order')
+        ->where('id',$request->orderId)
+        ->delete();
     }
 }

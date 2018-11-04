@@ -43,6 +43,14 @@ Route::get('/api/v1/food/get-location', 'FoodController@getLocation')->name('foo
 
 Route::get('/api/v1/food/get-order-detail', 'FoodController@getOrderDetail')->name('food/get-order-detail');
 
+//send order to chef
+Route::post('Order2Chef', 'FoodController@Order2Chef')->name('Order2Chef');
+
+//delete food order detail
+Route::get('deleteFoodOrderDetail', 'FoodController@deleteFoodOrderDetail')->name('deleteFoodOrderDetail');
+
+//delete order
+Route::get('deleteOrder', 'FoodController@deleteOrder')->name('deleteOrder');
 
 Route::group(['middleware' => [ 'auth:api' ]],function (){
 	Route::match(array('GET','POST'),'/api/v1/auth/logout', 'Auth\UserController@logout')->name('api_v1_logout_call');
