@@ -20,56 +20,57 @@ class TableService extends BaseService implements TableServiceInterface
     public function getMyTable($storeId)
     {
         $obj = SDB::table("store_location")
-            ->select('*')
+            ->join('store_floor','store_location.floor_id','=','store_floor.id')
+            ->where('store_floor.store_id','=', $storeId)
+            ->select('*','store_location.id as location_id','store_location.name as location_name', 'store_floor.name as floor_name')
             ->get();
-        foreach ($obj as $obj_floor){
-            $obj_floor->floor = SDB::table('store_floor')
-                ->where('store_floor.id','=',$obj_floor->floor_id)
-                ->where('store_floor.store_id','=',$storeId)
-                ->get();
-        }
-        foreach ($obj as $obj_type){
-            $obj_type->type= SDB::table('store_type_location')
-                ->where('store_type_location.id','=', $obj_type->type_location_id)
-                ->get();
-        }
         return $obj;
     }
+
+    public function getFloor($storeId){
+            $obj = SDB::table('store_floor')
+                ->where('store_floor.store_id','=',$storeId)
+                ->get();
+            return $obj;
+    }
+    public function getTypeLocation(){
+
+            $obj = SDB::table('store_type_location')
+                ->get();
+        return $obj;
+    }
+
     public function addTable($obj)
     {
-        SDB::table("store_table")->insert($obj);
-    }
-    public function editTable($obj)
-    {
-        SDB::table("store_store")
-            ->where("id",$obj["id"])
-            ->update([
-                "name"        => $obj["name"],
-                "lat"         => $obj["lat"],
-                "lng"         => $obj["lng"],
-                "address"     => $obj["address"],
-                "avatar"      => $obj["avatar"],
-                "description" => $obj["description"]
-            ]);
+        SDB::table("store_location")
+            ->insert($obj);
     }
 
     public function getById($id)
     {
-        $obj = SDB::table("store_menu")->where("id",$id)->get();
+        $obj = SDB::table("store_location")
+            ->where("id",$id)->get();
         return $obj[0];
     }
-    public function editMenu($obj)
+
+    public function editTable($obj)
     {
-        SDB::table("store_menu")->where("id",$obj->id)->update(["name" => $obj->name,"description"=> $obj->description]);
+        SDB::table("store_location")
+            ->where("id",$obj->id)
+            ->update([
+                "name" => $obj->name,
+                "type_location_id"=> $obj->type,
+                "floor_id"=>$obj->floor,
+                "price"=>$obj->price]);
     }
-    public function deleteMenu($id)
+    public function deleteTable($id)
     {
-        SDB::table("store_menu")->where("id",$id)->delete();
+        SDB::table("store_location")->where("id",$id)->delete();
     }
-    public function deleteAllMenu($arrId)
+    public function deleteAllTable($arrId)
     {
         foreach($arrId as $obj){
-            SDB::table("store_menu")->where("id",$obj)->delete();
+            SDB::table("store_location")->where("id",$obj)->delete();
         }
     }
 

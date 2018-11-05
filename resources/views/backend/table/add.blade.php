@@ -43,11 +43,11 @@
 							<label>Table Type</label>
 							<select class="form-control" id="type" name="type">
 								<option value="">Choose Type of Table</option>
-								{{--@foreach($table as $floor)--}}
-									{{--<option value="{{$floor->id}}">--}}
-										{{--{{$floor->name}}--}}
-									{{--</option>--}}
-								{{--@endforeach--}}
+								@foreach($type as $type)
+									<option value="{{$type->id}}">
+										{{$type->name}}
+									</option>
+								@endforeach
 							</select>
 						</div>
 					</div>
@@ -56,11 +56,11 @@
 							<label>Floor</label>
 							<select class="form-control" id="floor" name="floor">
 								<option value="">Choose Floor</option>
-								{{--@foreach($arrRole as $role)--}}
-								{{--<option value="{{$role->role_value}}">--}}
-								{{--{{$role->name}}--}}
-								{{--</option>--}}
-								{{--@endforeach--}}
+								@foreach($floor as $floor)
+									<option value="{{$floor->id}}">
+										{{$floor->name}}
+									</option>
+								@endforeach
 							</select>
 						</div>
 					</div>
@@ -98,7 +98,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 url: "{{route('postAddTable')}}",
-                data:{name:name,type:1,floor:1,price:0},
+                data:{name:name,type:type,floor:floor,price:price},
                 success: function (result) {
                     if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
                         //call parent and close modal
