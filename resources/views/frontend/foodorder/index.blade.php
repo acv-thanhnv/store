@@ -582,14 +582,11 @@
 <script type="text/javascript">
 	var numberMenu = '{{App\Core\Common\CutomerConst::numberMenu}}';
 	var access_token = '{{$access_token}}';
+	$(document).ready(function(){
+		localStorage.setItem('name', 'Matt West');
+	})
 	//function buildMenu
 	$(document).ready(function(){
-		//create access token
-		if(localStorage.access_token){
-			access_token = localStorage.access_token;
-		}else{
-			localStorage.access_token = access_token;
-		}
 		//set timeout local storage
 		var now = new Date().getTime();	
 		var hour = '{{\App\Core\Common\CutomerConst::hour}}';

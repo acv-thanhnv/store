@@ -386,6 +386,7 @@
             $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', obj.id);
             $(itemOrderTemp).find('.entities_order_time').text(obj.datetime_order);
             $(itemOrderTemp).find('.entities_order_status_content').text(obj.status_name);
+            $(itemOrderTemp).find('.entities_order_status_content').attr('order-status',obj.status);
             $(itemOrderTemp).find('.entities_order_status_content').addClass("status_"+obj.status);
             $(itemOrder).append($(itemOrderTemp));
 
@@ -410,11 +411,15 @@
     }
 
     function genOrderRealtime(order,obj){
-        var itemOrder = $('#entities-order');
-        var row_order_id = $('.entities-row-order[data-order-id="'+order.id+'"]').next();
-            console.log(row_order_id);
-        $(row_order_id).empty();
-        if(row_order_id.length!=0){//neu co thi cap nhap ordeer
+        var itemOrder        = $('#entities-order');
+        var row_order        = $('.entities-row-order[data-order-id="'+order.id+'"]');
+        var row_order_detail = $('.entities-row-order[data-order-id="'+order.id+'"]').next();
+        $(row_order_detail).empty();
+        //update status and status name of order
+        $(row_order).find('.entities_order_status_content').text('Cập nhập món');
+        $(row_order).find('.entities_order_status_content').attr('order-status',order.status);
+        $(row_order).find('.entities_order_status_content').removeClass('status_0 status_2 status_3').addClass('status_1');
+        if(row_order_detail.length!=0){//neu co thi cap nhap ordeer
             obj.forEach(function(itemDetail){
                 var rowDetail = $("#entities-detail-template").contents().clone();
                 //append data
@@ -429,7 +434,7 @@
                 $(rowDetail).find(".food_status").text(itemDetail.status_name);
                 $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
                 $(rowDetail).find(".delete-order-detail").attr('data-order-detail',itemDetail.id);
-                $(row_order_id).append($(rowDetail));
+                $(row_order_detail).append($(rowDetail));
             });
         }else {//ko thi append order moi
             var itemOrderTemp = $('#entities-order-template').contents().clone();
@@ -499,20 +504,34 @@
     //======================send order=========================
     $(document).on('click','.send_order',function(){
         var orderId = parseInt($(this).parents('.entities_order_action').siblings('.entities_order_id').text());
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: '{{route("Order2Chef")}}',
-            type: 'POST',
-            data: {orderId: orderId},
-            success: function (data) {
-                notify('Success','success','Order was successfully send to chef !','#398717');
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                console.log('Error ' + xhr.status + ' | ' + thrownError);
-            }
-        })
+        var status_order = parseInt($(this).parents('.entities-row-order').find('.entities_order_status_content').attr('order-status'));
+        console.log(status_order);
+        if(status_order<2){
+            var row_order = $(this).parents('.entities-row-order');
+            //change status of order
+            $(row_order).find('.entities_order_status_content ').text('Đang chế biến');
+            $(row_order).find('.entities_order_status_content ').removeClass('status_0 status_1').addClass('status_2');
+            var row_order_detail = $(row_order).next('.entities-row-detail');
+            //change status of food 
+            $(row_order_detail).find('.food_status').text('Đang chế biến');
+            $(row_order_detail).find('.food_status').removeClass('food_status_0 food_status_1').addClass('food_status_2');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route("Order2Chef")}}',
+                type: 'POST',
+                data: {orderId: orderId},
+                success: function (data) {
+                    notify('Success','success','Order was successfully send to chef !','#398717','#2F6227');
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error ' + xhr.status + ' | ' + thrownError);
+                }
+            })
+        }else{
+            notify('Warning','warning','Nothing to send to chef !','#E99551','#F4AD32');
+        }
     });
 
     //======================delete order=========================
@@ -539,7 +558,7 @@
                             type: 'GET',
                             data: {orderId: orderId},
                             success: function (data) {
-                                notify('Success','success','This order was successfully deleted !','#398717')
+                                notify('Success','success','This order was successfully deleted !','#398717','#2F6227');
                             }
                         })
                     }
@@ -575,7 +594,7 @@
                             type: 'GET',
                             data: {idOrderDetail: idOrderDetail},
                             success: function (data) {
-                                notify('Success','success','This food item was successfully deleted !','#398717');
+                                notify('Success','success','This food item was successfully deleted !','#398717','#2F6227');
                             },
                             error: function (xhr, ajaxOptions, thrownError) {
                                 console.log('Error ' + xhr.status + ' | ' + thrownError);
@@ -592,7 +611,7 @@
     });
 
     //======================function notify=========================
-    function notify(headingContent,icon,content,bgColor){
+    function notify(headingContent,icon,content,bgColor,loaderBg){
         $.toast({
             text: content,
             heading: headingContent,
@@ -605,7 +624,7 @@
             position: 'top-right',
             textAlign: 'left',
             loader : true,
-            loaderBg: '#279056'
+            loaderBg: loaderBg
         });
     }
 </script>
