@@ -40,7 +40,7 @@
         display: inline;
     }
     .row-order-detail{
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -85,6 +85,16 @@
     }
     .food_status_3{
         background-color: #5cb85c;
+    }
+    /* image css*/
+    .order_detail_image{
+        padding : 0px;
+    }
+    .img-detail{
+        height: 70px;
+        min-height: 70px;
+        width: 100px;
+        border-radius: 5px;
     }
 </style>
 

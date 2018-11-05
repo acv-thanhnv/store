@@ -153,6 +153,7 @@
 <script src="{{asset('frontend/js/order.js')}}"></script>
 <script type="text/javascript">
     var idStore = '{{$idStore}}';
+    var idTable,idFloor;
     $(document).ready(function () {
         getMenuList(idStore);
         getEntities(idStore);
@@ -171,10 +172,14 @@
         var channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\OrderConst::Customer2Order)}}';
         var channel = pusher.subscribe(channel_name);
         channel.bind(eventName, function(data){
-            $('*[location-id="'+data.location_id+'"]').removeClass('have-order');//remove class order, add class update
-            $('*[location-id="'+data.location_id+'"]').addClass("have-update");
+            console.log(data);
+            $('*[location-id="'+data.order.location_id+'"]').removeClass('have-order');
+            //remove class order, add class update
+            $('*[location-id="'+data.order.location_id+'"]').addClass("have-update");
             //get order and append
-            getOrderByLocation(data.location_id,idStore);
+            if(data.order.location_id===idTable && idStore === data.idStore){
+                genOrderRealtime(data.order,data.result);
+            }
         });
     }
     //====================GET MENU==============================
@@ -336,13 +341,14 @@
 
     //======================GET TABLE BY FLOOR============================
     $(document).on('click', '.item-floor', function () {
-        var idFloor = $(this).find('a').attr('item-floor-id');
+        idFloor = $(this).find('a').attr('item-floor-id');
         getTable(idFloor);
     })
 
     //======================click table=========================
     $(document).on("click", ".wrap-table", function () {
-        var idTable = $(this).find(".table-name").attr('item-table-id');
+        idTable = $(this).find(".table-name").attr('item-table-id');
+        idFloor = $(this).find('.table-name').attr('item-floor-id');
         var nameTable = $(this).find(".table-name").attr('item-table-name');
         var nameFloor = $(this).find(".table-name").attr('item-floor-name');
         //set location to order
@@ -351,6 +357,7 @@
         getOrderByLocation(idTable,idStore);
 
     });
+
     function getOrderByLocation(idTable,idStore){
         $.ajax({
             url: '{{route("food/list-order-by-location")}}',
@@ -365,6 +372,7 @@
             }
         })
     }
+
     function genOrderbyLocation(data) {
         var itemOrder = $('#entities-order');
         $(itemOrder).empty();
@@ -372,6 +380,8 @@
         data.data.forEach(function (obj) {
             //set entities-order
             var itemOrderTemp = $('#entities-order-template').contents().clone();
+            var row_id = $(itemOrderTemp)[1];
+            $(row_id).attr("data-order-id",obj.id);
             $(itemOrderTemp).find('.entities_order_id').text(obj.id);
             $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', obj.id);
             $(itemOrderTemp).find('.entities_order_time').text(obj.datetime_order);
@@ -380,12 +390,11 @@
             $(itemOrder).append($(itemOrderTemp));
 
             obj.detail.forEach(function(itemDetail){
-                console.log(itemDetail);
                 var rowDetail = $("#entities-detail-template").contents().clone();
                 //append data
                 $(rowDetail).find(".order_detail_name").text(itemDetail.name);
                 $(rowDetail).find(".order_detail_price").text(itemDetail.price);
-                $(rowDetail).find(".img-detail").attr("src",itemDetail.image);
+                $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
                 $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
                 $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
                 if(itemDetail.has_update===1){
@@ -398,6 +407,59 @@
                 $(row).append($(rowDetail));
             });
         })
+    }
+
+    function genOrderRealtime(order,obj){
+        var itemOrder = $('#entities-order');
+        var row_order_id = $('.entities-row-order[data-order-id="'+order.id+'"]').next();
+            console.log(row_order_id);
+        $(row_order_id).empty();
+        if(row_order_id.length!=0){//neu co thi cap nhap ordeer
+            obj.forEach(function(itemDetail){
+                var rowDetail = $("#entities-detail-template").contents().clone();
+                //append data
+                $(rowDetail).find(".order_detail_name").text(itemDetail.name);
+                $(rowDetail).find(".order_detail_price").text(itemDetail.price);
+                $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
+                $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
+                $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
+                if(itemDetail.has_update===1){
+                    $(rowDetail).find(".has_change").css('display','block');
+                }
+                $(rowDetail).find(".food_status").text(itemDetail.status_name);
+                $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
+                $(rowDetail).find(".delete-order-detail").attr('data-order-detail',itemDetail.id);
+                $(row_order_id).append($(rowDetail));
+            });
+        }else {//ko thi append order moi
+            var itemOrderTemp = $('#entities-order-template').contents().clone();
+            var row_id = $(itemOrderTemp)[1];
+            $(row_id).attr("data-order-id",order.id);
+            $(itemOrderTemp).find('.entities_order_id').text(order.id);
+            $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', order.id);
+            $(itemOrderTemp).find('.entities_order_time').text(order.datetime_order);
+            $(itemOrderTemp).find('.entities_order_status_content').text(order.status_name);
+            $(itemOrderTemp).find('.entities_order_status_content').addClass("status_"+order.status);
+            $(itemOrder).append($(itemOrderTemp));
+
+            obj.forEach(function(itemDetail){
+                var rowDetail = $("#entities-detail-template").contents().clone();
+                //append data
+                $(rowDetail).find(".order_detail_name").text(itemDetail.name);
+                $(rowDetail).find(".order_detail_price").text(itemDetail.price);
+                $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
+                $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
+                $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
+                if(itemDetail.has_update===1){
+                    $(rowDetail).find(".has_change").css('display','block');
+                }
+                $(rowDetail).find(".food_status").text(itemDetail.status_name);
+                $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
+                $(rowDetail).find(".delete-order-detail").attr('data-order-detail',itemDetail.id);
+                var row = $(itemOrderTemp)[3]; 
+                $(row).append($(rowDetail));
+            });
+        }
     }
     //======================click show detail=========================
     $(document).on('click', '.show_detail', function () {
@@ -442,13 +504,12 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             url: '{{route("Order2Chef")}}',
-            dataType: 'JSON',
             type: 'POST',
             data: {orderId: orderId},
             success: function (data) {
-                notify('Success','success','Order was successfully send to chef !','#398717')
+                notify('Success','success','Order was successfully send to chef !','#398717');
             },
-            err: function (xhr, ajaxOptions, thrownError) {
+            error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Error ' + xhr.status + ' | ' + thrownError);
             }
         })
@@ -461,8 +522,8 @@
         $.confirm({
             title         : '<p class="text-danger">Warning</p>',
             icon          : 'fa fa-exclamation-circle',
-            boxWidth: '30%',
-            useBootstrap: false,
+            boxWidth      : '30%',
+            useBootstrap  : false,
             type          : "red",
             closeIcon     : true,
             closeIconClass: 'fa fa-close',
@@ -475,14 +536,10 @@
                         $(row).remove();
                         $.ajax({
                             url: '{{route("deleteOrder")}}',
-                            dataType: 'JSON',
                             type: 'GET',
                             data: {orderId: orderId},
                             success: function (data) {
                                 notify('Success','success','This order was successfully deleted !','#398717')
-                            },
-                            err: function (xhr, ajaxOptions, thrownError) {
-                                console.log('Error ' + xhr.status + ' | ' + thrownError);
                             }
                         })
                     }
@@ -501,8 +558,8 @@
         $.confirm({
             title         : '<p class="text-danger">Warning</p>',
             icon          : 'fa fa-exclamation-circle',
-            boxWidth: '30%',
-            useBootstrap: false,
+            boxWidth      : '30%',
+            useBootstrap  : false,
             type          : "red",
             closeIcon     : true,
             closeIconClass: 'fa fa-close',
@@ -520,7 +577,7 @@
                             success: function (data) {
                                 notify('Success','success','This food item was successfully deleted !','#398717');
                             },
-                            err: function (xhr, ajaxOptions, thrownError) {
+                            error: function (xhr, ajaxOptions, thrownError) {
                                 console.log('Error ' + xhr.status + ' | ' + thrownError);
                             }
                         })

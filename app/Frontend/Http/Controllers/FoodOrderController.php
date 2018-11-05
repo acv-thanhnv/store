@@ -194,20 +194,24 @@ class FoodOrderController extends Controller
         $idStore                  = $request->idStore;
         $orderId                  = $request->orderId;
         $ip                       = $request->ip();
-        $access_token             = $request->access_token;
         $order["access_token"]    = $request->access_token;
         $order["store_id"]        = $request->idStore;
         $order["location_id"]     = $request->table;
         $cart_items               = $request->cart_items;
         $order["description"]     = $request->description;
-        $order["datetime_order"]  = CommonHelper::dateNow();
+        $order["status"]          = 0;
+        $order["datetime_order"]  = CommonHelper::dateNow();  
         if($orderId===null){
             //create new order
             $orderId                  = SDB::table('store_order')
                                             ->insertGetId($order);
             $order_detail['order_id'] = $orderId;
+            $order['id']              = $orderId;
+            $order['id']              = $orderId;
+            $order['status_name']     = CommonHelper::getOrderStatusName($order['status']);
         } else {
             $order_detail['order_id'] = $orderId;
+            $order['id']              = $orderId;
             //get status of order
             $order_status = SDB::table('store_order')
                             ->where('id',$orderId)
@@ -219,43 +223,52 @@ class FoodOrderController extends Controller
                 SDB::table('store_order')
                 ->where('id',$orderId)
                 ->update(['datetime_update' => $datetime_update]);
+                //set time update for order
+                $order['datetime_update'] = $datetime_update;
             }
             //Cập nhập status của order
             SDB::table('store_order')
                 ->where('id',$orderId)
                 ->update(['status' => 1]);
+
+            $order["status"]      = 1;
+            $order['status_name'] = CommonHelper::getOrderStatusName($order['status']);
         }
-        foreach($cart_items as $obj){
-            $order_detail['entities_id'] = $obj['entities_id'];
-            $order_detail['quantity']    = $obj['quantity'];
-            $order_detail['status']      = 1;
+        foreach($cart_items as $key=>$obj){
+            $order_detail['entities_id']     = $obj['entities_id'];
+            $order_detail['quantity']        = $obj['quantity'];
+            $order_detail['status']          = 1;
+            $cart_items[$key]['status_name'] = CommonHelper::getFoodStatusName(1);
+            $cart_items[$key]['status']      = 1;
             //nếu món ăn đó đã được order rồi thì cập nhập số lượng cũng như tình trạng món
             if(isset($obj["id"])){
                 SDB::table('store_order_detail')
                 ->where('id',$obj['id'])
                 ->update(['quantity' => $obj['quantity'],'has_update' => 1]);
+                //set update for item
+                $cart_items[$key]['has_update'] = 1;
             }else{
                 SDB::table('store_order_detail')->insert($order_detail);
             }
         }
-        //call event send to Order
-        event(new Customer2OrderManagerPusher($idStore,$orderId));
-        $arrOrder = SDB::table('store_order_detail')
+        $order['detail']         = $cart_items;
+        $arrOrderDetail = SDB::table('store_order_detail')
                     ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
                     ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
                     ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
                     ->where('order_id',$orderId)
                     ->get();
-        foreach($arrOrder as $obj){
+        foreach($arrOrderDetail as $obj){
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
             }else{
                 $obj->src = CommonHelper::getImageUrl($obj->image);
             }
         }
-        //
+        //call event send to Order
+        event(new Customer2OrderManagerPusher($idStore,$order,$arrOrderDetail));
         //call pusher when order, status food change
-        event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrder));
+        event(new OrderStatusPusherEvent($request->access_token,$orderId,$arrOrderDetail));
         return $orderId;
     }
     public function FoodDetail(Request $request)

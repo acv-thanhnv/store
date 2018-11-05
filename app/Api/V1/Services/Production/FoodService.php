@@ -92,7 +92,6 @@ class FoodService extends BaseService implements FoodServiceInterface
             ->where('store_order.status','<>',4)
             ->orderby('store_order.id','asc')
             ->get();
-
         foreach($order as $order_detail){
             $order_detail ->detail = SDB::table('store_order_detail as o_detail')
                 ->join ('store_entities','o_detail.entities_id','=','store_entities.id')
@@ -100,8 +99,15 @@ class FoodService extends BaseService implements FoodServiceInterface
                 ->select('o_detail.*','store_entities.name','store_entities.image','store_entities.price','s_detail.status_name')
                 ->where('o_detail.order_id','=', $order_detail->id)
                 ->get();
+            foreach($order_detail ->detail as $foodItem){
+                //check avatar
+                if($foodItem->image==NULL){
+                    $foodItem->src = url('/')."/common_images/no-store.png";
+                }else{
+                    $foodItem->src = CommonHelper::getImageUrl($foodItem->image);
+                }
+            }
         };
-
         return $order;
     }
 

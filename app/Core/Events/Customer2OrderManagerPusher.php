@@ -20,16 +20,12 @@ class Customer2OrderManagerPusher implements ShouldBroadcast
 
     public $result;
     public $idStore;
-    public $location_id;
-    public function __construct($idStore, $orderId)
+    public $order;
+    public function __construct($idStore,$order, $arrOrder)
     {
-        $result = DB::table('store_order')
-        ->select('store_order.location_id')
-        ->where('store_order.store_id',$idStore)
-        ->where('store_order.id',$orderId)
-        ->get();
-        $this->location_id  = $result[0]->location_id;
-        $this->idStore = $idStore;
+        $this->result      = $arrOrder;
+        $this->idStore     = $idStore;
+        $this->order       = $order;
     }
 
     /**

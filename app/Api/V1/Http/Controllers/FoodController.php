@@ -103,7 +103,7 @@ class FoodController extends Controller
 
     public function Order2Chef(Request $request)
     {
-        $orderId = $request->orderId;
+        $orderId  = $request->orderId;
         $arrOrder = SDB::table('store_order')
                     ->where('id',$orderId)
                     ->select('access_token','store_id')
@@ -119,6 +119,10 @@ class FoodController extends Controller
         ->where('order_id',$orderId)
         ->where('status','<',2)
         ->update(['status'=>2]);
+        //update has update of food
+        SDB::table('store_order_detail')
+        ->where('order_id',$orderId)
+        ->update(['has_update'=>0]);
         //get array of order
         $arrOrderDetail = SDB::table('store_order_detail')
                             ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
@@ -148,6 +152,10 @@ class FoodController extends Controller
     {
         SDB::table('store_order')
         ->where('id',$request->orderId)
+        ->delete();
+
+        SDB::table('store_order_detail')
+        ->where('order_id',$request->orderId)
         ->delete();
     }
 }

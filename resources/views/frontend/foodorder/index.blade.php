@@ -170,7 +170,7 @@
 				<div class="cart-items" >
 					<ul class="header-cart-wrapitem w-full">
 					</ul>
-					<div class="alert alert-warning alert-change dis-none">
+					<div class="alert alert-warning alert-change dis-none" style="padding: .2rem 1.25rem">
 						<strong>Warning!</strong> You just update orders, press <a class="btn btn-primary btn-sm btn-order">Order</a> to save changes 
 					</div>
 				</div>
@@ -581,8 +581,15 @@
 <script src="frontend/FoodOrder/js/custom.js"></script>
 <script type="text/javascript">
 	var numberMenu = '{{App\Core\Common\CutomerConst::numberMenu}}';
+	var access_token = '{{$access_token}}';
 	//function buildMenu
 	$(document).ready(function(){
+		//create access token
+		if(localStorage.access_token){
+			access_token = localStorage.access_token;
+		}else{
+			localStorage.access_token = access_token;
+		}
 		//set timeout local storage
 		var now = new Date().getTime();	
 		var hour = '{{\App\Core\Common\CutomerConst::hour}}';
@@ -591,13 +598,6 @@
 		}
 		$("#table").select2();
 		var idStore = {!! $idStore !!};
-		//create access token
-		if(localStorage.access_token){
-			var access_token = localStorage.access_token;
-		}else{
-			var access_token = '{{$access_token}}';
-			localStorage.access_token = access_token;
-		}
 		if(localStorage.orderId){
 			$("#table").prop("disabled",true);//disable if user have order
 			$(".btn-pay").removeClass('disabled');//disable if user have order
