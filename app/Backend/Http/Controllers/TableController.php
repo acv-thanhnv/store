@@ -30,23 +30,57 @@ class TableController
         $Table= $this->TableService->getMyTable($storeId);
         $result = new DataResultCollection();
         $result->status = SDBStatusCode::OK;
-        $result->data=$Table;
-        return view("backend.Table.list",["table" =>$result]);
+        $result=$Table;
+        //dd($result);
+        return view("backend.table.list",["table" =>$result]);
     }
 
-    public function insert($obj)
+    public function getAddTable()
     {
-        try {
-            SDB::beginTransaction();
-            SDB::table("store_Table")->insert([
-                "name" => $obj->name,
-            ]);
-
-            SDB::commit();
-        } catch (\Exception $e) {
-            SDB::rollBack();
-        }
+        return view("backend.table.add");
     }
+
+    public function postAddTable(Request $request)
+    {
+        $result             = new DataResultCollection();
+        $rule               = ["name" => "required|array|min:3"];
+        $validator          = Validator::make($request->all(),$rule);
+        $obj=array([
+            'name'=>$request->name,
+            'type_location_id'=>$request->type,
+            'floor_id'=>$request->floor,
+            'price'=>$request->price,
+        ]);
+
+        if(!$validator->fails()){
+            $this->service->addTable($obj);
+            $result->status   = SDBStatusCode::OK;
+            $result->message  = 'Success';
+        }else {
+            $error           = $validator->errors();
+            $result->status  = SDBStatusCode::ValidateError;
+            $result->message = 'An error occured when validate!';
+            $result->data    = $error;
+        }
+        return ResponseHelper::JsonDataResult($result);
+    }
+
+//    public function insert($obj)
+//    {
+//        try {
+//            SDB::beginTransaction();
+//            SDB::table("store_table")->insert([
+//                "name" => $obj->name,
+//                "type_location_id" => $obj->type,
+//                "floor_id" => $obj->floor,
+//                "price" => $obj->price,
+//            ]);
+//
+//            SDB::commit();
+//        } catch (\Exception $e) {
+//            SDB::rollBack();
+//        }
+//    }
 
     public function update($obj)
     {

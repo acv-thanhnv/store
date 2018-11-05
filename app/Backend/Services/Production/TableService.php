@@ -20,14 +20,24 @@ class TableService extends BaseService implements TableServiceInterface
     public function getMyTable($storeId)
     {
         $obj = SDB::table("store_location")
-            ->select('*', 'store_location.name as location_name', 'store_floor.name as floor_name')
-            ->join('store_floor','store_location.floor_id','=', 'store_floor.id' )
-            ->where("store_id",$storeId)->get();
+            ->select('*')
+            ->get();
+        foreach ($obj as $obj_floor){
+            $obj_floor->floor = SDB::table('store_floor')
+                ->where('store_floor.id','=',$obj_floor->floor_id)
+                ->where('store_floor.store_id','=',$storeId)
+                ->get();
+        }
+        foreach ($obj as $obj_type){
+            $obj_type->type= SDB::table('store_type_location')
+                ->where('store_type_location.id','=', $obj_type->type_location_id)
+                ->get();
+        }
         return $obj;
     }
     public function addTable($obj)
     {
-        SDB::table("store_Table")->insert($obj);
+        SDB::table("store_table")->insert($obj);
     }
     public function editTable($obj)
     {
@@ -41,6 +51,26 @@ class TableService extends BaseService implements TableServiceInterface
                 "avatar"      => $obj["avatar"],
                 "description" => $obj["description"]
             ]);
+    }
+
+    public function getById($id)
+    {
+        $obj = SDB::table("store_menu")->where("id",$id)->get();
+        return $obj[0];
+    }
+    public function editMenu($obj)
+    {
+        SDB::table("store_menu")->where("id",$obj->id)->update(["name" => $obj->name,"description"=> $obj->description]);
+    }
+    public function deleteMenu($id)
+    {
+        SDB::table("store_menu")->where("id",$id)->delete();
+    }
+    public function deleteAllMenu($arrId)
+    {
+        foreach($arrId as $obj){
+            SDB::table("store_menu")->where("id",$obj)->delete();
+        }
     }
 
 }

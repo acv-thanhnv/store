@@ -126,7 +126,7 @@
             Route::get("myTable","TableController@getMyTable")->name("getTable");
             //add
             Route::get("addTable","TableController@getAddTable")->name("addTable");
-            Route::post("addTable","TableController@postAddTable");
+            Route::post("addTable","TableController@postAddTable")->name('postAddTable');
             //Edit
             Route::get("editTable","TableController@getEditTable")->name("editTable");
             Route::post("editTable","TableController@postEditTable")->name("postEditTable");

@@ -39,7 +39,7 @@
     <!--Title-->
     <div class="page-title">
         <div class="title_left">
-            <h2 class="text-primary">Menu <small>List</small></h2>
+            <h2 class="text-primary">Talbe <small>List</small></h2>
         </div>
     </div>
     <!--Table-->
@@ -62,26 +62,31 @@
 
             <div class="x_content">
                 <div class="table-responsive">
-                    <table class="table table-striped jambo_table table-hover table-user" id="tbl-floor">
+                    <table class="table table-striped jambo_table table-hover table-user" id="tbl-table">
                         <thead>
                         <tr class="headings">
                             <th style="text-align: center">
                                 <input type="checkbox" id="check-all" class="flat">
                             </th>
                             <th class="column-title">Name</th>
+                            <th class="column-title">Type Location</th>
+                            <th class="column-title">Floor</th>
+                            <th class="column-title">Sub Price</th>
                             <th class="column-title">Edit </th>
-
                             <th class="column-title">Delete </th>
                         </tr>
                         </thead>
                         <!--Tbody-->
                         <tbody id="tbody">
-                        @foreach($table->data as $tableItem)
+                        @foreach($table as $tableItem)
                             <tr>
                                 <td style="text-align: center" class="check-delete">
-                                    <input type="checkbox" value="{{$floorItem->id}}">
+                                    <input type="checkbox" value="{{$tableItem->id}}">
                                 </td>
                                 <td>{{$tableItem->name}}</td>
+                                <td>{{$tableItem->type_location_id}}</td>
+                                <td>{{$tableItem->floor_id}}</td>
+                                <td>{{$tableItem->price}}</td>
                                 <td>
                                     <button type="button" class="btn btn-primary edit round">
                                         <i class="fa fa-pencil-square-o"></i>
@@ -106,7 +111,7 @@
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function () {
-            $("#tbl-floor").DataTable({
+            $("#tbl-table").DataTable({
                 "columnDefs": [
                     {
                         "orderable": false ,
@@ -127,7 +132,7 @@
                     $(".iziModal-iframe").attr("src","");
                 },
                 focusInput	   : true,
-                title          : 'User',
+                title          : 'Table',
                 subtitle       :'Add',
                 width          : 700,
                 iframeHeight   : 600,
@@ -146,7 +151,7 @@
                 arrowKeys      :true,
                 iframe         : true,
                 iframeWidth    :400,
-                iframeURL      :"{{route('add')}}"
+                iframeURL      :"{{route('addTable')}}"
             });
         //function edit
         $(document).on('click', '.edit', function(event) {
