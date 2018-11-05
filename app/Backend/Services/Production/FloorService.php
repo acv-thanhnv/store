@@ -41,11 +41,11 @@ class FloorService extends BaseService implements FloorServiceInterface
                 "name" => $obj->name,
                 ]);
     }
-    public function deleteTable($id)
+    public function deleteFloor($id)
     {
         SDB::table("store_floor")->where("id",$id)->delete();
     }
-    public function deleteAllTable($arrId)
+    public function deleteAllFloor($arrId)
     {
         foreach($arrId as $obj){
             SDB::table("store_floor")->where("id",$obj)->delete();

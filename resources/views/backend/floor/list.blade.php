@@ -82,14 +82,14 @@
                                 </td>
                                 <td>{{$floorItem->name}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary edit round">
+                                    <button type="button" class="btn btn-primary edit round" data-id="{{$floorItem->id}}">
                                         <i class="fa fa-pencil-square-o"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <a class="btn btn-danger round delete">
+                                    <button class="btn btn-danger round delete" data-id="{{$floorItem->id}}">
                                         <i class="fa fa-trash-o"></i>
-                                    </a>
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -200,6 +200,7 @@
                         action  : function (){
                             $("#dataTable").DataTable().row(tr).remove().draw(false);
                             $.get("{{route('deleteFloor')}}",{id:id},function(data){
+                                location.reload();
                                 Alert("Menu Item Have Been Deleted Successful!");
                             });
                         }
@@ -251,6 +252,7 @@
                                     arrId.push($(this).val());
                                 });
                                 $.get("{{route('deleteAllFloor')}}",{arrId:arrId},function(data){
+                                    location.reload();
                                     Alert("Menus have been deleted!");
                                 });
                             }

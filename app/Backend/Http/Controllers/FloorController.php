@@ -15,6 +15,7 @@ use App\Core\Common\SDBStatusCode;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
 use function MongoDB\BSON\toJSON;
+use Illuminate\Support\Facades\Validator;
 
 
 class FloorController
@@ -35,7 +36,7 @@ class FloorController
     }
     public function getAddFloor(Request $request)
     {
-        return view("backend.table.add");
+        return view("backend.floor.add");
     }
 
     public function postAddFloor(Request $request)
@@ -43,10 +44,11 @@ class FloorController
         $result             = new DataResultCollection();
         $rule               = ["name" => "required|min:3"];
         $validator          = Validator::make($request->all(),$rule);
+        $storeId = 1;
         $obj=array([
+            'store_id'=>$storeId,
             'name'=>$request->name
         ]);
-
         if(!$validator->fails()){
             $this->floorService->addFloor($obj);
             $result->status   = SDBStatusCode::OK;
@@ -63,7 +65,7 @@ class FloorController
     public function getEditFloor(Request $request)
     {
         $obj = $this->floorService->getById($request->id);
-        return view("backend.table.edit",["obj" => $obj]);
+        return view("backend.floor.edit",["obj" => $obj]);
     }
 
     public function update(Request $request)

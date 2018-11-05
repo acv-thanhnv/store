@@ -16,6 +16,6 @@ interface FloorServiceInterface
     public function addFloor($obj);
     public function getById($id);
     public function editFloor($obj);
-    public function deleteTable($id);
-    public function deleteAllTable($arrId);
+    public function deleteFloor($id);
+    public function deleteAllFloor($arrId);
 }
