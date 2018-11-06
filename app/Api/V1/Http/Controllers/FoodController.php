@@ -103,10 +103,20 @@ class FoodController extends Controller
 
     public function Order2Chef(Request $request)
     {
-        $orderId  = $request->orderId;
-        $arrOrder = SDB::table('store_order')
-                    ->where('id',$orderId)
-                    ->select('access_token','store_id')
+        $Order = (object) $request->objOrder;
+        $orderId  = $Order->orderId;
+        $idTable  = $request->idTable;
+        $arrOrder = SDB::table('store_order as order')
+                    ->join('store_location as table','table.id','=','order.location_id')
+                    ->join('store_floor as floor','floor.id','=','table.floor_id')
+                    ->join('store_type_location as type','type.id','=','table.type_location_id')
+                    ->where('order.id',$orderId)
+                    ->select(
+                        'order.access_token','order.store_id','order.datetime_order',
+                        'order.datetime_update','order.location_id',
+                        'table.name as table_name','floor.name as floor_name',
+                        'table.type_location_id as priority','type.name as type_name'
+                    )
                     ->get();
         $access_token = $arrOrder[0]->access_token;
         $idStore      = $arrOrder[0]->store_id;
@@ -115,14 +125,11 @@ class FoodController extends Controller
         ->where('id',$orderId)
         ->update(['status'=>2]);
         //update status of food
-        SDB::table('store_order_detail')
-        ->where('order_id',$orderId)
-        ->where('status','<',2)
-        ->update(['status'=>2]);
-        //update has update of food
-        SDB::table('store_order_detail')
-        ->where('order_id',$orderId)
-        ->update(['has_update'=>0]);
+        foreach($Order->orderDetail as $key=>$obj){
+            SDB::table('store_order_detail')
+            ->where('id',$obj['order_detail_id'])
+            ->update(['quantity' => $obj['order_detail_numProduct'],'status' => 2,'has_update' =>0]);
+        }
         //get array of order
         $arrOrderDetail = SDB::table('store_order_detail')
                             ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
@@ -137,8 +144,18 @@ class FoodController extends Controller
                 $obj->src = CommonHelper::getImageUrl($obj->image);
             }
         }
+        //count order of table have status<2
+        $numberOrderLowThan2 = SDB::table('store_order')
+                                ->where('store_id',$idStore)
+                                ->where('location_id',$idTable)
+                                ->where('status','<','2')
+                                ->select('id')
+                                ->get();
         //call event get status 
         event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrderDetail));
+        //call event send to chef
+        event(new Order2ChefPusher($idStore,$arrOrder,$arrOrderDetail));
+        return count($numberOrderLowThan2);
     }
 
     public function deleteFoodOrderDetail(Request $request)

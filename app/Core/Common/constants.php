@@ -68,6 +68,8 @@ class OrderConst{
     const CashierChannelToCashier    = "cashier2cashier";
     
     const Customer2Order             = "customer2order";
+
+    const Order2ChefEvent            = "order2chef";
     
     const PaymentDoneEventName       = "payment-done";
     

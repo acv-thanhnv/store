@@ -23,27 +23,13 @@ class Order2ChefPusher implements ShouldBroadcast
      * @return void
      */
     public $storeId;
-    public $orderId;
-    public $locationId;
-    public $locationName;
-    /*public $totalPrice;
-    public $dateTimeOrder;*/
-    public $description;
-    /*public $requestType;*/
-    public $entity;
-    public $priority;
-    public function __construct($storeId,$orderId,$priority,$locationId,$locationName,$description,$entity)
+    public $orderDetails;
+    public $foodDetails;
+    public function __construct($storeId,$orderDetails,$foodDetails)
     {
-        $this->storeId = $storeId;
-        $this->entity = $entity;
-        $this->orderId = $orderId;
-        $this->priority =  $priority;
-        $this->locationId = $locationId;
-        $this->locationName = $locationName;
-        /*$this->totalPrice = $totalPrice;*/
-        $this->description =  $description;
-        /*$this->dateTimeOrder = $now;
-        $this->requestType = $requestType;*/
+        $this->storeId      = $storeId;
+        $this->orderDetails = $orderDetails;
+        $this->foodDetails  = $foodDetails;
     }
     /**
      * The event's broadcast name.
@@ -52,7 +38,7 @@ class Order2ChefPusher implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::OrderChefEventName;
+        return OrderConst::Order2ChefEvent;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -61,6 +47,6 @@ class Order2ChefPusher implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OrderChannelToChef));
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::Order2ChefEvent));
     }
 }

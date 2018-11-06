@@ -226,13 +226,14 @@ class FoodOrderController extends Controller
                 //set time update for order
                 $order['datetime_update'] = $datetime_update;
             }
-            //Cập nhập status của order
-            SDB::table('store_order')
-                ->where('id',$orderId)
-                ->update(['status' => 1]);
-
-            $order["status"]      = 1;
-            $order['status_name'] = CommonHelper::getOrderStatusName($order['status']);
+            if ($order_status[0]->status>=2) {
+                //Cập nhập status của order
+                SDB::table('store_order')
+                        ->where('id',$orderId)
+                        ->update(['status' => 1]);
+                $order["status"]      = 1;
+                $order['status_name'] = CommonHelper::getOrderStatusName($order['status']);
+            }
         }
         foreach($cart_items as $key=>$obj){
             $order_detail['entities_id']     = $obj['entities_id'];

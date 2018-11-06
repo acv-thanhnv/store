@@ -580,13 +580,16 @@
 <!--Custom JS-->
 <script src="frontend/FoodOrder/js/custom.js"></script>
 <script type="text/javascript">
-	var numberMenu = '{{App\Core\Common\CutomerConst::numberMenu}}';
+	var numberMenu   = '{{App\Core\Common\CutomerConst::numberMenu}}';
 	var access_token = '{{$access_token}}';
-	$(document).ready(function(){
-		localStorage.setItem('name', 'Matt West');
-	})
+	var idStore      = '{{$idStore}}';
 	//function buildMenu
 	$(document).ready(function(){
+		if(localStorage.access_token){
+			access_token = localStorage.access_token;
+		}else {
+			localStorage.access_token = access_token;
+		}
 		//set timeout local storage
 		var now = new Date().getTime();	
 		var hour = '{{\App\Core\Common\CutomerConst::hour}}';
@@ -599,8 +602,11 @@
 			$("#table").prop("disabled",true);//disable if user have order
 			$(".btn-pay").removeClass('disabled');//disable if user have order
 		}
-		if(localStorage.idStore!=idStore){
-			localStorage.clear();
+		if(localStorage.idStore){
+			if(localStorage.idStore!=idStore){
+				localStorage.clear();
+				localStorage.access_token = access_token;
+			}
 		}
 		//show alert change
 		checkAlert();

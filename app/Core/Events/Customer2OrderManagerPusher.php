@@ -21,9 +21,10 @@ class Customer2OrderManagerPusher implements ShouldBroadcast
     public $result;
     public $idStore;
     public $order;
-    public function __construct($idStore,$order, $arrOrder)
+    public $arrOrderDetail;
+    public function __construct($idStore,$order, $arrOrderDetail)
     {
-        $this->result      = $arrOrder;
+        $this->result      = $arrOrderDetail;
         $this->idStore     = $idStore;
         $this->order       = $order;
     }
