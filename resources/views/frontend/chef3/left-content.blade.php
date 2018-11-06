@@ -1,6 +1,6 @@
 <div class="row">
-	<div class="col-md-7">
-		<table id="order-list" class="table table-hover red-blue-table" data-search="true" data-toggle="table" data-url="{{ url('/api/v1/store/'.$storeId.'/chef.json') }}">
+	<div id="order-list-left" class="col-md-7">
+		<table id="order-list" class="table table-hover red-blue-table" data-search="true" data-toggle="table">
 			<thead>
 				<tr>
 					<th style="width: 75%" data-field="name">Tên món</th>

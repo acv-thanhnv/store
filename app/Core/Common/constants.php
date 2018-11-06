@@ -65,6 +65,8 @@ class LoggingConst
 }
 class OrderConst{
 
+    const RollbackPaymentEventName = "rollback-payment";
+
     const CashierChannelToCashier = "cashier2cashier";
 
     const PaymentDoneEventName = "payment-done";

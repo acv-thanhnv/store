@@ -22,9 +22,10 @@ class CashierService extends BaseService implements CashierServiceInterface
         ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
         ->join('store_entities', 'store_entities.id', '=','store_order_detail.entities_id')
         ->join('store_location', 'store_order.location_id', '=','store_location.id')
-        ->selectRaw('store_order.id as id, store_location.name as location, sum(store_entities.price*store_order_detail.quantity) as sum, store_location.price as locationFee')
+        ->join('store_floor', 'store_floor.id', '=','store_location.floor_id')
+        ->selectRaw('store_order.id as id, store_location.name as location, store_floor.name as floor, sum(store_entities.price*store_order_detail.quantity) as sum, store_location.price as locationFee, store_order.status')
         ->where('store_order.store_id',$storeId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2,3])
         ->groupBy('store_order.id')
         ->get();
         return $data;
@@ -37,7 +38,8 @@ class CashierService extends BaseService implements CashierServiceInterface
         ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
         ->join('store_entities', 'store_entities.id', '=','store_order_detail.entities_id')
         ->join('store_location', 'store_order.location_id', '=','store_location.id')
-        ->selectRaw('store_order.id as id, store_location.name as location, sum(store_entities.price*store_order_detail.quantity) as sum, store_location.price as locationFee')
+        ->join('store_floor', 'store_floor.id', '=','store_location.floor_id')
+        ->selectRaw('store_order.id as id, store_location.name as location, store_floor.name as floor, sum(store_entities.price*store_order_detail.quantity) as sum, store_location.price as locationFee')
         ->where('store_order.store_id',$storeId)
         ->where('store_order.status',3)
         ->groupBy('store_order.id')
@@ -54,7 +56,7 @@ class CashierService extends BaseService implements CashierServiceInterface
         ->selectRaw('store_entities.id, store_entities.name,store_entities.price,store_order_detail.quantity,(store_entities.price*store_order_detail.quantity) as total')
         ->where('store_order.store_id',$storeId)
         ->where('store_order.id',$orderId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2,3])
         ->get();
         return $details;
     }
@@ -78,7 +80,7 @@ class CashierService extends BaseService implements CashierServiceInterface
         $listOrder = SDB::table('store_order')
         ->select('store_order.id')
         ->where('store_order.store_id',$storeId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2,3])
         ->get();
         return $listOrder;
     }
@@ -113,4 +115,42 @@ class CashierService extends BaseService implements CashierServiceInterface
         return $data;
     }
 
+    public function getRollbackCashierTable(Request $request)
+    {
+        $storeId = $request->storeId;
+        $data = SDB::table('store_rollback_cashier')
+        ->select('order_id', 'before_status')
+        ->where('store_id', $storeId)
+        ->get();
+        return $data;
+    }
+
+    public function getAllPayment(Request $request) {
+        $storeId = $request->storeId;
+        $listOrderId = $request->listOrderId;
+        $res = SDB::table('store_order')
+        ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
+        ->join('store_entities', 'store_entities.id', '=','store_order_detail.entities_id')
+        ->join('store_location', 'store_location.id', '=','store_order.location_id')
+        ->selectRaw('store_entities.id, store_entities.name,store_entities.price,sum(store_order_detail.quantity) as quantity')
+        ->where('store_order.store_id',$storeId)
+        ->whereIn('store_order.id', $listOrderId)
+        ->groupBy('store_entities.id')
+        ->get();
+
+        $res2 = SDB::table('store_order')
+        ->join('store_location', 'store_location.id', '=','store_order.location_id')
+        ->selectRaw('sum(store_location.price) as locationFee')
+        ->where('store_order.store_id',$storeId)
+        ->whereIn('store_order.id', $listOrderId)
+        ->get();
+
+        $data = [
+            'details' => $res,
+            'locationFee' => $res2
+        ];
+
+        return $data;
+    }
+    
 }

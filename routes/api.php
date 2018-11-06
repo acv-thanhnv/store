@@ -13,12 +13,15 @@ use Illuminate\Http\Request;
 |
 */
 Route::group(['prefix' => 'api/v1', 'name' => 'api_v1.'], function () {
+	Route::post('/all-payments', 'CashierController@showAllPayment');
 	Route::get('/store/{storeId}/customer2cashier.json', 'CashierController@showInvoicesPushedByCustomer');
+	Route::get('/store/{storeId}/rollback_cashier.json', 'CashierController@showRollbackCashierTable');
 	Route::get('/store/{storeId}/cashier.json', 'CashierController@showInvoicesByStore');
 	Route::get('/store/{storeId}/order/{orderId}/cashier_detail.json', 'CashierController@showInvoiceDetails');
 	Route::get('/store/{storeId}/chef.json', 'KitchenController@showFoodByStore');
 	Route::get('/store/{storeId}/chef/order.json', 'KitchenController@listOrder');
 	Route::get('/store/{storeId}/chef/{orderId}.json', 'KitchenController@showFoodByOrder');
+	Route::get('/store/{storeId}/chef_rollback.json', 'KitchenController@showRollbackTable');
 	Route::get('/store/{storeId}/order/{orderId}.json', 'KitchenController@listFoodByOrder');
 	Route::get('/store/{storeId}/chef_queue.json', 'KitchenController@showFoodQueue');
 	Route::get('/store/{storeId}/chef_location.json', 'KitchenController@showOrderLocationByStore');

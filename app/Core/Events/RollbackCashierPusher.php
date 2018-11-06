@@ -13,7 +13,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class Order2ChefPusher implements ShouldBroadcast
+class RollbackCashierPusher implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -23,14 +23,9 @@ class Order2ChefPusher implements ShouldBroadcast
      * @return void
      */
     public $storeId;
-    public $orderDetails;
-    public $foodDetails;
-    
-    public function __construct($storeId,$orderDetails,$foodDetails)
+    public function __construct($storeId)
     {
         $this->storeId = $storeId;
-        $this->orderDetails = $orderDetails;
-        $this->foodDetails=$foodDetails;
     }
     /**
      * The event's broadcast name.
@@ -39,7 +34,7 @@ class Order2ChefPusher implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::OrderChefEventName;
+        return OrderConst::RollbackPaymentEventName;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -48,6 +43,6 @@ class Order2ChefPusher implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OrderChannelToChef));
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::CashierChannelToCashier));
     }
 }
