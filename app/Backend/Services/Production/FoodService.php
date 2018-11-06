@@ -21,7 +21,7 @@ class FoodService extends BaseService implements FoodServiceInterface
      * HELPER: Generation Config File contain text translated.
      */
     protected $diskLocalName = "public";
-    public function getFood($idStore)
+    public function getAllFood($idStore)
     {
     	$arrFood = SDB::table("store_entities as en")
                     ->join("store_menu as menu","menu.id","=","en.menu_id")
@@ -30,6 +30,16 @@ class FoodService extends BaseService implements FoodServiceInterface
                     ->orderby("en.id","desc")
     				->get();
     	return $arrFood;
+    }
+    public function getFood($idStore,$total)
+    {
+        $arrFood = SDB::table("store_entities as en")
+                    ->join("store_menu as menu","menu.id","=","en.menu_id")
+                    ->where("menu.store_id",$idStore)
+                    ->select("en.*","menu.name as menuName")
+                    ->orderby("en.id","desc")
+                    ->paginate($total);
+        return $arrFood;
     }
     public function addFood($obj)
     {

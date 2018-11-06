@@ -25,7 +25,6 @@
     <script src="https://js.pusher.com/4.2/pusher.min.js"></script>
     <script src="{{asset('js/lib/bootstrap.min.js')}}"></script>
     <script src="{{asset('backend/template1/modal/js/iziModal.min.js')}}"></script>
-    <script src="{{asset('frontend/js/order.js')}}"></script>
     @yield('javascript')
 </body>
 </html>
