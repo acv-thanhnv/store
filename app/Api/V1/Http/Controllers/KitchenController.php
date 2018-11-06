@@ -109,4 +109,17 @@ class KitchenController extends Controller
 		->get();
 		return response()->json($data);
 	}
+
+	public function showRollbackTable(Request $request) {
+		$storeId = $request->storeId;
+		$data = DB::table('store_rollback_kitchen')
+		->join('store_entities', 'store_entities.id', '=','store_rollback_kitchen.food_id')
+		->join('store_order_detail', 'store_order_detail.order_id', '=','store_rollback_kitchen.order_id')
+		->selectRaw('store_rollback_kitchen.order_id, store_rollback_kitchen.food_id, store_entities.name as name, store_rollback_kitchen.order_id as orderId, store_order_detail.quantity as quantity, store_rollback_kitchen.cooked as cooked, store_rollback_kitchen.time as time')
+		->where('store_rollback_kitchen.store_id',$storeId)
+		->whereRaw('store_order_detail.entities_id = store_rollback_kitchen.food_id')
+		->get();
+		return response()->json($data);
+	}
+
 }

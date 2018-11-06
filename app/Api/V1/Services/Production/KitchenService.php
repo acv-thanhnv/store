@@ -23,7 +23,7 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->select('store_order.priority','store_order.description')
         ->where('store_order.store_id',$storeId)
         ->where('store_order.id',$orderId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2])
         ->get();
         return $priority;
     }
@@ -36,7 +36,7 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->join('store_entities', 'store_entities.id', '=','store_order_detail.entities_id')
         ->select('store_entities.name','store_order.id','store_order.priority','store_order_detail.quantity')
         ->where('store_order.store_id',$storeId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2])
         ->get();
         return $entity;
     }
@@ -51,7 +51,7 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->select('store_entities.id','store_entities.name','store_order_detail.quantity','store_order_detail.cooked')
         ->where('store_order.store_id',$storeId)
         ->where('store_order.id',$orderId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2])
         ->get();
         return $details;
     }
@@ -63,7 +63,7 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->select('store_entities.id','store_entities.name','store_order_detail.quantity','store_order_detail.cooked')
         ->where('store_order.store_id',$storeId)
         ->where('store_order.id',$orderId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2])
         ->whereRaw('store_order_detail.quantity > store_order_detail.cooked')
         ->get();
         return $details;
@@ -74,7 +74,10 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         $listOrder = SDB::table('store_order')
         ->select('store_order.id')
         ->where('store_order.store_id',$storeId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2])
+        ->orderBy('store_order.datetime_order', 'asc')
+        ->orderBy('store_order.datetime_update', 'asc')
+        ->orderBy('store_order.priority', 'desc')
         ->get();
         return $listOrder;
     }
@@ -100,7 +103,7 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->select('store_entities.id','store_entities.name','store_order_detail.quantity','store_order_detail.cooked')
         ->where('store_order.store_id',$storeId)
         ->where('store_order.id',$orderId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2])
         ->get();
         $data = [
             'orderId' => $orderId,
@@ -114,9 +117,13 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         $storeId = $request->storeId;
         $location = SDB::table('store_order')
         ->join('store_location', 'store_order.location_id', '=','store_location.id')
-        ->select('store_order.id','store_location.name')
+        ->join('store_floor', 'store_location.floor_id', '=','store_floor.id')
+        ->selectRaw('store_order.id, store_location.name as name, store_floor.name as floor, store_order.priority, store_order.datetime_order')
         ->where('store_order.store_id',$storeId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2])
+        ->orderBy('store_order.datetime_order', 'asc')
+        ->orderBy('store_order.datetime_update', 'asc')
+        ->orderBy('store_order.priority', 'desc')
         ->get();
         return $location;
     }
@@ -130,7 +137,7 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->select('store_location.id','store_location.name')
         ->where('store_order.store_id',$storeId)
         ->where('store_order.id',$orderId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2])
         ->get();
         return $location;
     }
@@ -144,7 +151,7 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->join('store_entities', 'store_entities.id', '=','store_order_detail.entities_id')
         ->selectRaw('store_entities.name as name, sum(quantity) as quantity')
         ->where('store_order.store_id',$storeId)
-        ->where('store_order.status',2)
+        ->whereIn('store_order.status',[1,2])
         ->groupBy('entities_id')
         ->get();
         return $queue;

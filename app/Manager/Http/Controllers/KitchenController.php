@@ -16,6 +16,14 @@ class KitchenController extends Controller
         $orderId = $request->orderId;
         $foodId = $request->foodId;
         $push = $request->push;
+        $time = $request->time;
+
+        $res2 = DB::table('store_rollback_kitchen')
+        ->where('store_id', $storeId)
+        ->where('order_id', $orderId)
+        ->where('food_id', $foodId)
+        ->where('time', $time)
+        ->delete();
 
         $quantityCooked = DB::table('store_order')
         ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
@@ -46,6 +54,17 @@ class KitchenController extends Controller
         $orderId = $request->orderId;
         $foodId = $request->foodId;
         $cooked = $request->cooked;
+        $time = $request->time;
+
+        $rollback = DB::table('store_rollback_kitchen')->insert(
+                [
+                    'store_id' => $storeId,
+                    'order_id' => $orderId,
+                    'food_id' => $foodId,
+                    'cooked' => $cooked,
+                    'time' => $time
+                ]
+            );
 
         $quantity = DB::table('store_order')
         ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
@@ -72,56 +91,34 @@ class KitchenController extends Controller
 
     public function newOrder2Kitchen($storeId, $orderId)
     {
-        //order-list
-        $entity = DB::table('store_order')
-        ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
-        ->join('store_entities', 'store_entities.id', '=','store_order_detail.entities_id')
-        ->select('store_entities.name','store_order_detail.quantity','store_order_detail.cooked')
+
+        $orderDetails = DB::table('store_order')
+        ->join('store_location', 'store_order.location_id', '=','store_location.id')
+        ->join('store_floor', 'store_location.floor_id', '=','store_floor.id')
+        ->select('store_order.id as order_id', 'store_location.name as table', 'store_floor.name as floor', 'store_order.priority', 'store_order.datetime_order')
         ->where('store_order.store_id',$storeId)
         ->where('store_order.id',$orderId)
+        ->whereIn('store_order.status',[1,2])
+        ->orderBy('store_order.datetime_order', 'asc')
+        ->orderBy('store_order.datetime_update', 'asc')
+        ->orderBy('store_order.priority', 'desc')
         ->get();
 
-        $entity = DB::table('store_order')
+        $foodDetails = DB::table('store_order')
         ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
         ->join('store_entities', 'store_entities.id', '=','store_order_detail.entities_id')
-        ->select('store_entities.name','store_order_detail.quantity','store_order_detail.cooked')
+        ->select('store_entities.id as food_id','store_entities.name as food_name','store_order_detail.quantity')
         ->where('store_order.store_id',$storeId)
         ->where('store_order.id',$orderId)
+        ->whereIn('store_order.status',[1,2])
+        ->whereRaw('store_order_detail.quantity > store_order_detail.cooked')
         ->get();
-
-        $list = DB::table('store_order')
-        ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
-        ->join('store_entities', 'store_entities.id', '=','store_order_detail.entities_id')
-        ->select('store_entities.name','store_order.id','store_order.priority','store_order_detail.quantity','store_order_detail.cooked')
-        ->where('store_order.store_id',$storeId)
-        ->where('store_order.id',$orderId)
-        ->get();
-
-        //food-queue
-        $queue = DB::table('store_order')
-        ->join('store_order_status', 'store_order_status.id', '=','store_order.status')
-        ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
-        ->join('store_entities', 'store_entities.id', '=','store_order_detail.entities_id')
-        ->selectRaw('store_entities.name as name, sum(quantity) as quantity')
-        ->where('store_order.store_id',$storeId)
-        ->where('store_order.status',2)
-        ->groupBy('entities_id')
-        ->get();
-
-        /*$data = [
-            'list' => $list,
-            'queue' => $queue
-        ];
-        $data = json_encode($data));*/
-        event(new Order2ChefPusher(
-            $storeId,
-            $entity,
-            $orderId,
-            $locationId,
-            $locationName,
-            $description
-        ));
         
+        event(new Order2ChefPusher(
+            1,
+            $orderDetails,
+            $foodDetails
+        ));
     }
 
     public function index($storeId) {
