@@ -464,6 +464,9 @@
             obj.forEach(function(itemDetail){
                 var rowDetail = $("#entities-detail-template").contents().clone();
                 //append data
+                var rowDetailId = $(rowDetail)[1];
+                //add iddetail for row
+                $(rowDetailId).attr('order-detail-id',itemDetail.id);
                 $(rowDetail).find(".order_detail_name").text(itemDetail.name);
                 $(rowDetail).find(".order_detail_price").text(itemDetail.price);
                 $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
