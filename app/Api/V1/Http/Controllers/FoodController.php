@@ -127,9 +127,18 @@ class FoodController extends Controller
         ->update(['status'=>2]);
         //update status of food
         foreach($Order->orderDetail as $key=>$obj){
-            SDB::table('store_order_detail')
-            ->where('id',$obj['order_detail_id'])
-            ->update(['quantity' => $obj['order_detail_numProduct'],'status' => 2,'has_update' =>0]);
+            if($obj['order_detail_id']==null){
+                SDB::table('store_order_detail')->insert([
+                    'order_id'=>$orderId,
+                    'entities_id'=>$obj['entities_id'],
+                    'quantity' => $obj['order_detail_numProduct'],
+                    'status' =>2
+                ]);
+            }else {
+                SDB::table('store_order_detail')
+                ->where('id',$obj['order_detail_id'])
+                ->update(['quantity' => $obj['order_detail_numProduct'],'status' => 2,'has_update' =>0]);
+            }
         }
         //get array of order
         $arrOrderDetail = SDB::table('store_order_detail')

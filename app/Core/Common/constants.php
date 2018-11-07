@@ -110,8 +110,16 @@ class CutomerConst{
     const hour = 2;
 }
 class OrderStatusValue{
+    const Done = 2;
+    const NoDone = 0;
+    const Process = 1;
     const Waiter = 1;
     const Cheft = 2;
     const Close = 3;
     const Deleted = 10;
+}
+class FoodStatusValue{
+    const Done = 2;
+    const NoDone = 0;
+    const Process = 1;
 }

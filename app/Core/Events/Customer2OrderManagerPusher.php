@@ -21,7 +21,6 @@ class Customer2OrderManagerPusher implements ShouldBroadcast
     public $result;
     public $idStore;
     public $order;
-    public $arrOrderDetail;
     public function __construct($idStore,$order, $arrOrderDetail)
     {
         $this->result      = $arrOrderDetail;

@@ -4,6 +4,8 @@ namespace App\Frontend\Http\Controllers;
 use App\Backend\Services\Interfaces\FoodServiceInterface;
 use App\Backend\Services\Interfaces\MenuServiceInterface;
 use App\Core\Common\FoodConst;
+use App\Core\Common\FoodStatusValue;
+use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
@@ -218,7 +220,7 @@ class FoodOrderController extends Controller
                             ->select('status')
                             ->get();
             //nếu order đã nấu xong thì khi thêm món mới cập nhập time update của order
-            if($order_status[0]->status==3){
+            if($order_status[0]->status==OrderStatusValue::Done){
                 $datetime_update = CommonHelper::dateNow();
                 SDB::table('store_order')
                 ->where('id',$orderId)
@@ -226,33 +228,40 @@ class FoodOrderController extends Controller
                 //set time update for order
                 $order['datetime_update'] = $datetime_update;
             }
-            if ($order_status[0]->status>=2) {
+            //nếu order đang chế biến thì chuyển status về chưa xác nhận
+            if ($order_status[0]->status>=OrderStatusValue::Process) {
                 //Cập nhập status của order
                 SDB::table('store_order')
                         ->where('id',$orderId)
-                        ->update(['status' => 1]);
-                $order["status"]      = 1;
+                        ->update(['status' => OrderStatusValue::NoDone]);
+                $order["status"]      = OrderStatusValue::NoDone;
                 $order['status_name'] = CommonHelper::getOrderStatusName($order['status']);
             }
         }
         foreach($cart_items as $key=>$obj){
             $order_detail['entities_id']     = $obj['entities_id'];
             $order_detail['quantity']        = $obj['quantity'];
-            $order_detail['status']          = 1;
+            $order_detail['status']          = FoodStatusValue::NoDone;
             $cart_items[$key]['status_name'] = CommonHelper::getFoodStatusName(1);
-            $cart_items[$key]['status']      = 1;
+            $cart_items[$key]['status']      = FoodStatusValue::NoDone;
             //nếu món ăn đó đã được order rồi thì cập nhập số lượng cũng như tình trạng món
             if(isset($obj["id"])){
+                //nếu món đó đã tồn tại và đang chế biến hoặc hoàn thành
                 SDB::table('store_order_detail')
                 ->where('id',$obj['id'])
+                ->where('status','>',FoodStatusValue::Process)
                 ->update(['quantity' => $obj['quantity'],'has_update' => 1]);
+                //Ko thì update số lượng của những món chưa chế biến
+                SDB::table('store_order_detail')
+                ->where('id',$obj['id'])
+                ->update(['quantity' => $obj['quantity']]);
                 //set update for item
                 $cart_items[$key]['has_update'] = 1;
             }else{
+                //ngược lại thì insert mới 
                 SDB::table('store_order_detail')->insert($order_detail);
             }
         }
-        $order['detail']         = $cart_items;
         $arrOrderDetail = SDB::table('store_order_detail')
                     ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
                     ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')

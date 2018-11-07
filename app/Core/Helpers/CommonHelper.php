@@ -218,16 +218,12 @@ class CommonHelper
         $status_name;
         switch ($status) {
             case 1:
-                $status_name = 'Cập nhập món';
-                break;
-
-            case 2:
                 $status_name = 'Đang chế biến';
                 break;
-            case 3:
+            case 2:
                 $status_name = 'Chế biến xong';
                 break;
-            case 4:
+            case 3:
                 $status_name = 'Đã thanh toán';
                 break;
             default:
