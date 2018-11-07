@@ -14,5 +14,8 @@ interface FloorServiceInterface
     //Floor
     public function getMyFloor($storeId);
     public function addFloor($obj);
+    public function getById($id);
     public function editFloor($obj);
+    public function deleteFloor($id);
+    public function deleteAllFloor($arrId);
 }

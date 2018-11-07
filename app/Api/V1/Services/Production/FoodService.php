@@ -100,7 +100,7 @@ class FoodService extends BaseService implements FoodServiceInterface
             ->get();
 
         foreach($order as $order_detail){
-            $order_detail ->detail = SDB::table('store_order_detail')
+            $order_detail-> detail = SDB::table('store_order_detail')
                 ->join ('store_entities','store_order_detail.entities_id','=','store_entities.id')
                 ->where('store_order_detail.order_id','=', $order_detail->id)
                 ->get();

@@ -26,18 +26,30 @@ class FloorService extends BaseService implements FloorServiceInterface
     {
         SDB::table("store_floor")->insert($obj);
     }
+
+    public function getById($id)
+    {
+        $obj = SDB::table("store_floor")
+            ->where("id",$id)->get();
+        return $obj[0];
+    }
     public function editFloor($obj)
     {
-        SDB::table("store_store")
-            ->where("id",$obj["id"])
+        SDB::table("store_floor")
+            ->where("id",$obj->id)
             ->update([
-                "name"        => $obj["name"],
-                "lat"         => $obj["lat"],
-                "lng"         => $obj["lng"],
-                "address"     => $obj["address"],
-                "avatar"      => $obj["avatar"],
-                "description" => $obj["description"]
-            ]);
+                "name" => $obj->name,
+                ]);
+    }
+    public function deleteFloor($id)
+    {
+        SDB::table("store_floor")->where("id",$id)->delete();
+    }
+    public function deleteAllFloor($arrId)
+    {
+        foreach($arrId as $obj){
+            SDB::table("store_floor")->where("id",$obj)->delete();
+        }
     }
 
 }

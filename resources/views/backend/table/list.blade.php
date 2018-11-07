@@ -39,7 +39,7 @@
     <!--Title-->
     <div class="page-title">
         <div class="title_left">
-            <h2 class="text-primary">Menu <small>List</small></h2>
+            <h2 class="text-primary">Talbe <small>List</small></h2>
         </div>
     </div>
     <!--Table-->
@@ -62,35 +62,40 @@
 
             <div class="x_content">
                 <div class="table-responsive">
-                    <table class="table table-striped jambo_table table-hover table-user" id="tbl-floor">
+                    <table class="table table-striped jambo_table table-hover table-user" id="tbl-table">
                         <thead>
                         <tr class="headings">
                             <th style="text-align: center">
                                 <input type="checkbox" id="check-all" class="flat">
                             </th>
                             <th class="column-title">Name</th>
+                            <th class="column-title">Type Location</th>
+                            <th class="column-title">Floor</th>
+                            <th class="column-title">Sub Price</th>
                             <th class="column-title">Edit </th>
-
                             <th class="column-title">Delete </th>
                         </tr>
                         </thead>
                         <!--Tbody-->
                         <tbody id="tbody">
-                        @foreach($table->data as $tableItem)
+                        @foreach($table as $tableItem)
                             <tr>
                                 <td style="text-align: center" class="check-delete">
-                                    <input type="checkbox" value="{{$floorItem->id}}">
+                                    <input type="checkbox" value="{{$tableItem->location_id}}">
                                 </td>
-                                <td>{{$tableItem->name}}</td>
+                                <td>{{$tableItem->location_name}}</td>
+                                <td>{{$tableItem->type_location_id}}</td>
+                                <td>{{$tableItem->floor_id}}</td>
+                                <td>{{$tableItem->price}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary edit round">
+                                    <button type="button" class="btn btn-primary edit round" data-id="{{$tableItem->location_id}}">
                                         <i class="fa fa-pencil-square-o"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <a class="btn btn-danger round delete">
+                                    <button class="btn btn-danger round delete" data-id="{{$tableItem->location_id}}">
                                         <i class="fa fa-trash-o"></i>
-                                    </a>
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -106,7 +111,7 @@
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function () {
-            $("#tbl-floor").DataTable({
+            $("#tbl-table").DataTable({
                 "columnDefs": [
                     {
                         "orderable": false ,
@@ -115,6 +120,19 @@
                 ],
                 order: []
             });
+
+            //drag modal
+            $( "#modal-add" ).draggable();
+            $( "#modal-edit" ).draggable();
+            if(localStorage.getItem("Message"))
+            {
+                if(localStorage.getItem("page")){
+                    var page = parseInt(localStorage.getItem("page"));
+                    $("#dataTable").DataTable().page(page).draw('page');
+                }
+                Alert(localStorage.getItem("Message"));
+                localStorage.clear();
+            }
         } );
 
         //function add
@@ -127,7 +145,7 @@
                     $(".iziModal-iframe").attr("src","");
                 },
                 focusInput	   : true,
-                title          : 'User',
+                title          : 'Table',
                 subtitle       :'Add',
                 width          : 700,
                 iframeHeight   : 600,
@@ -146,7 +164,7 @@
                 arrowKeys      :true,
                 iframe         : true,
                 iframeWidth    :400,
-                iframeURL      :"{{route('add')}}"
+                iframeURL      :"{{route('addTable')}}"
             });
         //function edit
         $(document).on('click', '.edit', function(event) {
@@ -156,13 +174,13 @@
             {
                 onOpening: function(modal){
                     var id =$(event.target).closest("button").data("id");//get Id, get button then get id
-                    $(".iziModal-iframe").attr("src","{{route('edit')}}?id="+id);
+                    $(".iziModal-iframe").attr("src","{{route('editTable')}}?id="+id);
                     //set url iframe
                 },
                 onClosed: function(modal){
                     $(".iziModal-iframe").attr("src","");
                 },
-                title          : 'User',
+                title          : 'Table',
                 subtitle       :'Edit',
                 width          : 700,
                 iframeHeight   : 600,
@@ -181,10 +199,10 @@
                 iframeWidth    :400,
                 iframeURL      :""
             });
-        //Delete User
+        //Delete table
         $("body").on("click",".delete",function(e){
             var id = $(this).data("id");
-            var tr = $(this).parent().parent();
+            var tr = $(this).parents('tr');
             $.confirm({
                 title         : '<p class="text-warning">Warning</p>',
                 icon          : 'fa fa-exclamation-circle',
@@ -193,16 +211,15 @@
                 type          :"orange",
                 closeIcon     : true,
                 closeIconClass: 'fa fa-close',
-                content       : "Are You Sure? This User Will Be Deleted!",
+                content       : "Are You Sure? This Menu Item Will Be Deleted!",
                 buttons       : {
                     Save: {
                         text    : 'OK',
                         btnClass: 'btn btn-primary',
                         action  : function (){
-                            $.get("{{route('delete')}}",{id:id},function(data){
-                                alert("Delete");
-                                $('#pagination-demo').twbsPagination('destroy');
-                                getList();
+                            $("#dataTable").DataTable().row(tr).remove().draw(false);
+                            $.get("{{route('deleteTable')}}",{id:id},function(data){
+                                Alert("Menu Item Have Been Deleted Successful!");
                             });
                         }
                     },
@@ -240,21 +257,20 @@
                     type          :"orange",
                     closeIcon     : true,
                     closeIconClass: 'fa fa-close',
-                    content       : "Are You Sure? Users Will Be Deleted!",
+                    content       : "Are You Sure? All of these menus will be deleted!",
                     buttons       : {
                         Save: {
                             text    : 'OK',
                             btnClass: 'btn btn-primary',
                             action  : function (){
-                                var arrUser = [];
+                                var arrId = [];
                                 $(".check-delete input:checked").each(function(){
-                                    arrUser.push($(this).val());
+                                    var tr = $(this).parents("tr");
+                                    $("#dataTable").DataTable().row(tr).remove().draw(false);
+                                    arrId.push($(this).val());
                                 });
-                                $.get("{{route('deleteAll')}}",{arrUser:arrUser},function(data){
-                                    $("#check-all").prop('checked',false);//set check-all = false
-                                    alert("Delete");
-                                    $('#pagination-demo').twbsPagination('destroy');
-                                    getList();
+                                $.get("{{route('deleteAllTable')}}",{arrId:arrId},function(data){
+                                    Alert("Menus have been deleted!");
                                 });
                             }
                         },
@@ -269,20 +285,20 @@
             }
         });
         //function alert
-        function alert(type)
+        function Alert(text)
         {
             $.toast({
-                text: "User Have Been "+type+" Successful!",
+                text: text,
                 heading: 'Successful',
                 icon: 'success',
-                showHideTransition: 'plain',
+                showHideTransition: 'slide',
                 allowToastClose: true,
-                hideAfter: 2000,
+                hideAfter: 1500,
                 stack: 5,
                 position: 'top-right',
                 textAlign: 'left',
-                loader: true,
-                loaderBg: '#9EC600',
+                loader : true,
+                loaderBg: '#9EC600'
             });
         }
     </script>
