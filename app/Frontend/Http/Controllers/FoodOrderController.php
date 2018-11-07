@@ -242,6 +242,7 @@ class FoodOrderController extends Controller
             $order_detail['entities_id']     = $obj['entities_id'];
             $order_detail['quantity']        = $obj['quantity'];
             $order_detail['status']          = FoodStatusValue::NoDone;
+            $order_detail['has_update']      = 1;
             $cart_items[$key]['status_name'] = CommonHelper::getFoodStatusName(1);
             $cart_items[$key]['status']      = FoodStatusValue::NoDone;
             //nếu món ăn đó đã được order rồi thì cập nhập số lượng cũng như tình trạng món
@@ -249,12 +250,12 @@ class FoodOrderController extends Controller
                 //nếu món đó đã tồn tại và đang chế biến hoặc hoàn thành
                 SDB::table('store_order_detail')
                 ->where('id',$obj['id'])
-                ->where('status','>',FoodStatusValue::Process)
-                ->update(['quantity' => $obj['quantity'],'has_update' => 1]);
-                //Ko thì update số lượng của những món chưa chế biến
-                SDB::table('store_order_detail')
-                ->where('id',$obj['id'])
-                ->update(['quantity' => $obj['quantity']]);
+                ->where('status','>=',FoodStatusValue::Process)
+                ->update([
+                    'quantity'   => $obj['quantity'],
+                    'status'     => FoodStatusValue::NoDone,
+                    'has_update' => 1
+                ]);
                 //set update for item
                 $cart_items[$key]['has_update'] = 1;
             }else{

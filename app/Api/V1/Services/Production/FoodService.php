@@ -89,7 +89,7 @@ class FoodService extends BaseService implements FoodServiceInterface
             ->join('store_order_status as status','status.value','=','store_order.status')
             ->where('store_order.store_id', $idStore)
             ->where('store_order.location_id', $idLocation)
-            ->where('store_order.status','<>',4)
+            ->where('store_order.status','<',OrderStatusValue::Pay)
             ->orderby('store_order.id','asc')
             ->get();
         foreach($order as $order_detail){

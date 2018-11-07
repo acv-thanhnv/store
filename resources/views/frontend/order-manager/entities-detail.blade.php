@@ -77,13 +77,13 @@
         cursor: pointer;
     }
     /* food status*/
-    .food_status_1{
-        background-color: #f0ad4e;
-    }
-    .food_status_2{
+    .food_status_0{
         background-color: #337ab7;
     }
-    .food_status_3{
+    .food_status_1{
+        background-color: #5bc0de;
+    }
+    .food_status_2{
         background-color: #5cb85c;
     }
     /* image css*/
