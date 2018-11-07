@@ -28,5 +28,11 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Passport::routes();
+//        Gate::define('order_manager/{idStore?}', function ($user){
+//             if($user->role_value==6){
+//                 return redirect()->route('login');
+//             }
+//
+//        });
     }
 }
