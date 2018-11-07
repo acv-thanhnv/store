@@ -18,17 +18,15 @@ class Customer2OrderManagerPusher implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $result:
-
-    public function __construct($storeId, $orderId)
+    public $result;
+    public $idStore;
+    public $order;
+    public $arrOrderDetail;
+    public function __construct($idStore,$order, $arrOrderDetail)
     {
-        $result = DB::table('store_order')
-        ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
-        ->select('store_order_detail.id','store_order_detail.order_id','store_order_detail.entities_id','store_order_detail.quantity','store_order_detail.cooked','store_order_detail.status')
-        ->where('store_order.store_id',$storeId)
-        ->where('store_order_detail.order_id',$orderId)
-        ->get();
-        $this->result = $result;
+        $this->result      = $arrOrderDetail;
+        $this->idStore     = $idStore;
+        $this->order       = $order;
     }
 
     /**
@@ -38,7 +36,7 @@ class Customer2OrderManagerPusher implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::UpdateOrderCooked;
+        return OrderConst::Customer2Order;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -47,6 +45,6 @@ class Customer2OrderManagerPusher implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OrderChannelToWaiter));
+        return new Channel(CommonHelper::getOrderEventName($this->idStore,OrderConst::Customer2Order));
     }
 }

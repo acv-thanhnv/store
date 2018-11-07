@@ -158,6 +158,7 @@ $("body").on("click",".add_to_cart",function(e){
 				cart_items[cart_index].quantity++;
 			}
 			sendItem(cart_items);
+			localStorage.idStore = $("#idStore").data("id");
             localStorage.cart_items = JSON.stringify(cart_items);
         }
         //change total items of cart
@@ -200,7 +201,9 @@ function sendItem(obj){
 					break;
 			case 1: percent_bar = 60;
 					break;
-			case 2: percent_bar = 100;
+			case 2: percent_bar = 80;
+					break;
+			case 3: percent_bar = 100;
 					break;
 		}
 		$(row).find(".progress-bar").css("width",percent_bar+"%");
@@ -259,7 +262,7 @@ $(document).on('click','.btn-num-product-up', function(){
 	var index = $(this).parent('div.wrap-num-product').data('id');
 	var cart_index = cart_items.findIndex(item => item.entities_id === index);
 	cart_items[cart_index].quantity++;
-	if(cart_items[cart_index].status===1){//check if food have been orderd
+	if(cart_items[cart_index].status>0){//check if food have been orderd
 		cart_items[cart_index].status = 0.5;
 		cart_items[cart_index].status_name = 'Processing';
 	}

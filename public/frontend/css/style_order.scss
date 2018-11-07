@@ -1,4 +1,5 @@
 //global===================
+$im:!important;
 .nopad {
   padding: 0px;
 }
@@ -155,6 +156,55 @@
 
   }
 }
-
+.have-order{
+  background-color: #EEA045 $im;
+  .table-name{
+    color: white $im;
+  }
+}
+.have-update{
+  background-color: #EA3232 $im;
+  .table-name{
+    color: white $im;
+  }
+}
+.content-right{
+  padding: 0px 10px;
+  .order-header{
+    padding    : 5px 10px;
+    color      : white;
+    font-size  : 16px;
+    background :#D83C3C;
+    font-weight: bold;
+  }
+  .entities-row-order{
+    padding: 8px 0px;
+    .entities_order_status_content{
+      width: 100px;
+    }
+    //css status 
+    .status_0{
+      padding         :0.5em;
+      background-color: #337ab7;
+    }
+    .status_1{
+      padding         :0.5em;
+      background-color: #f0ad4e;
+    }
+    .status_2{
+      padding         :0.5em;
+      background-color: #5bc0de;
+    }
+    .status_3{
+      padding         :0.5em;
+      background-color: #5cb85c;
+    }
+    margin-top: 5px;
+    border-bottom: 1px solid #E9E9E9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
 @media only screen and (max-width: 768px) {
 }

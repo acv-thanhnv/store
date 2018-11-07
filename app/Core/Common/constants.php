@@ -65,37 +65,38 @@ class LoggingConst
 }
 class OrderConst{
 
-    const RollbackPaymentEventName = "rollback-payment";
-
-    const CashierChannelToCashier = "cashier2cashier";
-
-    const PaymentDoneEventName = "payment-done";
+    const CashierChannelToCashier    = "cashier2cashier";
     
-    const UpdateOrderCooked = "update-order-cooked";
+    const Customer2Order             = "customer2order";
 
+    const Order2ChefEvent            = "order2chef";
+    
+    const PaymentDoneEventName       = "payment-done";
+    
+    const UpdateOrderCooked          = "update-order-cooked";
+    
     const OrderChannelToOrderManager = "customer-to-order-manager";
-
-    const OrderChannelToCashier = "customer2cashier";
-
-    const NewOrderToOrderManager = "new-order-to-order-manager";
-
-    const OrderChannelToWaiter = "waiter2waiter";
-    const OrderEventName = "order.waiter";
-
-
-    const OrderChannelToChef = "order2chef";
-    const OrderChefEventName = "new-order";
-
-    const CustomerCashierEventName = "new-payment";
-
-    /*const OrderChannelToChef = "to-chef";
-    const OrderChefEventName = "order.chef";
-    const OrderStatusEventName = "order-status";*/
-
-
-    const TypeDelete = "delete";
-    const TypeAdd = "add";
-    const TypeClearTrash = "clear_trash";
+    
+    const OrderChannelToCashier      = "customer2cashier";
+    
+    
+    const NewOrderToOrderManager     = "new-order-to-order-manager";
+    
+    const OrderChannelToWaiter       = "waiter2waiter";
+    const OrderEventName             = "order.waiter";
+    
+    
+    const OrderChannelToChef         = "order2chef";
+    const OrderChefEventName         = "new-order";
+    
+    const CustomerCashierEventName   = "new-payment";
+    
+    const OrderStatusEventName       = "order-status";
+    
+    
+    const TypeDelete                 = "delete";
+    const TypeAdd                    = "add";
+    const TypeClearTrash             = "clear_trash";
 }
 class EntityProperty{
     const maxField = 10;

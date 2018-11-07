@@ -89,8 +89,7 @@ class CommonHelper
         return base_path().'/resources/export_templates/';
     }
     public static function getOrderEventName($storeId,$orderChannel){
-        /*$hash = md5 ($storeId);*/
-        $hash = $storeId;
+        $hash = md5 ($storeId);
         return $hash."-".$orderChannel;
     }
 
@@ -185,9 +184,57 @@ class CommonHelper
         $obj = json_encode($obj);
         return $obj;
     }
+
+    //get current day
     public static function dateNow(){
         $now = Carbon::now('Asia/Ho_Chi_Minh');
+        $now = $now->format('Y-m-d H:i:s');
         return $now;
+    }
+
+    //get status name of food
+    public static function getFoodStatusName($status){
+        $status_name;
+        switch ($status) {
+            case 1:
+                $status_name = 'Chờ xác nhận';
+                break;
+
+            case 2:
+                $status_name = 'Đang chế biến';
+                break;
+            case 3:
+                $status_name = 'Đã hoàn thành';
+                break;
+            default:
+                $status_name = 'Chưa xác nhận';
+                break;
+        }
+        return $status_name;
+    }
+
+    //get status name of order
+    public static function getOrderStatusName($status){
+        $status_name;
+        switch ($status) {
+            case 1:
+                $status_name = 'Cập nhập món';
+                break;
+
+            case 2:
+                $status_name = 'Đang chế biến';
+                break;
+            case 3:
+                $status_name = 'Chế biến xong';
+                break;
+            case 4:
+                $status_name = 'Đã thanh toán';
+                break;
+            default:
+                $status_name = 'Chưa xác nhận';
+                break;
+        }
+        return $status_name;
     }
 
 }
