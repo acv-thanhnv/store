@@ -22,6 +22,16 @@ class CashierController extends Controller
         $this->service = $CashierService;
     }
 
+    public function showAllPayment(Request $request) {
+    	/*$data = $this->service->getAllPayment($request);
+    	$result = new DataResultCollection();
+    	$result->status = SDBStatusCode::OK;    
+    	$result->data = $data;            
+    	return ResponseHelper::JsonDataResult($result);*/
+    	$data = $this->service->getAllPayment($request);
+    	return response()->json($data);
+    }
+
     public function showInvoicesByStore(Request $request) {
 		$data = $this->service->getInvoicesByStore($request);
 		$details = $this->service->getInvoiceDetails($request);
@@ -42,6 +52,11 @@ class CashierController extends Controller
 			'details' => $details
 		];
 		return response()->json($arr);
+	}
+
+	public function showRollbackCashierTable(Request $request) {
+		$data = $this->service->getRollbackCashierTable($request);
+		return response()->json($data);
 	}
 
 }

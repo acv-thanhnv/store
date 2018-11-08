@@ -50,6 +50,7 @@
 </div>
 @endsection
 @section('javascript')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 <script src="{{ asset('frontend/js/chef/chef.js') }}"></script>
 @endsection
