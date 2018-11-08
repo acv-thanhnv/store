@@ -31,7 +31,7 @@ class FoodController extends Controller
         $result  = new DataResultCollection ();
         $result->status =  SDBStatusCode::OK;
         $result->data = $list;
-        return ResponseHelper::JsonDataResult($result);
+        return view('frontend.order-manager.table_manager',['location'=>$result]);
     }
 
     public function listByStore($storeId = null){
