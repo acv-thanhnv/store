@@ -198,7 +198,7 @@
             //remove class order, add class update
             $('*[location-id="'+data.order.location_id+'"]').addClass("have-update");
             //get order and append
-            if(data.order.location_id===idTable && idStore === data.idStore){
+            if(data.order.location_id==idTable && idStore == data.idStore){
                 genOrderRealtime(data.order,data.result);
             }
         });
@@ -443,12 +443,10 @@
         $(row_order_detail).empty();
         if(row_order_detail.length!=0){//neu co thi cap nhap order
             var order_status = $(row_order).find('.entities_order_status_content').attr('order-status');
-            if(order_status>='{{\App\Core\Common\OrderStatusValue::Process}}'){//cap nhap order co tinh trang >=1(Đang chế biến)
-                //update status and status name of order
-                $(row_order).find('.entities_order_status_content').text('Chưa xác nhận');
-                $(row_order).find('.entities_order_status_content').attr('order-status',order.status);
-                $(row_order).find('.entities_order_status_content').removeClass(' status_1 status_2').addClass('status_0');
-            }
+            //update status and status name of order
+            $(row_order).find('.entities_order_status_content').text(order.status_name);
+            $(row_order).find('.entities_order_status_content').attr('order-status',order.status);
+            $(row_order).find('.entities_order_status_content').removeClass('status_0 status_1 status_2').addClass('status_'+order.status);
             obj.forEach(function(itemDetail){
                 var rowDetail = $("#entities-detail-template").contents().clone();
                 //append data
