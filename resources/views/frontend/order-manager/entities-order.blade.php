@@ -35,15 +35,15 @@
         <div class="entities-row-order row">
             <div class="col-md-1 entities_order_id"></div>
             <div class="col-md-4 entities_order_time"></div>
-            <div class="col-md-2 entities_order_status">
+            <div class="col-md-3 entities_order_status">
                 <span class="label entities_order_status_content"></span>
             </div>
             <div class="col-md-4 entities_order_action">
                 <button class="btn btn-warning btn-sm show_description">
                     <span class="fa fa-comments-o" aria-hidden="true"></span>
                 </button>
-                <button class="btn btn-info btn-sm show_detail">
-                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                <button class="btn btn-info btn-sm add_food">
+                    <span class="fa fa-plus" aria-hidden="true"></span>
                 </button>
                 <button class="btn btn-danger btn-sm delete_order">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>

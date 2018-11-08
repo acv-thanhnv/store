@@ -105,13 +105,22 @@ class StorageDisk{
     const diskLocalName = "public";
 }
 class CutomerConst{
-    const limit = 5;
+    const limit      = 5;
     const numberMenu = 5;
-    const hour = 2;
+    const hour       = 2;
 }
 class OrderStatusValue{
-    const Waiter = 1;
-    const Cheft = 2;
-    const Close = 3;
+    const Done    = 2;
+    const NoDone  = 0;
+    const Process = 1;
+    const Pay     = 3;
+    const Waiter  = 1;
+    const Cheft   = 2;
+    const Close   = 3;
     const Deleted = 10;
+}
+class FoodStatusValue{
+    const Done    = 2;
+    const NoDone  = 0;
+    const Process = 1;
 }

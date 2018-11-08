@@ -193,10 +193,6 @@ $im:!important;
     }
     .status_2{
       padding         :0.5em;
-      background-color: #5bc0de;
-    }
-    .status_3{
-      padding         :0.5em;
       background-color: #5cb85c;
     }
     margin-top: 5px;
@@ -205,6 +201,16 @@ $im:!important;
     align-items: center;
     justify-content: center;
   }
+}
+.row_active{
+  .add_food{
+    background  : #E81E1E;
+    border-color:#E81E1E;
+  }
+  background: #E99336 $im;
+}
+.entities_item:hover{
+  cursor: pointer;
 }
 @media only screen and (max-width: 768px) {
 }
