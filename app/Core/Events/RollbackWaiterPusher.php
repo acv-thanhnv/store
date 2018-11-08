@@ -23,7 +23,8 @@ class RollbackWaiterPusher implements ShouldBroadcast
     public $quantity;
     public $cooked;
     public $clear;
-    public function __construct($storeId, $orderId, $foodId, $quantity, $cooked, $clear)
+    public $rollBack;
+    public function __construct($storeId, $orderId, $foodId, $quantity, $cooked, $clear, $rollBack)
     {
         $this->storeId = $storeId;
         $this->orderId = $orderId;
@@ -31,6 +32,7 @@ class RollbackWaiterPusher implements ShouldBroadcast
         $this->quantity = $quantity;
         $this->cooked = $cooked;
         $this->clear = $clear;
+        $this->rollBack = $rollBack;
     }
 
     /**

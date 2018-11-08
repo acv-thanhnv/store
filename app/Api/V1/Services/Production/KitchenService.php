@@ -72,12 +72,13 @@ class KitchenService extends BaseService implements KitchenServiceInterface
     public function getListOrdersByStore(Request $request) {
         $storeId = $request->storeId;
         $listOrder = SDB::table('store_order')
+        ->join('store_location', 'store_order.location_id', '=','store_location.id')
         ->select('store_order.id')
         ->where('store_order.store_id',$storeId)
         ->whereIn('store_order.status',[1,2])
+        ->orderBy('store_location.type_location_id', 'desc')
         ->orderBy('store_order.datetime_order', 'asc')
         ->orderBy('store_order.datetime_update', 'asc')
-        ->orderBy('store_order.priority', 'desc')
         ->get();
         return $listOrder;
     }
@@ -117,13 +118,14 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         $storeId = $request->storeId;
         $location = SDB::table('store_order')
         ->join('store_location', 'store_order.location_id', '=','store_location.id')
+        ->join('store_type_location', 'store_location.type_location_id', '=','store_type_location.id')
         ->join('store_floor', 'store_location.floor_id', '=','store_floor.id')
-        ->selectRaw('store_order.id, store_location.name as name, store_floor.name as floor, store_order.priority, store_order.datetime_order')
+        ->selectRaw('store_order.id, store_location.name as name, store_floor.name as floor, store_type_location.name as priority, store_order.datetime_order')
         ->where('store_order.store_id',$storeId)
         ->whereIn('store_order.status',[1,2])
+        ->orderBy('store_location.type_location_id', 'desc')
         ->orderBy('store_order.datetime_order', 'asc')
         ->orderBy('store_order.datetime_update', 'asc')
-        ->orderBy('store_order.priority', 'desc')
         ->get();
         return $location;
     }

@@ -1,5 +1,7 @@
 <?php
 //=========kitchen==================
+Route::get('/test1995', 'KitchenController@pushFoodToCustomer');
+
 Route::get('/store/{storeId}/kitchen', 'KitchenController@index');
 
 Route::get('/store/{storeId}/cashier', 'CashierController@index');

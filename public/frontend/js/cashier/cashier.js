@@ -586,15 +586,15 @@ var pusher = new Pusher("120973d888acaaed6fef", {
 	encrypted: true
 });
 
-var order2cashier = pusher.subscribe('1-customer2cashier');
+var order2cashier = pusher.subscribe(md5(storeId) + '-customer2cashier');
 order2cashier.bind('new-payment', function (res) {});
 
-var order2chef = pusher.subscribe('1-order2chef');
+var order2chef = pusher.subscribe(md5(storeId) + '-order2chef');
 order2chef.bind('new-order', function (res) {
 	loadCashierTable();
 });
 
-var cashier2cashier = pusher.subscribe('1-cashier2cashier');
+var cashier2cashier = pusher.subscribe(md5(storeId) + '-cashier2cashier');
 cashier2cashier.bind('payment-done', function (res) {
 	var listOrderId = res.listOrderId;
 	var status = res.status;
