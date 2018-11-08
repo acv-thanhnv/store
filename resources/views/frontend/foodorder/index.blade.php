@@ -635,6 +635,9 @@
         channel.bind(eventName, function(data){
         	localStorage.removeItem(cart_items);
         	cart_items = data.arrOrder;
+        	cart_total = data.arrOrder.length;
+			//change total items of cart
+			$(".js-show-cart").attr("data-notify",cart_total);
         	localStorage.cart_items = JSON.stringify(cart_items);
         });
 	}

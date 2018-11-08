@@ -300,9 +300,51 @@ class FoodOrderController extends Controller
     }
     public function deleteCartItem(Request $request)
     {
-        $id = $request->id;
+        $idFood  = $request->id;
+        $orderId = $request->orderId;
+        //delete food item
         SDB::table('store_order_detail')
-        ->where('id',$id)
+        ->where('id',$idFood)
         ->delete();
+        //get food items
+        $arrOrderDetail = SDB::table('store_order_detail')
+                    ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
+                    ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
+                    ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
+                    ->where('order_id',$orderId)
+                    ->get();
+        $Process = 0;//variable count food was processed
+        $NoDone  = 0;//variable count food not done
+        foreach($arrOrderDetail as $obj){
+            //check status of food, nếu ko có món nào là đang chờ xác nhận thì status của order chuyển theo món
+            switch ($obj->status) {
+                case FoodStatusValue::Process:
+                    $Process ++;
+                    break;
+                default:
+                    $NoDone++;
+            }
+            if($obj->image==NULL){
+                $obj->src = url('/')."/common_images/no-store.png";
+            }else{
+                $obj->src = CommonHelper::getImageUrl($obj->image);
+            }
+        }
+        if($NoDone>0){//nếu order đó có món ăn chưa xác nhận thì order status là chưa xác nhận
+            SDB::table('store_order')->where('id',$orderId)->update(['status'=>OrderStatusValue::NoDone]);
+        }else if($Process>0){// ng lại, nếu có món đang chế biến thì status là đang chế biến
+            SDB::table('store_order')->where('id',$orderId)->update(['status'=>OrderStatusValue::Process]);
+        }else{//còn lại là xong rồi
+            SDB::table('store_order')->where('id',$orderId)->update(['status'=>OrderStatusValue::Done]);
+        }
+        //get access token and orderId
+        $arrOrder       = SDB::table('store_order as order')
+                        ->join('store_order_status as status','status.value','=','order.status')
+                        ->where('order.id',$orderId)
+                        ->select('order.*','status.name as status_name')
+                        ->get();
+        $idStore = $arrOrder[0]->store_id;
+        //call event send to Order
+        event(new Customer2OrderManagerPusher($idStore,$arrOrder[0],$arrOrderDetail));
     }
 }
