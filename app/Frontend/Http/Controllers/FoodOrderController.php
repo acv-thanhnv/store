@@ -4,9 +4,12 @@ namespace App\Frontend\Http\Controllers;
 use App\Backend\Services\Interfaces\FoodServiceInterface;
 use App\Backend\Services\Interfaces\MenuServiceInterface;
 use App\Core\Common\FoodConst;
+use App\Core\Common\FoodStatusValue;
+use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
+use App\Core\Events\Customer2OrderManagerPusher;
 use App\Core\Events\OrderPusherEvent;
 use App\Core\Events\OrderStatusPusherEvent;
 use App\Core\Helpers\CommonHelper;
@@ -36,8 +39,10 @@ class FoodOrderController extends Controller
     {  
         $idStore      = $request->idStore;
         $arrTable     = SDB::table('store_location')
-        ->where("store_id",$idStore)
-        ->get();
+                        ->join('store_floor', 'store_location.floor_id','=', 'store_floor.id')
+                        ->where('store_floor.store_id', $idStore)
+                        ->select('store_location.*')
+                        ->get();
         $access_token = md5(CommonHelper::dateNow());
         return view('frontend.foodorder.index',[
             "idStore"      => $idStore,
@@ -188,63 +193,93 @@ class FoodOrderController extends Controller
     }
     public function sendOrder(Request $request)
     {
+        $idStore                  = $request->idStore;
         $orderId                  = $request->orderId;
         $ip                       = $request->ip();
-        $access_token             = $request->access_token;
         $order["access_token"]    = $request->access_token;
         $order["store_id"]        = $request->idStore;
         $order["location_id"]     = $request->table;
         $cart_items               = $request->cart_items;
         $order["description"]     = $request->description;
-        $order["datetime_order"]  = CommonHelper::dateNow();
-        $order["datetime_update"] = CommonHelper::dateNow();
+        $order["status"]          = 0;
+        $order["datetime_order"]  = CommonHelper::dateNow();  
         if($orderId===null){
             //create new order
             $orderId                  = SDB::table('store_order')
                                             ->insertGetId($order);
             $order_detail['order_id'] = $orderId;
+            $order['id']              = $orderId;
+            $order['id']              = $orderId;
+            $order['status_name']     = CommonHelper::getOrderStatusName($order['status']);
         } else {
             $order_detail['order_id'] = $orderId;
+            $order['id']              = $orderId;
             //get status of order
             $order_status = SDB::table('store_order')
                             ->where('id',$orderId)
                             ->select('status')
                             ->get();
-            if($order_status[0]->status===3){//check if food have been cooked, update time 
+            //nếu order đã nấu xong thì khi thêm món mới cập nhập time update của order
+            if($order_status[0]->status==OrderStatusValue::Done){
                 $datetime_update = CommonHelper::dateNow();
                 SDB::table('store_order')
                 ->where('id',$orderId)
                 ->update(['datetime_update' => $datetime_update]);
+                //set time update for order
+                $order['datetime_update'] = $datetime_update;
+            }
+            //nếu order đang chế biến thì chuyển status về chưa xác nhận
+            if ($order_status[0]->status>=OrderStatusValue::Process) {
+                //Cập nhập status của order
+                SDB::table('store_order')
+                        ->where('id',$orderId)
+                        ->update(['status' => OrderStatusValue::NoDone]);
+                $order["status"]      = OrderStatusValue::NoDone;
+                $order['status_name'] = CommonHelper::getOrderStatusName($order['status']);
             }
         }
-        foreach($cart_items as $obj){
-            $order_detail['entities_id'] = $obj['entities_id'];
-            $order_detail['quantity']    = $obj['quantity'];
-            $order_detail['status']      = 1;
+        foreach($cart_items as $key=>$obj){
+            $order_detail['entities_id']     = $obj['entities_id'];
+            $order_detail['quantity']        = $obj['quantity'];
+            $order_detail['status']          = FoodStatusValue::NoDone;
+            $order_detail['has_update']      = 1;
+            $cart_items[$key]['status_name'] = CommonHelper::getFoodStatusName(1);
+            $cart_items[$key]['status']      = FoodStatusValue::NoDone;
+            //nếu món ăn đó đã được order rồi thì cập nhập số lượng cũng như tình trạng món
             if(isset($obj["id"])){
+                //nếu món đó đã tồn tại và đang chế biến hoặc hoàn thành
                 SDB::table('store_order_detail')
                 ->where('id',$obj['id'])
-                ->update(['quantity' => $obj['quantity'],'status' => 1]);
+                ->where('status','>=',FoodStatusValue::Process)
+                ->update([
+                    'quantity'   => $obj['quantity'],
+                    'status'     => FoodStatusValue::NoDone,
+                    'has_update' => 1
+                ]);
+                //set update for item
+                $cart_items[$key]['has_update'] = 1;
             }else{
+                //ngược lại thì insert mới 
                 SDB::table('store_order_detail')->insert($order_detail);
             }
         }
-        $arrOrder = SDB::table('store_order_detail')
+        $arrOrderDetail = SDB::table('store_order_detail')
                     ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
                     ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
                     ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
                     ->where('order_id',$orderId)
                     ->get();
-        foreach($arrOrder as $obj){
+        foreach($arrOrderDetail as $obj){
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
             }else{
                 $obj->src = CommonHelper::getImageUrl($obj->image);
             }
         }
-        //
+        //call event send to Order
+        event(new Customer2OrderManagerPusher($idStore,$order,$arrOrderDetail));
         //call pusher when order, status food change
-        event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrder));
+        event(new OrderStatusPusherEvent($request->access_token,$orderId,$arrOrderDetail));
         return $orderId;
     }
     public function FoodDetail(Request $request)

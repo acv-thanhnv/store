@@ -65,37 +65,43 @@ class LoggingConst
 }
 class OrderConst{
 
-    const RollbackPaymentEventName = "rollback-payment";
 
-    const CashierChannelToCashier = "cashier2cashier";
+    const CashierChannelToCashier    = "cashier2cashier";
+
+    const RollbackPaymentEventName = "rollback-payment";
 
     const PaymentDoneEventName = "payment-done";
     
-    const UpdateOrderCooked = "update-order-cooked";
+    const Customer2Order             = "customer2order";
 
+    const Order2ChefEvent            = "order2chef";
+    
+    const PaymentDoneEventName       = "payment-done";
+    
+    const UpdateOrderCooked          = "update-order-cooked";
+    
     const OrderChannelToOrderManager = "customer-to-order-manager";
-
-    const OrderChannelToCashier = "customer2cashier";
-
-    const NewOrderToOrderManager = "new-order-to-order-manager";
-
-    const OrderChannelToWaiter = "waiter2waiter";
-    const OrderEventName = "order.waiter";
-
-
-    const OrderChannelToChef = "order2chef";
-    const OrderChefEventName = "new-order";
-
-    const CustomerCashierEventName = "new-payment";
-
-    /*const OrderChannelToChef = "to-chef";
-    const OrderChefEventName = "order.chef";
-    const OrderStatusEventName = "order-status";*/
-
-
-    const TypeDelete = "delete";
-    const TypeAdd = "add";
-    const TypeClearTrash = "clear_trash";
+    
+    const OrderChannelToCashier      = "customer2cashier";
+    
+    
+    const NewOrderToOrderManager     = "new-order-to-order-manager";
+    
+    const OrderChannelToWaiter       = "waiter2waiter";
+    const OrderEventName             = "order.waiter";
+    
+    
+    const OrderChannelToChef         = "order2chef";
+    const OrderChefEventName         = "new-order";
+    
+    const CustomerCashierEventName   = "new-payment";
+    
+    const OrderStatusEventName       = "order-status";
+    
+    
+    const TypeDelete                 = "delete";
+    const TypeAdd                    = "add";
+    const TypeClearTrash             = "clear_trash";
 }
 class EntityProperty{
     const maxField = 10;
@@ -104,13 +110,22 @@ class StorageDisk{
     const diskLocalName = "public";
 }
 class CutomerConst{
-    const limit = 5;
+    const limit      = 5;
     const numberMenu = 5;
-    const hour = 2;
+    const hour       = 2;
 }
 class OrderStatusValue{
-    const Waiter = 1;
-    const Cheft = 2;
-    const Close = 3;
+    const Done    = 2;
+    const NoDone  = 0;
+    const Process = 1;
+    const Pay     = 3;
+    const Waiter  = 1;
+    const Cheft   = 2;
+    const Close   = 3;
     const Deleted = 10;
+}
+class FoodStatusValue{
+    const Done    = 2;
+    const NoDone  = 0;
+    const Process = 1;
 }

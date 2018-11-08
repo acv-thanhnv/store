@@ -141,8 +141,8 @@ $("body").on("click",".add_to_cart",function(e){
     			cart_total++;
     			cart_items.push(obj);
 			}else{
-				if(cart_items[cart_index].status===1){//check if food have been orderd
-					cart_items[cart_index].status = 0.5;
+				if(cart_items[cart_index].status>=1){//check if food have been orderd
+					cart_items[cart_index].status = 0;
 					cart_items[cart_index].status_name = 'Processing';
 				}
 				cart_items[cart_index].quantity++;
@@ -158,6 +158,7 @@ $("body").on("click",".add_to_cart",function(e){
 				cart_items[cart_index].quantity++;
 			}
 			sendItem(cart_items);
+			localStorage.idStore = $("#idStore").data("id");
             localStorage.cart_items = JSON.stringify(cart_items);
         }
         //change total items of cart
@@ -198,7 +199,7 @@ function sendItem(obj){
 					break;
 			case 0.5 : percent_bar = 50;
 					break;
-			case 1: percent_bar = 60;
+			case 1: percent_bar = 80;
 					break;
 			case 2: percent_bar = 100;
 					break;
@@ -236,8 +237,8 @@ $(document).on('click','.btn-num-product-down', function(){
 			var cart_index = cart_items.findIndex(item => item.entities_id === index);
 			$(this).next().val(numProduct);
 			cart_items[cart_index].quantity--;
-			if(cart_items[cart_index].status===1){//check if food have been orderd
-				cart_items[cart_index].status = 0.5;
+			if(cart_items[cart_index].status>=1){//check if food have been orderd
+				cart_items[cart_index].status = 0;
 				cart_items[cart_index].status_name = 'Processing';
 			}
 			cal_total(cart_items);
@@ -259,8 +260,8 @@ $(document).on('click','.btn-num-product-up', function(){
 	var index = $(this).parent('div.wrap-num-product').data('id');
 	var cart_index = cart_items.findIndex(item => item.entities_id === index);
 	cart_items[cart_index].quantity++;
-	if(cart_items[cart_index].status===1){//check if food have been orderd
-		cart_items[cart_index].status = 0.5;
+	if(cart_items[cart_index].status>=1){//check if food have been orderd
+		cart_items[cart_index].status = 0;
 		cart_items[cart_index].status_name = 'Processing';
 	}
 	cal_total(cart_items);
@@ -282,8 +283,8 @@ $(document).on("change","input.num-product",function(){
 		$(this).val(cart_items[cart_index].quantity);
 	}else{
 		cart_items[cart_index].quantity = numProduct;
-		if(cart_items[cart_index].status===1){//check if food have been orderd
-			cart_items[cart_index].status = 0.5;
+		if(cart_items[cart_index].status>=1){//check if food have been orderd
+			cart_items[cart_index].status = 0;
 			cart_items[cart_index].status_name = 'Processing';
 		}
 		cal_total(cart_items);
@@ -381,7 +382,7 @@ function Order(url,idStore,access_token){
 			cart_items = JSON.parse(localStorage.cart_items);
 		}
 		cart_items.forEach(function(obj){
-			if(obj.status<1){
+			if(obj.status ===0){
 				cart_update.push(obj);
 			}
 		});
