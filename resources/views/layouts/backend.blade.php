@@ -151,6 +151,16 @@
                                     <?php }?>
                                 </ul>
                             </li>
+
+                            {{--Store Manager--}}
+                            <li><a><i class="fa fa-briefcase"></i> Store Manager <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a href="{{route('getListStore')}}">List Store</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
                             <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <?php if(\App\Core\Helpers\AuthHelper::IsAccess('form_template')==true){ ?>

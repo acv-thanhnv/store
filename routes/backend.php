@@ -161,7 +161,24 @@
             //Delete
             Route::get("deleteStore","StoreController@deleteStore")->name("deleteStore");
             Route::get("deleteAllStore","StoreController@deleteAllStore")->name("deleteAllStore");
+
         });
+
+        //Group Manage Store
+        Route::group(["prefix" => "StoreManager"],function(){
+            Route::get("listStore","StoreManagerController@getStoreManager")->name("getListStore");
+            //add
+            Route::get("addStore","StoreManagerController@addStoreManager")->name("addStoreManager");
+            Route::post("addStore","StoreManagerController@postAddStoreManager");
+            //Edit
+            Route::get("editStore","StoreManagerController@getEditStoreManager")->name("editStoreManager");
+            Route::post("editStore","StoreManagerController@postEditStoreManager")->name("postEditStoreManager");
+            //Delete
+            Route::get("deleteStore","StoreManagerController@deleteStoreManager")->name("deleteStoreManager");
+            Route::get("deleteAllStore","StoreManagerController@deleteAllStoreManager")->name("deleteAllStoreManager");
+
+        });
+
         //Dashboard
         Route::group(["prefix" => "dashboard"],function(){
 
