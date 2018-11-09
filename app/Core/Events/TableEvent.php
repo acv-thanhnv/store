@@ -4,6 +4,8 @@ namespace App\Core\Events;
 
 use App\Core\Common\FoodStatusValue;
 use App\Core\Common\OrderConst;
+use App\Core\Common\TableConst;
+use App\Core\Dao\SDB;
 use App\Core\Helpers\CommonHelper;
 use Illuminate\Broadcasting\Broadcasters\PusherBroadcaster;
 use Illuminate\Broadcasting\Channel;
@@ -24,37 +26,37 @@ class TableEvent implements ShouldBroadcast
     public $color;
     public function __construct($idStore,$idTable)
     {
-        $NoDone  =0;
-        $Done    =0;
-        $Process =0;
-        $this->idTable      = $idTable;
-        $this->idStore     = $idStore;
+        $NoDone  =0;//đếm order chờ xác nhận
+        $Done    =0;//đếm order đang chờ biến hoặc hoàn thành
         $arrTable = SDB::table('store_order')
-                    ->where('location_id',$location_id)
+                    ->where('location_id',$idTable)
                     ->where('store_id',$idStore)
                     ->select('id','status')
                     ->get();
+        //nếu bàn đó ko còn order nào thì hiện bàn trống
         if(count($arrTable)==0){
-        }
-        foreach($arrTable as $obj){
-            switch ($obj->status) {
-                case FoodStatusValue::NoDone:
-                    $NoDone++;
-                    break;
-                case FoodStatusValue::Process:
-                    $Process++;
-                    break;
-                default:
-                    $Done++;
-                    break;
+            $color = TableConst::noOrder;
+        }else{
+            foreach($arrTable as $obj){
+                switch ($obj->status) {
+                    case FoodStatusValue::NoDone:
+                        $NoDone++;
+                        break;
+                    default:
+                        $Done++;
+                        break;
+                }
+            }
+            //nếu cớ order chờ thì bàn màu..., ngược lại đang chế biến hoặc chế biến xong thì màu...
+            if($NoDone>0){
+                $color = TableConst::haveOrder;
+            }else{
+                $color = TableConst::Done;
             }
         }
-        if($NoDone>0){
-            $color = FoodStatusValue::NoDone;
-        }else if($){
-
-        }
-        $this->order       = $order;
+        $this->idTable      = $idTable;
+        $this->idStore     = $idStore;
+        $this->color   = $color;
     }
 
     /**
@@ -64,7 +66,7 @@ class TableEvent implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::Customer2Order;
+        return TableConst::TableColorEvent;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -73,6 +75,6 @@ class TableEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->idStore,OrderConst::Customer2Order));
+        return new Channel(CommonHelper::getOrderEventName($this->idStore,TableConst::TableColorEvent));
     }
 }

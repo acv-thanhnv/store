@@ -110,7 +110,7 @@ $im:!important;
         background-color: #5C6FA2;
         .table-name {
 
-          color: #CCCCCC;
+          color: white;
         }
       }
     }
@@ -211,6 +211,13 @@ $im:!important;
 }
 .entities_item:hover{
   cursor: pointer;
+}
+.new_order{
+  color:white;
+}
+.new_order:hover{
+  background: #E94D4D $im;
+  color:white;
 }
 @media only screen and (max-width: 768px) {
 }

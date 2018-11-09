@@ -84,6 +84,8 @@ class OrderConst{
     
     const OrderChannelToWaiter       = "waiter2waiter";
     const OrderEventName             = "order.waiter";
+
+    const OrderDeleteEvent           = 'order_delete';
     
     
     const OrderChannelToChef         = "order2chef";
@@ -100,6 +102,12 @@ class OrderConst{
 }
 class EntityProperty{
     const maxField = 10;
+}
+class TableConst{
+    const TableColorEvent = 'table_color_event';
+    const noOrder         = 'blue';
+    const haveOrder       = '#EA3232';
+    const Done            = '#EEA045';
 }
 class StorageDisk{
     const diskLocalName = "public";

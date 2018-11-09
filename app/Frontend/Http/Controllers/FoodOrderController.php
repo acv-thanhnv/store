@@ -12,6 +12,7 @@ use App\Core\Entities\DataResultCollection;
 use App\Core\Events\Customer2OrderManagerPusher;
 use App\Core\Events\OrderPusherEvent;
 use App\Core\Events\OrderStatusPusherEvent;
+use App\Core\Events\TableEvent;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
@@ -280,6 +281,8 @@ class FoodOrderController extends Controller
         event(new Customer2OrderManagerPusher($idStore,$order,$arrOrderDetail));
         //call pusher when order, status food change
         event(new OrderStatusPusherEvent($request->access_token,$orderId,$arrOrderDetail));
+        //call event bind table color
+        event(new TableEvent($idStore,$request->table));
         return $orderId;
     }
     public function FoodDetail(Request $request)
@@ -346,5 +349,7 @@ class FoodOrderController extends Controller
         $idStore = $arrOrder[0]->store_id;
         //call event send to Order
         event(new Customer2OrderManagerPusher($idStore,$arrOrder[0],$arrOrderDetail));
+        //call event bind table color
+        event(new TableEvent($idStore,$arrOrder[0]->location_id));
     }
 }

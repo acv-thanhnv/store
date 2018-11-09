@@ -8,9 +8,11 @@ use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
+use App\Core\Events\Customer2OrderManagerPusher;
 use App\Core\Events\Order2ChefPusher;
 use App\Core\Events\OrderPusherEvent;
 use App\Core\Events\OrderStatusPusherEvent;
+use App\Core\Events\TableEvent;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
@@ -186,18 +188,11 @@ class FoodController extends Controller
 
     public function deleteFoodOrderDetail(Request $request)
     {
-        //get access token and orderId
-        $arrOrder       = SDB::table('store_order as order')
-                        ->join('store_order_detail as detail','order.id','=','detail.order_id')
-                        ->where('detail.id',$request->idOrderDetail)
-                        ->select('order.id','order.access_token')
-                        ->get();
+        $orderId = $request->orderId;
         //delete food item
         SDB::table('store_order_detail')
         ->where('id',$request->idOrderDetail)
         ->delete();
-        $access_token   = $arrOrder[0]->access_token;
-        $orderId        = $arrOrder[0]->id;
         //get new list food items of order
         $arrOrderDetail = SDB::table('store_order_detail')
                             ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
@@ -205,25 +200,67 @@ class FoodController extends Controller
                             ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
                             ->where('order_id',$orderId)
                             ->get();
+        $Process = 0;//variable count food was processed
+        $NoDone  = 0;//variable count food not done
         foreach($arrOrderDetail as $obj){
+            //check status of food, nếu ko có món nào là đang chờ xác nhận thì status của order chuyển theo món
+            switch ($obj->status) {
+                case FoodStatusValue::Process:
+                    $Process ++;
+                    break;
+                default:
+                    $NoDone++;
+            }
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
             }else{
                 $obj->src = CommonHelper::getImageUrl($obj->image);
             }
         }
+        if($NoDone>0){//nếu order đó có món ăn chưa xác nhận thì order status là chưa xác nhận
+            SDB::table('store_order')->where('id',$orderId)->update(['status'=>OrderStatusValue::NoDone]);
+        }else if($Process>0){// ng lại, nếu có món đang chế biến thì status là đang chế biến
+            SDB::table('store_order')->where('id',$orderId)->update(['status'=>OrderStatusValue::Process]);
+        }else{//còn lại là xong rồi
+            SDB::table('store_order')->where('id',$orderId)->update(['status'=>OrderStatusValue::Done]);
+        }
+        //get access token and orderId
+        $arrOrder       = SDB::table('store_order as order')
+                        ->join('store_order_status as status','status.value','=','order.status')
+                        ->where('order.id',$orderId)
+                        ->select('order.*','status.name as status_name')
+                        ->get();
+        $idStore        = $arrOrder[0]->store_id;
+        $access_token   = $arrOrder[0]->access_token;
+        $idTable        = $arrOrder[0]->location_id;
+        //sau khi xóa gọi lại đúng hàm này đề build lại dữ liệu của order đó
+        event(new Customer2OrderManagerPusher($arrOrder[0]->store_id,$arrOrder[0],$arrOrderDetail));
+        //call event bind table color
+        event(new TableEvent($idStore,$idTable));
         //call event get status and return response for customer 
         event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrderDetail));
     }
 
     public function deleteOrder(Request $request)
     {
+        $arrOrder       = SDB::table('store_order')
+                            ->where('id',$request->orderId)
+                            ->select('access_token','store_id','location_id')
+                            ->get();
+        $access_token   = $arrOrder[0]->access_token;
+        $idStore        = $arrOrder[0]->store_id;
+        $idTable        = $arrOrder[0]->location_id;      
+        ///delete order
         SDB::table('store_order')
         ->where('id',$request->orderId)
         ->delete();
-
+        //delete order detail
         SDB::table('store_order_detail')
         ->where('order_id',$request->orderId)
         ->delete();
+        //call event get status and return response for customer 
+        event(new OrderStatusPusherEvent($access_token,$request->orderId,null,1));
+        //call event bind table color
+        event(new TableEvent($idStore,$idTable));
     }
 }

@@ -89,6 +89,9 @@
                 <li class="active">
                     <a href="#"><span id="table-id">Bàn</span>/<span id="floor-id">Tầng</span></a>
                 </li>
+                <li>
+                    <a href="#" class="fa fa-plus new_order"> New Order</a>
+                </li>
                 <li style="float: right; margin-right: 10px;">
                     <div class="dropdown">
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span
@@ -189,14 +192,19 @@
                 cluster: '{{env('PUSHER_APP_CLUSTER')}}',
                 encrypted: true
             });
-        var eventName = "{{\App\Core\Common\OrderConst::Customer2Order}}";
-        var channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\OrderConst::Customer2Order)}}';
-        var channel = pusher.subscribe(channel_name);
-        channel.bind(eventName, function(data){
+        //table event
+        var TableEventName = '{{\App\Core\Common\TableConst::TableColorEvent}}';
+        var table_channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\TableConst::TableColorEvent)}}';
+        var table_channel = pusher.subscribe(table_channel_name);
+        table_channel.bind(TableEventName, function(data){
+            $('*[location-id="'+data.idTable+'"]').removeClass('have-order have-update').css({'background-color':data.color,'color':'white'});
+        });
+        //order event
+        var OrderEventName = "{{\App\Core\Common\OrderConst::Customer2Order}}";
+        var order_channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\OrderConst::Customer2Order)}}';
+        var order_channel = pusher.subscribe(order_channel_name);
+        order_channel.bind(OrderEventName, function(data){
             console.log(data);
-            $('*[location-id="'+data.order.location_id+'"]').removeClass('have-order');
-            //remove class order, add class update
-            $('*[location-id="'+data.order.location_id+'"]').addClass("have-update");
             //get order and append
             if(data.order.location_id==idTable && idStore == data.idStore){
                 genOrderRealtime(data.order,data.result);
@@ -378,6 +386,12 @@
         getOrderByLocation(idTable,idStore);
 
     });
+
+    //======================add new order=========================
+    $(document).on('click','.new_order',function(e){
+        e.preventDefault();
+        console.log(1);
+    })
 
     function getOrderByLocation(idTable,idStore){
         $.ajax({
@@ -757,7 +771,8 @@
     //======================delete food item of each order=========================
     $(document).on('click','.delete-order-detail',function(){
         var idOrderDetail = $(this).data('order-detail');
-        var row = $(this).parents('.row-order-detail');
+        var orderId       = $(this).parents('.entities-row-detail').attr('order-id');
+        var row           = $(this).parents('.row-order-detail');
         $.confirm({
             title         : '<p class="text-danger">Warning</p>',
             icon          : 'fa fa-exclamation-circle',
@@ -776,7 +791,7 @@
                         $.ajax({
                             url: '{{route("deleteFoodOrderDetail")}}',
                             type: 'GET',
-                            data: {idOrderDetail: idOrderDetail},
+                            data: {idOrderDetail: idOrderDetail,orderId:orderId},
                             success: function (data) {
                                 notify('Success','success','This food item was successfully deleted !','#398717','#2F6227');
                             },
