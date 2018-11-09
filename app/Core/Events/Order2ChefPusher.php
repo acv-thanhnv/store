@@ -13,7 +13,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class OrderChefPusherEvent implements ShouldBroadcast
+class Order2ChefPusher implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -23,25 +23,13 @@ class OrderChefPusherEvent implements ShouldBroadcast
      * @return void
      */
     public $storeId;
-    public $orderId;
-    public $locationId;
-    public $locationName;
-    public $entity;
-    public $totalPrice;
-    public $dateTimeOrder;
-    public $description;
-    public $requestType;
-    public function __construct($storeId,$orderId,$locationId,$locationName,$totalPrice,$description, $requestType,$now,$entity)
+    public $orderDetails;
+    public $foodDetails;
+    public function __construct($storeId,$orderDetails,$foodDetails)
     {
-        $this->storeId = $storeId;
-        $this->entity = $entity;
-        $this->orderId = $orderId;
-        $this->locationId = $locationId;
-        $this->locationName = $locationName;
-        $this->totalPrice = $totalPrice;
-        $this->description =  $description;
-        $this->dateTimeOrder = $now;
-        $this->requestType = $requestType;
+        $this->storeId      = $storeId;
+        $this->orderDetails = $orderDetails;
+        $this->foodDetails  = $foodDetails;
     }
     /**
      * The event's broadcast name.
@@ -50,7 +38,7 @@ class OrderChefPusherEvent implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::OrderChefEventName;
+        return OrderConst::Order2ChefEvent;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -59,6 +47,6 @@ class OrderChefPusherEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OrderChannelToChef));
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::Order2ChefEvent));
     }
 }

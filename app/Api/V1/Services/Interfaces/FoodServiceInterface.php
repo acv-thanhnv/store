@@ -20,9 +20,7 @@ interface FoodServiceInterface
 
     public function getFloorsByStore($idStore);
 
-    public function getLocationbyFloor($idFloor, $idStore);
-
-    public function getLocation($idLocation, $idStore);
+    public function getLocation($idStore,$idFloor);
 
     public function getOrderByLocation($idLocation, $idStore);
 

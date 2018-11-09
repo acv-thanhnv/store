@@ -12,6 +12,8 @@ class ApiServiceProvider extends ServiceProvider
     protected $services = [
         Interfaces\FoodServiceInterface ::class => Production\FoodService ::class,
         Interfaces\OrderServiceInterface ::class => Production\OrderService ::class,
+        Interfaces\KitchenServiceInterface ::class => Production\KitchenService ::class,
+        Interfaces\CashierServiceInterface ::class => Production\CashierService ::class,
     ];
     /**
      * Bootstrap services.
