@@ -297,6 +297,7 @@ function deleteCartItem(url){
 	$(document).on("click","span.delete-food-cart",function(){
 		var row = $(this).parents("li.header-cart-item");
 		var index = $(row).find(".wrap-num-product").data("id");
+		var orderId = localStorage.orderId;
 		$.confirm({
 			title         : '<p class="text-danger">Warning</p>',
 			icon          : 'fa fa-exclamation-circle',
@@ -311,37 +312,44 @@ function deleteCartItem(url){
 					btnClass: 'btn btn-primary',
 					action  : function (){
 						var cart_index = cart_items.findIndex(item => item.entities_id === index);
-						if(cart_items[cart_index].cooked===0){
-							$(row).remove();
-							$.ajax({
-								type: 'POST',
-								headers: {
-									'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-								},
-								url: url,
-								data:{
-									id:cart_items[cart_index].id
-								},
-								success: function (data) {
-									notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
-									cart_items.splice(cart_index,1);
-									cal_total(cart_items);
-									localStorage.cart_items = JSON.stringify(cart_items);
-									cart_total--;
-									$(".js-show-cart").attr("data-notify",cart_total);
-									if(cart_total===0){
-										$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
-										localStorage.removeItem('hasAlert');
-										hideAlert();
+						$(row).remove();
+						var foodId = cart_items[cart_index].id;
+						var cooked = cart_items[cart_index].cooked;
+						cart_items.splice(cart_index,1);
+						cal_total(cart_items);
+						localStorage.cart_items = JSON.stringify(cart_items);
+						cart_total--;
+						$(".js-show-cart").attr("data-notify",cart_total);
+						notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
+						if(cart_total===0){
+						$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
+						localStorage.removeItem('hasAlert');
+						hideAlert();
+						}
+						if(typeof (foodId) !== 'undefined'){//nếu món đó đã có trong DB rồi thì mới ajax đi
+							if(cooked===0){
+								console.log(foodId);
+								console.log(cooked);
+								$.ajax({
+									type: 'POST',
+									headers: {
+										'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+									},
+									url: url,
+									data:{
+										id:foodId,
+										orderId:orderId
+									},
+									success: function (data) {
+									},
+									error:function(){
+										notify('Error','error','Oh maybe something went wrong, please order againt!','#F4A950');
 									}
-								},
-								error:function(){
-									notify('Error','error','Oh maybe something went wrong, please order againt!','#F4A950');
-								}
-							})
-					}else{
-						notify('Error','error','Sorry your food have been cooked, you cannot delete it','#DA3C3C');
-					}
+								})
+							}else{
+								notify('Error','error','Sorry your food have been cooked, you cannot delete it','#DA3C3C');
+							}
+						}
 				}
 			},
 			cancel: {

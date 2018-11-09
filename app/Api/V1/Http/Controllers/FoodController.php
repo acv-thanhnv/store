@@ -196,9 +196,34 @@ class FoodController extends Controller
 
     public function deleteFoodOrderDetail(Request $request)
     {
+        //get access token and orderId
+        $arrOrder       = SDB::table('store_order as order')
+                        ->join('store_order_detail as detail','order.id','=','detail.order_id')
+                        ->where('detail.id',$request->idOrderDetail)
+                        ->select('order.id','order.access_token')
+                        ->get();
+        //delete food item
         SDB::table('store_order_detail')
         ->where('id',$request->idOrderDetail)
         ->delete();
+        $access_token   = $arrOrder[0]->access_token;
+        $orderId        = $arrOrder[0]->id;
+        //get new list food items of order
+        $arrOrderDetail = SDB::table('store_order_detail')
+                            ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
+                            ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
+                            ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
+                            ->where('order_id',$orderId)
+                            ->get();
+        foreach($arrOrderDetail as $obj){
+            if($obj->image==NULL){
+                $obj->src = url('/')."/common_images/no-store.png";
+            }else{
+                $obj->src = CommonHelper::getImageUrl($obj->image);
+            }
+        }
+        //call event get status and return response for customer 
+        event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrderDetail));
     }
 
     public function deleteOrder(Request $request)
