@@ -21,6 +21,19 @@ use Illuminate\Http\Request;
 
 class FoodService extends BaseService implements FoodServiceInterface
 {
+    //====================get location and floor===============
+    public function getLocationFloor($storeId)
+    {
+        $list = SDB::table('store_floor')
+            ->where('store_floor.store_id','=',$storeId)
+            ->get();
+        foreach ($list as $floor){
+            $floor->location = SDB::table('store_location')
+                ->where('store_location.floor_id','=',$floor->id)
+                ->get();
+        }
+        return $list;
+    }
     //====================get food===============
     public function getFoodByStoreId($storeId = null)
     {
@@ -61,51 +74,53 @@ class FoodService extends BaseService implements FoodServiceInterface
     }
 
     //===================get location========================
-    public function getLocation($idStore)
-    {
-        $list = SDB::table('store_location')
-            ->select('*', 'store_location.name as location_name', 'store_location.id as location_id', 'store_floor.id as floor_id', 'store_floor.name as floor_name')
-            ->join('store_floor', 'store_location.floor_id','=', 'store_floor.id')
-            ->where('store_floor.store_id', $idStore)
-            ->get();
-        return $list;
-    }
-    //===================get location by floor========================
-    public function getLocationbyFloor($idFloor, $idStore)
+    public function getLocation($idStore,$idFloor)
     {
         if ($idFloor != null) {
             $list = SDB::table('store_location')
-                ->select('*')
-                ->where('floor_id', $idFloor)
-                ->where('store_id', $idStore)
+                ->select('store_location.*', 'store_location.name as location_name', 'store_location.id as location_id', 'store_floor.id as floor_id', 'store_floor.name as floor_name')
+                ->join('store_floor', 'store_location.floor_id','=', 'store_floor.id')
+                ->where('store_floor.store_id', $idStore)
+                ->where('store_location.floor_id', $idFloor)
                 ->get();
-        } else {
+        }else {
             $list = SDB::table('store_location')
-                ->select('*')
-                ->where('store_id', $idStore)
+                ->join('store_floor','store_location.floor_id','=','store_floor.id')
+                ->select('store_location.*','store_floor.name as floor_name')
+                ->where('store_floor.store_id', $idStore)
                 ->get();
         }
         return $list;
     }
 
-
     //===================get Order by location========================
     public function getOrderByLocation($idLocation, $idStore)
     {
         $order = SDB::table('store_order')
-            ->select('*','store_order.id', 'store_order.datetime_order', 'store_order.status', 'store_location.name as location_name')
+            ->select('*','store_order.id', 'store_order.datetime_order', 'status.name as status_name', 'store_location.name as location_name')
             ->join('store_location', 'store_order.location_id', '=', 'store_location.id')
+            ->join('store_order_status as status','status.value','=','store_order.status')
             ->where('store_order.store_id', $idStore)
             ->where('store_order.location_id', $idLocation)
+            ->where('store_order.status','<',OrderStatusValue::Pay)
+            ->orderby('store_order.id','asc')
             ->get();
-
         foreach($order as $order_detail){
-            $order_detail-> detail = SDB::table('store_order_detail')
-                ->join ('store_entities','store_order_detail.entities_id','=','store_entities.id')
-                ->where('store_order_detail.order_id','=', $order_detail->id)
+            $order_detail ->detail = SDB::table('store_order_detail as o_detail')
+                ->join ('store_entities','o_detail.entities_id','=','store_entities.id')
+                ->join('store_order_detail_status as s_detail','s_detail.value','=','o_detail.status')
+                ->select('o_detail.*','store_entities.name','store_entities.image','store_entities.price','s_detail.status_name')
+                ->where('o_detail.order_id','=', $order_detail->id)
                 ->get();
+            foreach($order_detail ->detail as $foodItem){
+                //check avatar
+                if($foodItem->image==NULL){
+                    $foodItem->src = url('/')."/common_images/no-store.png";
+                }else{
+                    $foodItem->src = CommonHelper::getImageUrl($foodItem->image);
+                }
+            }
         };
-
         return $order;
     }
 
