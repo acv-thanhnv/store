@@ -54,6 +54,7 @@
             </div>
         </div>
         <div class="entities-row-detail" style="display: none">
+            <span class="no-data dis-none"><i class="fa fa-minus-circle"></i> No data found!</span>
         </div>
     </div>
     </div>

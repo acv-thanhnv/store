@@ -318,19 +318,24 @@ class FoodOrderController extends Controller
                     ->get();
         $Process = 0;//variable count food was processed
         $NoDone  = 0;//variable count food not done
-        foreach($arrOrderDetail as $obj){
-            //check status of food, nếu ko có món nào là đang chờ xác nhận thì status của order chuyển theo món
-            switch ($obj->status) {
-                case FoodStatusValue::Process:
-                    $Process ++;
-                    break;
-                default:
-                    $NoDone++;
-            }
-            if($obj->image==NULL){
-                $obj->src = url('/')."/common_images/no-store.png";
-            }else{
-                $obj->src = CommonHelper::getImageUrl($obj->image);
+        //nếu người dùng xóa món,order trống thì tình trạng là chưa xác nhận
+        if(count($arrOrderDetail)==0){
+            $NoDone++;
+        }else{
+            foreach($arrOrderDetail as $obj){
+                //check status of food, nếu ko có món nào là đang chờ xác nhận thì status của order chuyển theo món
+                switch ($obj->status) {
+                    case FoodStatusValue::Process:
+                        $Process ++;
+                        break;
+                    default:
+                        $NoDone++;
+                }
+                if($obj->image==NULL){
+                    $obj->src = url('/')."/common_images/no-store.png";
+                }else{
+                    $obj->src = CommonHelper::getImageUrl($obj->image);
+                }
             }
         }
         if($NoDone>0){//nếu order đó có món ăn chưa xác nhận thì order status là chưa xác nhận

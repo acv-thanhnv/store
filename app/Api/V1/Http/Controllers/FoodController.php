@@ -105,6 +105,54 @@ class FoodController extends Controller
         return ResponseHelper::JsonDataResult($result);
     }
 
+    public function search(Request $request)
+    {
+        $idStore        = $request->idStore;
+        $key            = $request->key;
+        $tab            = $request->tab;
+        $result         = new DataResultCollection();
+        $result->status = SDBStatusCode::OK;
+        //nếu search table
+        if($tab=='table'){
+            $arrTable  = SDB::table('store_location as table')
+                            ->join('store_floor as floor','floor.id','=','table.floor_id')
+                            ->where('table.name','like','%'.$key.'%')
+                            ->where('floor.store_id',$idStore)
+                            ->select('table.*')
+                            ->paginate(10);
+            foreach($arrTable as $obj){
+                $obj->arrOrder =   SDB::table('store_order as order')
+                                        ->where('order.location_id',$obj->id)
+                                        ->where('order.store_id',$idStore)
+                                        ->orderby('order.id','asc')
+                                        ->get();
+            }
+            $result->data = $arrTable;
+            $result->tab  = 'table';
+        }else{
+            $result->data   = SDB::table('store_entities as food')
+                            ->join('store_menu as menu','menu.id','=','food.menu_id')
+                            ->where('food.name','like','%'.$key.'%')
+                            ->where('menu.store_id',$idStore)
+                            ->select('food.*')
+                            ->paginate(10);
+            $result->tab  = 'menu';
+        }
+        return ResponseHelper::JsonDataResult($result);
+    }
+
+    public function newOrder(Request $request)
+    {
+        $Order["datetime_order"] = CommonHelper::dateNow();
+        $Order["store_id"]       = $request->idStore;
+        $Order["location_id"]    = $request->idTable;
+        $Order["status"]         = OrderStatusValue::NoDone;
+        $idOrder                 = SDB::table('store_order')->insertGetId($Order);
+        $Order["id"]             = $idOrder;
+        $Order["status_name"]    = CommonHelper::getOrderStatusName($Order["status"]);              
+        return $Order;
+    }
+
     public function Order2Chef(Request $request)
     {
         $Order = (object) $request->objOrder;

@@ -42,9 +42,14 @@ Route::get('/api/v1/food/list-order-by-location', 'FoodController@getOrderByLoca
 Route::get('/api/v1/food/get-location', 'FoodController@getLocation')->name('food/get-location');
 
 Route::get('/api/v1/food/get-order-detail', 'FoodController@getOrderDetail')->name('food/get-order-detail');
+//new order
+Route::get('newOrder', 'FoodController@newOrder')->name('newOrder');
 
 //send order to chef
 Route::post('Order2Chef', 'FoodController@Order2Chef')->name('Order2Chef');
+
+//search table/menu
+Route::get('order/search', 'FoodController@search')->name('OrderSearch');
 
 //delete food order detail
 Route::get('deleteFoodOrderDetail', 'FoodController@deleteFoodOrderDetail')->name('deleteFoodOrderDetail');
