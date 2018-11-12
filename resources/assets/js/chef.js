@@ -185,7 +185,7 @@ function pushToWaiterTable(result) {
 		}
 		$.ajax({
 			type:'POST',
-			url:'/update',
+			url:rootPath+'/update',
 			data: formData
 		}).done(function(result) {
 			console.log(result)
@@ -237,7 +237,7 @@ function pushToWaiterTable(result) {
 		
 		$.ajax({
 			type:'POST',
-			url:'/rollback',
+			url:rootPath+'/rollback',
 			data: formData
 		}).done(function(result) {
 			console.log(result)
@@ -307,6 +307,7 @@ order2kitchen.bind('update-order-at-kichen', function(res) {
 var waiter2waiter = pusher.subscribe(md5(storeId)+'-waiter2waiter')
 waiter2waiter.bind('update-order-at-kichen', function(res) {
 	loadRollbackTable()
+	loadOrderListTable()
 	console.log(res)
 	var time = res.time
 	var orderId = res.orderId
@@ -332,7 +333,10 @@ waiter2waiter.bind('update-order-at-kichen', function(res) {
 		}
 		console.log(obj)
 		pushToloadRollbackTable(obj)
-		if (clearAll==1) $(detectOrder).addClass('hidden')
+		if (clearAll==1) {
+			$(detectOrder).addClass('hidden')
+			loadWaiterTable()
+		}
 			if (quantity!=cooked) {
 				$(detect+' td').eq(1).html(cooked+'/'+quantity)
 				$(detect+' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button>')
