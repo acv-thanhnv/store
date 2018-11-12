@@ -77,7 +77,7 @@ module.exports = __webpack_require__(72);
 /***/ (function(module, exports, __webpack_require__) {
 
 storeId = $('#config').attr('storeId');
-//js here
+
 $(document).ready(function () {
 	$("#header-left a").click(function () {
 		$(this).tab('show');
@@ -87,13 +87,8 @@ $(document).ready(function () {
 	loadOrderListTable();
 });
 
-/*function loadRollbackTable() {
-	var output='<table id="roll-back" class="table table-hover red-blue-table" data-toggle="table" data-search="true"> <thead> <tr> <th style="width: 35%" data-field="name">Tên món</th> <th style="width:15%" data-field="invoice">Hóa đơn</th> <th style="width: 10%" data-field="quantity">SL</th> <th style="width: 30%" data-field="action">Thao tác</th> <th style="width: 20%"></th> </tr> </thead> <tbody id="rollback-body">';
-	output+="</tbody> <tfoot></tfoot> </table>";
-	$('#hoan-tac').html(output)
-}*/
-
 function pushToOrderListTable(result) {
+	console.log(result);
 	var output = '';
 	var orderId = result.orderDetails[0].order_id;
 	var table = result.orderDetails[0].table;
@@ -162,7 +157,6 @@ function loadRollbackTable() {
 }
 
 function pushToWaiterTable(result) {
-	console.log(result);
 	var output = '';
 	var orderId = result.orderDetails[0].order_id;
 	var table = result.orderDetails[0].table;
@@ -209,7 +203,6 @@ function loadWaiterTable() {
 }
 
 $(document).on("click", ".push-food", function (e) {
-	/*e.preventDefault();*/
 	var orderId = $(this).parents('tr').attr('orderId');
 	var foodId = $(this).parents('tr').attr('foodId');
 	var foodName = $(this).parents('tr').attr('foodName');
@@ -258,7 +251,6 @@ $(document).on("click", ".push-food", function (e) {
 });
 
 $(document).on("click", ".rollback", function (e) {
-	/*e.preventDefault();*/
 	var orderId = $(this).parents('tr').attr('orderId');
 	var foodId = $(this).parents('tr').attr('foodId');
 	var push = $(this).parents('tr').attr('push');
@@ -296,13 +288,14 @@ $(document).on("click", ".rollback", function (e) {
 		push: push,
 		time: time
 	};
-	// $('#'+id).addClass('hidden')
+
 	$.ajax({
 		type: 'POST',
 		url: '/rollback',
 		data: formData
 	}).done(function (result) {
 		console.log(result);
+		$(this).parents('tr').addClass('hidden');
 	}).fail(function () {
 		console.log('false');
 	});
@@ -325,7 +318,6 @@ function loadJSON(file, callback) {
 	xobj.open('GET', file, true); // Replace 'my_data' with the path to your file
 	xobj.onreadystatechange = function () {
 		if (xobj.readyState == 4 && xobj.status == "200") {
-			// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
 			callback(xobj.responseText);
 		}
 	};
@@ -361,30 +353,19 @@ function searchFor() {
 	}
 }
 
-/*$('tr.t-header2').nextUntil('tr.t-header2').slideToggle(0, function(){
-
-});
-$('.t-header2-collapse').click(function(){
-	$(this).find('span:first-child').text(function(_, value){return value=='-'?'+':'-'});
-	$(this).parents('tr').nextUntil('tr.t-header2').slideToggle(100, function(){
-
-	});
-});*/
-
 var pusher = new Pusher("120973d888acaaed6fef", {
 	cluster: "ap1",
 	encrypted: true
 });
 
-var order2chef = pusher.subscribe(md5(storeId) + '-order2chef');
-order2chef.bind('new-order', function (res) {
+var order2kitchen = pusher.subscribe(md5(storeId) + '-order2kitchen');
+order2kitchen.bind('update-order-at-kichen', function (res) {
 	pushToOrderListTable(res);
 	pushToWaiterTable(res);
-	/*loadWaiterTable()*/
 });
 
 var waiter2waiter = pusher.subscribe(md5(storeId) + '-waiter2waiter');
-waiter2waiter.bind('update-order-cooked', function (res) {
+waiter2waiter.bind('update-order-at-kichen', function (res) {
 	loadRollbackTable();
 	console.log(res);
 	var time = res.time;
