@@ -3,6 +3,7 @@
 namespace App\Api\V1\Http\Controllers;
 use App\Api\V1\Services\Interfaces\FoodServiceInterface;
 use App\Api\V1\Services\Interfaces\OrderServiceInterface;
+use App\Core\Common\FoodConst;
 use App\Core\Common\FoodStatusValue;
 use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
@@ -135,7 +136,7 @@ class FoodController extends Controller
                             ->where('food.name','like','%'.$key.'%')
                             ->where('menu.store_id',$idStore)
                             ->select('food.*')
-                            ->paginate(10);
+                            ->paginate(FoodConst::foodPerPage);
             $result->tab  = 'menu';
         }
         return ResponseHelper::JsonDataResult($result);
