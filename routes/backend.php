@@ -106,7 +106,7 @@
         });
         //Group Food
         Route::group(["prefix" => "Food"],function(){
-            Route::get("list","FoodController@getFood")->name("getFood");
+            Route::get("list","FoodController@getFood")->name("getFoodManager");
             //add
             Route::get("addFood","FoodController@getAddFood")->name("addFood");
             Route::post("addFood","FoodController@postAddFood");
@@ -130,6 +130,8 @@
             //Edit
             Route::get("editTable","TableController@getEditTable")->name("editTable");
             Route::post("editTable","TableController@update")->name("postEditTable");
+            //get table price
+            Route::get("tablePrice","TableController@tablePrice")->name("tablePrice");
             //Delete
             Route::get("deleteTable","TableController@deleteTable")->name("deleteTable");
             Route::get("deleteAllTable","TableController@deleteAllTable")->name("deleteAllTable");

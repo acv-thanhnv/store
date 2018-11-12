@@ -139,7 +139,7 @@
                                         <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getType')==true){ ?>
                                     <li><a href="{{route('getType')}}">Mẫu món ăn</a></li><?php }?>
                                         <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getFood')==true){ ?>
-                                    <li><a href="{{route('getFood')}}">Món ăn</a></li>
+                                    <li><a href="{{route('getFoodManager')}}">Món ăn</a></li>
                                         <?php }?>
                                 </ul>
                             </li>

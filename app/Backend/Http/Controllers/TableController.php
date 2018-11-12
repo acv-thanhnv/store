@@ -9,12 +9,13 @@
 namespace App\Backend\Http\Controllers;
 use App\Backend\Services\Interfaces\TableServiceInterface;
 use App\Backend\Services\Production\TableService;
-use App\Core\Helpers\CommonHelper;
-use App\Core\Entities\DataResultCollection;
 use App\Core\Common\SDBStatusCode;
+use App\Core\Dao\SDB;
+use App\Core\Entities\DataResultCollection;
+use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use function MongoDB\BSON\toJSON;
 
 
@@ -27,7 +28,7 @@ class TableController
         $this->tableService   = $tableService;
     }
     public function getMyTable(Request $request){
-        $storeId = 1;
+        $storeId = CommonHelper::getStoreId();
         $table= $this->tableService->getMyTable($storeId);
         $result = new DataResultCollection();
         $result->status = SDBStatusCode::OK;
@@ -38,9 +39,9 @@ class TableController
 
     public function getAddTable(Request $request)
     {
-        $storeId=$request->storeId;
-        $type=$this->tableService->getTypeLocation();
-        $floor = $this->tableService->getFloor(1);
+        $storeId = CommonHelper::getStoreId();
+        $type    =$this->tableService->getTypeLocation($storeId);
+        $floor   = $this->tableService->getFloor($storeId);
         return view("backend.table.add",['floor'=>$floor, 'type'=>$type]);
     }
 
@@ -53,7 +54,6 @@ class TableController
             'name'=>$request->name,
             'type_location_id'=>$request->type,
             'floor_id'=>$request->floor,
-            'price'=>$request->price,
         ]);
 
         if(!$validator->fails()){
@@ -71,11 +71,20 @@ class TableController
 
     public function getEditTable(Request $request)
     {
-        $storeID =$request->storeId;
-        $type=$this->tableService->getTypeLocation();
-        $floor = $this->tableService->getFloor(1);
-        $obj = $this->tableService->getById($request->id);
+        $storeId = CommonHelper::getStoreId();
+        $type    = $this->tableService->getTypeLocation($storeId);
+        $floor   = $this->tableService->getFloor($storeId);
+        $obj     = $this->tableService->getById($request->id);
         return view("backend.table.edit",["obj" => $obj, "type"=>$type,"floor"=>$floor]);
+    }
+
+    public function tablePrice(Request $request)
+    {
+        $price = SDB::table('store_type_location')
+                ->where('id',$request->idType)
+                ->select('subprice')
+                ->get();
+        return $price[0]->subprice;
     }
 
     public function update(Request $request)
@@ -89,7 +98,6 @@ class TableController
             $obj->name        = $request->name;
             $obj->type        = $request->type;
             $obj->floor        = $request->floor;
-            $obj->price        = $request->price;
             $this->tableService->editTable($obj);
             $result->status   = SDBStatusCode::OK;
             $result->message  = 'Success';
