@@ -44,7 +44,7 @@ class Waiter2WaiterPusher implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::UpdateOrderCooked;
+        return OrderConst::UpdateOrderAtKitchenEvent;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -53,6 +53,6 @@ class Waiter2WaiterPusher implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OrderChannelToWaiter));
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::WaiterToWaiterChannel));
     }
 }
