@@ -2,62 +2,53 @@
 /**
  * Created by PhpStorm.
  * User: SonMT
- * Date: 11/2/2018
- * Time: 10:53 AM
+ * Date: 11/9/2018
+ * Time: 2:02 PM
  */
 
 namespace App\Backend\Http\Controllers;
-use App\Backend\Services\Interfaces\TableServiceInterface;
-use App\Backend\Services\Production\TableService;
+use App\Backend\Services\Interfaces\StoreManagerInterface;
+use App\Backend\Services\Production\StoreManagerService;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Helpers\ResponseHelper;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use function MongoDB\BSON\toJSON;
+use Illuminate\Support\Facades\Validator;
 
-
-class TableController
+class StoreManagerController
 {
-    protected $TableService;
-    protected $storeId;
-    public function __construct(TableServiceInterface $tableService)
+    protected $storeService;
+
+    public function __construct(StoreManagerInterface $storeService)
     {
-        $this->tableService   = $tableService;
+        $this->storeService   = $storeService;
     }
-    public function getMyTable(Request $request){
-        $storeId = 1;
-        $table= $this->tableService->getMyTable($storeId);
+    public function getStoreManager(Request $request){
+        $store= $this->storeService->getStoreManager();
         $result = new DataResultCollection();
         $result->status = SDBStatusCode::OK;
-        $result=$table;
-        //dd($result);
-        return view("backend.table.list",["table" =>$result]);
+        $result->data=$store;
+        return view("backend.store_manager.list",["store" =>$result]);
     }
-
-    public function getAddTable(Request $request)
+    public function addStoreManager(Request $request)
     {
-        $storeId=$request->storeId;
-        $type=$this->tableService->getTypeLocation();
-        $floor = $this->tableService->getFloor(1);
-        return view("backend.table.add",['floor'=>$floor, 'type'=>$type]);
+        return view("backend.store_manager.add");
     }
 
-    public function postAddTable(Request $request)
+    public function postAddFloor(Request $request)
     {
         $result             = new DataResultCollection();
         $rule               = ["name" => "required|min:3"];
         $validator          = Validator::make($request->all(),$rule);
+        $storeId = 1;
         $obj=array([
-            'name'=>$request->name,
-            'type_location_id'=>$request->type,
-            'floor_id'=>$request->floor,
-            'price'=>$request->price,
+            'store_id'=>$storeId,
+            'name'=>$request->name
         ]);
-
         if(!$validator->fails()){
-            $this->tableService->addTable($obj);
+            $this->storeService->addFloor($obj);
             $result->status   = SDBStatusCode::OK;
             $result->message  = 'Success';
         }else {
@@ -69,13 +60,10 @@ class TableController
         return ResponseHelper::JsonDataResult($result);
     }
 
-    public function getEditTable(Request $request)
+    public function getEditStoreManager(Request $request)
     {
-        $storeID =$request->storeId;
-        $type=$this->tableService->getTypeLocation();
-        $floor = $this->tableService->getFloor(1);
-        $obj = $this->tableService->getById($request->id);
-        return view("backend.table.edit",["obj" => $obj, "type"=>$type,"floor"=>$floor]);
+        $obj = $this->storeService->getById($request->id);
+        return view("backend.store_manager.edit",["obj" => $obj]);
     }
 
     public function update(Request $request)
@@ -87,10 +75,7 @@ class TableController
             $obj              = new \stdClass();
             $obj->id          = $request->id;
             $obj->name        = $request->name;
-            $obj->type        = $request->type;
-            $obj->floor        = $request->floor;
-            $obj->price        = $request->price;
-            $this->tableService->editTable($obj);
+            $this->storeService->editFloor($obj);
             $result->status   = SDBStatusCode::OK;
             $result->message  = 'Success';
         }else {
@@ -101,13 +86,14 @@ class TableController
         }
         return ResponseHelper::JsonDataResult($result);
     }
-    public function deleteTable(Request $request)
+    public function deleteStoreManager(Request $request)
     {
-        $this->tableService->deleteTable($request->id);
+        $this->storeService->deleteFloor($request->id);
     }
-    public function deleteAllTable(Request $request)
+    public function deleteAllStoreManager(Request $request)
     {
-        $this->tableService->deleteAllTable($request->arrId);
+        $this->storeService->deleteAllFloor($request->arrId);
     }
+
 
 }

@@ -65,11 +65,16 @@ class LoggingConst
 }
 class OrderConst{
 
+<<<<<<< HEAD
 
     const CashierChannelToCashier    = "cashier2cashier";
 
     const RollbackPaymentEventName = "rollback-payment";
 
+=======
+    const CashierChannelToCashier    = "cashier2cashier";
+    
+>>>>>>> dev
     const Customer2Order             = "customer2order";
 
     const UpdateOrderAtKitchenEvent            = "update-order-at-kichen";

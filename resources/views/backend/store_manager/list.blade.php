@@ -39,7 +39,7 @@
     <!--Title-->
     <div class="page-title">
         <div class="title_left">
-            <h2 class="text-primary">Talbe <small>List</small></h2>
+            <h2 class="text-primary">Store <small>List</small></h2>
         </div>
     </div>
     <!--Table-->
@@ -62,38 +62,46 @@
 
             <div class="x_content">
                 <div class="table-responsive">
-                    <table class="table table-striped jambo_table table-hover table-user" id="tbl-table">
+                    <table class="table table-striped jambo_table table-hover table-user" id="tbl-store">
                         <thead>
                         <tr class="headings">
                             <th style="text-align: center">
                                 <input type="checkbox" id="check-all" class="flat">
                             </th>
+                            <th class="column-title">Avartar</th>
                             <th class="column-title">Name</th>
-                            <th class="column-title">Type Location</th>
-                            <th class="column-title">Floor</th>
-                            <th class="column-title">Sub Price</th>
+                            <th class="column-title">Address</th>
+                            <th class="column-title">Latitude</th>
+                            <th class="column-title">Longitude</th>
+                            <th class="column-title">Description</th>
+                            <th class="column-title">Priority</th>
                             <th class="column-title">Edit </th>
                             <th class="column-title">Delete </th>
                         </tr>
                         </thead>
                         <!--Tbody-->
                         <tbody id="tbody">
-                        @foreach($table as $tableItem)
+                        @foreach($store->data as $storeItem)
                             <tr>
                                 <td style="text-align: center" class="check-delete">
-                                    <input type="checkbox" value="{{$tableItem->location_id}}">
+                                    <input type="checkbox" value="{{$storeItem->id}}">
                                 </td>
-                                <td>{{$tableItem->location_name}}</td>
-                                <td>{{$tableItem->type_location_id}}</td>
-                                <td>{{$tableItem->floor_id}}</td>
-                                <td>{{$tableItem->price}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary edit round" data-id="{{$tableItem->location_id}}">
+                                    <img src="{{$storeItem->avatar}}" alt="image store..." width="50px" height="50px">
+                                </td>
+                                <td>{{$storeItem->name}}</td>
+                                <td>{{$storeItem->address}}</td>
+                                <td>{{$storeItem->lat}}</td>
+                                <td>{{$storeItem->lng}}</td>
+                                <td>{{$storeItem->description}}</td>
+                                <td>{{$storeItem->priority}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary edit round" data-id="{{$storeItem->id}}">
                                         <i class="fa fa-pencil-square-o"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger round delete" data-id="{{$tableItem->location_id}}">
+                                    <button class="btn btn-danger round delete" data-id="{{$storeItem->id}}">
                                         <i class="fa fa-trash-o"></i>
                                     </button>
                                 </td>
@@ -111,7 +119,7 @@
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function () {
-            $("#tbl-table").DataTable({
+            $("#tbl-store").DataTable({
                 "columnDefs": [
                     {
                         "orderable": false ,
@@ -120,19 +128,6 @@
                 ],
                 order: []
             });
-
-            //drag modal
-            $( "#modal-add" ).draggable();
-            $( "#modal-edit" ).draggable();
-            if(localStorage.getItem("Message"))
-            {
-                if(localStorage.getItem("page")){
-                    var page = parseInt(localStorage.getItem("page"));
-                    $("#dataTable").DataTable().page(page).draw('page');
-                }
-                Alert(localStorage.getItem("Message"));
-                localStorage.clear();
-            }
         } );
 
         //function add
@@ -145,7 +140,7 @@
                     $(".iziModal-iframe").attr("src","");
                 },
                 focusInput	   : true,
-                title          : 'Table',
+                title          : 'Store',
                 subtitle       :'Add',
                 width          : 700,
                 iframeHeight   : 600,
@@ -164,7 +159,7 @@
                 arrowKeys      :true,
                 iframe         : true,
                 iframeWidth    :400,
-                iframeURL      :"{{route('addTable')}}"
+                iframeURL      :"{{route('addStoreManager')}}"
             });
         //function edit
         $(document).on('click', '.edit', function(event) {
@@ -174,13 +169,13 @@
             {
                 onOpening: function(modal){
                     var id =$(event.target).closest("button").data("id");//get Id, get button then get id
-                    $(".iziModal-iframe").attr("src","{{route('editTable')}}?id="+id);
+                    $(".iziModal-iframe").attr("src","{{route('editStoreManager')}}?id="+id);
                     //set url iframe
                 },
                 onClosed: function(modal){
                     $(".iziModal-iframe").attr("src","");
                 },
-                title          : 'Table',
+                title          : 'Store',
                 subtitle       :'Edit',
                 width          : 700,
                 iframeHeight   : 600,
@@ -199,7 +194,7 @@
                 iframeWidth    :400,
                 iframeURL      :""
             });
-        //Delete table
+        //Delete Floor
         $("body").on("click",".delete",function(e){
             var id = $(this).data("id");
             var tr = $(this).parents('tr');
@@ -218,7 +213,8 @@
                         btnClass: 'btn btn-primary',
                         action  : function (){
                             $("#dataTable").DataTable().row(tr).remove().draw(false);
-                            $.get("{{route('deleteTable')}}",{id:id},function(data){
+                            $.get("{{route('deleteFloor')}}",{id:id},function(data){
+                                location.reload();
                                 Alert("Menu Item Have Been Deleted Successful!");
                             });
                         }
@@ -269,7 +265,8 @@
                                     $("#dataTable").DataTable().row(tr).remove().draw(false);
                                     arrId.push($(this).val());
                                 });
-                                $.get("{{route('deleteAllTable')}}",{arrId:arrId},function(data){
+                                $.get("{{route('deleteAllFloor')}}",{arrId:arrId},function(data){
+                                    location.reload();
                                     Alert("Menus have been deleted!");
                                 });
                             }

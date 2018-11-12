@@ -95,10 +95,10 @@
                                     class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" style="top:43px;right:-10px;">
-                            <li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal"><span
+                            <li><a id="move_table" class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal"><span
                                             class="glyphicon glyphicon-retweet"></span> Chuyển Bàn</a></li>
                             <li class="line"></li>
-                            <li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal2"><span
+                            <li><a id="merge_table" class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal2"><span
                                             class="glyphicon glyphicon-link" aria-hidden="true"></span> Ghép Bàn</a>
                             </li>
                             <li class="line"></li>
@@ -183,6 +183,20 @@
         PusherEvent();//create pusher event
         //getTableByFloor(null, idStore);
     });
+    $(document).on('click', '#move_table', function (data) {
+        $.ajax({
+            url: '{{route("floor-location")}}',
+            dataType: 'JSON',
+            type: 'GET',
+            data: {idStore: idStore},
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Error ' + xhr.status + ' | ' + thrownError);
+            },
+        });
+    })
     //pusher event
     function PusherEvent(){
         var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
@@ -198,7 +212,7 @@
             //remove class order, add class update
             $('*[location-id="'+data.order.location_id+'"]').addClass("have-update");
             //get order and append
-            if(data.order.location_id===idTable && idStore === data.idStore){
+            if(data.order.location_id==idTable && idStore == data.idStore){
                 genOrderRealtime(data.order,data.result);
             }
         });
@@ -443,12 +457,10 @@
         $(row_order_detail).empty();
         if(row_order_detail.length!=0){//neu co thi cap nhap order
             var order_status = $(row_order).find('.entities_order_status_content').attr('order-status');
-            if(order_status>='{{\App\Core\Common\OrderStatusValue::Process}}'){//cap nhap order co tinh trang >=1(Đang chế biến)
-                //update status and status name of order
-                $(row_order).find('.entities_order_status_content').text('Chưa xác nhận');
-                $(row_order).find('.entities_order_status_content').attr('order-status',order.status);
-                $(row_order).find('.entities_order_status_content').removeClass(' status_1 status_2').addClass('status_0');
-            }
+            //update status and status name of order
+            $(row_order).find('.entities_order_status_content').text(order.status_name);
+            $(row_order).find('.entities_order_status_content').attr('order-status',order.status);
+            $(row_order).find('.entities_order_status_content').removeClass('status_0 status_1 status_2').addClass('status_'+order.status);
             obj.forEach(function(itemDetail){
                 var rowDetail = $("#entities-detail-template").contents().clone();
                 //append data
