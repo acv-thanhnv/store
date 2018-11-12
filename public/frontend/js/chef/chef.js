@@ -112,7 +112,7 @@ function pushToOrderListTable(result) {
 }
 
 function loadOrderListTable() {
-	loadJSON('http://store.dev/api/v1/store/' + storeId + '/chef_order_detail.json', function (response) {
+	loadJSON('/api/v1/store/' + storeId + '/chef_order_detail.json', function (response) {
 		var result = JSON.parse(response);
 		var output = '<table id="order-list" class="table table-hover red-blue-table" data-search="true" data-toggle="table"> <thead> <tr> <th style="width: 55%" data-field="name">Tên món</th> <th style="width: 20%" data-field="id" data-sortable="true">Hóa đơn</th> <th style="width: 15%" data-field="priority" data-sortable="true">VIP</th> <th style="width: 10%" data-field="quantity">SL</th> </tr> </thead> <tbody id="order-list-table-body">';
 		for (var i in result.orders) {
@@ -138,7 +138,7 @@ function pushToloadRollbackTable(obj) {
 }
 
 function loadRollbackTable() {
-	loadJSON('http://store.dev/api/v1/store/' + storeId + '/chef_rollback.json', function (response) {
+	loadJSON('/api/v1/store/' + storeId + '/chef_rollback.json', function (response) {
 		var result = JSON.parse(response);
 		var output = '<table id="roll-back" class="table table-hover red-blue-table" data-toggle="table" data-search="true"> <thead> <tr> <th style="width: 35%" data-field="name">Tên món</th> <th style="width:15%" data-field="invoice">Hóa đơn</th> <th style="width: 10%" data-field="quantity">SL</th> <th style="width: 30%" data-field="action">Thao tác</th> <th style="width: 20%"></th> </tr> </thead> <tbody id="rollback-body">';
 		for (var i in result) {
@@ -162,20 +162,31 @@ function pushToWaiterTable(result) {
 	var table = result.orderDetails[0].table;
 	var floor = result.orderDetails[0].floor;
 	var priority = result.orderDetails[0].priority;
-	if (priority !== 'Normal') output += '<tr class="t-header vip ' + storeId + '-' + orderId + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ ' + orderId + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + table + ' ' + floor + '</span> </button> </td> </tr>';else output += '<tr class="t-header normal ' + storeId + '-' + orderId + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ ' + orderId + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + table + ' ' + floor + '</span> </button> </td> </tr>';
-	output += '<tr class="hidden t-header-child ' + storeId + '-' + orderId + '"> <th style="width: 25%">Tên món</th> <th style="width: 15%">SL</th> <th style="width: 40%">Trạng thái</th> <th style="width: 20%"></th> </tr>';
-	for (var i in result.foodDetails) {
-		var foodId = result.foodDetails[i].food_id;
-		var foodName = result.foodDetails[i].food_name;
-		var quantity = result.foodDetails[i].quantity;
-		var cooked = 0;
-		output += '<tr id="' + storeId + '-' + orderId + '-' + foodId + '" storeId="' + storeId + '" orderId="' + orderId + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '" class="hidden"> <td class="food food-right">' + foodName + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td> <td> <button cooked="' + (cooked + 1) + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
+	if ($('.' + storeId + '-' + orderId)[0]) {
+		for (var i in result.foodDetails) {
+			var foodId = result.foodDetails[i].food_id;
+			var foodName = result.foodDetails[i].food_name;
+			var quantity = result.foodDetails[i].quantity;
+			var cooked = 0;
+			output += '<tr id="' + storeId + '-' + orderId + '-' + foodId + '" class="hidden ' + storeId + '-' + orderId + '" storeId="' + storeId + '" orderId="' + orderId + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '"> <td class="food food-right">' + foodName + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td> <td> <button cooked="' + (cooked + 1) + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
+		}
+		$('#cho-cung-ung').find('.' + storeId + '-' + orderId + ':last').after(output);
+	} else {
+		if (priority !== 'Normal') output += '<tr class="t-header vip ' + storeId + '-' + orderId + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ ' + orderId + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + table + ' ' + floor + '</span> </button> </td> </tr>';else output += '<tr class="t-header normal ' + storeId + '-' + orderId + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ ' + orderId + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + table + ' ' + floor + '</span> </button> </td> </tr>';
+		output += '<tr class="hidden t-header-child ' + storeId + '-' + orderId + '"> <th style="width: 25%">Tên món</th> <th style="width: 15%">SL</th> <th style="width: 40%">Trạng thái</th> <th style="width: 20%"></th> </tr>';
+		for (var i in result.foodDetails) {
+			var foodId = result.foodDetails[i].food_id;
+			var foodName = result.foodDetails[i].food_name;
+			var quantity = result.foodDetails[i].quantity;
+			var cooked = 0;
+			output += '<tr id="' + storeId + '-' + orderId + '-' + foodId + '" class="hidden ' + storeId + '-' + id + '" storeId="' + storeId + '" orderId="' + orderId + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '"> <td class="food food-right">' + foodName + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td> <td> <button cooked="' + (cooked + 1) + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
+		}
+		if (priority !== 'Normal') $('#cho-cung-ung').find('.normal:first').before(output);else $('#cho-cung-ung').find('.hidden:last').after(output);
 	}
-	if (priority !== 'Normal') $('#cho-cung-ung').find('.normal:first').before(output);else $('#cho-cung-ung').find('.hidden:last').after(output);
 }
 
 function loadWaiterTable() {
-	loadJSON('http://store.dev/api/v1/store/' + storeId + '/chef_order_detail.json', function (response) {
+	loadJSON('/api/v1/store/' + storeId + '/chef_order_detail.json', function (response) {
 		var result = JSON.parse(response);
 		var output = '<table id="cho-cung-ung" class="table table-hover red-blue-table" data-toggle="table" data-search="true"> <thead> <tr> <th colspan="2" style="width:40%">Hóa đơn</th> <th colspan="2" style="width:60%">Bàn/Phòng/Tầng</th> </tr> </thead> <tbody>';
 		for (var i in result.orders) {
@@ -191,7 +202,7 @@ function loadWaiterTable() {
 					var name = result.details[i][j].name;
 					var cooked = result.details[i][j].cooked;
 					var quantity = result.details[i][j].quantity;
-					output += '<tr id="' + storeId + '-' + id + '-' + foodId + '" storeId="' + storeId + '" orderId="' + id + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '" cooked="' + cooked + '" class="hidden"> <td class="food food-right">' + name + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td> <td> <button cooked="' + (cooked + 1) + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
+					output += '<tr id="' + storeId + '-' + id + '-' + foodId + '" class="hidden ' + storeId + '-' + id + '" storeId="' + storeId + '" orderId="' + id + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '" cooked="' + cooked + '"> <td class="food food-right">' + name + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td> <td> <button cooked="' + (cooked + 1) + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
 				}
 			}
 		}
@@ -221,23 +232,23 @@ $(document).on("click", ".push-food", function (e) {
 		time: currentTime
 	};
 	console.log(formData);
-	var obj = {
-		storeId: storeId,
-		foodId: foodId,
-		foodName: foodName,
-		orderId: orderId,
-		quantity: quantity,
-		cooked: cooked,
-		push: push,
-		id: 'rollback-' + storeId + '-' + orderId + '-' + foodId + '-' + currentTime
-	};
-	pushToloadRollbackTable(obj);
+	/*let obj = {
+ 	storeId: storeId,
+ 	foodId: foodId,
+ 	foodName: foodName,
+ 	orderId: orderId,
+ 	quantity: quantity,
+ 	cooked: cooked,
+ 	push: push,
+ 	id: 'rollback-'+storeId+'-'+orderId+'-'+foodId+'-'+currentTime
+ }
+ pushToloadRollbackTable(obj)*/
 	var detect = '#' + storeId + '-' + orderId + '-' + foodId;
 	if (quantity != cooked) {
 		$(detect).attr('cooked', cooked);
 		$(detect + ' td').eq(1).html(cooked + '/' + quantity);
-		$(detect + ' td').eq(2).html('<td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td>');
-		$(detect + ' td').eq(4).html('<td> <button cooked="' + cooked1 + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td>');
+		$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button>');
+		$(detect + ' td').eq(4).html('<button cooked="' + cooked1 + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button>');
 	}
 	$.ajax({
 		type: 'POST',
@@ -275,8 +286,8 @@ $(document).on("click", ".rollback", function (e) {
 	if (quantity != cooked) {
 		$(detect).attr('cooked', cooked);
 		$(detect + ' td').eq(1).html(cooked + '/' + quantity);
-		$(detect + ' td').eq(2).html('<td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td>');
-		$(detect + ' td').eq(4).html('<td> <button cooked="' + cooked1 + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td>');
+		$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button>');
+		$(detect + ' td').eq(4).html('<button cooked="' + cooked1 + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button>');
 	} else {}
 
 	$('#rollback-' + storeId + '-' + orderId + '-' + foodId + '-' + time).addClass('hidden');
@@ -395,8 +406,8 @@ waiter2waiter.bind('update-order-at-kichen', function (res) {
 		if (clearAll == 1) $(detectOrder).addClass('hidden');
 		if (quantity != cooked) {
 			$(detect + ' td').eq(1).html(cooked + '/' + quantity);
-			$(detect + ' td').eq(2).html('<td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td>');
-			$(detect + ' td').eq(4).html('<td> <button cooked="' + cooked1 + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td>');
+			$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button>');
+			$(detect + ' td').eq(4).html('<button cooked="' + cooked1 + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity + cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button>');
 		} else $(detect).addClass('hidden');
 	} else {
 		$(detectRollback).addClass('hidden');
@@ -406,8 +417,8 @@ waiter2waiter.bind('update-order-at-kichen', function (res) {
 		if (quantity != cooked) {
 			$(detect).attr('cooked', cooked);
 			$(detect + ' td').eq(1).html(cooked + '/' + quantity);
-			$(detect + ' td').eq(2).html('<td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td>');
-			$(detect + ' td').eq(4).html('<td> <button cooked="' + cooked1 + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td>');
+			$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button>');
+			$(detect + ' td').eq(4).html('<button cooked="' + cooked1 + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity + cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button>');
 		} else {}
 	}
 });
