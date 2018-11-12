@@ -21,6 +21,19 @@ use Illuminate\Http\Request;
 
 class FoodService extends BaseService implements FoodServiceInterface
 {
+    //====================get location and floor===============
+    public function getLocationFloor($storeId)
+    {
+        $list = SDB::table('store_floor')
+            ->where('store_floor.store_id','=',$storeId)
+            ->get();
+        foreach ($list as $floor){
+            $floor->location = SDB::table('store_location')
+                ->where('store_location.floor_id','=',$floor->id)
+                ->get();
+        }
+        return $list;
+    }
     //====================get food===============
     public function getFoodByStoreId($storeId = null)
     {

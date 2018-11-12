@@ -27,6 +27,16 @@ class FoodController extends Controller
         $this->service = $foodService;
         $this->orderService = $orderService;
     }
+//====================get location and floor===============
+    public function getLocationFloor(Request $request){
+        $storeId = $request->idStore;
+        $list = $this->service->getLocationFloor($storeId);
+        $result  = new DataResultCollection ();
+        $result->status =  SDBStatusCode::OK;
+        $result->data = $list;
+        return view('frontend.order-manager.table_manager',['location'=>$result]);
+    }
+
     public function listByStore($storeId = null){
         $list = $this->service->getFoodByStoreId($storeId);
         $result  = new DataResultCollection ();

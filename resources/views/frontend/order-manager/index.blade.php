@@ -98,10 +98,10 @@
                                     class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" style="top:43px;right:-10px;">
-                            <li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal"><span
+                            <li><a id="move_table" class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal"><span
                                             class="glyphicon glyphicon-retweet"></span> Chuyển Bàn</a></li>
                             <li class="line"></li>
-                            <li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal2"><span
+                            <li><a id="merge_table" class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal2"><span
                                             class="glyphicon glyphicon-link" aria-hidden="true"></span> Ghép Bàn</a>
                             </li>
                             <li class="line"></li>
@@ -187,6 +187,20 @@
         PusherEvent();//create pusher event
         //getTableByFloor(null, idStore);
     });
+    $(document).on('click', '#move_table', function (data) {
+        $.ajax({
+            url: '{{route("floor-location")}}',
+            dataType: 'JSON',
+            type: 'GET',
+            data: {idStore: idStore},
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Error ' + xhr.status + ' | ' + thrownError);
+            },
+        });
+    })
     //pusher event
     function PusherEvent(){
         var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {

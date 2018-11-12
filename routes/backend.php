@@ -121,6 +121,34 @@
             //Other
             Route::get("Prop","FoodController@getProp")->name("getProp");
         });
+        //Group Table
+        Route::group(["prefix" => "Table"],function(){
+            Route::get("myTable","TableController@getMyTable")->name("getTable");
+            //add
+            Route::get("addTable","TableController@getAddTable")->name("addTable");
+            Route::post("addTable","TableController@postAddTable")->name('postAddTable');
+            //Edit
+            Route::get("editTable","TableController@getEditTable")->name("editTable");
+            Route::post("editTable","TableController@update")->name("postEditTable");
+            //Delete
+            Route::get("deleteTable","TableController@deleteTable")->name("deleteTable");
+            Route::get("deleteAllTable","TableController@deleteAllTable")->name("deleteAllTable");
+        });
+
+        //Group Floor
+        Route::group(["prefix" => "Floor"],function(){
+            Route::get("myFloor","FloorController@getMyFloor")->name("getFloor");
+            //add
+            Route::get("addFloor","FloorController@getAddFloor")->name("addFloor");
+            Route::post("addFloor","FloorController@postAddFloor")->name("postAddFloor");;
+            //Edit
+            Route::get("editFloor","FloorController@getEditFloor")->name("editFloor");
+            Route::post("editFloor","FloorController@update")->name("postEditFloor");
+            //Delete
+            Route::get("deleteFloor","FloorController@deleteFloor")->name("deleteFloor");
+            Route::get("deleteAllFloor","FloorController@deleteAllFloor")->name("deleteAllFloor");
+        });
+
         //Group Store
         Route::group(["prefix" => "Store"],function(){
             Route::get("myStore","StoreController@getStore")->name("getStore");
@@ -133,7 +161,24 @@
             //Delete
             Route::get("deleteStore","StoreController@deleteStore")->name("deleteStore");
             Route::get("deleteAllStore","StoreController@deleteAllStore")->name("deleteAllStore");
+
         });
+
+        //Group Manage Store
+        Route::group(["prefix" => "StoreManager"],function(){
+            Route::get("listStore","StoreManagerController@getStoreManager")->name("getListStore");
+            //add
+            Route::get("addStore","StoreManagerController@addStoreManager")->name("addStoreManager");
+            Route::post("addStore","StoreManagerController@postAddStoreManager");
+            //Edit
+            Route::get("editStore","StoreManagerController@getEditStoreManager")->name("editStoreManager");
+            Route::post("editStore","StoreManagerController@postEditStoreManager")->name("postEditStoreManager");
+            //Delete
+            Route::get("deleteStore","StoreManagerController@deleteStoreManager")->name("deleteStoreManager");
+            Route::get("deleteAllStore","StoreManagerController@deleteAllStoreManager")->name("deleteAllStoreManager");
+
+        });
+
         //Dashboard
         Route::group(["prefix" => "dashboard"],function(){
 

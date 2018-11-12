@@ -61,3 +61,6 @@ Route::group(['middleware' => [ 'auth:api' ]],function (){
 	Route::match(array('GET','POST'),'/api/v1/auth/logout', 'Auth\UserController@logout')->name('api_v1_logout_call');
 });
 Route::get('/api/v1/food/order', 'OrderController@order')->name('food/order');
+
+//====================get location and floor===============
+Route::get('/api/v1/food/floor-location', 'FoodController@getLocationFloor')->name('floor-location');

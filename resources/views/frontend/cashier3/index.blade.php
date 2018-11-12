@@ -2,6 +2,7 @@
 @section('css')
 <link href="{{ asset('frontend/css/cashier.css') }}" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.0.3/css/tableexport.min.css">
 @endsection
 
 @section('content')
@@ -11,7 +12,7 @@
 		<div class="header-left">
 			<ul class="nav nav-tabs location-order">
 				<li class="active"><a data-toggle="tab" href="#danh-sach"><strong>Thu ngân</strong></a></li>
-				<li class="active"><a data-toggle="tab" href="#yeu-cau-thanh-toan"><strong>Yêu cầu thanh toán</strong></a></li>
+				<!-- <li class="active"><a data-toggle="tab" href="#yeu-cau-thanh-toan"><strong>Yêu cầu thanh toán</strong></a></li> -->
 				<li class="active"><a data-toggle="tab" href="#rollback-thanh-toan"><strong>Hoàn tác</strong></a></li>
 				<div class="md-form">
 					<input id="search" class="form-control" type="text" placeholder="Tìm hóa đơn theo vị trí" aria-label="Search" autofocus="">
@@ -24,10 +25,10 @@
 				<div id="invoices-details"></div>
 			</div>
 			
-			<div id="yeu-cau-thanh-toan" class="tab-pane">
+			<!-- <div id="yeu-cau-thanh-toan" class="tab-pane">
 				<div id="khach-thanh-toan"></div>
 				<div id="invoices-details-2"></div>
-			</div>
+			</div> -->
 			<div id="rollback-thanh-toan" class="tab-pane">
 			</div>
 		</div>
@@ -54,6 +55,13 @@
 </div>
 @endsection
 @section('javascript')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.0/xlsx.core.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 <script src="{{ asset('frontend/js/cashier/cashier.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.0.3/js/tableexport.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
 @endsection

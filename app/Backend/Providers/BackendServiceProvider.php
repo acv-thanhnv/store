@@ -18,7 +18,10 @@ class BackendServiceProvider extends ServiceProvider
         Interfaces\MenuServiceInterface::class=>Production\MenuService::class,
         Interfaces\TypeServiceInterface::class=>Production\TypeService::class,
         Interfaces\UserServiceInterface::class=>Production\UserService::class,
-        Interfaces\OrderServiceInterface::class=>Production\OrderService::class
+        Interfaces\OrderServiceInterface::class=>Production\OrderService::class,
+        Interfaces\FloorServiceInterface::class=>Production\FloorService::class,
+        Interfaces\TableServiceInterface::class=>Production\TableService::class,
+        Interfaces\StoreManagerInterface::class=>Production\StoreManagerService::class,
     ];
     /**
      * Bootstrap services.

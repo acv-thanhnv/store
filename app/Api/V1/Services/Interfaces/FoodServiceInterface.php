@@ -26,4 +26,7 @@ interface FoodServiceInterface
 
     public function getOrderDetail($idOrder);
 
+    //====================get location and floor===============
+    public function getLocationFloor($storeId);
+
 }

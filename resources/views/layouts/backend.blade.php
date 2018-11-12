@@ -124,9 +124,10 @@
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-book"></i> Cửa hàng <span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li><a href="{{route('getStore')}}">Table/Floor</a>
+                                 <ul class="nav child_menu">
+                                    <li><a href="{{route('getTable')}}">Table</a>
                                     </li>
+                                    <li><a href="{{route('getFloor')}}">Floor</a></li>
                                     <li><a href="{{route('editStore')}}">My Store</a>
                                     </li>
                                 </ul>
@@ -150,6 +151,16 @@
                                     <?php }?>
                                 </ul>
                             </li>
+
+                            {{--Store Manager--}}
+                            <li><a><i class="fa fa-briefcase"></i> Store Manager <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a href="{{route('getListStore')}}">List Store</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
                             <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <?php if(\App\Core\Helpers\AuthHelper::IsAccess('form_template')==true){ ?>

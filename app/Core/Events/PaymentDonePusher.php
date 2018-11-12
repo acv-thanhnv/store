@@ -24,10 +24,12 @@ class PaymentDonePusher implements ShouldBroadcast
      */
     public $storeId;
     public $listOrderId;
-    public function __construct($storeId,$listOrderId)
+    public $status;
+    public function __construct($storeId,$listOrderId,$status)
     {
         $this->storeId = $storeId;
         $this->listOrderId = $listOrderId;
+        $this->status = $status;
     }
     /**
      * The event's broadcast name.
