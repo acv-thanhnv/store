@@ -121,6 +121,7 @@
             //Other
             Route::get("Prop","FoodController@getProp")->name("getProp");
         });
+
         //Group Table
         Route::group(["prefix" => "Table"],function(){
             Route::get("myTable","TableController@getMyTable")->name("getTable");
@@ -136,6 +137,23 @@
             Route::get("deleteTable","TableController@deleteTable")->name("deleteTable");
             Route::get("deleteAllTable","TableController@deleteAllTable")->name("deleteAllTable");
         });
+
+        //Group Table Type
+        Route::group(["prefix" => "Table"],function(){
+            Route::get("myTable","TableController@getMyTable")->name("getTable");
+            //add
+            Route::get("addTable","TableController@getAddTable")->name("addTable");
+            Route::post("addTable","TableController@postAddTable")->name('postAddTable');
+            //Edit
+            Route::get("editTable","TableController@getEditTable")->name("editTable");
+            Route::post("editTable","TableController@update")->name("postEditTable");
+            //get table price
+            Route::get("tablePrice","TableController@tablePrice")->name("tablePrice");
+            //Delete
+            Route::get("deleteTable","TableController@deleteTable")->name("deleteTable");
+            Route::get("deleteAllTable","TableController@deleteAllTable")->name("deleteAllTable");
+        });
+
 
         //Group Floor
         Route::group(["prefix" => "Floor"],function(){
