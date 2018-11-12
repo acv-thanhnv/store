@@ -13,17 +13,35 @@ use Illuminate\Http\Request;
 |
 */
 Route::group(['prefix' => 'api/v1', 'name' => 'api_v1.'], function () {
+
+	//khach hang bam nut thanh toan
 	Route::get('/store/{storeId}/customer2cashier.json', 'CashierController@showInvoicesPushedByCustomer');
+
+	//hien thi danh sach hoa don
 	Route::get('/store/{storeId}/cashier.json', 'CashierController@showInvoicesByStore');
+
+	//hien thi chi tiet hoa don
 	Route::get('/store/{storeId}/order/{orderId}/cashier_detail.json', 'CashierController@showInvoiceDetails');
+
+	// hien thi chi tiet danh sach order trong bep
 	Route::get('/store/{storeId}/chef.json', 'KitchenController@showFoodByStore');
+
 	Route::get('/store/{storeId}/chef/order.json', 'KitchenController@listOrder');
+
 	Route::get('/store/{storeId}/chef/{orderId}.json', 'KitchenController@showFoodByOrder');
+
 	Route::get('/store/{storeId}/order/{orderId}.json', 'KitchenController@listFoodByOrder');
+
 	Route::get('/store/{storeId}/chef_queue.json', 'KitchenController@showFoodQueue');
+
+	Route::get('/store/{storeId}/chef_rollback.json', 'KitchenController@showRollbackTable');
+
 	Route::get('/store/{storeId}/chef_location.json', 'KitchenController@showOrderLocationByStore');
+
 	Route::get('/store/{storeId}/chef_order_detail.json', 'KitchenController@showOrderDetail');
+
 	Route::get('/store/{storeId}/order/{orderId}/test.json', 'KitchenController@showPriorityByOrder');
+
 	Route::get('/{storeId}/{orderId}/test', 'KitchenController@test');
 });
 
