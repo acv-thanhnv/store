@@ -76,7 +76,9 @@ module.exports = __webpack_require__(72);
 /***/ 72:
 /***/ (function(module, exports, __webpack_require__) {
 
-storeId = $('#config').attr('storeId');
+var storeId = $('#config').attr('storeId');
+
+var rootPath = $('#config').attr('rootPath');
 
 $(document).ready(function () {
 	$("#header-left a").click(function () {
@@ -112,7 +114,7 @@ function pushToOrderListTable(result) {
 }
 
 function loadOrderListTable() {
-	loadJSON('/api/v1/store/' + storeId + '/chef_order_detail.json', function (response) {
+	loadJSON(rootPath + '/api/v1/store/' + storeId + '/chef_order_detail.json', function (response) {
 		var result = JSON.parse(response);
 		var output = '<table id="order-list" class="table table-hover red-blue-table" data-search="true" data-toggle="table"> <thead> <tr> <th style="width: 55%" data-field="name">Tên món</th> <th style="width: 20%" data-field="id" data-sortable="true">Hóa đơn</th> <th style="width: 15%" data-field="priority" data-sortable="true">VIP</th> <th style="width: 10%" data-field="quantity">SL</th> </tr> </thead> <tbody id="order-list-table-body">';
 		for (var i in result.orders) {
@@ -138,7 +140,7 @@ function pushToloadRollbackTable(obj) {
 }
 
 function loadRollbackTable() {
-	loadJSON('/api/v1/store/' + storeId + '/chef_rollback.json', function (response) {
+	loadJSON(rootPath + '/api/v1/store/' + storeId + '/chef_rollback.json', function (response) {
 		var result = JSON.parse(response);
 		var output = '<table id="roll-back" class="table table-hover red-blue-table" data-toggle="table" data-search="true"> <thead> <tr> <th style="width: 35%" data-field="name">Tên món</th> <th style="width:15%" data-field="invoice">Hóa đơn</th> <th style="width: 10%" data-field="quantity">SL</th> <th style="width: 30%" data-field="action">Thao tác</th> <th style="width: 20%"></th> </tr> </thead> <tbody id="rollback-body">';
 		for (var i in result) {
@@ -186,7 +188,7 @@ function pushToWaiterTable(result) {
 }
 
 function loadWaiterTable() {
-	loadJSON('/api/v1/store/' + storeId + '/chef_order_detail.json', function (response) {
+	loadJSON(rootPath + '/api/v1/store/' + storeId + '/chef_order_detail.json', function (response) {
 		var result = JSON.parse(response);
 		var output = '<table id="cho-cung-ung" class="table table-hover red-blue-table" data-toggle="table" data-search="true"> <thead> <tr> <th colspan="2" style="width:40%">Hóa đơn</th> <th colspan="2" style="width:60%">Bàn/Phòng/Tầng</th> </tr> </thead> <tbody>';
 		for (var i in result.orders) {

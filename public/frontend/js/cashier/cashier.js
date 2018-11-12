@@ -78,6 +78,8 @@ module.exports = __webpack_require__(74);
 
 var storeId = $('#config').attr('storeId');
 
+var rootPath = $('#config').attr('rootPath');
+
 var paymentAll = [];
 
 Storage.prototype.setObj = function (key, obj) {
@@ -129,7 +131,7 @@ function loadJSON(file, callback) {
 }
 
 function loadRollbackTable() {
-	loadJSON('/api/v1/store/' + storeId + '/rollback_cashier.json', function (response) {
+	loadJSON(rootPath + '/api/v1/store/' + storeId + '/rollback_cashier.json', function (response) {
 		var output = '<table id="roll-back" class="table table-hover red-blue-table"> <thead> <tr> <th style="width: 70%" data-field="invoice">Hóa đơn</th> <th style="width: 30%"></th> </tr> </thead> <tbody id="rollback-body">';
 		var result = JSON.parse(response);
 		console.log(result);
@@ -175,7 +177,7 @@ function pushToloadRollbackTable(obj) {
 }
 
 function loadCashierTable() {
-	loadJSON('/api/v1/store/' + storeId + '/cashier.json', function (response) {
+	loadJSON(rootPath + '/api/v1/store/' + storeId + '/cashier.json', function (response) {
 		var output = '<table id="bang-thu-ngan" class="table table-hover red-blue-table" data-toggle="table" data-search="true" responsive hover> <thead> <tr> <th style="width: 5%"></th> <th style="width: 10%">Hóa đơn</th> <th style="width: 20%">Vị trí</th> <th style="width: 10%">Tổng tiền</th> <th style="width: 10%">Thuế suất</th> <th style="width: 15%">Chiết khấu</th> <th style="width: 15%">Thành tiền</th> <th style="width: 15%"></th> </tr> </thead> <tbody>';
 		var result = JSON.parse(response);
 		for (var i in result.orders) {
