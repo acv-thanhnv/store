@@ -80,6 +80,9 @@ class TableService extends BaseService implements TableServiceInterface
 
     public function getTypeTable($idStore)
     {
-        $arrTableType;
+        $arrTableType = SDB::table('store_type_location')
+                        ->where('store_id',$idStore)
+                        ->get();
+        return $arrTableType;
     }
 }

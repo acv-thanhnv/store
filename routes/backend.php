@@ -142,8 +142,8 @@
         Route::group(["prefix" => "TableType"],function(){
             Route::get("listTableType","TableController@getTypeTable")->name("getTypeTable");
             //add
-            Route::get("addTable","TableController@getAddTable")->name("addTable");
-            Route::post("addTable","TableController@postAddTable")->name('postAddTable');
+            Route::get("addTypeTable","TableController@getAddTypeTable")->name("addTypeTable");
+            Route::post("addTypeTable","TableController@postAddTypeTable");
             //Edit
             Route::get("editTable","TableController@getEditTable")->name("editTable");
             Route::post("editTable","TableController@update")->name("postEditTable");

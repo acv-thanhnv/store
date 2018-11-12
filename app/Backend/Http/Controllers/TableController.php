@@ -121,11 +121,39 @@ class TableController
     //Type Table
     public function getTypeTable(Request $request){
         $storeId = CommonHelper::getStoreId();
-        $table_type = $this->tableService->getMyTable($storeId);
+        $table_type = $this->tableService->getTypeTable($storeId);
         $result = new DataResultCollection();
         $result->status = SDBStatusCode::OK;
-        $result=$table;
-        //dd($result);
-        return view("backend.table.list",["table" =>$result]);
+        $result=$table_type;
+        return view("backend.table.typeList",["type" =>$result]);
+    }
+
+    public function getAddTypeTable()
+    {
+        return view('backend.table.typeAdd');
+    }
+
+    public function postAddTypeTable(Request $request)
+    {
+        $storeId   = CommonHelper::getStoreId();
+        $result    = new DataResultCollection();
+        $rule      = ["name" => "required|min:3"];
+        $validator = Validator::make($request->all(),$rule);
+        $obj = array([
+            'name'     =>$request->name,
+            'subprice' =>$request->price,
+            'store_id' =>$storeId
+        ]);
+        if(!$validator->fails()){
+            SDB::table('store_type_location')->insert($obj);
+            $result->status   = SDBStatusCode::OK;
+            $result->message  = 'Success';
+        }else {
+            $error           = $validator->errors();
+            $result->status  = SDBStatusCode::ValidateError;
+            $result->message = 'An error occured when validate!';
+            $result->data    = $error;
+        }
+        return ResponseHelper::JsonDataResult($result);
     }
 }

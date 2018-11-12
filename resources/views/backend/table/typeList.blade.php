@@ -43,7 +43,7 @@
     <!--Title-->
     <div class="page-title">
         <div class="title_left">
-            <h2 class="text-primary">Talbe <small>List</small></h2>
+            <h2 class="text-primary">Type Talbe <small>List</small></h2>
         </div>
     </div>
     <!--Table-->
@@ -66,15 +66,13 @@
 
             <div class="x_content">
                 <div class="table-responsive">
-                    <table class="table table-striped jambo_table table-hover table-user" id="tbl-table">
+                    <table class="table table-striped jambo_table table-hover table-user" id="tbl-type">
                         <thead>
                         <tr class="headings">
                             <th style="text-align: center">
                                 <input type="checkbox" id="check-all" class="flat">
                             </th>
                             <th class="column-title">Name</th>
-                            <th class="column-title">Type Location</th>
-                            <th class="column-title">Floor</th>
                             <th class="column-title">Sub Price</th>
                             <th class="column-title">Edit </th>
                             <th class="column-title">Delete </th>
@@ -82,22 +80,20 @@
                         </thead>
                         <!--Tbody-->
                         <tbody id="tbody">
-                        @foreach($table as $tableItem)
+                        @foreach($type as $obj)
                             <tr>
                                 <td style="text-align: center" class="check-delete">
-                                    <input type="checkbox" value="{{$tableItem->location_id}}">
+                                    <input type="checkbox" value="{{$obj->id}}">
                                 </td>
-                                <td>{{$tableItem->location_name}}</td>
-                                <td>{{$tableItem->type_name}}</td>
-                                <td>{{$tableItem->floor_name}}</td>
-                                <td>{{$tableItem->subprice}}</td>
+                                <td>{{$obj->name}}</td>
+                                <td>{{$obj->subprice}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary edit round" data-id="{{$tableItem->location_id}}">
+                                    <button type="button" class="btn btn-primary edit round" data-id="{{$obj->id}}">
                                         <i class="fa fa-pencil-square-o"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger round delete" data-id="{{$tableItem->location_id}}">
+                                    <button class="btn btn-danger round delete" data-id="{{$obj->id}}">
                                         <i class="fa fa-trash-o"></i>
                                     </button>
                                 </td>
@@ -144,9 +140,9 @@
                 title          : 'Table',
                 subtitle       :'Add',
                 width          : 700,
-                iframeHeight   : 450,
+                iframeHeight   : 300,
                 headerColor    :"#405467",
-                icon           :"fa fa-folder",
+                icon           :"fa fa-rocket",
                 iconColor      :"#ECF0F1",
                 fullscreen     :true,
                 arrowKeys      :true,
@@ -160,7 +156,7 @@
                 arrowKeys      :true,
                 iframe         : true,
                 iframeWidth    :400,
-                iframeURL      :"{{route('addTable')}}"
+                iframeURL      :"{{route('addTypeTable')}}"
             });
         //function edit
         $(document).on('click', '.edit', function(event) {
@@ -301,46 +297,15 @@
         //function dataTable
         function dataTable()
         {
-            var groupColumn = 3;
-            var table = $('#tbl-table').DataTable({
-                "autoWidth": false,
+            $("#tbl-type").DataTable({
                 "columnDefs": [
                     {
-                        "visible": false,
-                        "targets": groupColumn
-                    },
-                    {
                         "orderable": false ,
-                        "targets": [0,5,6]
+                        "targets": [0,3,4]
                     }
                 ],
-                "order": [[ groupColumn, 'asc' ]],
-                "drawCallback": function ( settings ) {
-                    var api = this.api();
-                    var rows = api.rows( {page:'current'} ).nodes();
-                    var last=null;
-
-                    api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
-                        if ( last !== group ) {
-                            $(rows).eq( i ).before(
-                                '<tr class="group"><td colspan="6">'+group+'</td></tr>'
-                                );
-
-                            last = group;
-                        }
-                    } );
-                }
-            } );
-            // Order by the grouping
-            $('#tbl-table tbody').on( 'click', 'tr.group', function () {
-                var currentOrder = table.order()[0];
-                if ( currentOrder[0] === groupColumn && currentOrder[1] === 'asc' ) {
-                    table.order( [ groupColumn, 'desc' ] ).draw();
-                }
-                else {
-                    table.order( [ groupColumn, 'asc' ] ).draw();
-                }
-            } );
+                order: []
+            });
         }
     </script>
 @endpush

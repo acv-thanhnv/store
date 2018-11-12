@@ -67,7 +67,7 @@
 					<div class="form-group">
 						<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 							<label>Sub Price</label>
-							<input type="number" placeholder="Choose type..." name="price" class="form-control has-feedback-left" id="price" placeholder="Add Price..." readonly="">
+							<input type="number" placeholder="Choose type..." name="price" class="form-control has-feedback-left" id="price"  readonly="">
 							<span class="fa fa-money form-control-feedback left" aria-hidden="true"></span>
 						</div>
 					</div>

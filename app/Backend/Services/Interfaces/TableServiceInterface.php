@@ -16,6 +16,7 @@ interface TableServiceInterface
     public function addTable($obj);
     public function getFloor($storeId);
     public function getTypeLocation($storeId);
+    public function getTypeTable($storeId);
     public function getById($obj);
     public function editTable($obj);
     public function deleteTable($obj);
