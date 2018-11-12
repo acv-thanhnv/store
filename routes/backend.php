@@ -139,8 +139,8 @@
         });
 
         //Group Table Type
-        Route::group(["prefix" => "Table"],function(){
-            Route::get("myTable","TableController@getMyTable")->name("getTable");
+        Route::group(["prefix" => "TableType"],function(){
+            Route::get("listTableType","TableController@getTypeTable")->name("getTypeTable");
             //add
             Route::get("addTable","TableController@getAddTable")->name("addTable");
             Route::post("addTable","TableController@postAddTable")->name('postAddTable');

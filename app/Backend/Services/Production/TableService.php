@@ -78,4 +78,8 @@ class TableService extends BaseService implements TableServiceInterface
         }
     }
 
+    public function getTypeTable($idStore)
+    {
+        $arrTableType;
+    }
 }

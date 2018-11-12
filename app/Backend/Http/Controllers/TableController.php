@@ -118,4 +118,14 @@ class TableController
         $this->tableService->deleteAllTable($request->arrId);
     }
 
+    //Type Table
+    public function getTypeTable(Request $request){
+        $storeId = CommonHelper::getStoreId();
+        $table_type = $this->tableService->getMyTable($storeId);
+        $result = new DataResultCollection();
+        $result->status = SDBStatusCode::OK;
+        $result=$table;
+        //dd($result);
+        return view("backend.table.list",["table" =>$result]);
+    }
 }
