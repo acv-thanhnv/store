@@ -32,7 +32,7 @@ class Waiter2WaiterPusher implements ShouldBroadcast
         $this->foodId = $foodId;
         $this->quantity = $quantity;
         $this->cooked = $cooked;
-        $this->clear = $clearAll;
+        $this->clearAll = $clearAll;
         $this->rollback = $rollback;
         $this->time = $time;
     }

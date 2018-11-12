@@ -59,14 +59,14 @@ class KitchenController extends Controller
         $time = $request->time;
 
         $rollback = DB::table('store_rollback_kitchen')->insert(
-                [
-                    'store_id' => $storeId,
-                    'order_id' => $orderId,
-                    'food_id' => $foodId,
-                    'cooked' => $cooked,
-                    'time' => $time
-                ]
-            );
+            [
+                'store_id' => $storeId,
+                'order_id' => $orderId,
+                'food_id' => $foodId,
+                'cooked' => $cooked,
+                'time' => $time
+            ]
+        );
 
         $quantity = DB::table('store_order')
         ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
@@ -79,7 +79,12 @@ class KitchenController extends Controller
         ->where('order_id', $orderId)
         ->whereRaw('store_order_detail.quantity != store_order_detail.cooked')
         ->get();
-        if ( count($isAllDone)==1 && ($cooked==$quantity) ) $clearAll=1;
+        if ( count($isAllDone)==1 && ($cooked==$quantity) ) {
+            $clearAll=1;
+            /*$statusTo3 = DB::table('store_order')
+            ->where('order_id', $orderId)
+            ->update(['status' => 3]);*/
+        }
         else $clearAll = 0;
 
         $res = DB::table('store_order_detail')
