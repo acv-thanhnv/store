@@ -70,11 +70,9 @@ class OrderConst{
 
     const RollbackPaymentEventName = "rollback-payment";
 
-    const PaymentDoneEventName = "payment-done";
-    
     const Customer2Order             = "customer2order";
 
-    const Order2ChefEvent            = "order2chef";
+    const UpdateOrderAtKitchenEvent            = "update-order-at-kichen";
     
     const PaymentDoneEventName       = "payment-done";
     
@@ -87,11 +85,13 @@ class OrderConst{
     
     const NewOrderToOrderManager     = "new-order-to-order-manager";
     
-    const OrderChannelToWaiter       = "waiter2waiter";
+    const WaiterToWaiterChannel       = "waiter2waiter";
+    
     const OrderEventName             = "order.waiter";
     
     
-    const OrderChannelToChef         = "order2chef";
+    const OrderToKitchenChannel         = "order2kitchen";
+
     const OrderChefEventName         = "new-order";
     
     const CustomerCashierEventName   = "new-payment";

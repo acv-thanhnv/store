@@ -40,7 +40,7 @@ class Order2ChefPusher implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::Order2ChefEvent;
+        return OrderConst::UpdateOrderAtKitchenEvent;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -49,6 +49,6 @@ class Order2ChefPusher implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::Order2ChefEvent));
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OrderToKitchenChannel));
     }
 }

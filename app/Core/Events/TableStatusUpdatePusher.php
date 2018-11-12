@@ -13,38 +13,33 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class Waiter2WaiterPusher implements ShouldBroadcast
+class TableStatusUpdatePusher implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $storeId;
-    public $orderId;
-    public $foodId;
-    public $quantity;
-    public $cooked;
-    public $clearAll;
-    public $rollback;
-    public $time;
-    public function __construct($storeId, $orderId, $foodId, $quantity, $cooked, $clearAll, $rollback, $time)
-    {
-        $this->storeId = $storeId;
-        $this->orderId = $orderId;
-        $this->foodId = $foodId;
-        $this->quantity = $quantity;
-        $this->cooked = $cooked;
-        $this->clear = $clearAll;
-        $this->rollback = $rollback;
-        $this->time = $time;
-    }
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
+    public $storeId;
+    public $floorId;
+    public $tableId;
+    
+    public function __construct($storeId,$orderDetails,$foodDetails)
+    {
+        $this->storeId = $storeId;
+        $this->floorId = $floorId;
+        $this->tableId = $tableId;
+    }
+    /**
+     * The event's broadcast name.
+     *
+     * @return string
+     */
     public function broadcastAs()
     {
-        return OrderConst::UpdateOrderAtKitchenEvent;
+        return OrderConst::TableStatusUpdateEventName;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -53,6 +48,6 @@ class Waiter2WaiterPusher implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::WaiterToWaiterChannel));
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::TableChannel));
     }
 }
