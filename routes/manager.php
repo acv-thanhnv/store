@@ -6,9 +6,9 @@ Route::get('/store/{storeId}/kitchen', 'KitchenController@index');
 
 Route::get('/store/{storeId}/cashier', 'CashierController@index');
 	
-Route::post('/update', 'KitchenController@updateFoodByOrder');
+Route::post('/kitchen/push-food-to-customer/{push?}', 'KitchenController@updateFoodByOrder');
 
-Route::post('/rollback', 'KitchenController@rollbackFoodByOrder');
+Route::post('/kitchen/rollback-food', 'KitchenController@rollbackFoodByOrder');
 
 Route::post('/rollback-payment', 'CashierController@rollbackPayment');
 

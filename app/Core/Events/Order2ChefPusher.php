@@ -25,7 +25,8 @@ class Order2ChefPusher implements ShouldBroadcast
     public $storeId;
     public $orderDetails;
     public $foodDetails;
-public function __construct($storeId,$orderDetails,$foodDetails)
+    
+    public function __construct($storeId,$orderDetails,$foodDetails)
     {
         $this->storeId      = $storeId;
         $this->orderDetails = $orderDetails;
