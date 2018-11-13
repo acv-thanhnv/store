@@ -10,6 +10,7 @@ namespace App\Backend\Services\Production;
 use App\Backend\Services\Interfaces\StoreManagerInterface;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
+use App\Core\Helpers\CommonHelper;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,8 +20,15 @@ class StoreManagerService extends BaseService implements StoreManagerInterface
 {
     public function getStoreManager()
     {
-        $obj = SDB::table("store_store")->get();
-        return $obj;
+        $store = SDB::table("store_store")->get();
+        foreach($store as $obj){
+            if($obj->avatar==NULL){
+             $obj->src = url('/')."/common_images/no-avatar.png";
+            }else{
+                $obj->src = CommonHelper::getImageUrl($obj->avatar);
+            }
+        }
+        return $store;
     }
     public function addStoreManager($obj)
     {

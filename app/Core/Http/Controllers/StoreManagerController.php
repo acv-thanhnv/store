@@ -6,7 +6,7 @@
  * Time: 2:02 PM
  */
 
-namespace App\Backend\Http\Controllers;
+namespace App\Core\Http\Controllers;
 use App\Backend\Services\Interfaces\StoreManagerInterface;
 use App\Backend\Services\Production\StoreManagerService;
 use App\Core\Helpers\CommonHelper;
@@ -26,10 +26,10 @@ class StoreManagerController
         $this->storeService   = $storeService;
     }
     public function getStoreManager(Request $request){
-        $store= $this->storeService->getStoreManager();
-        $result = new DataResultCollection();
+        $store          = $this->storeService->getStoreManager();
+        $result         = new DataResultCollection();
         $result->status = SDBStatusCode::OK;
-        $result->data=$store;
+        $result->data   = $store;
         return view("backend.store_manager.list",["store" =>$result]);
     }
     public function addStoreManager(Request $request)

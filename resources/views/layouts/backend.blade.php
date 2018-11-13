@@ -159,7 +159,9 @@
                                 <ul class="nav child_menu">
                                     <li><a href="{{route('getListStore')}}">List Store</a>
                                     </li>
-
+                                    
+                                    <li><a href="{{route('addStoreManager')}}">Add Store</a>
+                                    </li>
                                 </ul>
                             </li>
 

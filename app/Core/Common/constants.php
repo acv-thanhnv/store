@@ -137,3 +137,7 @@ class FoodStatusValue{
     const NoDone  = 0;
     const Process = 1;
 }
+class UserValue{
+    const role_manager = 2;
+    const role_admin   = 1;
+}
