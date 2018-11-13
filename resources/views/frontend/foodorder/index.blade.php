@@ -633,12 +633,25 @@
 	    var channel = pusher.subscribe(channel_name);
 	    var eventName = "{{\App\Core\Common\OrderConst::OrderStatusEventName}}";
         channel.bind(eventName, function(data){
-        	localStorage.removeItem(cart_items);
-        	cart_items = data.arrOrder;
-        	cart_total = data.arrOrder.length;
-			//change total items of cart
-			$(".js-show-cart").attr("data-notify",cart_total);
-        	localStorage.cart_items = JSON.stringify(cart_items);
+        	//nếu ở order xóa order thì clear all local storage
+        	console.log(data);
+        	if(data.has_delete==1){
+        		$(".js-show-cart").attr("data-notify",0);
+				localStorage.removeItem('cart_items');
+				localStorage.removeItem('time');
+				localStorage.removeItem('orderId');
+				localStorage.removeItem('table');
+				cart_items = [];//set biến cart items về rỗng
+				cart_total = 0;
+				$("#table").prop("disabled",false);//enable user choose table
+        	}else{
+				localStorage.removeItem(cart_items);
+				cart_items = data.arrOrder;
+				cart_total = data.arrOrder.length;
+				//change total items of cart
+				$(".js-show-cart").attr("data-notify",cart_total);
+				localStorage.cart_items = JSON.stringify(cart_items);
+        	}
         });
 	}
 	//fixed cart for mobile

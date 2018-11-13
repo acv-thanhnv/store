@@ -217,7 +217,7 @@ $(document).on("click",".js-show-cart",function(){
 		sendItem(cart_items);
 		cal_total(cart_items);
 	}
-	if(cart_items.length===0){
+	if(cart_items.length==0){
 		$(".total-money").text("Total: 0");
 		$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
 	}
@@ -390,10 +390,11 @@ function Order(url,idStore,access_token){
 			cart_items = JSON.parse(localStorage.cart_items);
 		}
 		cart_items.forEach(function(obj){
-			if(obj.status ===0){
+			if(obj.status == 0){
 				cart_update.push(obj);
 			}
 		});
+		console.log(cart_update);
 		if(localStorage.orderId){
 			orderId = localStorage.getItem('orderId');
 		}

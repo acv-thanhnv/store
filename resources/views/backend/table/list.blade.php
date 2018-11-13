@@ -32,6 +32,10 @@
             background: #172D44 !important;
             color: white !important;
         }
+        tr.group, tr.group:hover {
+            background-color: #ddd !important;
+            font-weight: bold;
+        }
     </style>
 @endpush
 @extends("layouts.backend")
@@ -84,9 +88,9 @@
                                     <input type="checkbox" value="{{$tableItem->location_id}}">
                                 </td>
                                 <td>{{$tableItem->location_name}}</td>
-                                <td>{{$tableItem->type_location_id}}</td>
-                                <td>{{$tableItem->floor_id}}</td>
-                                <td>{{$tableItem->price}}</td>
+                                <td>{{$tableItem->type_name}}</td>
+                                <td>{{$tableItem->floor_name}}</td>
+                                <td>{{$tableItem->subprice}}</td>
                                 <td>
                                     <button type="button" class="btn btn-primary edit round" data-id="{{$tableItem->location_id}}">
                                         <i class="fa fa-pencil-square-o"></i>
@@ -111,15 +115,7 @@
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function () {
-            $("#tbl-table").DataTable({
-                "columnDefs": [
-                    {
-                        "orderable": false ,
-                        "targets": [0,3,4]
-                    }
-                ],
-                order: []
-            });
+            dataTable();
 
             //drag modal
             $( "#modal-add" ).draggable();
@@ -148,9 +144,9 @@
                 title          : 'Table',
                 subtitle       :'Add',
                 width          : 700,
-                iframeHeight   : 600,
+                iframeHeight   : 450,
                 headerColor    :"#405467",
-                icon           :"fa fa-user",
+                icon           :"fa fa-folder",
                 iconColor      :"#ECF0F1",
                 fullscreen     :true,
                 arrowKeys      :true,
@@ -183,9 +179,9 @@
                 title          : 'Table',
                 subtitle       :'Edit',
                 width          : 700,
-                iframeHeight   : 600,
+                iframeHeight   : 450,
                 headerColor    :"#405467",
-                icon           :"fa fa-user",
+                icon           :"fa fa-folder",
                 iconColor      :"#ECF0F1",
                 fullscreen     :true,
                 arrowKeys      :true,
@@ -217,7 +213,7 @@
                         text    : 'OK',
                         btnClass: 'btn btn-primary',
                         action  : function (){
-                            $("#dataTable").DataTable().row(tr).remove().draw(false);
+                            $("#tbl-table").DataTable().row(tr).remove().draw(false);
                             $.get("{{route('deleteTable')}}",{id:id},function(data){
                                 Alert("Menu Item Have Been Deleted Successful!");
                             });
@@ -266,11 +262,12 @@
                                 var arrId = [];
                                 $(".check-delete input:checked").each(function(){
                                     var tr = $(this).parents("tr");
-                                    $("#dataTable").DataTable().row(tr).remove().draw(false);
+                                    $("#tbl-table").DataTable().row(tr).remove().draw(false);
                                     arrId.push($(this).val());
                                 });
+                                console.log(arrId);
                                 $.get("{{route('deleteAllTable')}}",{arrId:arrId},function(data){
-                                    Alert("Menus have been deleted!");
+                                    Alert("Tables were successfully deleted!");
                                 });
                             }
                         },
@@ -300,6 +297,50 @@
                 loader : true,
                 loaderBg: '#9EC600'
             });
+        }
+        //function dataTable
+        function dataTable()
+        {
+            var groupColumn = 3;
+            var table = $('#tbl-table').DataTable({
+                "autoWidth": false,
+                "columnDefs": [
+                    {
+                        "visible": false,
+                        "targets": groupColumn
+                    },
+                    {
+                        "orderable": false ,
+                        "targets": [0,5,6]
+                    }
+                ],
+                "order": [[ groupColumn, 'asc' ]],
+                "drawCallback": function ( settings ) {
+                    var api = this.api();
+                    var rows = api.rows( {page:'current'} ).nodes();
+                    var last=null;
+
+                    api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
+                        if ( last !== group ) {
+                            $(rows).eq( i ).before(
+                                '<tr class="group"><td colspan="6">'+group+'</td></tr>'
+                                );
+
+                            last = group;
+                        }
+                    } );
+                }
+            } );
+            // Order by the grouping
+            $('#tbl-table tbody').on( 'click', 'tr.group', function () {
+                var currentOrder = table.order()[0];
+                if ( currentOrder[0] === groupColumn && currentOrder[1] === 'asc' ) {
+                    table.order( [ groupColumn, 'desc' ] ).draw();
+                }
+                else {
+                    table.order( [ groupColumn, 'asc' ] ).draw();
+                }
+            } );
         }
     </script>
 @endpush

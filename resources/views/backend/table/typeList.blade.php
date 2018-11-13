@@ -32,6 +32,10 @@
             background: #172D44 !important;
             color: white !important;
         }
+        tr.group, tr.group:hover {
+            background-color: #ddd !important;
+            font-weight: bold;
+        }
     </style>
 @endpush
 @extends("layouts.backend")
@@ -39,7 +43,7 @@
     <!--Title-->
     <div class="page-title">
         <div class="title_left">
-            <h2 class="text-primary">Floor <small>List</small></h2>
+            <h2 class="text-primary">Type Talbe <small>List</small></h2>
         </div>
     </div>
     <!--Table-->
@@ -62,32 +66,34 @@
 
             <div class="x_content">
                 <div class="table-responsive">
-                    <table class="table table-striped jambo_table table-hover table-user" id="tbl-floor">
+                    <table class="table table-striped jambo_table table-hover table-user" id="tbl-type">
                         <thead>
                         <tr class="headings">
                             <th style="text-align: center">
                                 <input type="checkbox" id="check-all" class="flat">
                             </th>
                             <th class="column-title">Name</th>
+                            <th class="column-title">Sub Price</th>
                             <th class="column-title">Edit </th>
                             <th class="column-title">Delete </th>
                         </tr>
                         </thead>
                         <!--Tbody-->
                         <tbody id="tbody">
-                        @foreach($floor->data as $floorItem)
+                        @foreach($type as $obj)
                             <tr>
                                 <td style="text-align: center" class="check-delete">
-                                    <input type="checkbox" value="{{$floorItem->id}}">
+                                    <input type="checkbox" value="{{$obj->id}}">
                                 </td>
-                                <td>{{$floorItem->name}}</td>
+                                <td>{{$obj->name}}</td>
+                                <td>{{$obj->subprice}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary edit round" data-id="{{$floorItem->id}}">
+                                    <button type="button" class="btn btn-primary edit round" data-id="{{$obj->id}}">
                                         <i class="fa fa-pencil-square-o"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger round delete" data-id="{{$floorItem->id}}">
+                                    <button class="btn btn-danger round delete" data-id="{{$obj->id}}">
                                         <i class="fa fa-trash-o"></i>
                                     </button>
                                 </td>
@@ -105,15 +111,20 @@
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function () {
-            $("#tbl-floor").DataTable({
-                "columnDefs": [
-                    {
-                        "orderable": false ,
-                        "targets": [0,3,4]
-                    }
-                ],
-                order: []
-            });
+            dataTable();
+
+            //drag modal
+            $( "#modal-add" ).draggable();
+            $( "#modal-edit" ).draggable();
+            if(localStorage.getItem("Message"))
+            {
+                if(localStorage.getItem("page")){
+                    var page = parseInt(localStorage.getItem("page"));
+                    $("#dataTable").DataTable().page(page).draw('page');
+                }
+                Alert(localStorage.getItem("Message"));
+                localStorage.clear();
+            }
         } );
 
         //function add
@@ -126,12 +137,12 @@
                     $(".iziModal-iframe").attr("src","");
                 },
                 focusInput	   : true,
-                title          : 'Floor',
+                title          : 'Table',
                 subtitle       :'Add',
                 width          : 700,
-                iframeHeight   : 250,
+                iframeHeight   : 300,
                 headerColor    :"#405467",
-                icon           :"fa fa-suitcase",
+                icon           :"fa fa-rocket",
                 iconColor      :"#ECF0F1",
                 fullscreen     :true,
                 arrowKeys      :true,
@@ -145,7 +156,7 @@
                 arrowKeys      :true,
                 iframe         : true,
                 iframeWidth    :400,
-                iframeURL      :"{{route('addFloor')}}"
+                iframeURL      :"{{route('addTypeTable')}}"
             });
         //function edit
         $(document).on('click', '.edit', function(event) {
@@ -155,18 +166,18 @@
             {
                 onOpening: function(modal){
                     var id =$(event.target).closest("button").data("id");//get Id, get button then get id
-                    $(".iziModal-iframe").attr("src","{{route('editFloor')}}?id="+id);
+                    $(".iziModal-iframe").attr("src","{{route('editTypeTable')}}?id="+id);
                     //set url iframe
                 },
                 onClosed: function(modal){
                     $(".iziModal-iframe").attr("src","");
                 },
-                title          : 'Floor',
+                title          : 'Table',
                 subtitle       :'Edit',
                 width          : 700,
-                iframeHeight   : 250,
+                iframeHeight   : 300,
                 headerColor    :"#405467",
-                icon           :"fa fa-suitcase",
+                icon           :"fa fa-folder",
                 iconColor      :"#ECF0F1",
                 fullscreen     :true,
                 arrowKeys      :true,
@@ -180,7 +191,7 @@
                 iframeWidth    :400,
                 iframeURL      :""
             });
-        //Delete Floor
+        //Delete table
         $("body").on("click",".delete",function(e){
             var id = $(this).data("id");
             var tr = $(this).parents('tr');
@@ -198,9 +209,8 @@
                         text    : 'OK',
                         btnClass: 'btn btn-primary',
                         action  : function (){
-                            $("#dataTable").DataTable().row(tr).remove().draw(false);
-                            $.get("{{route('deleteFloor')}}",{id:id},function(data){
-                                location.reload();
+                            $("#tbl-type").DataTable().row(tr).remove().draw(false);
+                            $.get("{{route('deleteTypeTable')}}",{id:id},function(data){
                                 Alert("Menu Item Have Been Deleted Successful!");
                             });
                         }
@@ -248,12 +258,11 @@
                                 var arrId = [];
                                 $(".check-delete input:checked").each(function(){
                                     var tr = $(this).parents("tr");
-                                    $("#dataTable").DataTable().row(tr).remove().draw(false);
+                                    $("#tbl-type").DataTable().row(tr).remove().draw(false);
                                     arrId.push($(this).val());
                                 });
-                                $.get("{{route('deleteAllFloor')}}",{arrId:arrId},function(data){
-                                    location.reload();
-                                    Alert("Menus have been deleted!");
+                                $.get("{{route('deleteAllTypeTable')}}",{arrId:arrId},function(data){
+                                    Alert("Tables were successfully deleted!");
                                 });
                             }
                         },
@@ -282,6 +291,19 @@
                 textAlign: 'left',
                 loader : true,
                 loaderBg: '#9EC600'
+            });
+        }
+        //function dataTable
+        function dataTable()
+        {
+            $("#tbl-type").DataTable({
+                "columnDefs": [
+                    {
+                        "orderable": false ,
+                        "targets": [0,3,4]
+                    }
+                ],
+                order: []
             });
         }
     </script>

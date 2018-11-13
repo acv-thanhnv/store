@@ -21,8 +21,9 @@ class TableService extends BaseService implements TableServiceInterface
     {
         $obj = SDB::table("store_location")
             ->join('store_floor','store_location.floor_id','=','store_floor.id')
+            ->join('store_type_location as type','type.id','=','store_location.type_location_id')
             ->where('store_floor.store_id','=', $storeId)
-            ->select('*','store_location.id as location_id','store_location.name as location_name', 'store_floor.name as floor_name')
+            ->select('*','store_location.id as location_id','store_location.name as location_name', 'store_floor.name as floor_name','type.name as type_name','type.subprice')
             ->get();
         return $obj;
     }
@@ -33,10 +34,11 @@ class TableService extends BaseService implements TableServiceInterface
                 ->get();
             return $obj;
     }
-    public function getTypeLocation(){
+    public function getTypeLocation($idStore){
 
             $obj = SDB::table('store_type_location')
-                ->get();
+                    ->where('store_id',$idStore)
+                    ->get();
         return $obj;
     }
 
@@ -49,7 +51,10 @@ class TableService extends BaseService implements TableServiceInterface
     public function getById($id)
     {
         $obj = SDB::table("store_location")
-            ->where("id",$id)->get();
+                ->join('store_type_location as type','type.id','=','store_location.type_location_id')
+                ->select('store_location.*','type.name as type_name','type.subprice')
+                ->where('store_location.id',$id)
+                ->get();
         return $obj[0];
     }
 
@@ -60,8 +65,7 @@ class TableService extends BaseService implements TableServiceInterface
             ->update([
                 "name" => $obj->name,
                 "type_location_id"=> $obj->type,
-                "floor_id"=>$obj->floor,
-                "price"=>$obj->price]);
+                "floor_id"=>$obj->floor]);
     }
     public function deleteTable($id)
     {
@@ -74,4 +78,11 @@ class TableService extends BaseService implements TableServiceInterface
         }
     }
 
+    public function getTypeTable($idStore)
+    {
+        $arrTableType = SDB::table('store_type_location')
+                        ->where('store_id',$idStore)
+                        ->get();
+        return $arrTableType;
+    }
 }

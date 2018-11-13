@@ -39,7 +39,7 @@ public function __construct($storeId,$orderDetails,$foodDetails)
      */
     public function broadcastAs()
     {
-        return OrderConst::UpdateOrderAtKitchenEvent;
+        return OrderConst::Order2Kitchen;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -48,6 +48,6 @@ public function __construct($storeId,$orderDetails,$foodDetails)
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OrderToKitchenChannel));
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::Order2Kitchen));
     }
 }

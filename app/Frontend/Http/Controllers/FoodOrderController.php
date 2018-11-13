@@ -12,6 +12,7 @@ use App\Core\Entities\DataResultCollection;
 use App\Core\Events\Customer2OrderManagerPusher;
 use App\Core\Events\OrderPusherEvent;
 use App\Core\Events\OrderStatusPusherEvent;
+use App\Core\Events\TableEvent;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
@@ -202,7 +203,7 @@ class FoodOrderController extends Controller
         $cart_items               = $request->cart_items;
         $order["description"]     = $request->description;
         $order["status"]          = 0;
-        $order["datetime_order"]  = CommonHelper::dateNow();  
+        $order["datetime_order"]  = CommonHelper::dateNow(); 
         if($orderId===null){
             //create new order
             $orderId                  = SDB::table('store_order')
@@ -243,21 +244,16 @@ class FoodOrderController extends Controller
             $order_detail['quantity']        = $obj['quantity'];
             $order_detail['status']          = FoodStatusValue::NoDone;
             $order_detail['has_update']      = 1;
-            $cart_items[$key]['status_name'] = CommonHelper::getFoodStatusName(1);
-            $cart_items[$key]['status']      = FoodStatusValue::NoDone;
             //nếu món ăn đó đã được order rồi thì cập nhập số lượng cũng như tình trạng món
             if(isset($obj["id"])){
                 //nếu món đó đã tồn tại và đang chế biến hoặc hoàn thành
                 SDB::table('store_order_detail')
                 ->where('id',$obj['id'])
-                ->where('status','>=',FoodStatusValue::Process)
                 ->update([
                     'quantity'   => $obj['quantity'],
                     'status'     => FoodStatusValue::NoDone,
                     'has_update' => 1
                 ]);
-                //set update for item
-                $cart_items[$key]['has_update'] = 1;
             }else{
                 //ngược lại thì insert mới 
                 SDB::table('store_order_detail')->insert($order_detail);
@@ -280,6 +276,8 @@ class FoodOrderController extends Controller
         event(new Customer2OrderManagerPusher($idStore,$order,$arrOrderDetail));
         //call pusher when order, status food change
         event(new OrderStatusPusherEvent($request->access_token,$orderId,$arrOrderDetail));
+        //call event bind table color
+        event(new TableEvent($idStore,$request->table));
         return $orderId;
     }
     public function FoodDetail(Request $request)
@@ -315,19 +313,24 @@ class FoodOrderController extends Controller
                     ->get();
         $Process = 0;//variable count food was processed
         $NoDone  = 0;//variable count food not done
-        foreach($arrOrderDetail as $obj){
-            //check status of food, nếu ko có món nào là đang chờ xác nhận thì status của order chuyển theo món
-            switch ($obj->status) {
-                case FoodStatusValue::Process:
-                    $Process ++;
-                    break;
-                default:
-                    $NoDone++;
-            }
-            if($obj->image==NULL){
-                $obj->src = url('/')."/common_images/no-store.png";
-            }else{
-                $obj->src = CommonHelper::getImageUrl($obj->image);
+        //nếu người dùng xóa món,order trống thì tình trạng là chưa xác nhận
+        if(count($arrOrderDetail)==0){
+            $NoDone++;
+        }else{
+            foreach($arrOrderDetail as $obj){
+                //check status of food, nếu ko có món nào là đang chờ xác nhận thì status của order chuyển theo món
+                switch ($obj->status) {
+                    case FoodStatusValue::Process:
+                        $Process ++;
+                        break;
+                    default:
+                        $NoDone++;
+                }
+                if($obj->image==NULL){
+                    $obj->src = url('/')."/common_images/no-store.png";
+                }else{
+                    $obj->src = CommonHelper::getImageUrl($obj->image);
+                }
             }
         }
         if($NoDone>0){//nếu order đó có món ăn chưa xác nhận thì order status là chưa xác nhận
@@ -346,5 +349,7 @@ class FoodOrderController extends Controller
         $idStore = $arrOrder[0]->store_id;
         //call event send to Order
         event(new Customer2OrderManagerPusher($idStore,$arrOrder[0],$arrOrderDetail));
+        //call event bind table color
+        event(new TableEvent($idStore,$arrOrder[0]->location_id));
     }
 }

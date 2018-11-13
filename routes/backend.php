@@ -106,7 +106,7 @@
         });
         //Group Food
         Route::group(["prefix" => "Food"],function(){
-            Route::get("list","FoodController@getFood")->name("getFood");
+            Route::get("list","FoodController@getFood")->name("getFoodManager");
             //add
             Route::get("addFood","FoodController@getAddFood")->name("addFood");
             Route::post("addFood","FoodController@postAddFood");
@@ -121,6 +121,7 @@
             //Other
             Route::get("Prop","FoodController@getProp")->name("getProp");
         });
+
         //Group Table
         Route::group(["prefix" => "Table"],function(){
             Route::get("myTable","TableController@getMyTable")->name("getTable");
@@ -130,10 +131,27 @@
             //Edit
             Route::get("editTable","TableController@getEditTable")->name("editTable");
             Route::post("editTable","TableController@update")->name("postEditTable");
+            //get table price
+            Route::get("tablePrice","TableController@tablePrice")->name("tablePrice");
             //Delete
             Route::get("deleteTable","TableController@deleteTable")->name("deleteTable");
             Route::get("deleteAllTable","TableController@deleteAllTable")->name("deleteAllTable");
         });
+
+        //Group Table Type
+        Route::group(["prefix" => "TableType"],function(){
+            Route::get("listTableType","TableController@getTypeTable")->name("getTypeTable");
+            //add
+            Route::get("addTypeTable","TableController@getAddTypeTable")->name("addTypeTable");
+            Route::post("addTypeTable","TableController@postAddTypeTable");
+            //Edit
+            Route::get("editTypeTable","TableController@getEditTypeTable")->name("editTypeTable");
+            Route::post("editTypeTable","TableController@editType");
+            //Delete
+            Route::get("deleteTypeTable","TableController@deleteTypeTable")->name("deleteTypeTable");
+            Route::get("deleteAllTypeTable","TableController@deleteAllTypeTable")->name("deleteAllTypeTable");
+        });
+
 
         //Group Floor
         Route::group(["prefix" => "Floor"],function(){
