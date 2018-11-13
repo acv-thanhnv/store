@@ -137,7 +137,10 @@ class TableController
     {
         $storeId   = CommonHelper::getStoreId();
         $result    = new DataResultCollection();
-        $rule      = ["name" => "required|min:3"];
+        $rule      = [
+                        "name" => "required|min:3",
+                        "price" => "required|int"
+                    ];
         $validator = Validator::make($request->all(),$rule);
         $obj = array([
             'name'     =>$request->name,
@@ -155,5 +158,50 @@ class TableController
             $result->data    = $error;
         }
         return ResponseHelper::JsonDataResult($result);
+    }
+
+    public function getEditTypeTable(Request $request)
+    {
+        $obj = SDB::table('store_type_location')
+                ->where('id',$request->id)
+                ->get();
+        return view('backend.table.typeEdit',['type' => $obj[0]]);
+    }
+
+    public function editType(Request $request)
+    {
+        $result    = new DataResultCollection();
+        $rule      = [
+            "name" => "required|min:3",
+            "price" => "required|int"
+        ];
+        $validator = Validator::make($request->all(),$rule);
+        if(!$validator->fails()){
+            SDB::table('store_type_location')
+            ->where('id',$request->id)
+            ->update(['name' => $request->name,'subprice' => $request->price]);
+            $result->status   = SDBStatusCode::OK;
+            $result->message  = 'Success';
+        }else {
+            $error           = $validator->errors();
+            $result->status  = SDBStatusCode::ValidateError;
+            $result->message = 'An error occured when validate!';
+            $result->data    = $error;
+        }
+        return ResponseHelper::JsonDataResult($result);
+    }
+
+    public function deleteTypeTable(Request $request)
+    {
+        SDB::table('store_type_location')
+        ->where('id',$request->id)
+        ->delete();
+    }
+
+    public function deleteAllTypeTable(Request $request)
+    {
+        foreach($request->arrId as $obj){
+            SDB::table("store_type_location")->where("id",$obj)->delete();
+        }
     }
 }

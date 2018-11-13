@@ -166,7 +166,7 @@
             {
                 onOpening: function(modal){
                     var id =$(event.target).closest("button").data("id");//get Id, get button then get id
-                    $(".iziModal-iframe").attr("src","{{route('editTable')}}?id="+id);
+                    $(".iziModal-iframe").attr("src","{{route('editTypeTable')}}?id="+id);
                     //set url iframe
                 },
                 onClosed: function(modal){
@@ -175,7 +175,7 @@
                 title          : 'Table',
                 subtitle       :'Edit',
                 width          : 700,
-                iframeHeight   : 450,
+                iframeHeight   : 300,
                 headerColor    :"#405467",
                 icon           :"fa fa-folder",
                 iconColor      :"#ECF0F1",
@@ -209,8 +209,8 @@
                         text    : 'OK',
                         btnClass: 'btn btn-primary',
                         action  : function (){
-                            $("#tbl-table").DataTable().row(tr).remove().draw(false);
-                            $.get("{{route('deleteTable')}}",{id:id},function(data){
+                            $("#tbl-type").DataTable().row(tr).remove().draw(false);
+                            $.get("{{route('deleteTypeTable')}}",{id:id},function(data){
                                 Alert("Menu Item Have Been Deleted Successful!");
                             });
                         }
@@ -258,11 +258,10 @@
                                 var arrId = [];
                                 $(".check-delete input:checked").each(function(){
                                     var tr = $(this).parents("tr");
-                                    $("#tbl-table").DataTable().row(tr).remove().draw(false);
+                                    $("#tbl-type").DataTable().row(tr).remove().draw(false);
                                     arrId.push($(this).val());
                                 });
-                                console.log(arrId);
-                                $.get("{{route('deleteAllTable')}}",{arrId:arrId},function(data){
+                                $.get("{{route('deleteAllTypeTable')}}",{arrId:arrId},function(data){
                                     Alert("Tables were successfully deleted!");
                                 });
                             }

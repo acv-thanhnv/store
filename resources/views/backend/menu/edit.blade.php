@@ -64,7 +64,7 @@
 						<span class="fa fa-pencil form-control-feedback left" aria-hidden="true"></span>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group" style="text-align: right">
 					<div>
 						<button class="btn btn-primary" type="reset">Reset</button>
 						<button type="button" class="btn btn-success edit">Edit</button>

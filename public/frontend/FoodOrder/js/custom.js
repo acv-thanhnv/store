@@ -390,10 +390,11 @@ function Order(url,idStore,access_token){
 			cart_items = JSON.parse(localStorage.cart_items);
 		}
 		cart_items.forEach(function(obj){
-			if(obj.status ===0){
+			if(obj.status == 0){
 				cart_update.push(obj);
 			}
 		});
+		console.log(cart_update);
 		if(localStorage.orderId){
 			orderId = localStorage.getItem('orderId');
 		}

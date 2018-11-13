@@ -145,13 +145,11 @@
             Route::get("addTypeTable","TableController@getAddTypeTable")->name("addTypeTable");
             Route::post("addTypeTable","TableController@postAddTypeTable");
             //Edit
-            Route::get("editTable","TableController@getEditTable")->name("editTable");
-            Route::post("editTable","TableController@update")->name("postEditTable");
-            //get table price
-            Route::get("tablePrice","TableController@tablePrice")->name("tablePrice");
+            Route::get("editTypeTable","TableController@getEditTypeTable")->name("editTypeTable");
+            Route::post("editTypeTable","TableController@editType");
             //Delete
-            Route::get("deleteTable","TableController@deleteTable")->name("deleteTable");
-            Route::get("deleteAllTable","TableController@deleteAllTable")->name("deleteAllTable");
+            Route::get("deleteTypeTable","TableController@deleteTypeTable")->name("deleteTypeTable");
+            Route::get("deleteAllTypeTable","TableController@deleteAllTypeTable")->name("deleteAllTypeTable");
         });
 
 

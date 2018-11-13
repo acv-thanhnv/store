@@ -67,12 +67,12 @@ class OrderConst{
 
 
     const CashierChannelToCashier    = "cashier2cashier";
-
-    const RollbackPaymentEventName = "rollback-payment";
+    
+    const RollbackPaymentEventName   = "rollback-payment";
     
     const Customer2Order             = "customer2order";
-
-    const UpdateOrderAtKitchenEvent            = "update-order-at-kichen";
+    
+    const UpdateOrderAtKitchenEvent  = "update-order-at-kichen";
     
     const PaymentDoneEventName       = "payment-done";
     
@@ -85,15 +85,15 @@ class OrderConst{
     
     const NewOrderToOrderManager     = "new-order-to-order-manager";
     
-    const WaiterToWaiterChannel       = "waiter2waiter";
+    const WaiterToWaiterChannel      = "waiter2waiter";
     
     const OrderEventName             = "order.waiter";
-
+    
     const OrderDeleteEvent           = 'order_delete';
     
     
-    const OrderToKitchenChannel         = "order2kitchen";
-
+    const Order2Kitchen              = "order2kitchen";
+    
     const OrderChefEventName         = "new-order";
     
     const CustomerCashierEventName   = "new-payment";

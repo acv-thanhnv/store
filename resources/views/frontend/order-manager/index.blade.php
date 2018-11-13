@@ -425,6 +425,7 @@
                     $(itemOrderTemp).find('.entities_order_status_content').text(data.status_name);
                     $(itemOrderTemp).find('.entities_order_status_content').addClass("status_"+data.status);
                     $(itemOrderTemp).find('.entities_order_status_content').attr("order-status",data.status);
+                    $(itemOrderTemp).find('.no-data').removeClass('dis-none');
                     $(itemOrder).append($(itemOrderTemp));
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -829,6 +830,7 @@
                     text    : 'OK',
                     btnClass: 'btn btn-primary',
                     action  : function (){
+                        $(row).next('.entities-row-detail').remove();
                         $(row).remove();
                         $.ajax({
                             url: '{{route("deleteOrder")}}',

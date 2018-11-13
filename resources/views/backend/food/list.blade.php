@@ -60,7 +60,7 @@
 <!--Title-->
 <div class="page-title">
 	<div class="title_left">
-		<h2 class="text-primary">Type <small>List</small></h2>
+		<h2 class="text-primary">Food <small>List</small></h2>
 	</div>
 </div>
 <!--Table-->
@@ -193,7 +193,7 @@
 		width          : 850,
 		iframeHeight   : 500,
 		headerColor    :"#405467",
-		icon           :"fa fa-user",
+		icon           :"fa fa-cutlery",
 		iconColor      :"#ECF0F1",
 		fullscreen     :true,
 		arrowKeys      :true,
@@ -233,7 +233,7 @@
 		width          : 850,
 		iframeHeight   : 500,
 		headerColor    :"#405467",
-		icon           :"fa fa-user",
+		icon           :"fa fa-cutlery",
 		iconColor      :"#ECF0F1",
 		fullscreen     :true,
 		arrowKeys      :true,
