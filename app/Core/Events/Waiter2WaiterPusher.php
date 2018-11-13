@@ -22,17 +22,17 @@ class Waiter2WaiterPusher implements ShouldBroadcast
     public $foodId;
     public $quantity;
     public $cooked;
-    public $clearAll;
+    public $push;
     public $rollback;
     public $time;
-    public function __construct($storeId, $orderId, $foodId, $quantity, $cooked, $clearAll, $rollback, $time)
+    public function __construct($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time)
     {
         $this->storeId = $storeId;
         $this->orderId = $orderId;
         $this->foodId = $foodId;
         $this->quantity = $quantity;
         $this->cooked = $cooked;
-        $this->clearAll = $clearAll;
+        $this->push = $push;
         $this->rollback = $rollback;
         $this->time = $time;
     }
