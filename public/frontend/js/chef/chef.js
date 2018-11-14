@@ -78,6 +78,9 @@ module.exports = __webpack_require__(72);
 
 var storeId = $('#config').attr('storeId');
 var rootPath = $('#config').attr('rootPath');
+var Order2Kitchen = $('#config').attr('Order2Kitchen');
+var WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel');
+var Customer2Order = $('#config').attr('Customer2Order');
 
 $(document).ready(function () {
 	$("#header-left a").click(function () {
@@ -89,7 +92,6 @@ $(document).ready(function () {
 });
 
 function pushToOrderListTable(result) {
-	console.log(result);
 	var output = '';
 	var orderId = result.orderDetails.id;
 	var table = result.orderDetails.table_name;
@@ -436,20 +438,20 @@ var pusher = new Pusher("120973d888acaaed6fef", {
 	encrypted: true
 });
 
-var order2kitchen = pusher.subscribe(md5(storeId) + '-order2kitchen');
-order2kitchen.bind('update-order-at-kichen', function (res) {
+var order2kitchen = pusher.subscribe(md5(storeId) + '-' + Order2Kitchen);
+order2kitchen.bind(Order2Kitchen, function (res) {
 	pushToOrderListTable(res);
 	pushToWaiterTable(res);
 });
 
-var customer2order = pusher.subscribe(md5(storeId) + '-customer2order');
-customer2order.bind('customer2order', function (res) {
+var customer2order = pusher.subscribe(md5(storeId) + '-' + Customer2Order);
+customer2order.bind(Customer2Order, function (res) {
 	removeFromOrderListTable(res);
 	removeFromWaiterTable(res);
 });
 
-var waiter2waiter = pusher.subscribe(md5(storeId) + '-waiter2waiter');
-waiter2waiter.bind('update-order-at-kichen', function (res) {
+var waiter2waiter = pusher.subscribe(md5(storeId) + '-' + WaiterToWaiterChannel);
+waiter2waiter.bind(WaiterToWaiterChannel, function (res) {
 	console.log(res);
 	var time = res.time;
 	var orderId = res.orderId;

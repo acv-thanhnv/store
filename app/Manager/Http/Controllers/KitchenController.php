@@ -2,8 +2,10 @@
 
 namespace App\Manager\Http\Controllers;
 
+use App\Core\Common\OrderConst;
 use App\Core\Events\Order2ChefPusher;
 use App\Core\Events\Waiter2WaiterPusher;
+use App\Core\Events\FoodStatusEvent;
 
 use Illuminate\Http\Request; 
 use Pusher\Pusher;
@@ -84,6 +86,8 @@ class KitchenController extends Controller
 
         $cooked = $cooked+$push;
 
+        if ($cooked==$quantity) $status=2;
+
         $rollback = DB::table('store_rollback_kitchen')->insert(
             [
                 'store_id' => $storeId,
@@ -96,10 +100,20 @@ class KitchenController extends Controller
 
         $res = DB::table('store_order_detail')
         ->where('order_id', $orderId)
+        ->whereRaw('cooked!=quantity')
+        ->get();
+
+        if (!$res[0]) event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, 0, 0));
+
+        $count = DB::table('store_order_detail')
+        ->where('order_id', $orderId)
         ->where('entities_id', $foodId)
         ->update(['cooked' => $cooked]);
 
-        if ($res) event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, 0, 0));
+        if ($res) {
+            event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, 0, 0));
+            event(new FoodStatusEvent($access_token,$order_detail_id,$cooked,$status));
+        }
         return $res;
     }
 
@@ -156,7 +170,12 @@ class KitchenController extends Controller
     }
 
     public function index($storeId) {
-        return view('frontend/chef3/index', ['storeId' => $storeId]);
+        return view('frontend/chef3/index', [
+            'storeId' => $storeId,
+            'Order2Kitchen' => OrderConst::Order2Kitchen,
+            'WaiterToWaiterChannel' => OrderConst::WaiterToWaiterChannel,
+            'Customer2Order' => OrderConst::Customer2Order
+        ]);
     }
 
 }
