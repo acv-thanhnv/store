@@ -157,6 +157,14 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
+						<label>Priority</label>
+						<input type="number" id="priority" class="form-control has-feedback-left" name="priority" 
+						placeholder="Priority...">
+						<span class="fa fa-star-half-empty form-control-feedback left" aria-hidden="true"></span>
+					</div>
+				</div>
+				<div class="form-group">
 					<div class="col-md-10 col-sm-10 col-xs-12 form-group has-feedback">
 						<label>Description</label>
 						<textarea class="form-control" id="description" rows="2" placeholder="Description for store..."></textarea>
@@ -164,7 +172,7 @@
 				</div>
 				<div class="form-group footer">
 					<div>
-						<button type="button" class="btn btn-success add pull-right">Add</button>
+						<button type="button" class="btn btn-success add pull-right">Save</button>
 						<button class="btn btn-primary pull-right" type="reset">Reset</button>
 					</div>
 				</div>
@@ -173,7 +181,64 @@
 			</div>
 		</div>
 	</div>
+	<div class="col-md-12 col-xs-12">
+		<button class="btn btn-danger" id="addUser" title="Add New User" data-toggle="tooltip">
+			<i class="fa fa-plus"></i> Add User
+		</button>
+		<div id="listUser" class="dis-none">
+			<table class="table table-striped jambo_table table-hover table-user">
+				<thead>
+					<tr class="headings">
+						<th style="text-align: center">
+							<input type="checkbox" id="check-all" class="flat">
+						</th>
+						<th class="column-title">Image </th>
+						<th class="column-title">Name </th>
+						<th class="column-title">Email </th>
+						<th class="column-title">Store </th>
+						<th class="column-title">Role </th>
+						<th class="column-title">Active </th>
+						<th class="column-title">Edit </th>
+						<th class="column-title">Delete </th>
+					</tr>
+				</thead>
+				<!--Tbody-->
+				<tbody id="tbody">
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
+<!--Template User-->
+<!--template table-->
+<div class="#template" style="display: none;">
+	<table >
+		<tbody id="tr-customer">
+			<tr>
+				<td align="center" class="check-delete">
+					<input class="check" type="checkbox" name="xoa[]">
+				</td>
+				<td><img class="img" src="" alt="Avatar"></td>
+				<td class="name"></td>
+				<td class="email"></td>
+                <td class="store"></td>
+				<td class="role"></td>
+				<td class="active"></td>
+				<td>
+					<button type="button" class="btn btn-primary edit round">
+					  <i class="fa fa-pencil-square-o"></i>
+					</button>
+				</td>
+				<td>
+					<a class="btn btn-danger round delete">
+						<i class="fa fa-trash-o"></i>
+					</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
 @endsection
 @push("js")
 <!--Mapp-->
@@ -263,6 +328,42 @@
     }
 </script>
 <script type="text/javascript">
+	var idStore=1;
+	//function add user
+	$(document).on('click', '#addUser', function(event) {
+		if(idStore==0){
+			notify('Warning','warning','Sorry, your must save store to add user','#D9A357','#9EC600');
+		}else{
+			$('#modal-add').iziModal('open',event);
+		}
+	});
+	$('#modal-add').iziModal(
+	{
+		onClosed: function(modal){
+			$(".iziModal-iframe").attr("src","");
+		},
+		focusInput	   : true,
+		title          : 'User',
+		subtitle       :'Add',
+		width          : 700,
+		iframeHeight   : 660,
+		headerColor    :"#405467",
+		icon           :"fa fa-user",
+		iconColor      :"#ECF0F1",
+		fullscreen     :true,
+		arrowKeys      :true,
+		pauseOnHover   :true,
+		overlayColor   : 'rgba(0, 0, 0, 0.2)',
+		navigateCaption:true,
+		bodyOverflow   : true,
+		radius         :15,
+		transitionIn   :"bounceInDown",
+		transitionOut  :"bounceOutUp",
+		arrowKeys      :true,
+		iframe         : true,
+		iframeWidth    :500,
+		iframeURL      :"{{route('admin.user.add')}}?idStore="+idStore
+	});
 	//upload image 
 	function handleFileSelect(event) {
 		var input = this;
@@ -286,7 +387,8 @@
 		$('#file').trigger('click');
 	});
 	//submit add 
-	$(".add").click(function(){
+	$(document).on('click','.add',function(){
+		console.log(idStore);
 		var formData = new FormData();
 		formData.append("name", $("#name").val());
 		formData.append("address", $("#address").val());
@@ -294,36 +396,117 @@
         formData.append("lat", $("#lat").val());
         formData.append("lng", $('#lng').val());
         formData.append("description",$('#description').val());
-        $.ajax({
-        	type: 'POST',
-        	headers: {
-        		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        	},
-        	contentType: false,
-        	processData: false,
-        	url: "",
-        	data:formData,
-        	success: function (result) {
-        		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
-        			$.toast({
-        				text: "Store have been added on map!",
-        				heading: 'Successful',
-        				icon: "success",
-        				showHideTransition: 'slide',
-        				allowToastClose: true,
-        				hideAfter: 1500,
-        				stack: 5,
-        				position: 'top-right',
-        				textAlign: 'left', 
-        				loader : true,
-        				loaderBg: '#9EC600'
-        			});
-        		}else{
-        			_commonShowError(result.data);
-        		}
-			}
-		});
+        formData.append("priority",$('#priority').val());
+        formData.append("idStore",idStore);
+        //neu chua them store thi them moi, nguoc lai thi update
+        if(idStore==0){
+        	$.ajax({ 
+	        	type: 'POST',
+	        	headers: {
+	        		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	        	},
+	        	contentType: false,
+	        	processData: false,
+	        	url: "",
+	        	data:formData,
+	        	success: function (result) {
+	        		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
+	        			$.toast({
+	        				text: "Store have been added on map!",
+	        				heading: 'Successful',
+	        				icon: "success",
+	        				showHideTransition: 'slide',
+	        				allowToastClose: true,
+	        				hideAfter: 1500,
+	        				stack: 5,
+	        				position: 'top-right',
+	        				textAlign: 'left', 
+	        				loader : true,
+	        				loaderBg: '#9EC600'
+	        			});
+	        			idStore = result.idStore;
+	        		}else{
+	        			_commonShowError(result.data);
+	        		}
+				}
+			});
+        }else{
+        	$.ajax({ 
+	        	type: 'POST',
+	        	headers: {
+	        		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	        	},
+	        	contentType: false,
+	        	processData: false,
+	        	url: "{{route('postEditStoreManager')}}",
+	        	data:formData,
+	        	success: function (result) {
+	        		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
+	        			$.toast({
+	        				text: "Store have been save!",
+	        				heading: 'Successful',
+	        				icon: "success",
+	        				showHideTransition: 'slide',
+	        				allowToastClose: true,
+	        				hideAfter: 1500,
+	        				stack: 5,
+	        				position: 'top-right',
+	        				textAlign: 'left', 
+	        				loader : true,
+	        				loaderBg: '#9EC600'
+	        			});
+	        		}else{
+	        			_commonShowError(result.data);
+	        		}
+				}
+			});
+        }
 	})
+	//build List
+	function buildList(data)
+	{
+		var tbody = $("#tbody");
+		$(tbody).empty();
+		data.data.forEach(function(obj) {
+			var row = $("#tr-customer").contents().clone();
+			$(row).find('.check').val(obj.id);
+			$(row).find('.img').attr('src', obj.avatar);
+			$(row).find('.img').data("id",obj.id);
+		 	$(row).find('.name').html(obj.name);
+		 	$(row).find('.email').html(obj.email);
+            $(row).find('.store').html(obj.store_name);
+		 	$(row).find('.role').html(obj.role);
+		 	if(obj.is_active===1){
+		 		$(row).find('.active').html("Có");
+		 	}else{
+		 		$(row).find('.active').html("Không");
+		 	}
+		 	//profile
+		 	$(row).find('.profile').data("id",obj.id);
+		 	//edit
+		 	$(row).find('.edit').data("id",obj.id);
+		 	//delete
+		 	$(row).find('.delete').data("id",obj.id);
+		 	$(tbody).append($(row));
+		});
+	}
+	//======================function notify=========================
+    function notify(headingContent,icon,content,bgColor,loaderBg){
+        $.toast({
+            text: content,
+            heading: headingContent,
+            icon: icon,
+            showHideTransition: 'plain',
+            allowToastClose: true,
+            hideAfter: 2000,
+            bgColor:bgColor,
+            stack: 5,
+            position: 'top-right',
+            textAlign: 'left',
+            loader : true,
+            loaderBg: loaderBg
+        });
+    }
 </script>
 <script async defer
    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcW21XZbz_N3NzUiwUSd-K_4vLCZSCM7I&callback=initMap&libraries=places">

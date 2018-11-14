@@ -28,4 +28,6 @@ Route::get("OrderBy","FoodOrderController@OrderBy")->name("OrderBy");//filter or
 Route::get("getCartItems","FoodOrderController@getCartItems")->name('getCartItems'); 
 Route::post("deleteCartItem","FoodOrderController@deleteCartItem")->name('deleteCartItem'); 
 
+Route::get('testEvent','FoodOrderController@TestEvent');
+
 

@@ -610,7 +610,10 @@
 		}
 		//show alert change
 		checkAlert();
+		//order channel name
 		var channel_name = access_token+'_'+'{{\App\Core\Common\OrderConst::OrderStatusEventName}}';
+		//food channel name
+		var food_channel_name = access_token+'_'+'{{\App\Core\Common\FoodStatusValue::FoodStatusEvent}}';
 		setTable();
 		countCart();//dem va hien thi so item trong gio hang
 		getFoodByMenu(idStore,"{{route('getFood')}}");
@@ -620,16 +623,24 @@
 		buildFood("{{route('getFood')}}",idStore,1,null,null,null);
 		lazyLoad("{{route('getFood')}}","{{route('OrderBy')}}",idStore);
 		Order("{{route('sendOrder')}}",idStore,access_token);
-		PusherEvent(channel_name);
+		PusherEvent(channel_name,food_channel_name);
 		deleteCartItem('{{route("deleteCartItem")}}');//delete item from cart
 	})
 
 	//pusher event
-	function PusherEvent(channel_name){
+	function PusherEvent(channel_name,food_channel_name){
 		var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
                 cluster: '{{env('PUSHER_APP_CLUSTER')}}',
                 encrypted: true
             });
+		//food status event
+		var food_channel = pusher.subscribe(food_channel_name);
+		var food_eventName = '{{\App\Core\Common\FoodStatusValue::FoodStatusEvent}}';
+		food_channel.bind(food_eventName,function(data){
+			console.log(data);
+			FoodStatus(data.idDetail,data.cooked,data.foodStatus,data.foodStatusName);
+		});
+		//order status event
 	    var channel = pusher.subscribe(channel_name);
 	    var eventName = "{{\App\Core\Common\OrderConst::OrderStatusEventName}}";
         channel.bind(eventName, function(data){

@@ -29,6 +29,9 @@ Route::group(["prefix" => "Admin"],function(){
         //add
         Route::get("addStore","StoreManagerController@addStoreManager")->name("addStoreManager");
         Route::post("addStore","StoreManagerController@postAddStoreManager");
+        //Add user for store
+        Route::get("addUser","StoreManagerController@addUser")->name("admin.user.add");
+        Route::post("addUser","StoreManagerController@postAddUser");
         //Edit
         Route::get("editStore","StoreManagerController@getEditStoreManager")->name("editStoreManager");
         Route::post("editStore","StoreManagerController@postEditStoreManager")->name("postEditStoreManager");

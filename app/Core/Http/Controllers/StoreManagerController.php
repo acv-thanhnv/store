@@ -8,22 +8,29 @@
 
 namespace App\Core\Http\Controllers;
 use App\Backend\Services\Interfaces\StoreManagerInterface;
+use App\Backend\Services\Interfaces\UserServiceInterface;
 use App\Backend\Services\Production\StoreManagerService;
-use App\Core\Helpers\CommonHelper;
-use App\Core\Entities\DataResultCollection;
 use App\Core\Common\SDBStatusCode;
+use App\Core\Dao\SDB;
+use App\Core\Entities\DataResultCollection;
+use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
+use App\Core\Services\Interfaces\UploadServiceInterface;
 use Illuminate\Http\Request;
-use function MongoDB\BSON\toJSON;
 use Illuminate\Support\Facades\Validator;
+use function MongoDB\BSON\toJSON;
 
 class StoreManagerController
 {
     protected $storeService;
+    protected $userService;
+    protected $uploadService;
 
-    public function __construct(StoreManagerInterface $storeService)
+    public function __construct(UploadServiceInterface $uploadService,StoreManagerInterface $storeService,UserServiceInterface $userService)
     {
-        $this->storeService   = $storeService;
+        $this->storeService  = $storeService;
+        $this->uploadService = $uploadService;
+        $this->userService   = $userService;
     }
     public function getStoreManager(Request $request){
         $store          = $this->storeService->getStoreManager();
@@ -37,20 +44,88 @@ class StoreManagerController
         return view("backend.store_manager.add");
     }
 
-    public function postAddFloor(Request $request)
+    public function addUser(Request $request)
+    {
+        $arrRole = SDB::table('sys_roles')->get();
+        return view('backend.store_manager.addUser',["arrRole" => $arrRole]);
+    }
+
+    public function postAddUser(Request $request)
+    {
+        $idStore = $request->idStore;
+        $image  = $request->file("image");
+        $result =  new DataResultCollection();
+        $rule_image = "";
+        if($image!=NULL){
+            $rule_image = "mimes:".UploadConst::FILE_IMAGE_UPLOAD_ACCESSED."|image|max:".UploadConst::BACKEND_UPLOAD_IMAGE_MAX;
+        }
+        $rule   = [
+            "image" => $rule_image,
+            "name"  => "required|min:3|max:32",
+            "date"  => "required|date",
+            "email" => "required|email|unique:users",
+            "pass"  => "required|min:3|max:32",
+            "role"  => "required"
+        ];
+        $message_rule = [
+            '*.mimes' => 'Mime not Allowed'
+        ];
+        $validator = Validator::make($request->all(),$rule,$message_rule);
+        if (!$validator->fails()) {
+            if($image!=NULL){
+                $result = $this->uploadService->uploadFile(array($image),$diskLocalName,'uploads/avatars','');
+                foreach ($result->data as $data){
+                    $imageUrl = $data["uri"];
+                }
+            } else{
+                $result->status = SDBStatusCode::OK;
+            }
+
+        } else {
+            $error           = array($validator->errors());
+            $result->status  = SDBStatusCode::ValidateError;
+            $result->message = 'An error occured while uploading avatar or validate!';
+            $result->data    =$error;
+        }
+        if($result->status==SDBStatusCode::OK){
+            $obj        = new \stdClass();
+            $obj->image = NULL;
+            if($image!=NULL){
+                $obj->image  = $imageUrl;
+            }
+            $obj->name   = $request->name;
+            $obj->date   = $request->date;
+            $obj->gender = $request->gender;
+            $obj->email  = $request->email;
+            $obj->pass   = Hash::make($request->pass);
+            $obj->role   = $request->role;
+            $this->service->insert($obj);
+        }
+        dd($idStore);
+    }
+
+    public function postAddStoreManager(Request $request)
     {
         $result             = new DataResultCollection();
-        $rule               = ["name" => "required|min:3"];
+        $rule               = [
+                                "name"    => "required|min:3",
+                                'address' => 'required|min:3',
+                                'lng'     => 'required',
+                                'lat'     => 'required',
+                                ];
+        $obj['name']        = $request->name;
+        $obj['address']     = $request->address;
+        $obj['avatar']      = $request->image;
+        $obj['lat']         = $request->lat;
+        $obj['lng']         = $request->lng;
+        $obj['description'] = $request->description;
+        $obj['priority']    = $request->priority;
         $validator          = Validator::make($request->all(),$rule);
-        $storeId = 1;
-        $obj=array([
-            'store_id'=>$storeId,
-            'name'=>$request->name
-        ]);
         if(!$validator->fails()){
-            $this->storeService->addFloor($obj);
-            $result->status   = SDBStatusCode::OK;
-            $result->message  = 'Success';
+            $idStore         = $this->storeService->addStoreManager($obj);
+            $result->status  = SDBStatusCode::OK;
+            $result->idStore = $idStore;
+            $result->message = 'Success';
         }else {
             $error           = $validator->errors();
             $result->status  = SDBStatusCode::ValidateError;
@@ -66,16 +141,27 @@ class StoreManagerController
         return view("backend.store_manager.edit",["obj" => $obj]);
     }
 
-    public function update(Request $request)
+    public function postEditStoreManager(Request $request)
     {
-        $result    = new DataResultCollection();
-        $rule      = ["name" => "required|min:3"];
+        $result     = new DataResultCollection();
+        $rule       = [
+                        "name"    => "required|min:3",
+                        'address' => 'required|min:3',
+                        'lng'     => 'required',
+                        'lat'     => 'required',
+                    ];
+        $obj = new \stdClass;
+        $obj->idStore     = $request->idStore;
+        $obj->name        = $request->name;
+        $obj->address     = $request->address;
+        $obj->avatar      = $request->image;
+        $obj->lat         = $request->lat;
+        $obj->lng         = $request->lng;
+        $obj->description = $request->description;
+        $obj->priority    = $request->priority;
         $validator = Validator::make($request->all(),$rule);
         if(!$validator->fails()){
-            $obj              = new \stdClass();
-            $obj->id          = $request->id;
-            $obj->name        = $request->name;
-            $this->storeService->editFloor($obj);
+            $this->storeService->editStoreManager($obj);
             $result->status   = SDBStatusCode::OK;
             $result->message  = 'Success';
         }else {

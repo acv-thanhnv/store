@@ -9,10 +9,10 @@ use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
-use App\Core\Events\Customer2OrderManagerPusher;
 use App\Core\Events\Order2ChefPusher;
 use App\Core\Events\OrderPusherEvent;
 use App\Core\Events\OrderStatusPusherEvent;
+use App\Core\Events\Other2OrderManagerPusher;
 use App\Core\Events\TableEvent;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
@@ -293,7 +293,7 @@ class FoodController extends Controller
         $access_token   = $arrOrder[0]->access_token;
         $idTable        = $arrOrder[0]->location_id;
         //sau khi xóa gọi lại đúng hàm này đề build lại dữ liệu của order đó
-        event(new Customer2OrderManagerPusher($arrOrder[0]->store_id,$arrOrder[0],$arrOrderDetail));
+        event(new Other2OrderManagerPusher($arrOrder[0]->store_id,$arrOrder[0],$arrOrderDetail));
         //call event bind table color
         event(new TableEvent($idStore,$idTable));
         //call event get status and return response for customer 
