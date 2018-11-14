@@ -364,7 +364,7 @@ function deleteCartItem(url){
 			}
 		}
 	});
-						})
+})
 }
 //count cart item
 function countCart(){
@@ -400,7 +400,6 @@ function Order(url,idStore,access_token){
 				cart_update.push(obj);
 			}
 		});
-		console.log(cart_update);
 		if(localStorage.orderId){
 			orderId = localStorage.getItem('orderId');
 		}
@@ -564,6 +563,7 @@ function FoodStatus(idDetail,cooked,status,status_name){
 	cart_items[cart_index].status_name = status_name;
 	sendItem(cart_items);
     localStorage.cart_items = JSON.stringify(cart_items);
+    notify('Success','success','Món '+cart_items[cart_index].name+' đã nấu xong '+cooked,'#437F2C');
 }
 //function alert notify
 function notify(headingContent,icon,content,bgColor){

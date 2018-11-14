@@ -141,12 +141,20 @@ class FoodController extends Controller
             $result->data = $arrTable;
             $result->tab  = 'table';
         }else{
-            $result->data   = SDB::table('store_entities as food')
+            $arrFood   = SDB::table('store_entities as food')
                             ->join('store_menu as menu','menu.id','=','food.menu_id')
                             ->where('food.name','like','%'.$key.'%')
                             ->where('menu.store_id',$idStore)
                             ->select('food.*')
                             ->paginate(FoodConst::foodPerPage);
+            foreach ($arrFood as $obj) {
+                if($obj->image==NULL){
+                    $obj->src = url('/')."/common_images/no-store.png";
+                }else{
+                    $obj->src = CommonHelper::getImageUrl($obj->image);
+                }
+            }
+            $result->data = $arrFood;
             $result->tab  = 'menu';
         }
         return ResponseHelper::JsonDataResult($result);

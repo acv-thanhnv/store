@@ -354,7 +354,7 @@ class FoodOrderController extends Controller
                         ->get();
         $idStore = $arrOrder[0]->store_id;
         //call event send to Order
-        event(new Customer2OrderManagerPusher($idStore,$arrOrder[0],$arrOrderDetail));
+        event(new Other2OrderManagerPusher($idStore,$arrOrder[0],$arrOrderDetail));
         //call event bind table color
         event(new TableEvent($idStore,$arrOrder[0]->location_id));
     }
