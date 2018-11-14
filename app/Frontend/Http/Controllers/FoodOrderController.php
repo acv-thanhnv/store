@@ -39,7 +39,7 @@ class FoodOrderController extends Controller
 
     public function TestEvent()
     {
-        event(new FoodStatusEvent('1bb4373b2f7642c2d0f0d88326e7a787',562,1,FoodStatusValue::Done));
+        event(new FoodStatusEvent('1bb4373b2f7642c2d0f0d88326e7a787',192,2,null,565,1,FoodStatusValue::Done));
     }
 
     public function getOrder(Request $request)
