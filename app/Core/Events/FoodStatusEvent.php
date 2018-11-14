@@ -29,13 +29,19 @@ class FoodStatusEvent implements ShouldBroadcast
     public $cooked;
     public $foodStatus;
     public $foodStatusName;
-    public function __construct($access_token,$idDetail,$cooked,$foodStatus)
+    public $orderId;
+    public $location_id;
+    public $idStore;
+    public function __construct($access_token,$orderId,$idStore,$location_id,$idDetail,$cooked,$foodStatus)
     {
-        $this->access_token    = $access_token;
-        $this->foodStatus      = $foodStatus;
-        $this->idDetail        = $idDetail;
-        $this->cooked          = $cooked;
-        $this->foodStatusName  = CommonHelper::getFoodStatusName($foodStatus);
+        $this->access_token   = $access_token;
+        $this->foodStatus     = $foodStatus;
+        $this->idDetail       = $idDetail;
+        $this->cooked         = $cooked;
+        $this->orderId        = $orderId;
+        $this->location_id    = $location_id;
+        $this->foodStatusName = CommonHelper::getFoodStatusName($foodStatus);
+        $this->idStore        = $idStore;
     }
     /**
      * The event's broadcast name.
@@ -53,7 +59,11 @@ class FoodStatusEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        $channel_name = $this->access_token."_".FoodStatusValue::FoodStatusEvent;
-        return new Channel($channel_name);
+        $cus_channel_name = $this->access_token."_".FoodStatusValue::FoodStatusEvent;
+        $order_channel_name = CommonHelper::getOrderEventName($this->idStore,FoodStatusValue::FoodStatusEvent);
+        return [
+            new Channel($cus_channel_name),
+            new Channel($order_channel_name)
+        ];
     }
 }
