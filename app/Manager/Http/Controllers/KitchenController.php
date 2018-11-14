@@ -15,10 +15,17 @@ class KitchenController extends Controller
         $storeId = $request->storeId;
         $orderId = $request->orderId;
         $foodId = $request->foodId;
-        $push = $request->push;
         $time = $request->time;
+        $rollback = 1;
 
-        $res2 = DB::table('store_rollback_kitchen')
+        $push = DB::table('store_rollback_kitchen')
+        ->where('store_id', $storeId)
+        ->where('order_id', $orderId)
+        ->where('food_id', $foodId)
+        ->where('time', $time)
+        ->value('push');
+
+        $del = DB::table('store_rollback_kitchen')
         ->where('store_id', $storeId)
         ->where('order_id', $orderId)
         ->where('food_id', $foodId)
@@ -47,7 +54,7 @@ class KitchenController extends Controller
         ->where('store_order_detail.entities_id', $foodId)
         ->update(['store_order_detail.cooked' => $cooked ]);
 
-        event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, 0, 1, $time));
+        event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
         return $res;
     }
 
@@ -55,44 +62,44 @@ class KitchenController extends Controller
         $storeId = $request->storeId;
         $orderId = $request->orderId;
         $foodId = $request->foodId;
-        $cooked = $request->cooked;
+        $push = $request->push;
         $time = $request->time;
+
+        $quantityNcooked = DB::table('store_order')
+        ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
+        ->where('store_order.store_id',$storeId)
+        ->where('store_order_detail.order_id', $orderId)
+        ->where('store_order_detail.entities_id', $foodId)
+        ->select('store_order_detail.id as order_detail_id', 'store_order_detail.cooked', 'store_order_detail.quantity', 'store_order_detail.status','store_order.access_token')
+        ->get();
+
+        $order_detail_id = $quantityNcooked[0]->order_detail_id;
+        $status = $quantityNcooked[0]->status;
+        $access_token = $quantityNcooked[0]->access_token;
+        $cooked = $quantityNcooked[0]->cooked;
+        $quantity = $quantityNcooked[0]->quantity;
+
+        if ($push) $push=1;
+        else $push = $quantity - $cooked;
+
+        $cooked = $cooked+$push;
 
         $rollback = DB::table('store_rollback_kitchen')->insert(
             [
                 'store_id' => $storeId,
                 'order_id' => $orderId,
                 'food_id' => $foodId,
-                'cooked' => $cooked,
+                'push' => $push,
                 'time' => $time
             ]
         );
-
-        $quantity = DB::table('store_order')
-        ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
-        ->where('store_order.store_id',$storeId)
-        ->where('store_order_detail.order_id', $orderId)
-        ->where('store_order_detail.entities_id', $foodId)
-        ->value('store_order_detail.quantity');
-
-        $isAllDone = DB::table('store_order_detail')
-        ->where('order_id', $orderId)
-        ->whereRaw('store_order_detail.quantity != store_order_detail.cooked')
-        ->get();
-        if ( count($isAllDone)==1 && ($cooked==$quantity) ) {
-            $clearAll=1;
-            /*$statusTo3 = DB::table('store_order')
-            ->where('order_id', $orderId)
-            ->update(['status' => 3]);*/
-        }
-        else $clearAll = 0;
 
         $res = DB::table('store_order_detail')
         ->where('order_id', $orderId)
         ->where('entities_id', $foodId)
         ->update(['cooked' => $cooked]);
 
-        if ($res) event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $clearAll, 0, 0));
+        if ($res) event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, 0, 0));
         return $res;
     }
 
@@ -145,7 +152,7 @@ class KitchenController extends Controller
         ->where('store_order.access_token',$access_token)
         ->get();
         
-        return response()->json($foodDetails); 
+        return response()->json($foodDetails);
     }
 
     public function index($storeId) {
