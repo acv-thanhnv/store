@@ -23,6 +23,12 @@ Route::group(['prefix' => 'api/v1', 'name' => 'api_v1.'], function () {
 	//hien thi chi tiet hoa don
 	Route::get('/store/{storeId}/order/{orderId}/cashier_detail.json', 'CashierController@showInvoiceDetails');
 
+	//hien thi rollback hoa don
+	Route::get('/store/{storeId}/rollback_cashier.json', 'CashierController@showRollbackCashierTable');
+
+	//hien thi thanh toan tat ca hoa don
+	Route::post('/all-payments', 'CashierController@showAllPayment');
+
 	// hien thi chi tiet danh sach order trong bep
 	Route::get('/store/{storeId}/chef.json', 'KitchenController@showFoodByStore');
 

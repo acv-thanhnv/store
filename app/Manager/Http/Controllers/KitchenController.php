@@ -73,7 +73,7 @@ class KitchenController extends Controller
         ->where('store_order.store_id',$storeId)
         ->where('store_order_detail.order_id', $orderId)
         ->where('store_order_detail.entities_id', $foodId)
-        ->select('store_order_detail.id as order_detail_id', 'store_order_detail.cooked', 'store_order_detail.quantity', 'store_order_detail.status','store_order.access_token')
+        ->select('store_order_detail.id as order_detail_id', 'store_order_detail.cooked', 'store_order_detail.quantity', 'store_order_detail.status','store_order.access_token', 'store_order.location_id')
         ->get();
 
         $order_detail_id = $quantityNcooked[0]->order_detail_id;
@@ -81,6 +81,7 @@ class KitchenController extends Controller
         $access_token = $quantityNcooked[0]->access_token;
         $cooked = $quantityNcooked[0]->cooked;
         $quantity = $quantityNcooked[0]->quantity;
+        $location_id = $quantityNcooked[0]->location_id;
 
         if ($push) $push=1;
         else $push = $quantity - $cooked;
@@ -101,10 +102,14 @@ class KitchenController extends Controller
 
         $res = DB::table('store_order_detail')
         ->where('order_id', $orderId)
-        ->whereRaw('cooked!=quantity')
+        ->where('cooked', '!=', 'quantity')
         ->get();
 
-        if (!$res[0]) {
+        if (empty($res)) {
+            $update = DB::table('store_order')
+            ->where('id', $orderId)
+            ->update(['status' => 2]);
+
             $orderDetails = DB::table('store_order')
             ->join('store_location', 'store_order.location_id', '=','store_location.id')
             ->join('store_floor', 'store_location.floor_id', '=','store_floor.id')
@@ -134,7 +139,7 @@ class KitchenController extends Controller
 
         if ($res) {
             event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, 0, 0));
-            event(new FoodStatusEvent($access_token,$order_detail_id,$cooked,$status));
+            event(new FoodStatusEvent($access_token,$orderId,$storeId,$location_id,$order_detail_id,$cooked,$status));
         }
         return $res;
     }

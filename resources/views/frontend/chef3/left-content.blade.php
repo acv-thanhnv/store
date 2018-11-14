@@ -21,7 +21,7 @@
 	<tfoot></tfoot>
 </table>
 </div>
-<div class="col-md-5">
+<div class="col-md-5" style="position: -webkit-sticky;position: sticky; top: 0;">
 	<table id="order-trend" class="table table-hover red-blue-table" data-search="false" data-toggle="table" data-url="{{ url('/api/v1/store/'.$storeId.'/chef_queue.json') }}">
 		<thead>
 			<tr>
