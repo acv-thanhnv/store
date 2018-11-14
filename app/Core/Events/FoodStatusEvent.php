@@ -2,19 +2,20 @@
 
 namespace App\Core\Events;
 
+use App\Core\Common\FoodStatusValue;
 use App\Core\Common\OrderConst;
 use App\Core\Helpers\CommonHelper;
 use Illuminate\Broadcasting\Broadcasters\PusherBroadcaster;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
 
-class OrderStatusPusherEvent implements ShouldBroadcast
+class FoodStatusEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -23,16 +24,18 @@ class OrderStatusPusherEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public $arrOrder;
-    public $orderId;
     public $access_token;
-    public $has_delete;
-    public function __construct($access_token,$orderId,$arrOrder,$has_delete=0)
+    public $idDetail;
+    public $cooked;
+    public $foodStatus;
+    public $foodStatusName;
+    public function __construct($access_token,$idDetail,$cooked,$foodStatus)
     {
-        $this->arrOrder     = $arrOrder; //json array order status
-        $this->orderId      = $orderId;
-        $this->access_token = $access_token;
-        $this->has_delete   = $has_delete;
+        $this->access_token    = $access_token;
+        $this->foodStatus      = $foodStatus;
+        $this->idDetail        = $idDetail;
+        $this->cooked          = $cooked;
+        $this->foodStatusName  = CommonHelper::getFoodStatusName($foodStatus);
     }
     /**
      * The event's broadcast name.
@@ -41,7 +44,7 @@ class OrderStatusPusherEvent implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::OrderStatusEventName;
+        return FoodStatusValue::FoodStatusEvent;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -50,7 +53,7 @@ class OrderStatusPusherEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        $channel_name = $this->access_token."_".OrderConst::OrderStatusEventName;
+        $channel_name = $this->access_token."_".FoodStatusValue::FoodStatusEvent;
         return new Channel($channel_name);
     }
 }

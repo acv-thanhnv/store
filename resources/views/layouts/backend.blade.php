@@ -49,9 +49,9 @@
             font-weight: bold;
         }
         #preview .thumb {
-            width : 300px;
+            width : 250px;
             min-height: 100px;
-            height: 200px;
+            height: 120px;
             margin: 0.2em -0.7em 0 0;
             border-radius: 20px;
             box-shadow: 5px 5px 2px 5px #D7C7C7;
@@ -70,6 +70,9 @@
         }
         #preview .remove_img_preview:before {
             content:"\f057";
+        }
+        .dis-none{
+            display: none;
         }
     </style>
 </head>
@@ -125,6 +128,8 @@
                             </li>
                             <li><a><i class="fa fa-book"></i> Cửa hàng <span class="fa fa-chevron-down"></span></a>
                                  <ul class="nav child_menu">
+                                    <li><a href="{{route('getTypeTable')}}">Table Type</a>
+                                    </li>
                                     <li><a href="{{route('getTable')}}">Table</a>
                                     </li>
                                     <li><a href="{{route('getFloor')}}">Floor</a></li>
@@ -139,7 +144,7 @@
                                         <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getType')==true){ ?>
                                     <li><a href="{{route('getType')}}">Mẫu món ăn</a></li><?php }?>
                                         <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getFood')==true){ ?>
-                                    <li><a href="{{route('getFood')}}">Món ăn</a></li>
+                                    <li><a href="{{route('getFoodManager')}}">Món ăn</a></li>
                                         <?php }?>
                                 </ul>
                             </li>
@@ -157,7 +162,9 @@
                                 <ul class="nav child_menu">
                                     <li><a href="{{route('getListStore')}}">List Store</a>
                                     </li>
-
+                                    
+                                    <li><a href="{{route('addStoreManager')}}">Add Store</a>
+                                    </li>
                                 </ul>
                             </li>
 

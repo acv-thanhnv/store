@@ -26,4 +26,10 @@ Route::post("sendOrder","FoodOrderController@sendOrder")->name("sendOrder");
 Route::get("FoodDetail","FoodOrderController@FoodDetail")->name("FoodDetail"); //get food detail
 Route::get("OrderBy","FoodOrderController@OrderBy")->name("OrderBy");//filter order by
 Route::get("getCartItems","FoodOrderController@getCartItems")->name('getCartItems'); 
+
+Route::post("deleteCartItem","FoodOrderController@deleteCartItem")->name('deleteCartItem'); 
+
+Route::get('testEvent','FoodOrderController@TestEvent');
+
 Route::post("deleteCartItem","FoodOrderController@deleteCartItem")->name('deleteCartItem');
+

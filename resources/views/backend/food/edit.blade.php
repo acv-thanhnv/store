@@ -165,7 +165,7 @@
 						@endforeach
 					</div>
 				</div>
-				<div class="form-group footer">
+				<div class="form-group footer" style="text-align: right">
 					<div>
 						<button class="btn btn-primary reset" type="reset">Reset</button>
 						<button type="button" class="btn btn-success save">Save</button>

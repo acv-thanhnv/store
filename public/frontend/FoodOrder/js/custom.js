@@ -217,7 +217,7 @@ $(document).on("click",".js-show-cart",function(){
 		sendItem(cart_items);
 		cal_total(cart_items);
 	}
-	if(cart_items.length===0){
+	if(cart_items.length==0){
 		$(".total-money").text("Total: 0");
 		$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
 	}
@@ -298,6 +298,9 @@ function deleteCartItem(url){
 		var row = $(this).parents("li.header-cart-item");
 		var index = $(row).find(".wrap-num-product").data("id");
 		var orderId = localStorage.orderId;
+		var cart_index = cart_items.findIndex(item => item.entities_id === index);
+		var foodId = cart_items[cart_index].id;
+		var cooked = cart_items[cart_index].cooked;
 		$.confirm({
 			title         : '<p class="text-danger">Warning</p>',
 			icon          : 'fa fa-exclamation-circle',
@@ -311,25 +314,20 @@ function deleteCartItem(url){
 					text    : 'OK',
 					btnClass: 'btn btn-primary',
 					action  : function (){
-						var cart_index = cart_items.findIndex(item => item.entities_id === index);
-						$(row).remove();
-						var foodId = cart_items[cart_index].id;
-						var cooked = cart_items[cart_index].cooked;
-						cart_items.splice(cart_index,1);
-						cal_total(cart_items);
-						localStorage.cart_items = JSON.stringify(cart_items);
-						cart_total--;
-						$(".js-show-cart").attr("data-notify",cart_total);
-						notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
-						if(cart_total===0){
-						$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
-						localStorage.removeItem('hasAlert');
-						hideAlert();
-						}
 						if(typeof (foodId) !== 'undefined'){//nếu món đó đã có trong DB rồi thì mới ajax đi
-							if(cooked===0){
-								console.log(foodId);
-								console.log(cooked);
+							if(cooked===0){//neu mon do chua nau xong thi moi cho xoa
+								$(row).remove();
+								cart_items.splice(cart_index,1);
+								cal_total(cart_items);
+								localStorage.cart_items = JSON.stringify(cart_items);
+								cart_total--;
+								$(".js-show-cart").attr("data-notify",cart_total);
+								notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
+								if(cart_total===0){
+									$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
+									localStorage.removeItem('hasAlert');
+									hideAlert();
+								}
 								$.ajax({
 									type: 'POST',
 									headers: {
@@ -349,6 +347,14 @@ function deleteCartItem(url){
 							}else{
 								notify('Error','error','Sorry your food have been cooked, you cannot delete it','#DA3C3C');
 							}
+						}else{//nguoc lai thi xoa o local storage
+							$(row).remove();
+							cart_items.splice(cart_index,1);
+							cal_total(cart_items);
+							localStorage.cart_items = JSON.stringify(cart_items);
+							cart_total--;
+							$(".js-show-cart").attr("data-notify",cart_total);
+							notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
 						}
 				}
 			},
@@ -390,10 +396,11 @@ function Order(url,idStore,access_token){
 			cart_items = JSON.parse(localStorage.cart_items);
 		}
 		cart_items.forEach(function(obj){
-			if(obj.status ===0){
+			if(obj.status == 0){
 				cart_update.push(obj);
 			}
 		});
+		console.log(cart_update);
 		if(localStorage.orderId){
 			orderId = localStorage.getItem('orderId');
 		}
@@ -547,6 +554,16 @@ function filter(idStore,url){
 		_menu_id = null;
 		buildFood(url,idStore,_page,null,null,_sort_by,_price);
 	})
+}
+//function buid status food
+function FoodStatus(idDetail,cooked,status,status_name){
+	cart_items = JSON.parse(localStorage.cart_items);
+	var cart_index = cart_items.findIndex(item => item.id === idDetail);
+	cart_items[cart_index].cooked = cooked;
+	cart_items[cart_index].status = status;
+	cart_items[cart_index].status_name = status_name;
+	sendItem(cart_items);
+    localStorage.cart_items = JSON.stringify(cart_items);
 }
 //function alert notify
 function notify(headingContent,icon,content,bgColor){

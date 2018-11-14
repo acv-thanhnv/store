@@ -65,13 +65,14 @@ class LoggingConst
 }
 class OrderConst{
 
+
     const CashierChannelToCashier    = "cashier2cashier";
-
-    const RollbackPaymentEventName = "rollback-payment";
-
+    
+    const RollbackPaymentEventName   = "rollback-payment";
+    
     const Customer2Order             = "customer2order";
-
-    const UpdateOrderAtKitchenEvent            = "update-order-at-kichen";
+    
+    const UpdateOrderAtKitchenEvent  = "update-order-at-kichen";
     
     const PaymentDoneEventName       = "payment-done";
     
@@ -84,13 +85,15 @@ class OrderConst{
     
     const NewOrderToOrderManager     = "new-order-to-order-manager";
     
-    const WaiterToWaiterChannel       = "waiter2waiter";
+    const WaiterToWaiterChannel      = "waiter2waiter";
     
     const OrderEventName             = "order.waiter";
     
+    const OrderDeleteEvent           = 'order_delete';
     
-    const OrderToKitchenChannel         = "order2kitchen";
-
+    
+    const Order2Kitchen              = "order2kitchen";
+    
     const OrderChefEventName         = "new-order";
     
     const CustomerCashierEventName   = "new-payment";
@@ -104,6 +107,12 @@ class OrderConst{
 }
 class EntityProperty{
     const maxField = 10;
+}
+class TableConst{
+    const TableColorEvent = 'table_color_event';
+    const noOrder         = 'blue';
+    const haveOrder       = '#EA3232';
+    const Done            = '#EEA045';
 }
 class StorageDisk{
     const diskLocalName = "public";
@@ -124,7 +133,12 @@ class OrderStatusValue{
     const Deleted = 10;
 }
 class FoodStatusValue{
-    const Done    = 2;
-    const NoDone  = 0;
-    const Process = 1;
+    const FoodStatusEvent = 'food.status';
+    const Done            = 2;
+    const NoDone          = 0;
+    const Process         = 1;
+}
+class UserValue{
+    const role_manager = 2;
+    const role_admin   = 1;
 }
