@@ -215,6 +215,17 @@
         table_channel.bind(TableEventName, function(data){
             $('*[location-id="'+data.idTable+'"]').removeClass('have-order have-update').css({'background-color':data.color,'color':'white'});
         });
+        //food event
+        var FoodEventName = '{{\App\Core\Common\FoodStatusValue::FoodStatusEvent}}';
+        var food_channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\FoodStatusValue::FoodStatusEvent)}}';
+        var food_channel = pusher.subscribe(food_channel_name);
+        food_channel.bind(FoodEventName, function(data){
+            var row_order = $('.entities-row-order[data-order-id="'+data.orderId+'"]').next();
+            console.log(row_order);
+            var row_order_detail = $(row_order).find('.row-order-detail[order-detail-id="'+data.idDetail+'"]');
+            $(row_order_detail).find('.food_status').text(data.foodStatusName);
+            $(row_order_detail).find('.food_status').addClass('food_status_'+data.foodStatus);
+        });
         //order event
         var OrderEventName = "{{\App\Core\Common\OrderConst::Customer2Order}}";
         var order_channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\OrderConst::Customer2Order)}}';

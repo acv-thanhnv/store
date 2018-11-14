@@ -638,6 +638,7 @@
 		var food_channel = pusher.subscribe(food_channel_name);
 		var food_eventName = '{{\App\Core\Common\FoodStatusValue::FoodStatusEvent}}';
 		food_channel.bind(food_eventName,function(data){
+			console.log(data.cooked);
 			FoodStatus(data.idDetail,data.cooked,data.foodStatus,data.foodStatusName);
 		});
 		//order status event
