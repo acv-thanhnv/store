@@ -77,7 +77,6 @@ module.exports = __webpack_require__(72);
 /***/ (function(module, exports, __webpack_require__) {
 
 var storeId = $('#config').attr('storeId');
-
 var rootPath = $('#config').attr('rootPath');
 
 $(document).ready(function () {

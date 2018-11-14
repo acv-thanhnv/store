@@ -1,10 +1,9 @@
 const storeId = $('#config').attr('storeId')
-
 const rootPath = $('#config').attr('rootPath')
 
 $(document).ready(function(){
 	$("#header-left a").click(function(){
-		$(this).tab('show');
+		$(this).tab('show')
 	});
 	loadWaiterTable()
 	loadRollbackTable()
