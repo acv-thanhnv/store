@@ -6,6 +6,7 @@ use App\Core\Common\OrderConst;
 use App\Core\Events\Order2ChefPusher;
 use App\Core\Events\Waiter2WaiterPusher;
 use App\Core\Events\FoodStatusEvent;
+use App\Core\Events\Other2OrderManagerPusher;
 
 use Illuminate\Http\Request; 
 use Pusher\Pusher;
@@ -103,7 +104,28 @@ class KitchenController extends Controller
         ->whereRaw('cooked!=quantity')
         ->get();
 
-        if (!$res[0]) event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, 0, 0));
+        if (!$res[0]) {
+            $orderDetails = DB::table('store_order')
+            ->join('store_location', 'store_order.location_id', '=','store_location.id')
+            ->join('store_floor', 'store_location.floor_id', '=','store_floor.id')
+            ->join('store_type_location', 'store_location.type_location_id', '=','store_type_location.id')
+            ->select('store_order.access_token', 'store_order.store_id', 'store_order.datetime_order', 'store_order.datetime_update', 'store_order.location_id', 'store_location.name as table_name', 'store_floor.name as floor_name', 'store_order.priority', 'store_type_location.name as type_name')
+            ->where('store_order.store_id',$storeId)
+            ->where('store_order.access_token',$access_token)
+            ->get();
+
+            $foodDetails = DB::table('store_order')
+            ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
+            ->join('store_entities', 'store_entities.id', '=','store_order_detail.entities_id')
+            ->join('store_order_detail_status', 'store_order_detail.status', '=','store_order_detail_status.value')
+            ->select('store_order_detail.id','store_order.id as order_id','store_order_detail.entities_id', 'store_order_detail.quantity', 'store_order_detail.cooked', 'store_order_detail.status', 'store_order_detail.has_update', 'store_entities.name', 'store_entities.image', 'store_entities.price', 'store_order_detail_status.status_name')
+            ->where('store_order.store_id',$storeId)
+            ->where('store_order.access_token',$access_token)
+            ->get();
+
+            event(new Other2OrderManagerPusher($foodDetails, $storeId, $orderDetails) );
+
+        }
 
         $count = DB::table('store_order_detail')
         ->where('order_id', $orderId)
