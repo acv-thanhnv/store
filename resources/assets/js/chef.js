@@ -25,18 +25,47 @@ function pushToOrderListTable(result) {
 		let foodName = result.foodDetails[i].name
 		let quantity = result.foodDetails[i].quantity
 		let cooked = 0
+		$('#foodlist-'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
 		if ($('#foodlist-'+storeId+'-'+orderId+'-'+foodId)[0]) {
 			$('#foodlist-'+storeId+'-'+orderId+'-'+foodId+' td').eq(3).html(quantity)
 		} else {
 			if (priority!=='Normal') {
-				output='<tr id="foodlist-'+storeId+'-'+orderId+'-'+foodId+'" class="vip"> <td class="food food-left"><span>'+foodName+'</span></td> <td>#HĐ '+orderId+'</td> <td><span class="badge badge-secondary">'+priority+'</span></td> <td>'+quantity+'</td> </tr>'
+				output='<tr id="foodlist-'+storeId+'-'+orderId+'-'+foodId+'" class="vip foodlist foodlist-'+storeId+'-'+orderId+'"> <td class="food food-left"><span>'+foodName+'</span></td> <td>#HĐ '+orderId+'</td> <td><span class="badge badge-secondary">'+priority+'</span></td> <td>'+quantity+'</td> </tr>'
 				$('#order-list').find('.vip:last').after(output)
 			}
 			else {
-				output='<tr id="foodlist-'+storeId+'-'+orderId+'-'+foodId+'" class="normal"> <td class="food food-left"><span>'+foodName+'</span></td> <td>#HĐ '+orderId+'</td> <td></td> <td>'+quantity+'</td> </tr>'
+				output='<tr id="foodlist-'+storeId+'-'+orderId+'-'+foodId+'" class="normal foodlist foodlist-'+storeId+'-'+orderId+'"> <td class="food food-left"><span>'+foodName+'</span></td> <td>#HĐ '+orderId+'</td> <td></td> <td>'+quantity+'</td> </tr>'
 				$('#order-list').find('.normal:last').after(output)
 			}
 		}
+	}
+}
+
+function removeFromOrderListTable(result) {
+	var orderId = result.order.id
+	if (result.result[0]) {
+		for (var i in result.result) {
+			let foodId = result.result[i].entities_id
+			let status = result.result[i].status
+			$('.foodlist-'+storeId+'-'+orderId).addClass('hidden')
+			if (status) $('#foodlist-'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
+		}
+	} else {
+		$('.foodlist-'+storeId+'-'+orderId).addClass('hidden')
+	}
+}
+
+function removeFromWaiterTable(result) {
+	var orderId = result.order.id
+	if (result.result[0]) {
+		for (var i in result.result) {
+			let foodId = result.result[i].entities_id
+			let status = result.result[i].status
+			$('.foodline.'+storeId+'-'+orderId).addClass('hidden')
+			if (status) $('#'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
+		}
+	} else {
+		$('.'+storeId+'-'+orderId).addClass('hidden')
 	}
 }
 
@@ -52,8 +81,8 @@ function loadOrderListTable() {
 				var foodId = result.details[i][j].id
 				var foodName = result.details[i][j].name
 				var quantity = result.details[i][j].quantity
-				if (priority!=='Normal') output+='<tr id="foodlist-'+storeId+'-'+orderId+'-'+foodId+'" class="vip"> <td class="food food-left"><span>'+foodName+'</span></td> <td>#HĐ '+orderId+'</td> <td><span class="badge badge-secondary">'+priority+'</span></td> <td>'+quantity+'</td> </tr>'
-					else output+='<tr id="foodlist-'+storeId+'-'+orderId+'-'+foodId+'" class="normal"> <td class="food food-left"><span>'+foodName+'</span></td> <td>#HĐ '+orderId+'</td> <td></td> <td>'+quantity+'</td> </tr>'
+				if (priority!=='Normal') output+='<tr id="foodlist-'+storeId+'-'+orderId+'-'+foodId+'" class="vip foodlist foodlist-'+storeId+'-'+orderId+'"> <td class="food food-left"><span>'+foodName+'</span></td> <td>#HĐ '+orderId+'</td> <td><span class="badge badge-secondary">'+priority+'</span></td> <td>'+quantity+'</td> </tr>'
+					else output+='<tr id="foodlist-'+storeId+'-'+orderId+'-'+foodId+'" class="normal foodlist foodlist-'+storeId+'-'+orderId+'"> <td class="food food-left"><span>'+foodName+'</span></td> <td>#HĐ '+orderId+'</td> <td></td> <td>'+quantity+'</td> </tr>'
 				}
 		}
 		output+="</tbody> <tfoot></tfoot> </table>"
@@ -99,10 +128,16 @@ function pushToWaiterTable(result) {
 			var foodName = result.foodDetails[i].name
 			var quantity = result.foodDetails[i].quantity
 			var cooked = result.foodDetails[i].cooked
+			$('.t-header.'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
 			if ($('#'+storeId+'-'+orderId+'-'+foodId)[0]) {
 				let text = $('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html()
+				let index = text.indexOf('/')
+				let substring = text.substring(index)
+				let newText = text.replace(substring, '/'+quantity)
+				$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html(newText)
+				$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(2).find('span:last').text(quantity-cooked)
 			} else {
-				output+='<tr id="'+storeId+'-'+orderId+'-'+foodId+'" class="hidden '+storeId+'-'+orderId+'" storeId="'+storeId+'" orderId="'+orderId+'" foodId="'+foodId+'" foodName="'+name+'" quantity="'+quantity+'"> <td class="food food-right">'+foodName+'</td> <td>'+cooked+'/'+quantity+'</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button> </td> <td> <button cooked="'+(cooked+1)+'" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="'+quantity+'" push="'+(quantity-cooked)+'" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>'
+				output+='<tr id="'+storeId+'-'+orderId+'-'+foodId+'" class="hidden foodline '+storeId+'-'+orderId+'" storeId="'+storeId+'" orderId="'+orderId+'" foodId="'+foodId+'" foodName="'+name+'" quantity="'+quantity+'"> <td class="food food-right">'+foodName+'</td> <td>'+cooked+'/'+quantity+'</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button> </td> <td> <button cooked="'+(cooked+1)+'" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="'+quantity+'" push="'+(quantity-cooked)+'" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>'
 			}
 		}
 
@@ -117,15 +152,26 @@ function pushToWaiterTable(result) {
 				var foodName = result.foodDetails[i].name
 				var quantity = result.foodDetails[i].quantity
 				var cooked = result.foodDetails[i].cooked
+				$('.t-header.'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
 				if ($('#'+storeId+'-'+orderId+'-'+foodId)[0]) {
-					$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html('123')
+					let text = $('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html()
+					let index = text.indexOf('/')
+					let substring = text.substring(index)
+					let newText = text.replace(substring, '/'+quantity)
+					$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html(newText)
+					$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(2).find('span:last').text(quantity-cooked)
 				} else {
-					output+='<tr id="'+storeId+'-'+orderId+'-'+foodId+'" class="hidden '+storeId+'-'+orderId+'" storeId="'+storeId+'" orderId="'+orderId+'" foodId="'+foodId+'" foodName="'+name+'" quantity="'+quantity+'"> <td class="food food-right">'+foodName+'</td> <td>'+cooked+'/'+quantity+'</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button> </td> <td> <button cooked="'+(cooked+1)+'" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="'+quantity+'" push="'+(quantity-cooked)+'" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>'
+					output+='<tr id="'+storeId+'-'+orderId+'-'+foodId+'" class="hidden foodline '+storeId+'-'+orderId+'" storeId="'+storeId+'" orderId="'+orderId+'" foodId="'+foodId+'" foodName="'+name+'" quantity="'+quantity+'"> <td class="food food-right">'+foodName+'</td> <td>'+cooked+'/'+quantity+'</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button> </td> <td> <button cooked="'+(cooked+1)+'" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="'+quantity+'" push="'+(quantity-cooked)+'" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>'
 				}
 			}
 
 			if ($('#'+storeId+'-'+orderId+'-'+foodId)[0]) {
-				$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html('123')
+				let text = $('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html()
+				let index = text.indexOf('/')
+				let substring = text.substring(index)
+				let newText = text.replace(substring, '/'+quantity)
+				$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html(newText)
+				$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(2).find('span:last').text(quantity-cooked)
 			} else {
 				if (priority!=='Normal') $('#cho-cung-ung').find('.normal:first').before(output)
 					else $('#cho-cung-ung').find('.hidden:last').after(output)
@@ -152,7 +198,7 @@ function pushToWaiterTable(result) {
 							var name = result.details[i][j].name;
 							var cooked = result.details[i][j].cooked;
 							var quantity = result.details[i][j].quantity;
-							output+='<tr id="'+storeId+'-'+id+'-'+foodId+'" class="hidden '+storeId+'-'+id+'" storeId="'+storeId+'" orderId="'+id+'" foodId="'+foodId+'" foodName="'+name+'" quantity="'+quantity+'" cooked="'+cooked+'"> <td class="food food-right">'+name+'</td> <td>'+cooked+'/'+quantity+'</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button> </td> <td> <button class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="'+(quantity-cooked)+'" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
+							output+='<tr id="'+storeId+'-'+id+'-'+foodId+'" class="hidden foodline '+storeId+'-'+id+'" storeId="'+storeId+'" orderId="'+id+'" foodId="'+foodId+'" foodName="'+name+'" quantity="'+quantity+'" cooked="'+cooked+'"> <td class="food food-right">'+name+'</td> <td>'+cooked+'/'+quantity+'</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button> </td> <td> <button class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="'+(quantity-cooked)+'" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
 						}
 					}
 				}
@@ -323,6 +369,12 @@ order2kitchen.bind('update-order-at-kichen', function(res) {
 	pushToWaiterTable(res)
 })
 
+var customer2order = pusher.subscribe(md5(storeId)+'-customer2order');
+customer2order.bind('customer2order', function(res) {
+	removeFromOrderListTable(res)
+	removeFromWaiterTable(res)
+})
+
 var waiter2waiter = pusher.subscribe(md5(storeId)+'-waiter2waiter')
 waiter2waiter.bind('update-order-at-kichen', function(res) {
 	console.log(res)
@@ -346,7 +398,10 @@ waiter2waiter.bind('update-order-at-kichen', function(res) {
 		}
 		else $(detect).addClass('hidden')
 	} else {
-		$(detect).removeClass('hidden')
+		if ($(detect)[0]) $(detect).removeClass('hidden')
+			else {
+				pushToWaiterTable()
+			}
 	}
 	loadRollbackTable()
 })

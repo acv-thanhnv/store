@@ -16,6 +16,7 @@ class KitchenController extends Controller
         $orderId = $request->orderId;
         $foodId = $request->foodId;
         $time = $request->time;
+        $rollback = 1;
 
         $push = DB::table('store_rollback_kitchen')
         ->where('store_id', $storeId)
@@ -53,7 +54,7 @@ class KitchenController extends Controller
         ->where('store_order_detail.entities_id', $foodId)
         ->update(['store_order_detail.cooked' => $cooked ]);
 
-        event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, 0, 0, 1, $time));
+        event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
         return $res;
     }
 
@@ -69,9 +70,12 @@ class KitchenController extends Controller
         ->where('store_order.store_id',$storeId)
         ->where('store_order_detail.order_id', $orderId)
         ->where('store_order_detail.entities_id', $foodId)
-        ->select('store_order_detail.cooked', 'store_order_detail.quantity')
+        ->select('store_order_detail.id as order_detail_id', 'store_order_detail.cooked', 'store_order_detail.quantity', 'store_order_detail.status','store_order.access_token')
         ->get();
 
+        $order_detail_id = $quantityNcooked[0]->order_detail_id;
+        $status = $quantityNcooked[0]->status;
+        $access_token = $quantityNcooked[0]->access_token;
         $cooked = $quantityNcooked[0]->cooked;
         $quantity = $quantityNcooked[0]->quantity;
 
