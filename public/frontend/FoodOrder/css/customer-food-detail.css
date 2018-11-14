@@ -1,24 +1,31 @@
 .hide-modal {
   position: absolute;
   top: 2%;
-  right: 2%; }
+  right: 2%;
+}
 
 .slide-image {
   height: 240px;
-  min-height: 240px; }
+  min-height: 240px;
+}
 
 .iziModal-wrap {
-  width: 300px; }
+  width: 300px;
+}
 
-.modal-cart-payment .div1, .modal-cart-payment .div2, .modal-cart-payment .div3 {
+.modal-cart-payment .div1,
+.modal-cart-payment .div2,
+.modal-cart-payment .div3 {
   margin-left: auto;
   margin-right: auto;
-  text-align: center; }
+  text-align: center;
+}
+
 .modal-cart-payment .div2 .js-addcart-detail {
   margin-left: auto;
   margin-right: auto;
   text-align-last: center;
   height: 50px;
-  min-width: 50px; }
+  min-width: 50px;
+}
 
-/*# sourceMappingURL=customer-food-detail.css.map */
