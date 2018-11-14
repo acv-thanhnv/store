@@ -22,7 +22,7 @@
 </table>
 </div>
 <div class="col-md-5">
-	<table id="order-trend" class="table table-hover red-blue-table" data-search="true" data-toggle="table" data-url="{{ url('/api/v1/store/'.$storeId.'/chef_queue.json') }}">
+	<table id="order-trend" class="table table-hover red-blue-table" data-search="false" data-toggle="table" data-url="{{ url('/api/v1/store/'.$storeId.'/chef_queue.json') }}">
 		<thead>
 			<tr>
 				<th style="width: 90%" data-field="name">Tên món</th>
