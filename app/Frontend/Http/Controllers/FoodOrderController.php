@@ -9,9 +9,10 @@ use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
-use App\Core\Events\Customer2OrderManagerPusher;
+use App\Core\Events\FoodStatusEvent;
 use App\Core\Events\OrderPusherEvent;
 use App\Core\Events\OrderStatusPusherEvent;
+use App\Core\Events\Other2OrderManagerPusher;
 use App\Core\Events\TableEvent;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
@@ -34,6 +35,11 @@ class FoodOrderController extends Controller
     {
         $this->foodService = $foodService;
         $this->menuService = $menuService;
+    }
+
+    public function TestEvent()
+    {
+        event(new FoodStatusEvent('1bb4373b2f7642c2d0f0d88326e7a787',562,1,FoodStatusValue::Done));
     }
 
     public function getOrder(Request $request)
@@ -273,7 +279,7 @@ class FoodOrderController extends Controller
             }
         }
         //call event send to Order
-        event(new Customer2OrderManagerPusher($idStore,$order,$arrOrderDetail));
+        event(new Other2OrderManagerPusher($idStore,$order,$arrOrderDetail));
         //call pusher when order, status food change
         event(new OrderStatusPusherEvent($request->access_token,$orderId,$arrOrderDetail));
         //call event bind table color

@@ -193,15 +193,13 @@
         	},
         	contentType: false,
         	processData: false,
-        	url: "{{route('add')}}",
+        	url: "",
         	data:formData,
         	success: function (result) {
-        		console.log(result);
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
         			//call parent and close modal
         			parent.$('#modal-add').iziModal('close');
-        			parent.getList();
-        			parent.alert("Add");
+        			parent.notify('Success','success','Add user success','#46A533','#9EC600');;
         		}else{
         			_commonShowError(result.data[0]);
         		}

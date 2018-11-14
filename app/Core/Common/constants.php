@@ -133,7 +133,12 @@ class OrderStatusValue{
     const Deleted = 10;
 }
 class FoodStatusValue{
-    const Done    = 2;
-    const NoDone  = 0;
-    const Process = 1;
+    const FoodStatusEvent = 'food.status';
+    const Done            = 2;
+    const NoDone          = 0;
+    const Process         = 1;
+}
+class UserValue{
+    const role_manager = 2;
+    const role_admin   = 1;
 }

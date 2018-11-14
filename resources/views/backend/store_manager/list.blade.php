@@ -32,6 +32,13 @@
             background: #172D44 !important;
             color: white !important;
         }
+        .store_image{
+			min-height   : 60px;
+			min-width    : 100px;
+			width        : 100px;
+			height       : 60px;
+			border-radius: 10px;
+        }
     </style>
 @endpush
 @extends("layouts.backend")
@@ -46,9 +53,6 @@
     <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
         <div class="x_panel">
             <div class="x_title">
-                <button class="btn btn-primary" id="add" title="Add New Menu" data-toggle="tooltip">
-                    <i class="fa fa-plus"></i>
-                </button>
                 <button class="btn btn-danger" id="delete_all" title="Delete All" data-toggle="tooltip">Delete All</button>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -87,7 +91,7 @@
                                     <input type="checkbox" value="{{$storeItem->id}}">
                                 </td>
                                 <td>
-                                    <img src="{{$storeItem->avatar}}" alt="image store..." width="50px" height="50px">
+                                    <img src="{{$storeItem->src}}" alt="image store..." class="store_image">
                                 </td>
                                 <td>{{$storeItem->name}}</td>
                                 <td>{{$storeItem->address}}</td>

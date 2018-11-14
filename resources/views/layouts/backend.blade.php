@@ -49,9 +49,9 @@
             font-weight: bold;
         }
         #preview .thumb {
-            width : 300px;
+            width : 250px;
             min-height: 100px;
-            height: 200px;
+            height: 120px;
             margin: 0.2em -0.7em 0 0;
             border-radius: 20px;
             box-shadow: 5px 5px 2px 5px #D7C7C7;
@@ -70,6 +70,9 @@
         }
         #preview .remove_img_preview:before {
             content:"\f057";
+        }
+        .dis-none{
+            display: none;
         }
     </style>
 </head>
@@ -159,7 +162,9 @@
                                 <ul class="nav child_menu">
                                     <li><a href="{{route('getListStore')}}">List Store</a>
                                     </li>
-
+                                    
+                                    <li><a href="{{route('addStoreManager')}}">Add Store</a>
+                                    </li>
                                 </ul>
                             </li>
 

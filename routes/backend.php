@@ -18,7 +18,6 @@
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/some', 'SomeController@index')->name('some');
     Route::get('/blog', 'BlogController@index')->name('blog');
-
     //Backend Controller
     Route::group(["prefix" => "backend"],function(){
         Route::get('/executeSchedule', 'TemplateController@executeSchedule')->name('backend_schedule_template');
@@ -75,6 +74,8 @@
                 return view("backend.users.test");
             })->name("testAdd");
         });
+
+
         //Menu
         Route::group(["prefix" => "menu"],function(){
             Route::get("list","MenuController@getMenu")->name("getMenu");
@@ -179,21 +180,6 @@
             //Delete
             Route::get("deleteStore","StoreController@deleteStore")->name("deleteStore");
             Route::get("deleteAllStore","StoreController@deleteAllStore")->name("deleteAllStore");
-
-        });
-
-        //Group Manage Store
-        Route::group(["prefix" => "StoreManager"],function(){
-            Route::get("listStore","StoreManagerController@getStoreManager")->name("getListStore");
-            //add
-            Route::get("addStore","StoreManagerController@addStoreManager")->name("addStoreManager");
-            Route::post("addStore","StoreManagerController@postAddStoreManager");
-            //Edit
-            Route::get("editStore","StoreManagerController@getEditStoreManager")->name("editStoreManager");
-            Route::post("editStore","StoreManagerController@postEditStoreManager")->name("postEditStoreManager");
-            //Delete
-            Route::get("deleteStore","StoreManagerController@deleteStoreManager")->name("deleteStoreManager");
-            Route::get("deleteAllStore","StoreManagerController@deleteAllStoreManager")->name("deleteAllStoreManager");
 
         });
 
