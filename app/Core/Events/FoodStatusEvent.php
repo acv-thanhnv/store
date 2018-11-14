@@ -29,13 +29,17 @@ class FoodStatusEvent implements ShouldBroadcast
     public $cooked;
     public $foodStatus;
     public $foodStatusName;
-    public function __construct($access_token,$idDetail,$cooked,$foodStatus)
+    public $orderId;
+    public $location_id;
+    public function __construct($access_token,$orderId=null,$location_id=null,$idDetail,$cooked,$foodStatus)
     {
-        $this->access_token    = $access_token;
-        $this->foodStatus      = $foodStatus;
-        $this->idDetail        = $idDetail;
-        $this->cooked          = $cooked;
-        $this->foodStatusName  = CommonHelper::getFoodStatusName($foodStatus);
+        $this->access_token   = $access_token;
+        $this->foodStatus     = $foodStatus;
+        $this->idDetail       = $idDetail;
+        $this->cooked         = $cooked;
+        $this->orderId        = $orderId;
+        $this->location_id    = $location_id;
+        $this->foodStatusName = CommonHelper::getFoodStatusName($foodStatus);
     }
     /**
      * The event's broadcast name.

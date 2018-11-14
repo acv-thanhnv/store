@@ -58,6 +58,7 @@
                         <nav class="navbar navbar-inverse">
                             <div class="container-fluid">
                                 <ul class="nav navbar-nav" id="entity-menu">
+                                    <li class="item-menu"><a href="javascript:void(0);" item-menu-id="*">All</a></li>
                                     {{--content menu--}}
 
                                 </ul>
@@ -219,7 +220,6 @@
         var order_channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\OrderConst::Customer2Order)}}';
         var order_channel = pusher.subscribe(order_channel_name);
         order_channel.bind(OrderEventName, function(data){
-            console.log(data);
             //get order and append
             if(data.order.location_id==idTable && idStore == data.idStore){
                 genOrderRealtime(data.order,data.result);
@@ -261,6 +261,7 @@
             type: 'GET',
             data: {idStore: idStore},
             success: function (data) {
+                console.log(data);
                 genEntities(data);
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -276,9 +277,9 @@
             var listItemTemp = $('#list-entities-template').contents().clone();
             $(listItemTemp).find('.entities_item').attr('entities-id', obj.id);
             $(listItemTemp).find('.entities_item').attr('entities-name', obj.name);
-            $(listItemTemp).find('.entities_item').attr('entities-image', obj.image);
+            $(listItemTemp).find('.entities_item').attr('entities-image', obj.src);
             $(listItemTemp).find('.entities_item').attr('entities-price', obj.price);
-            $(listItemTemp).find('img').attr('src', obj.image);
+            $(listItemTemp).find('img').attr('src', obj.src);
             $(listItemTemp).find('h6').text(obj.name);
             $(listItemTemp).find('h5').text(parseInt(obj.price));
 
@@ -352,7 +353,6 @@
     }
 
     function genTable(data){
-        console.log(data);
         var itemTable = $('#table-list');
         $(itemTable).empty();
         data.data.forEach(function (obj) {

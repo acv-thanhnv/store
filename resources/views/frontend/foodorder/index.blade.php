@@ -595,6 +595,7 @@
 		var hour = '{{\App\Core\Common\CutomerConst::hour}}';
 		if(now-localStorage.time > hour*60*60*1000){
 			localStorage.clear();
+			location.reload();
 		}
 		$("#table").select2();
 		var idStore = {!! $idStore !!};
@@ -637,7 +638,6 @@
 		var food_channel = pusher.subscribe(food_channel_name);
 		var food_eventName = '{{\App\Core\Common\FoodStatusValue::FoodStatusEvent}}';
 		food_channel.bind(food_eventName,function(data){
-			console.log(data);
 			FoodStatus(data.idDetail,data.cooked,data.foodStatus,data.foodStatusName);
 		});
 		//order status event
@@ -645,7 +645,6 @@
 	    var eventName = "{{\App\Core\Common\OrderConst::OrderStatusEventName}}";
         channel.bind(eventName, function(data){
         	//nếu ở order xóa order thì clear all local storage
-        	console.log(data);
         	if(data.has_delete==1){
         		$(".js-show-cart").attr("data-notify",0);
 				localStorage.removeItem('cart_items');

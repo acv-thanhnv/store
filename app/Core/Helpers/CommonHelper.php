@@ -196,10 +196,6 @@ class CommonHelper
     public static function getFoodStatusName($status){
         $status_name;
         switch ($status) {
-            case 0:
-                $status_name = 'Chờ xác nhận';
-                break;
-
             case 1:
                 $status_name = 'Đang chế biến';
                 break;
