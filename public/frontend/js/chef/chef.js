@@ -103,6 +103,7 @@ function pushToOrderListTable(result) {
 		var foodId = result.foodDetails[i].entities_id;
 		var foodName = result.foodDetails[i].name;
 		var quantity = result.foodDetails[i].quantity;
+		var foodStatus = result.foodDetails[i].status;
 		var cooked = 0;
 		$('#foodlist-' + storeId + '-' + orderId + '-' + foodId).removeClass('hidden');
 		if ($('#foodlist-' + storeId + '-' + orderId + '-' + foodId)[0]) {
@@ -116,6 +117,7 @@ function pushToOrderListTable(result) {
 				$('#order-list').find('.normal:last').after(output);
 			}
 		}
+		if (foodStatus == 2) $('#foodlist-' + storeId + '-' + orderId + '-' + foodId).addClass('hidden');else $('#foodlist-' + storeId + '-' + orderId + '-' + foodId).removeClass('hidden');
 	}
 }
 
@@ -197,10 +199,12 @@ function pushToWaiterTable(result) {
 	var table = result.orderDetails.table_name;
 	var floor = result.orderDetails.floor_name;
 	var priority = result.orderDetails.type_name;
+	$('.t-header.' + storeId + '-' + orderId).removeClass('hidden');
 	if ($('.' + storeId + '-' + orderId)[0]) {
 		for (var i in result.foodDetails) {
 			var foodId = result.foodDetails[i].entities_id;
 			var foodName = result.foodDetails[i].name;
+			var foodStatus = result.foodDetails[i].status;
 			var quantity = result.foodDetails[i].quantity;
 			var cooked = result.foodDetails[i].cooked;
 			$('.t-header.' + storeId + '-' + orderId + '-' + foodId).removeClass('hidden');
@@ -212,16 +216,18 @@ function pushToWaiterTable(result) {
 				$('#' + storeId + '-' + orderId + '-' + foodId + ' td').eq(1).html(newText);
 				$('#' + storeId + '-' + orderId + '-' + foodId + ' td').eq(2).find('span:last').text(quantity - cooked);
 			} else {
-				output += '<tr id="' + storeId + '-' + orderId + '-' + foodId + '" class="hidden foodline ' + storeId + '-' + orderId + '" storeId="' + storeId + '" orderId="' + orderId + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '"> <td class="food food-right">' + foodName + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td> <td> <button cooked="' + (cooked + 1) + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
+				output += '<tr id="' + storeId + '-' + orderId + '-' + foodId + '" class="hidden foodline ' + storeId + '-' + orderId + '" storeId="' + storeId + '" orderId="' + orderId + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '"> <td class="food food-right">' + foodName + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td> <td> <button cooked="' + (cooked + 1) + '" push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
 			}
+			if (foodStatus == 2) $('#' + storeId + '-' + orderId + '-' + foodId).addClass('hidden');else $('#' + storeId + '-' + orderId + '-' + foodId).removeClass('hidden');
 		}
 		$('#cho-cung-ung').find('.' + storeId + '-' + orderId + ':last').after(output);
 	} else {
 		if (priority !== 'Normal') output += '<tr class="t-header vip ' + storeId + '-' + orderId + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ ' + orderId + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + table + ' ' + floor + '</span> </button> </td> </tr>';else output += '<tr class="t-header normal ' + storeId + '-' + orderId + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ ' + orderId + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + table + ' ' + floor + '</span> </button> </td> </tr>';
 		output += '<tr class="hidden t-header-child ' + storeId + '-' + orderId + '"> <th style="width: 25%">Tên món</th> <th style="width: 15%">SL</th> <th style="width: 40%">Trạng thái</th> <th style="width: 20%"></th> </tr>';
 		for (var i in result.foodDetails) {
-			var foodId = result.foodDetails[i].id;
+			var foodId = result.foodDetails[i].entities_id;
 			var foodName = result.foodDetails[i].name;
+			var foodStatus = result.foodDetails[i].status;
 			var quantity = result.foodDetails[i].quantity;
 			var cooked = result.foodDetails[i].cooked;
 			$('.t-header.' + storeId + '-' + orderId + '-' + foodId).removeClass('hidden');
@@ -233,8 +239,9 @@ function pushToWaiterTable(result) {
 				$('#' + storeId + '-' + orderId + '-' + foodId + ' td').eq(1).html(_newText);
 				$('#' + storeId + '-' + orderId + '-' + foodId + ' td').eq(2).find('span:last').text(quantity - cooked);
 			} else {
-				output += '<tr id="' + storeId + '-' + orderId + '-' + foodId + '" class="hidden foodline ' + storeId + '-' + orderId + '" storeId="' + storeId + '" orderId="' + orderId + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '"> <td class="food food-right">' + foodName + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td> <td> <button cooked="' + (cooked + 1) + '" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
+				output += '<tr id="' + storeId + '-' + orderId + '-' + foodId + '" class="hidden foodline ' + storeId + '-' + orderId + '" storeId="' + storeId + '" orderId="' + orderId + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '"> <td class="food food-right">' + foodName + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td> <td> <button cooked="' + (cooked + 1) + '" push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
 			}
+			if (foodStatus == 2) $('#' + storeId + '-' + orderId + '-' + foodId).addClass('hidden');else $('#' + storeId + '-' + orderId + '-' + foodId).removeClass('hidden');
 		}
 
 		if ($('#' + storeId + '-' + orderId + '-' + foodId)[0]) {
@@ -291,15 +298,6 @@ $(document).on("click", ".push-food-1", function (e) {
 		time: currentTime
 	};
 	console.log(formData);
-	/*let obj = {
- 	foodName: foodName,
- 	orderId: orderId,
- 	foodId: foodId,
- 	time: currentTime,
- 	quantity: quantity,
- 	push: 1
- }
- pushToloadRollbackTable(obj)*/
 	$.ajax({
 		type: 'POST',
 		url: rootPath + '/kitchen/push-food-to-customer/1',
@@ -324,16 +322,8 @@ $(document).on("click", ".push-food-all", function (e) {
 		orderId: orderId,
 		foodId: foodId,
 		time: currentTime
-		/*let obj = {
-  	foodName: foodName,
-  	orderId: orderId,
-  	foodId: foodId,
-  	time: currentTime,
-  	quantity: quantity,
-  	push: push
-  }
-  pushToloadRollbackTable(obj)*/
-	};$.ajax({
+	};
+	$.ajax({
 		type: 'POST',
 		url: rootPath + '/kitchen/push-food-to-customer',
 		data: formData
@@ -469,7 +459,11 @@ waiter2waiter.bind(WaiterToWaiterChannel, function (res) {
 			$(detect + ' td').eq(1).html(cooked + '/' + quantity);
 			$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button>');
 			$(detect + ' td').eq(4).html('<button push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button>');
-		} else $(detect).addClass('hidden');
+		} else {
+			$(detect).addClass('hidden');
+			$('#foodlist-' + storeId + '-' + orderId + '-' + foodId).addClass('hidden');
+		}
+		if (!$('.foodline.' + storeId + '-' + orderId).not('.hidden')[0]) $('.' + storeId + '-' + orderId).addClass('hidden');
 	} else {
 		if ($(detect)[0]) {
 			if (quantity != cooked) {
@@ -478,6 +472,8 @@ waiter2waiter.bind(WaiterToWaiterChannel, function (res) {
 				$(detect + ' td').eq(4).html('<button push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button>');
 			}
 			$(detect).removeClass('hidden');
+			$('.t-header-child.' + storeId + '-' + orderId).removeClass('hidden');
+			$('.t-header.' + storeId + '-' + orderId).removeClass('hidden');
 		} else {
 			loadWaiterTable();
 		}

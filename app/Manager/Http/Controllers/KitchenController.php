@@ -88,7 +88,13 @@ class KitchenController extends Controller
 
         $cooked = $cooked+$push;
 
-        if ($cooked==$quantity) $status=2;
+        if ($cooked==$quantity) {
+            $status=2;
+            $update = DB::table('store_order_detail')
+            ->where('order_id', $orderId)
+            ->where('entities_id', $foodId)
+            ->update(['status' => 2]);
+        }
 
         $rollback = DB::table('store_rollback_kitchen')->insert(
             [
@@ -137,7 +143,7 @@ class KitchenController extends Controller
         ->where('entities_id', $foodId)
         ->update(['cooked' => $cooked]);
 
-        if ($res) {
+        if (true) {
             event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, 0, 0));
             event(new FoodStatusEvent($access_token,$orderId,$storeId,$location_id,$order_detail_id,$cooked,$status));
         }
