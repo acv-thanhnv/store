@@ -13,7 +13,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class Order2ChefPusher implements ShouldBroadcast
+class Order2Other implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -40,7 +40,7 @@ class Order2ChefPusher implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::Order2Kitchen;
+        return OrderConst::Order2Other;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -49,6 +49,9 @@ class Order2ChefPusher implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::Order2Kitchen));
+        return [
+            new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::Order2Kitchen)),
+            new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::Order2Cashier))
+        ];
     }
 }

@@ -9,7 +9,7 @@ use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
-use App\Core\Events\Order2ChefPusher;
+use App\Core\Events\Order2Other;
 use App\Core\Events\OrderPusherEvent;
 use App\Core\Events\OrderStatusPusherEvent;
 use App\Core\Events\Other2OrderManagerPusher;
@@ -243,7 +243,7 @@ class FoodController extends Controller
         //call event get status 
         event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrderDetail));
         //call event send to chef
-        event(new Order2ChefPusher($idStore,$arrOrder[0],$arrOrderDetail));
+        event(new Order2Other($idStore,$arrOrder[0],$arrOrderDetail));
         //convert values into json
         $result              = new DataResultCollection();
         $result->status      = SDBStatusCode::OK;
