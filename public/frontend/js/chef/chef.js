@@ -328,6 +328,7 @@ $(document).on("click", ".push-food-all", function (e) {
 		foodId: foodId,
 		time: currentTime
 	};
+	console.log(formData);
 	$.ajax({
 		type: 'POST',
 		url: rootPath + '/kitchen/push-food-to-customer',

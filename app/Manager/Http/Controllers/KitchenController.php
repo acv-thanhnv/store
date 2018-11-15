@@ -3,6 +3,7 @@
 namespace App\Manager\Http\Controllers;
 
 use App\Core\Common\OrderConst;
+use App\Core\Common\FoodStatusValue;
 use App\Core\Events\Order2ChefPusher;
 use App\Core\Events\Waiter2WaiterPusher;
 use App\Core\Events\FoodStatusEvent;
@@ -93,7 +94,7 @@ class KitchenController extends Controller
             $update = DB::table('store_order_detail')
             ->where('order_id', $orderId)
             ->where('entities_id', $foodId)
-            ->update(['status' => 2]);
+            ->update(['status' => FoodStatusValue::Done]);
         }
 
         $rollback = DB::table('store_rollback_kitchen')->insert(
@@ -106,21 +107,22 @@ class KitchenController extends Controller
             ]
         );
 
-        $res = DB::table('store_order_detail')
+        $res123 = DB::table('store_order_detail')
+        ->select('id')
         ->where('order_id', $orderId)
-        ->where('cooked', '!=', 'quantity')
+        ->where('status', '<', FoodStatusValue::Done)
         ->get();
-
-        if (empty($res)) {
+        
+        if (count($res123)===0) {
             $update = DB::table('store_order')
             ->where('id', $orderId)
             ->update(['status' => 2]);
 
             $orderDetails = DB::table('store_order')
             ->join('store_location', 'store_order.location_id', '=','store_location.id')
-            ->join('store_floor', 'store_location.floor_id', '=','store_floor.id')
             ->join('store_type_location', 'store_location.type_location_id', '=','store_type_location.id')
-            ->select('store_order.access_token', 'store_order.store_id', 'store_order.datetime_order', 'store_order.datetime_update', 'store_order.location_id', 'store_location.name as table_name', 'store_floor.name as floor_name', 'store_order.priority', 'store_type_location.name as type_name')
+            ->join('store_order_status', 'store_order_status.value', '=','store_order.status')
+            ->select('store_order.access_token', 'store_order.store_id', 'store_order.datetime_order', 'store_order.datetime_update', 'store_order.location_id', 'store_location.name as table_name', 'store_order.priority', 'store_type_location.name as type_name', 'store_order_status.name as status_name')
             ->where('store_order.store_id',$storeId)
             ->where('store_order.access_token',$access_token)
             ->get();
@@ -147,7 +149,7 @@ class KitchenController extends Controller
             event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, 0, 0));
             event(new FoodStatusEvent($access_token,$orderId,$storeId,$location_id,$order_detail_id,$cooked,$status));
         }
-        return $res;
+        return $time;
     }
 
     public function newOrder2Kitchen($storeId, $orderId)

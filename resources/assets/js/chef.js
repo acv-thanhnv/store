@@ -261,6 +261,7 @@ function pushToWaiterTable(result) {
 			foodId: foodId,
 			time: currentTime
 		}
+		console.log(formData)
 		$.ajax({
 			type:'POST',
 			url:rootPath+'/kitchen/push-food-to-customer',
