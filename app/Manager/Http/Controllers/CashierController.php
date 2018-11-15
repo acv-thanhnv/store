@@ -2,9 +2,12 @@
 
 namespace App\Manager\Http\Controllers;
 
+use App\Core\Common\OrderConst;
+use App\Core\Common\OrderStatusValue;
 use App\Core\Events\Customer2CashierPusher;
 use App\Core\Events\PaymentDonePusher;
 use App\Core\Events\RollbackCashierPusher;
+use App\Core\Events\Other2OrderManagerPusher;
 
 use Illuminate\Http\Request; 
 use Pusher\Pusher;
@@ -32,7 +35,7 @@ class CashierController extends Controller
 		$res = DB::table('store_order')
 		->where('store_order.store_id', $storeId)
 		->whereIn('store_order.id', $listOrderId)
-		->update(['store_order.status' => 4 ]);
+		->update(['store_order.status' => OrderStatusValue::Pay ]);
 
 		foreach ($listOrderId as $orderId) {
 			$rollback = DB::table('store_rollback_cashier')->insert(
@@ -44,7 +47,19 @@ class CashierController extends Controller
 			);
 		}
 
-		if ($res) event(new PaymentDonePusher($storeId, $listOrderId, $beforeStatus));
+		$orderDetails = DB::table('store_order')
+            ->join('store_location', 'store_order.location_id', '=','store_location.id')
+            ->join('store_type_location', 'store_location.type_location_id', '=','store_type_location.id')
+            ->join('store_order_status', 'store_order_status.value', '=','store_order.status')
+            ->select('store_order.id', 'store_order.status', 'store_order.access_token', 'store_order.store_id', 'store_order.datetime_order', 'store_order.datetime_update', 'store_order.location_id', 'store_location.name as table_name', 'store_order.priority', 'store_type_location.name as type_name', 'store_order_status.name as status_name')
+            ->where('store_order.store_id',$storeId)
+            ->where('store_order.access_token',$access_token)
+            ->get();
+
+		if ($res) {
+			event(new PaymentDonePusher($storeId, $listOrderId, $beforeStatus));
+			event(new Other2OrderManagerPusher($storeId,$orderDetails[0],null));
+		}
 		return $res;
 	}
 
