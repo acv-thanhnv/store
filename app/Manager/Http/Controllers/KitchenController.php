@@ -128,7 +128,7 @@ class KitchenController extends Controller
             ->where('store_order.access_token',$access_token)
             ->get();
 
-            event(new Other2OrderManagerPusher($foodDetails, $storeId, $orderDetails) );
+            event(new Other2OrderManagerPusher($storeId, $orderDetails, $foodDetails) );
 
         }
 
