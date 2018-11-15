@@ -441,7 +441,7 @@ $(document).on("click", ".payment", function (e) {
 
 	$.ajax({
 		type: 'POST',
-		url: '/payment-done',
+		url: rootPath + '/payment-done',
 		data: formData
 	}).done(function (result) {
 		console.log(result);
@@ -463,7 +463,7 @@ $(document).on("click", "#thanh-toan-tat-ca", function (e) {
 		console.log(formData);
 		$.ajax({
 			type: 'POST',
-			url: '/payment-done',
+			url: rootPath + '/payment-done',
 			data: formData
 		}).done(function (result) {
 			console.log(result);
@@ -487,7 +487,7 @@ $(document).on("click", "#in-tat-ca", function (e) {
 	console.log(formData);
 	$.ajax({
 		type: 'POST',
-		url: '/api/v1/all-payments',
+		url: rootPath + '/api/v1/all-payments',
 		data: formData
 	}).done(function (result) {
 		console.log(result);
@@ -574,7 +574,7 @@ $(document).on("click", ".rollback", function (e) {
 	$('#rollback-' + storeId + '-' + orderId).addClass('hidden');
 	$.ajax({
 		type: 'POST',
-		url: '/rollback-payment',
+		url: rootPath + '/rollback-payment',
 		data: formData
 	}).done(function (result) {
 		console.log(result);

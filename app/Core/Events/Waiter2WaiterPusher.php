@@ -44,7 +44,7 @@ class Waiter2WaiterPusher implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::UpdateOrderAtKitchenEvent;
+        return OrderConst::WaiterToWaiterChannel;
     }
     /**
      * Get the channels the event should broadcast on.

@@ -1,10 +1,12 @@
 const storeId = $('#config').attr('storeId')
-
 const rootPath = $('#config').attr('rootPath')
+const Order2Kitchen = $('#config').attr('Order2Kitchen')
+const WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel')
+const Customer2Order = $('#config').attr('Customer2Order')
 
 $(document).ready(function(){
 	$("#header-left a").click(function(){
-		$(this).tab('show');
+		$(this).tab('show')
 	});
 	loadWaiterTable()
 	loadRollbackTable()
@@ -12,7 +14,6 @@ $(document).ready(function(){
 });
 
 function pushToOrderListTable(result) {
-	console.log(result)
 	var output=''
 	var orderId = result.orderDetails.id
 	var table = result.orderDetails.table_name
@@ -50,9 +51,9 @@ function removeFromOrderListTable(result) {
 			$('.foodlist-'+storeId+'-'+orderId).addClass('hidden')
 			if (status) $('#foodlist-'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
 		}
-	} else {
-		$('.foodlist-'+storeId+'-'+orderId).addClass('hidden')
-	}
+} else {
+	$('.foodlist-'+storeId+'-'+orderId).addClass('hidden')
+}
 }
 
 function removeFromWaiterTable(result) {
@@ -64,15 +65,15 @@ function removeFromWaiterTable(result) {
 			$('.foodline.'+storeId+'-'+orderId).addClass('hidden')
 			if (status) $('#'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
 		}
-	} else {
-		$('.'+storeId+'-'+orderId).addClass('hidden')
-	}
+} else {
+	$('.'+storeId+'-'+orderId).addClass('hidden')
+}
 }
 
 function loadOrderListTable() {
 	loadJSON(rootPath+'/api/v1/store/'+storeId+'/chef_order_detail.json', function(response) {
 		var result = JSON.parse(response)
-		var output='<table id="order-list" class="table table-hover red-blue-table" data-search="true" data-toggle="table"> <thead> <tr> <th style="width: 55%" data-field="name">Tên món</th> <th style="width: 20%" data-field="id" data-sortable="true">Hóa đơn</th> <th style="width: 15%" data-field="priority" data-sortable="true">VIP</th> <th style="width: 10%" data-field="quantity">SL</th> </tr> </thead> <tbody id="order-list-table-body">'
+		var output='<table id="order-list" class="table table-hover red-blue-table" data-search="true" data-toggle="table"> <thead> <tr> <th class="sticky" style="width: 55%" data-field="name">Tên món</th> <th class="sticky" style="width: 20%" data-field="id" data-sortable="true">Hóa đơn</th> <th class="sticky" style="width: 15%" data-field="priority" data-sortable="true">VIP</th> <th class="sticky" style="width: 10%" data-field="quantity">SL</th> </tr> </thead> <tbody id="order-list-table-body">'
 		for (var i in result.orders)
 		{
 			var orderId = result.orders[i].id
@@ -100,7 +101,7 @@ function pushToloadRollbackTable(obj) {
 function loadRollbackTable() {
 	loadJSON(rootPath+'/api/v1/store/'+storeId+'/chef_rollback.json', function(response) {
 		var result = JSON.parse(response)
-		var output='<table id="roll-back" class="table table-hover red-blue-table" data-toggle="table" data-search="true"> <thead> <tr> <th style="width: 35%" data-field="name">Tên món</th> <th style="width:15%" data-field="invoice">Hóa đơn</th> <th style="width: 10%" data-field="quantity">SL</th> <th style="width: 30%" data-field="action">Thao tác</th> <th style="width: 20%"></th> </tr> </thead> <tbody id="rollback-body">'
+		var output='<table id="roll-back" class="table table-hover red-blue-table" data-toggle="table" data-search="true"> <thead> <tr> <th class="sticky" style="width: 35%" data-field="name">Tên món</th> <th class="sticky" style="width:15%" data-field="invoice">Hóa đơn</th> <th class="sticky" style="width: 10%" data-field="quantity">SL</th> <th class="sticky" style="width: 30%" data-field="action">Thao tác</th> <th class="sticky" style="width: 20%"></th> </tr> </thead> <tbody id="rollback-body">'
 		for (var i in result)
 		{
 			let orderId = result[i].order_id
@@ -140,7 +141,6 @@ function pushToWaiterTable(result) {
 				output+='<tr id="'+storeId+'-'+orderId+'-'+foodId+'" class="hidden foodline '+storeId+'-'+orderId+'" storeId="'+storeId+'" orderId="'+orderId+'" foodId="'+foodId+'" foodName="'+name+'" quantity="'+quantity+'"> <td class="food food-right">'+foodName+'</td> <td>'+cooked+'/'+quantity+'</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button> </td> <td> <button cooked="'+(cooked+1)+'" push="1" class="btn btn-warning push-food"><i class="fa fa-angle-right"></i></button> <button cooked="'+quantity+'" push="'+(quantity-cooked)+'" class="btn-group-kitchen btn btn-danger push-food"><i class="fa fa-angle-double-right"></i></button> </td> </tr>'
 			}
 		}
-
 		$('#cho-cung-ung').find('.'+storeId+'-'+orderId+':last').after(output)
 	}
 	else {
@@ -182,7 +182,7 @@ function pushToWaiterTable(result) {
 	function loadWaiterTable() {
 		loadJSON(rootPath+'/api/v1/store/'+storeId+'/chef_order_detail.json', function(response) {
 			var result = JSON.parse(response);
-			var output='<table id="cho-cung-ung" class="table table-hover red-blue-table" data-toggle="table" data-search="true"> <thead> <tr> <th colspan="2" style="width:40%">Hóa đơn</th> <th colspan="2" style="width:60%">Bàn/Phòng/Tầng</th> </tr> </thead> <tbody>'
+			var output='<table id="cho-cung-ung" class="table table-hover red-blue-table" data-toggle="table" data-search="true"> <thead> <tr> <th class="sticky" colspan="2" style="width:40%">Hóa đơn</th> <th class="sticky" colspan="2" style="width:60%">Bàn/Phòng/Tầng</th> </tr> </thead> <tbody>'
 			for (var i in result.orders)
 			{
 				var id = result.orders[i].id
@@ -363,20 +363,20 @@ var pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
 	encrypted: true
 });
 
-var order2kitchen = pusher.subscribe(md5(storeId)+'-order2kitchen');
-order2kitchen.bind('update-order-at-kichen', function(res) {
+var order2kitchen = pusher.subscribe(md5(storeId)+'-'+Order2Kitchen);
+order2kitchen.bind(Order2Kitchen, function(res) {
 	pushToOrderListTable(res)
 	pushToWaiterTable(res)
 })
 
-var customer2order = pusher.subscribe(md5(storeId)+'-customer2order');
-customer2order.bind('customer2order', function(res) {
+var customer2order = pusher.subscribe(md5(storeId)+'-'+Customer2Order);
+customer2order.bind(Customer2Order, function(res) {
 	removeFromOrderListTable(res)
 	removeFromWaiterTable(res)
 })
 
-var waiter2waiter = pusher.subscribe(md5(storeId)+'-waiter2waiter')
-waiter2waiter.bind('update-order-at-kichen', function(res) {
+var waiter2waiter = pusher.subscribe(md5(storeId)+'-'+WaiterToWaiterChannel)
+waiter2waiter.bind(WaiterToWaiterChannel, function(res) {
 	console.log(res)
 	var time = res.time
 	var orderId = res.orderId
@@ -398,10 +398,17 @@ waiter2waiter.bind('update-order-at-kichen', function(res) {
 		}
 		else $(detect).addClass('hidden')
 	} else {
-		if ($(detect)[0]) $(detect).removeClass('hidden')
-			else {
-				pushToWaiterTable()
+		if ($(detect)[0]) {
+			if (quantity!=cooked) {
+				$(detect+' td').eq(1).html(cooked+'/'+quantity)
+				$(detect+' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button>')
+				$(detect+' td').eq(4).html('<button push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="'+(quantity-cooked)+'" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button>')
 			}
+			$(detect).removeClass('hidden')
+		}
+		else {
+			loadWaiterTable()
+		}
 	}
 	loadRollbackTable()
 })
