@@ -810,7 +810,7 @@
                 type: 'POST',
                 data: {objOrder: objOrder,idTable:idTable},
                 success: function (data) {
-                    notify('Success','success','Order was successfully send to chef !','#398717','#2F6227');
+                    notify('Success','success','Order đã được gửi thành công cho bếp !','#398717','#2F6227');
                     if(parseInt(data.numberTable)===0){
                         $('*[location-id="'+idTable+'"]').removeClass('have-update').addClass('have-order');
                     }
@@ -821,7 +821,7 @@
                 }
             })
         }else{
-            notify('Warning','warning','Nothing to send to chef !','#E99551','#F4AD32');
+            notify('Warning','warning','Không có món nào để gửi cho bếp, cập nhập order để gửi !','#E99551','#F4AD32');
         }
     });
 

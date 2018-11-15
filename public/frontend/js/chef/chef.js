@@ -430,8 +430,7 @@ function searchFor() {
 		$('.t-header-child').nextUntil('.t-header').slideToggle(0, function () {});
 	}
 }
-
-var pusher = new Pusher("120973d888acaaed6fef", {
+var pusher = new Pusher("4f5dd81b5671af6c6fb2", {
 	cluster: "ap1",
 	encrypted: true
 });

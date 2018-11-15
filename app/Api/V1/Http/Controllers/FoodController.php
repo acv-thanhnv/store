@@ -167,13 +167,27 @@ class FoodController extends Controller
 
     public function Order2Chef(Request $request)
     {
-        $Order = (object) $request->objOrder;
-        $orderId  = $Order->orderId;
-        $idTable  = $request->idTable;
-        //update status of order
-        SDB::table('store_order')
-        ->where('id',$orderId)
-        ->update(['status'=>OrderStatusValue::Process]);
+        $Order   = (object) $request->objOrder;
+        $orderId = $Order->orderId;
+        $idTable = $request->idTable;
+        $now     = CommonHelper::dateNow();
+        //lấy trạng thái cũ của order
+        $arrOrder = SDB::table('store_order')
+                    ->where('id',$Order->orderId)
+                    ->select('status')
+                    ->get();
+        //nếu order đó đã chế biến xong thì cập nhập time update
+        if($arrOrder[0]->status==OrderStatusValue::Done){
+            //update status of order
+            SDB::table('store_order')
+            ->where('id',$orderId)
+            ->update(['status'=>OrderStatusValue::Process,'datetime_update' => $now]);
+        }else{
+            //update status of order
+            SDB::table('store_order')
+            ->where('id',$orderId)
+            ->update(['status'=>OrderStatusValue::Process]);
+        }
         //update status of food
         foreach($Order->orderDetail as $key=>$obj){
             //nếu món ăn đấy đã được thêm ở phía của khách hàng thì cập nhập số lượng, ngược lại thì

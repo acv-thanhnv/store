@@ -576,7 +576,7 @@ function notify(headingContent,icon,content,bgColor){
 	    icon: icon,
 	    showHideTransition: 'plain',
 	    allowToastClose: true,
-	    hideAfter: 2000,
+	    hideAfter: 2500,
 	    bgColor:bgColor,
 	    stack: 5,
 	    position: 'top-right',
