@@ -38,7 +38,7 @@
                         <nav class="navbar navbar-inverse">
                             <div class="container-fluid">
                                 <ul class="nav navbar-nav" id="floors">
-                                    <li class="item-floor"><a href="javascript:void(0);" item-floor-id="">All</a></li>
+                                    <li class="item-floor active_floor"><a href="javascript:void(0);" item-floor-id="">All</a></li>
                                     {{--content floor--}}
                                 </ul>
                                 {{--content floor include--}}
@@ -182,7 +182,7 @@
 
     $(document).ready(function () {
         getMenuList(idStore);
-        getEntities(idStore);
+        getEntitiesByMenu('*',idStore);
         getFloors(idStore);
         getTable(null);
         PusherEvent();//create pusher event
@@ -273,8 +273,7 @@
             type: 'GET',
             data: {idStore: idStore},
             success: function (data) {
-                console.log(data);
-                genEntities(data);
+                genEntities(data.data);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Error ' + xhr.status + ' | ' + thrownError);
@@ -293,7 +292,7 @@
             $(listItemTemp).find('.entities_item').attr('entities-price', obj.price);
             $(listItemTemp).find('img').attr('src', obj.src);
             $(listItemTemp).find('h6').text(obj.name);
-            $(listItemTemp).find('h5').text(parseInt(obj.price));
+            $(listItemTemp).find('h5').text(obj.price);
 
             $(listItem).append($(listItemTemp));
         })
@@ -309,12 +308,12 @@
 
     function getEntitiesByMenu(idMenu, idStore) {
         $.ajax({
-            url: '{{route("food/list-by-menu")}}' + '/' + idMenu,
+            url: '{{route("food/list-by-menu")}}',
             dataType: 'JSON',
             type: 'GET',
             data: {idMenu: idMenu, idStore: idStore},
             success: function (data) {
-                genEntities(data);
+                genEntities(data.data);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Error ' + xhr.status + ' | ' + thrownError);
@@ -398,6 +397,8 @@
 
     //======================GET TABLE BY FLOOR============================
     $(document).on('click', '.item-floor', function () {
+        $('.item-floor').removeClass('active_floor');
+        $(this).addClass('active_floor');
         idFloor = $(this).find('a').attr('item-floor-id');
         getTable(idFloor);
     })
@@ -836,20 +837,24 @@
             type          : "red",
             closeIcon     : true,
             closeIconClass: 'fa fa-close',
-            content       : "Are You Sure? This Order Will Be Deleted!",
+            content       : "Bạn có chắc là muốn xóa Order này?",
             buttons       : {
                 Save: {
                     text    : 'OK',
                     btnClass: 'btn btn-primary',
                     action  : function (){
-                        $(row).next('.entities-row-detail').remove();
-                        $(row).remove();
                         $.ajax({
                             url: '{{route("deleteOrder")}}',
                             type: 'GET',
                             data: {orderId: orderId},
                             success: function (data) {
-                                notify('Success','success','This order was successfully deleted !','#398717','#2F6227');
+                                if(data.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
+                                    $(row).next('.entities-row-detail').remove();
+                                    $(row).remove();
+                                    notify('Success','success','Order đã được xóa thành công!','#398717','#2F6227');
+                                }else{
+                                    notify('Error','error','Lỗi! Bạn không thể xóa order đã có món nấu xong!','#B42727','#A34242');
+                                }
                             }
                         })
                     }

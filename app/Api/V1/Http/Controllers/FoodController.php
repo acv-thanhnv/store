@@ -36,20 +36,13 @@ class FoodController extends Controller
         $result->data = $list;
         return view('frontend.order-manager.table_manager',['location'=>$result]);
     }
-
-    public function listByStore($storeId = null){
-        $list = $this->service->getFoodByStoreId($storeId);
-        $result  = new DataResultCollection ();
+    public function listByMenu(Request $request){
+        $idMenu         = $request->idMenu;
+        $storeId        = $request->input('idStore');
+        $list           = $this->service->getFoodByMenuId($idMenu,$storeId);
+        $result         = new DataResultCollection ();
         $result->status =  SDBStatusCode::OK;
-        $result->data = $list;
-        return ResponseHelper::JsonDataResult($result);
-    }
-    public function listByMenu(Request $request,$menuId=null){
-        $storeId =   $request->input('idStore');
-        $list = $this->service->getFoodByMenuId($menuId,$storeId);
-        $result  = new DataResultCollection ();
-        $result->status =  SDBStatusCode::OK;
-        $result->data = $list;
+        $result->data   = $list;
         return ResponseHelper::JsonDataResult($result);
     }
     public function listMenu($storeId=null){
@@ -107,12 +100,12 @@ class FoodController extends Controller
     }
 
     public function getOrderByLocation(Request $request){
-        $idLocation = $request->idLocation;
-        $idStore = $request->idStore;
-        $list = $this->service->getOrderByLocation($idLocation, $idStore);
-        $result = new DataResultCollection();
+        $idLocation     = $request->idLocation;
+        $idStore        = $request->idStore;
+        $list           = $this->service->getOrderByLocation($idLocation, $idStore);
+        $result         = new DataResultCollection();
         $result->status = SDBStatusCode::OK;
-        $result->data=$list;
+        $result->data   =$list;
         return ResponseHelper::JsonDataResult($result);
     }
 
@@ -310,24 +303,37 @@ class FoodController extends Controller
 
     public function deleteOrder(Request $request)
     {
-        $arrOrder       = SDB::table('store_order')
-                            ->where('id',$request->orderId)
-                            ->select('access_token','store_id','location_id')
+        $result         = new DataResultCollection();
+        $result->status = SDBStatusCode::OK;
+        $numFoodSuccess = SDB::table('store_order_detail')
+                            ->where('order_id',$request->orderId)
+                            ->where('status',FoodStatusValue::Done)
+                            ->select('id')
                             ->get();
-        $access_token   = $arrOrder[0]->access_token;
-        $idStore        = $arrOrder[0]->store_id;
-        $idTable        = $arrOrder[0]->location_id;      
-        ///delete order
-        SDB::table('store_order')
-        ->where('id',$request->orderId)
-        ->delete();
-        //delete order detail
-        SDB::table('store_order_detail')
-        ->where('order_id',$request->orderId)
-        ->delete();
-        //call event get status and return response for customer 
-        event(new OrderStatusPusherEvent($access_token,$request->orderId,null,1));
-        //call event bind table color
-        event(new TableEvent($idStore,$idTable));
+        //neu order do co mon da che bien xong thi ko cho xoa order
+        if(count($numFoodSuccess)>0){
+            $result->status = SDBStatusCode::WebError;
+        }else{
+            $arrOrder       = SDB::table('store_order')
+                                ->where('id',$request->orderId)
+                                ->select('access_token','store_id','location_id')
+                                ->get();
+            $access_token   = $arrOrder[0]->access_token;
+            $idStore        = $arrOrder[0]->store_id;
+            $idTable        = $arrOrder[0]->location_id;      
+            ///delete order
+            SDB::table('store_order')
+            ->where('id',$request->orderId)
+            ->delete();
+            //delete order detail
+            SDB::table('store_order_detail')
+            ->where('order_id',$request->orderId)
+            ->delete();
+            //call event get status and return response for customer 
+            event(new OrderStatusPusherEvent($access_token,$request->orderId,null,1));
+            //call event bind table color
+            event(new TableEvent($idStore,$idTable));
+        }
+        return ResponseHelper::JsonDataResult($result);
     }
 }

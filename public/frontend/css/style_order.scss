@@ -118,6 +118,9 @@ $im:!important;
           color: white;
         }
       }
+      .wrap-table:hover{
+        cursor: pointer;
+      };
     }
     #list-entities {
       padding: 0px 15px;
@@ -233,6 +236,19 @@ $im:!important;
 }
 .div_table{
   margin:10px 0px;
+  padding-left: 3px;
+}
+.item-floor a{
+  color: #ccc $im;
+}
+.active_floor{
+  a{
+    color: white $im;
+  }
+  font-size: 16px;
+  font-weight: bold;
+  background: #4874E5;
+  border-radius: 3px;
 }
 @media only screen and (max-width: 768px) {
 }

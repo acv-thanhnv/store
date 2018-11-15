@@ -143,7 +143,7 @@
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Latitude  </label>
-						<input type="number" id="lat" class="form-control has-feedback-left" name="lat" 
+						<input type="number" readonly="" id="lat" class="form-control has-feedback-left" name="lat" 
 						placeholder="Latitude...">
 						<span class="fa fa-compass form-control-feedback left" aria-hidden="true"></span>
 					</div>
@@ -151,7 +151,7 @@
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Longtitude   </label>
-						<input type="number" id="lng" class="form-control has-feedback-left" name="lng" 
+						<input type="number" readonly="" id="lng" class="form-control has-feedback-left" name="lng" 
 						placeholder="Longitude...">
 						<span class="fa fa-compass form-control-feedback left" aria-hidden="true"></span>
 					</div>

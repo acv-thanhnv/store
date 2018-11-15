@@ -98,7 +98,7 @@
 		<div class="wrap-header-mobile">
 			<!-- Logo moblie -->		
 			<div class="logo-mobile">
-				<a href="index.html">
+				<a href="">
 					Gem's Store
 				</a>
 			</div>
@@ -171,7 +171,7 @@
 					<ul class="header-cart-wrapitem w-full">
 					</ul>
 					<div class="alert alert-warning alert-change dis-none" style="padding: .2rem 1.25rem">
-						<strong>Warning!</strong> You just update orders, press <a class="btn btn-primary btn-sm btn-order">Order</a> to save changes 
+						<strong>Warning!</strong> Bạn vừa cập nhập giỏ hàng, click <a class="btn btn-primary btn-sm btn-order">Order</a> để cập nhập món ăn 
 					</div>
 				</div>
 				<div class="w-full cart-total p-t-5 row" style="margin-left: 0px;">
@@ -501,7 +501,7 @@
 
 					<a href="" class="block2-btn flex-c-m stext-103 cl2 bg0 bor2 hov-btn1 p-lr-15 trans-04 add_to_cart">
 						<i class="zmdi zmdi-shopping-cart cart-desktop">
-						</i> Add To Cart
+						</i> Chọn món
 					</a>
 				</div>
 

@@ -55,7 +55,7 @@ Route::match(array('GET','POST'),'/api/v1/auth/login', 'Auth\UserController@logi
 
 Route::get('/api/v1/food/list-by-store/{storeId?}', 'FoodController@listByStore')->name('food/list-by-store');
 
-Route::get('/api/v1/food/list-by-menu/{menuId?}', 'FoodController@listByMenu')->name('food/list-by-menu');
+Route::get('/api/v1/food/list-by-menu', 'FoodController@listByMenu')->name('food/list-by-menu');
 
 Route::get('/api/v1/food/list-menu-by-store/{storeId?}', 'FoodController@listMenu')->name('food/list-menu-by-store');
 

@@ -89,7 +89,7 @@ class FoodOrderController extends Controller
                         ->paginate($total);
         }
         foreach($arrFood as $obj){
-            $obj->price = number_format($obj->price);
+            $obj->format_price = number_format($obj->price);
             //check avatar
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
