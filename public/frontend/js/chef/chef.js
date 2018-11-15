@@ -428,7 +428,7 @@ function searchFor() {
 	}
 }
 
-var pusher = new Pusher("120973d888acaaed6fef", {
+var pusher = new Pusher("4f5dd81b5671af6c6fb2", {
 	cluster: "ap1",
 	encrypted: true
 });
