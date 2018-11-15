@@ -231,6 +231,7 @@
         var order_channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\OrderConst::Customer2Order)}}';
         var order_channel = pusher.subscribe(order_channel_name);
         order_channel.bind(OrderEventName, function(data){
+            console.log(data);
             //get order and append
             if(data.order.location_id==idTable && idStore == data.idStore){
                 genOrderRealtime(data.order,data.result);
