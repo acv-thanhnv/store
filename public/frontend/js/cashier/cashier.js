@@ -193,7 +193,7 @@ function loadCashierTable() {
 		output += "</tbody> <tfoot></tfoot> </table>";
 		$('#thu-ngan').html(output);
 		output = '';
-		for (var i in result.details) {
+		for (var i in result.orders) {
 			var orderId = result.orders[i].id;
 			var locationFee = result.orders[i].locationFee;
 			locationFee = parseInt(locationFee);
