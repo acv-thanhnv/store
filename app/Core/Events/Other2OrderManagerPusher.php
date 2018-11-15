@@ -35,7 +35,7 @@ class Other2OrderManagerPusher implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::Customer2Order;
+        return OrderConst::Other2Order;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -44,6 +44,6 @@ class Other2OrderManagerPusher implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->idStore,OrderConst::Customer2Order));
+        return new Channel(CommonHelper::getOrderEventName($this->idStore,OrderConst::Other2Order));
     }
 }

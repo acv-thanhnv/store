@@ -9,7 +9,7 @@ $(document).ready(function(){
 		$(this).tab('show')
 	});
 	loadWaiterTable()
-	loadRollbackTable()
+	loadRollbackTable()ar
 	loadOrderListTable()
 });
 

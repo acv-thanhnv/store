@@ -89,6 +89,7 @@ class FoodOrderController extends Controller
                         ->paginate($total);
         }
         foreach($arrFood as $obj){
+            $obj->price = number_format($obj->price);
             //check avatar
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
@@ -186,6 +187,7 @@ class FoodOrderController extends Controller
                     ->paginate($total);
         }
         foreach($arrFood as $obj){
+            $obj->price = number_format($obj->price);
             //check avatar
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
@@ -272,6 +274,7 @@ class FoodOrderController extends Controller
                     ->where('order_id',$orderId)
                     ->get();
         foreach($arrOrderDetail as $obj){
+            $obj->price = number_format($obj->price);
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
             }else{
@@ -293,6 +296,7 @@ class FoodOrderController extends Controller
             ->where('id',$entities_id)
             ->get();
         foreach($foodDetail as $obj){
+            $obj->price = number_format($obj->price);
             //check avatar
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
@@ -332,6 +336,7 @@ class FoodOrderController extends Controller
                     default:
                         $NoDone++;
                 }
+                $obj->price = number_format($obj->price);
                 if($obj->image==NULL){
                     $obj->src = url('/')."/common_images/no-store.png";
                 }else{

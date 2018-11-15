@@ -82,6 +82,9 @@ class OrderConst{
     
     const OrderChannelToCashier      = "customer2cashier";
     
+    const Other2Order                = 'other2order';
+
+    const Order2Other                = 'order2other';
     
     const NewOrderToOrderManager     = "new-order-to-order-manager";
     
@@ -93,6 +96,8 @@ class OrderConst{
     
     
     const Order2Kitchen              = "order2kitchen";
+
+    const Order2Cashier              = "order2cashier";
     
     const OrderChefEventName         = "new-order";
     
@@ -109,6 +114,7 @@ class EntityProperty{
     const maxField = 10;
 }
 class TableConst{
+    const TablePerPage    = 12;
     const TableColorEvent = 'table_color_event';
     const noOrder         = 'blue';
     const haveOrder       = '#EA3232';

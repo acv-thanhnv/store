@@ -100,16 +100,21 @@ $im:!important;
       }
     }
     #table-list {
-      padding: 0px 10px;
+      margin-right: auto;
+      margin-left: auto;
       .wrap-table {
-        width: 70px;
-        height: 70px;
-        margin: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 75px;
+        padding:5px;
         border-radius: 10px;
         box-shadow: 3px 3px #CCCCCC;
         background-color: #5C6FA2;
         .table-name {
-
+          font-size: 16px;
+          font-weight: bold;
           color: white;
         }
       }
@@ -225,6 +230,9 @@ $im:!important;
 }
 .dis-none{
   display: none;
+}
+.div_table{
+  margin:10px 0px;
 }
 @media only screen and (max-width: 768px) {
 }

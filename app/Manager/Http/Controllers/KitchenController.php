@@ -2,16 +2,16 @@
 
 namespace App\Manager\Http\Controllers;
 
-use App\Core\Common\OrderConst;
 use App\Core\Common\FoodStatusValue;
-use App\Core\Events\Order2ChefPusher;
-use App\Core\Events\Waiter2WaiterPusher;
+use App\Core\Common\OrderConst;
 use App\Core\Events\FoodStatusEvent;
+use App\Core\Events\Order2ChefPusher;
 use App\Core\Events\Other2OrderManagerPusher;
-
-use Illuminate\Http\Request; 
-use Pusher\Pusher;
+use App\Core\Events\Waiter2WaiterPusher;
+use App\Core\Helpers\CommonHelper;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Pusher\Pusher;
 
 class KitchenController extends Controller
 {
@@ -135,11 +135,16 @@ class KitchenController extends Controller
             ->where('store_order.store_id',$storeId)
             ->where('store_order.access_token',$access_token)
             ->get();
-
-            event(new Other2OrderManagerPusher($storeId, $orderDetails, $foodDetails) );
+            foreach($foodDetails as $obj){
+                if($obj->image==NULL){
+                    $obj->src = url('/')."/common_images/no-store.png";
+                }else{
+                    $obj->src = CommonHelper::getImageUrl($obj->image);
+                }
+            }
+            event(new Other2OrderManagerPusher($storeId, $orderDetails[0], $foodDetails) );
 
         }
-
         $count = DB::table('store_order_detail')
         ->where('order_id', $orderId)
         ->where('entities_id', $foodId)

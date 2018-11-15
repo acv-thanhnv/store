@@ -47,7 +47,7 @@
                         </nav>
                     </div>
 
-                    <div id="table-list">
+                    <div id="table-list" class="row">
                         {{--content TABLE--}}
                     </div>
                     {{--content TABLE INCLUDE--}}
@@ -227,10 +227,11 @@
             $(row_order_detail).find('.food_status').addClass('food_status_'+data.foodStatus);
         });
         //order event
-        var OrderEventName = "{{\App\Core\Common\OrderConst::Customer2Order}}";
-        var order_channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\OrderConst::Customer2Order)}}';
+        var OrderEventName = "{{\App\Core\Common\OrderConst::Other2Order}}";
+        var order_channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\OrderConst::Other2Order)}}';
         var order_channel = pusher.subscribe(order_channel_name);
         order_channel.bind(OrderEventName, function(data){
+            console.log(data);
             //get order and append
             if(data.order.location_id==idTable && idStore == data.idStore){
                 genOrderRealtime(data.order,data.result);
@@ -368,7 +369,7 @@
         $(itemTable).empty();
         data.data.forEach(function (obj) {
             var itemTableTemp = $('#table-list-template').contents().clone();
-            var order_data = $(itemTableTemp)[1];
+            var order_data = $(itemTableTemp).find('.wrap-table');
             var have_update =0;
             obj.arrOrder.forEach(function(orderItem){
                 //nếu trong bàn đó có các order chưa xác nhận hoặc cập nhập món thì hiện cập nhập

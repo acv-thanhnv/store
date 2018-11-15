@@ -435,6 +435,7 @@ var pusher = new Pusher("4f5dd81b5671af6c6fb2", {
 
 var order2kitchen = pusher.subscribe(md5(storeId) + '-' + Order2Kitchen);
 order2kitchen.bind(Order2Kitchen, function (res) {
+	console.log(res);
 	pushToOrderListTable(res);
 	pushToWaiterTable(res);
 });
