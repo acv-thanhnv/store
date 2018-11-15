@@ -23,7 +23,7 @@ class StoreManagerService extends BaseService implements StoreManagerInterface
         $store = SDB::table("store_store")->get();
         foreach($store as $obj){
             if($obj->avatar==NULL){
-             $obj->src = url('/')."/common_images/no-avatar.png";
+             $obj->src = url('/')."/common_images/no-store.png";
             }else{
                 $obj->src = CommonHelper::getImageUrl($obj->avatar);
             }

@@ -9,6 +9,7 @@
 namespace App\Api\V1\Services\Production;
 
 use App\Api\V1\Services\Interfaces\FoodServiceInterface;
+use App\Core\Common\FoodConst;
 use App\Core\Common\OrderConst;
 use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
@@ -35,24 +36,29 @@ class FoodService extends BaseService implements FoodServiceInterface
         }
         return $list;
     }
-    //====================get food===============
-    public function getFoodByStoreId($storeId = null)
-    {
-        $list = SDB::table("view_entity_infor")
-            ->where("store_id", $storeId)
-            ->select('*')
-            ->get();
-        return $this->buildFoodListByStoreId($list, $storeId);
-    }
 
     //===================get food by menu========================
     public function getFoodByMenuId($menuId = null, $storeId = null)
     {
-        $list = SDB::table("view_entity_infor")
-            ->whereRaw("? IS NOT NULL AND store_id = ?  AND (? IS NULL OR ? ='' OR ? = menu_id)", [$storeId, $storeId, $menuId, $menuId, $menuId])
-            ->select('*')
-            ->get();
-        return $this->buildFoodListByMenu($list, $menuId, $storeId);
+        if($menuId=='*'){
+            $list = SDB::table("store_entities as en")
+                    ->join('store_menu as menu','menu.id','=','en.menu_id')
+                    ->where('menu.store_id',$storeId)
+                    ->select('en.*')
+                    ->paginate(FoodConst::foodPerPage);
+        }else{
+            $list = SDB::table("store_entities as en")
+                    ->join('store_menu as menu','menu.id','=','en.menu_id')
+                    ->where('menu.store_id',$storeId)
+                    ->where('menu.id',$menuId)
+                    ->select('en.*')
+                    ->paginate(FoodConst::foodPerPage);
+        }
+        foreach($list as $obj){
+            $obj->src = CommonHelper::getImageSrc($obj->image);
+            $obj->price = number_format($obj->price);
+        }
+        return $list;
     }
 
     //===================get menu========================
@@ -115,11 +121,7 @@ class FoodService extends BaseService implements FoodServiceInterface
                 ->get();
             foreach($order_detail ->detail as $foodItem){
                 //check avatar
-                if($foodItem->image==NULL){
-                    $foodItem->src = url('/')."/common_images/no-store.png";
-                }else{
-                    $foodItem->src = CommonHelper::getImageUrl($foodItem->image);
-                }
+                $foodItem->src = CommonHelper::getImageSrc($foodItem->image);
             }
         };
         return $order;
