@@ -132,7 +132,7 @@ function loadJSON(file, callback) {
 
 function loadRollbackTable() {
 	loadJSON(rootPath + '/api/v1/store/' + storeId + '/rollback_cashier.json', function (response) {
-		var output = '<table id="roll-back" class="table table-hover red-blue-table"> <thead> <tr> <th style="width: 70%" data-field="invoice">Hóa đơn</th> <th style="width: 30%"></th> </tr> </thead> <tbody id="rollback-body">';
+		var output = '<table id="roll-back" class="table table-hover red-blue-table"> <thead> <tr> <th class="sticky" style="width: 70%" data-field="invoice">Hóa đơn</th> <th class="sticky" style="width: 30%"></th> </tr> </thead> <tbody id="rollback-body">';
 		var result = JSON.parse(response);
 		console.log(result);
 		for (var i in result) {

@@ -155,6 +155,7 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->where('store_order.store_id',$storeId)
         ->whereIn('store_order.status',[1,2])
         ->groupBy('entities_id')
+        ->orderBy('quantity', 'desc')
         ->get();
         return $queue;
     }
