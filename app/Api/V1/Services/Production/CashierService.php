@@ -26,7 +26,7 @@ class CashierService extends BaseService implements CashierServiceInterface
         ->join('store_type_location', 'store_location.type_location_id', '=','store_type_location.id')
         ->selectRaw('store_order.id as id, store_location.name as location, store_floor.name as floor, sum(store_entities.price*store_order_detail.quantity) as sum, store_type_location.subprice as locationFee, store_order.status')
         ->where('store_order.store_id',$storeId)
-        ->whereIn('store_order.status',[1,2,3])
+        ->whereIn('store_order.status',[OrderStatusValue::Process,OrderStatusValue::Done])
         ->groupBy('store_order.id')
         ->get();
         return $data;
@@ -43,7 +43,7 @@ class CashierService extends BaseService implements CashierServiceInterface
         ->join('store_type_location', 'store_location.type_location_id', '=','store_type_location.id')
         ->selectRaw('store_order.id as id, store_location.name as location, store_floor.name as floor, sum(store_entities.price*store_order_detail.quantity) as sum, store_type_location.subprice as locationFee')
         ->where('store_order.store_id',$storeId)
-        ->where('store_order.status',3)
+        ->where('store_order.status',OrderStatusValue::Pay)
         ->groupBy('store_order.id')
         ->get();
         return $data;
@@ -58,7 +58,7 @@ class CashierService extends BaseService implements CashierServiceInterface
         ->selectRaw('store_entities.id, store_entities.name,store_entities.price,store_order_detail.quantity,(store_entities.price*store_order_detail.quantity) as total')
         ->where('store_order.store_id',$storeId)
         ->where('store_order.id',$orderId)
-        ->whereIn('store_order.status',[1,2,3])
+        ->whereIn('store_order.status',[OrderStatusValue::Process,OrderStatusValue::Done])
         ->get();
         return $details;
     }
@@ -72,7 +72,7 @@ class CashierService extends BaseService implements CashierServiceInterface
         ->selectRaw('store_entities.id, store_entities.name,store_entities.price,store_order_detail.quantity,(store_entities.price*store_order_detail.quantity) as total')
         ->where('store_order.store_id',$storeId)
         ->where('store_order.id',$orderId)
-        ->where('store_order.status',3)
+        ->where('store_order.status',OrderStatusValue::Pay)
         ->get();
         return $details;
     }
@@ -82,7 +82,7 @@ class CashierService extends BaseService implements CashierServiceInterface
         $listOrder = SDB::table('store_order')
         ->select('store_order.id')
         ->where('store_order.store_id',$storeId)
-        ->whereIn('store_order.status',[1,2,3])
+        ->whereIn('store_order.status',[OrderStatusValue::Process,OrderStatusValue::Done])
         ->get();
         return $listOrder;
     }
@@ -92,7 +92,7 @@ class CashierService extends BaseService implements CashierServiceInterface
         $listOrder = SDB::table('store_order')
         ->select('store_order.id')
         ->where('store_order.store_id',$storeId)
-        ->where('store_order.status',3)
+        ->where('store_order.status', OrderStatusValue::Pay)
         ->get();
         return $listOrder;
     }

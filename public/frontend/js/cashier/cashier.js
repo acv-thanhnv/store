@@ -77,8 +77,13 @@ module.exports = __webpack_require__(74);
 /***/ (function(module, exports, __webpack_require__) {
 
 var storeId = $('#config').attr('storeId');
-
 var rootPath = $('#config').attr('rootPath');
+var Customer2Order = $('#config').attr('Customer2Order');
+var WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel');
+
+var Order2Kitchen = $('#config').attr('Order2Kitchen');
+var Order2Cashier = $('#config').attr('Order2Cashier');
+var Order2Other = $('#config').attr('Order2Other');
 
 var paymentAll = [];
 
@@ -138,7 +143,6 @@ function loadRollbackTable() {
 		for (var i in result) {
 			var orderId = result[i].order_id;
 			var beforeStatus = result[i].before_status;
-			console.log(beforeStatus);
 			output += '<tr id="rollback-' + storeId + '-' + orderId + '" orderId="' + orderId + '" status="' + beforeStatus + '"> <td> <button type="button" class="btn btn-primary">#HĐ ' + orderId + '</button> </td> <td> <button class="btn btn-success rollback"><i class="fa fa-undo"></i></button> </td> </tr>';
 		}
 		output += '</tbody> <tfoot></tfoot> </table>';
@@ -583,16 +587,13 @@ $(document).on("click", ".rollback", function (e) {
 	});
 });
 
-var pusher = new Pusher("4f5dd81b5671af6c6fb2", {
+var pusher = new Pusher("120973d888acaaed6fef", {
 	cluster: "ap1",
 	encrypted: true
 });
 
-var order2cashier = pusher.subscribe(md5(storeId) + '-customer2cashier');
-order2cashier.bind('new-payment', function (res) {});
-
-var order2chef = pusher.subscribe(md5(storeId) + '-order2chef');
-order2chef.bind('new-order', function (res) {
+var order2chef = pusher.subscribe(md5(storeId) + '-' + Order2Cashier);
+order2chef.bind(Order2Other, function (res) {
 	loadCashierTable();
 });
 

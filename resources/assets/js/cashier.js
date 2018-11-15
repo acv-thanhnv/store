@@ -1,6 +1,11 @@
 const storeId = $('#config').attr('storeId')
-
 const rootPath = $('#config').attr('rootPath')
+const Customer2Order = $('#config').attr('Customer2Order')
+const WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel')
+
+const Order2Kitchen = $('#config').attr('Order2Kitchen')
+const Order2Cashier = $('#config').attr('Order2Cashier')
+const Order2Other = $('#config').attr('Order2Other')
 
 var paymentAll = []
 
@@ -63,7 +68,6 @@ function loadRollbackTable() {
 		{
 			var orderId = result[i].order_id
 			var beforeStatus = result[i].before_status
-			console.log(beforeStatus)
 			output+='<tr id="rollback-'+storeId+'-'+orderId+'" orderId="'+orderId+'" status="'+beforeStatus+'"> <td> <button type="button" class="btn btn-primary">#HĐ '+orderId+'</button> </td> <td> <button class="btn btn-success rollback"><i class="fa fa-undo"></i></button> </td> </tr>'
 		}
 		output+='</tbody> <tfoot></tfoot> </table>'
@@ -516,12 +520,8 @@ var pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
 	encrypted: true
 });
 
-var order2cashier = pusher.subscribe(md5(storeId)+'-customer2cashier');
-order2cashier.bind('new-payment', function(res) {
-})
-
-var order2chef = pusher.subscribe(md5(storeId)+'-order2chef');
-order2chef.bind('new-order', function(res) {
+var order2chef = pusher.subscribe(md5(storeId)+'-'+Order2Cashier);
+order2chef.bind(Order2Other, function(res) {
 	loadCashierTable()
 })
 

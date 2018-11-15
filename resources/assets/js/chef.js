@@ -1,15 +1,18 @@
 const storeId = $('#config').attr('storeId')
 const rootPath = $('#config').attr('rootPath')
-const Order2Kitchen = $('#config').attr('Order2Kitchen')
-const WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel')
 const Customer2Order = $('#config').attr('Customer2Order')
+const WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel')
+
+const Order2Kitchen = $('#config').attr('Order2Kitchen')
+const Order2Cashier = $('#config').attr('Order2Cashier')
+const Order2Other = $('#config').attr('Order2Other')
 
 $(document).ready(function(){
 	$("#header-left a").click(function(){
 		$(this).tab('show')
 	});
 	loadWaiterTable()
-	loadRollbackTable()ar
+	loadRollbackTable()
 	loadOrderListTable()
 });
 
@@ -96,7 +99,7 @@ function loadOrderListTable() {
 
 function pushToloadRollbackTable(obj) {
 	var current = $('#rollback-body').html();
-	var newRow = '<tr id="rollback-'+storeId+'-'+obj.orderId+'-'+obj.foodId+'-'+obj.time+'" storeId="'+storeId+'" orderId="'+obj.orderId+'" foodId="'+obj.foodId+'" quantity="'+obj.quantity+'" time="'+obj.time+'"> <td>'+obj.foodName+'</td> <td> <button type="button" class="btn btn-primary">#HĐ '+obj.orderId+'</button> </td> <td>'+obj.quantity+'</td> <td> <button type="button" class="btn btn-primary">Chuyển: <span class="badge badge-secondary">'+obj.push+'</span></button> </td> <td> <button class="btn btn-success"><i class="fa fa-undo rollback"></i></button> </td> </tr>'
+	var newRow = '<tr id="rollback-'+storeId+'-'+obj.orderId+'-'+obj.foodId+'-'+obj.time+'" storeId="'+storeId+'" orderId="'+obj.orderId+'" foodId="'+obj.foodId+'" quantity="'+obj.quantity+'" push="'+obj.push+'" time="'+obj.time+'"> <td>'+obj.foodName+'</td> <td> <button type="button" class="btn btn-primary">#HĐ '+obj.orderId+'</button> </td> <td>'+obj.quantity+'</td> <td> <button type="button" class="btn btn-primary">Chuyển: <span class="badge badge-secondary">'+obj.push+'</span></button> </td> <td> <button class="btn btn-success"><i class="fa fa-undo rollback"></i></button> </td> </tr>'
 	current = newRow + current;
 	$('#rollback-body').html(current)
 }
@@ -361,7 +364,7 @@ var pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
 });
 
 var order2kitchen = pusher.subscribe(md5(storeId)+'-'+Order2Kitchen);
-order2kitchen.bind(Order2Kitchen, function(res) {
+order2kitchen.bind(Order2Other, function(res) {
 	pushToOrderListTable(res)
 	pushToWaiterTable(res)
 })
@@ -388,6 +391,16 @@ waiter2waiter.bind(WaiterToWaiterChannel, function(res) {
 	var detectRollback = '#rollback-'+storeId+'-'+orderId+'-'+foodId+'-'+time
 	var foodName = $(detect).attr('foodName')
 	if (!rollback) {
+		let obj = {
+			storeId: storeId,
+			orderId: orderId,
+			time: time,
+			quantity: quantity,
+			foodName: foodName,
+			foodId: foodId,
+			push: push
+		}
+		pushToloadRollbackTable(obj)
 		if (quantity!=cooked) {
 			$(detect+' td').eq(1).html(cooked+'/'+quantity)
 			$(detect+' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button>')
@@ -413,5 +426,5 @@ waiter2waiter.bind(WaiterToWaiterChannel, function(res) {
 			loadWaiterTable()
 		}
 	}
-	loadRollbackTable()
+	/*loadRollbackTable()*/
 })

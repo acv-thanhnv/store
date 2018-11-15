@@ -212,9 +212,11 @@ class KitchenController extends Controller
     public function index($storeId) {
         return view('frontend/chef3/index', [
             'storeId' => $storeId,
-            'Order2Kitchen' => OrderConst::Order2Kitchen,
             'WaiterToWaiterChannel' => OrderConst::WaiterToWaiterChannel,
-            'Customer2Order' => OrderConst::Customer2Order
+            'Customer2Order' => OrderConst::Customer2Order,
+            'Order2Cashier' => OrderConst::Order2Cashier,
+            'Order2Kitchen' => OrderConst::Order2Kitchen,
+            'Order2Other' => OrderConst::Order2Other
         ]);
     }
 
