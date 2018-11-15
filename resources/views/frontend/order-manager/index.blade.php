@@ -47,7 +47,7 @@
                         </nav>
                     </div>
 
-                    <div id="table-list">
+                    <div id="table-list" class="row">
                         {{--content TABLE--}}
                     </div>
                     {{--content TABLE INCLUDE--}}
@@ -368,7 +368,7 @@
         $(itemTable).empty();
         data.data.forEach(function (obj) {
             var itemTableTemp = $('#table-list-template').contents().clone();
-            var order_data = $(itemTableTemp)[1];
+            var order_data = $(itemTableTemp).find('.wrap-table');
             var have_update =0;
             obj.arrOrder.forEach(function(orderItem){
                 //nếu trong bàn đó có các order chưa xác nhận hoặc cập nhập món thì hiện cập nhập

@@ -199,7 +199,7 @@
 		var c_temp = $(".closest-res");
 		data.forEach(function(obj) {
 			var row = $("#closest-template").contents().clone();
-			$(row).find(".res-link").attr("href","{{route('Order')}}?storeId="+obj.id);
+			$(row).find(".res-link").attr("href","{{route('Order')}}?idStore="+obj.id);
             $(row).find(".post-distance a").text(obj.distance_in_km);
 			$(row).find(".res-images").attr("src",obj.src);
 			$(row).find(".res-name").text(obj.name);

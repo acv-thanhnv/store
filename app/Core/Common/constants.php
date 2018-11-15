@@ -109,6 +109,7 @@ class EntityProperty{
     const maxField = 10;
 }
 class TableConst{
+    const TablePerPage    = 12;
     const TableColorEvent = 'table_color_event';
     const noOrder         = 'blue';
     const haveOrder       = '#EA3232';

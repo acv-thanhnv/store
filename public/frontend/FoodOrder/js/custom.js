@@ -218,7 +218,7 @@ $(document).on("click",".js-show-cart",function(){
 		cal_total(cart_items);
 	}
 	if(cart_items.length==0){
-		$(".total-money").text("Total: 0");
+		$(".total-money").text("Total: 0 đ");
 		$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
 	}
 })
@@ -383,7 +383,7 @@ function cal_total(data){
 		var total = price*quantity;
 		total_money += total;
 	});
-	$(".total-money").text("Total: "+total_money);
+	$(".total-money").text("Total: "+total_money+' đ');
 }
 //function order
 function Order(url,idStore,access_token){
@@ -545,6 +545,7 @@ $(document).on("change","#sort-by",function(){
 //function filter
 function filter(idStore,url){
 	$(document).on("click",'.btn-filter',function(){
+		window.scrollTo(0,0);
 		$(".list-food").empty();
 		_sort_by = $("#sort-by").val();
 		_price   = $("#price").val();

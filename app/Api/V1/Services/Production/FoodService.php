@@ -12,6 +12,7 @@ use App\Api\V1\Services\Interfaces\FoodServiceInterface;
 use App\Core\Common\OrderConst;
 use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
+use App\Core\Common\TableConst;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Events\OrderChefPusherEvent;
@@ -26,7 +27,7 @@ class FoodService extends BaseService implements FoodServiceInterface
     {
         $list = SDB::table('store_floor')
             ->where('store_floor.store_id','=',$storeId)
-            ->get();
+            ->paginate(TableConst::TablePerPage);
         foreach ($list as $floor){
             $floor->location = SDB::table('store_location')
                 ->where('store_location.floor_id','=',$floor->id)
