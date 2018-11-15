@@ -122,7 +122,7 @@ class KitchenController extends Controller
             ->join('store_location', 'store_order.location_id', '=','store_location.id')
             ->join('store_type_location', 'store_location.type_location_id', '=','store_type_location.id')
             ->join('store_order_status', 'store_order_status.value', '=','store_order.status')
-            ->select('store_order.access_token', 'store_order.store_id', 'store_order.datetime_order', 'store_order.datetime_update', 'store_order.location_id', 'store_location.name as table_name', 'store_order.priority', 'store_type_location.name as type_name', 'store_order_status.name as status_name')
+            ->select('store_order.id', 'store_order.status', 'store_order.access_token', 'store_order.store_id', 'store_order.datetime_order', 'store_order.datetime_update', 'store_order.location_id', 'store_location.name as table_name', 'store_order.priority', 'store_type_location.name as type_name', 'store_order_status.name as status_name')
             ->where('store_order.store_id',$storeId)
             ->where('store_order.access_token',$access_token)
             ->get();
