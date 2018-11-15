@@ -583,7 +583,7 @@ $(document).on("click", ".rollback", function (e) {
 	});
 });
 
-var pusher = new Pusher("4f5dd81b5671af6c6fb2", {
+var pusher = new Pusher("120973d888acaaed6fef", {
 	cluster: "ap1",
 	encrypted: true
 });
@@ -591,8 +591,8 @@ var pusher = new Pusher("4f5dd81b5671af6c6fb2", {
 var order2cashier = pusher.subscribe(md5(storeId) + '-customer2cashier');
 order2cashier.bind('new-payment', function (res) {});
 
-var order2chef = pusher.subscribe(md5(storeId) + '-order2chef');
-order2chef.bind('new-order', function (res) {
+var order2chef = pusher.subscribe(md5(storeId) + '-' + Order2Kitchen);
+order2chef.bind(Order2Kitchen, function (res) {
 	loadCashierTable();
 });
 

@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-<div id="config" class="hidden" storeId="{{ $storeId }}" rootPath="{{ config('app.url') }}"></div>
+<div id="config" class="hidden" storeId="{{ $storeId }}" rootPath="{{ config('app.url') }}" Order2Kitchen="{{ $Order2Kitchen }}" WaiterToWaiterChannel="{{ $WaiterToWaiterChannel }}" Customer2Order="{{$Customer2Order}}"></div>
 <div class="wraper">
 	<div class="wraper-left col-sm-9">
 		<div class="header-left">

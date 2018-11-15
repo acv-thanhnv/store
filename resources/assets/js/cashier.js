@@ -520,8 +520,8 @@ var order2cashier = pusher.subscribe(md5(storeId)+'-customer2cashier');
 order2cashier.bind('new-payment', function(res) {
 })
 
-var order2chef = pusher.subscribe(md5(storeId)+'-order2chef');
-order2chef.bind('new-order', function(res) {
+var order2chef = pusher.subscribe(md5(storeId)+'-'+Order2Kitchen);
+order2chef.bind(Order2Kitchen, function(res) {
 	loadCashierTable()
 })
 
