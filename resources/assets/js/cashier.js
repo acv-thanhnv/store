@@ -1,6 +1,8 @@
 const storeId = $('#config').attr('storeId')
-
 const rootPath = $('#config').attr('rootPath')
+const Order2Kitchen = $('#config').attr('Order2Kitchen')
+const WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel')
+const Customer2Order = $('#config').attr('Customer2Order')
 
 var paymentAll = []
 
@@ -522,6 +524,7 @@ order2cashier.bind('new-payment', function(res) {
 
 var order2chef = pusher.subscribe(md5(storeId)+'-'+Order2Kitchen);
 order2chef.bind(Order2Kitchen, function(res) {
+	console.log('123')
 	loadCashierTable()
 })
 

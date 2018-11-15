@@ -77,8 +77,10 @@ module.exports = __webpack_require__(74);
 /***/ (function(module, exports, __webpack_require__) {
 
 var storeId = $('#config').attr('storeId');
-
 var rootPath = $('#config').attr('rootPath');
+var Order2Kitchen = $('#config').attr('Order2Kitchen');
+var WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel');
+var Customer2Order = $('#config').attr('Customer2Order');
 
 var paymentAll = [];
 
@@ -593,6 +595,7 @@ order2cashier.bind('new-payment', function (res) {});
 
 var order2chef = pusher.subscribe(md5(storeId) + '-' + Order2Kitchen);
 order2chef.bind(Order2Kitchen, function (res) {
+	console.log('123');
 	loadCashierTable();
 });
 
