@@ -1,5 +1,6 @@
 const storeId = $('#config').attr('storeId')
 const rootPath = $('#config').attr('rootPath')
+
 const Customer2Order = $('#config').attr('Customer2Order')
 const WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel')
 

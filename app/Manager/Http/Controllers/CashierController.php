@@ -3,6 +3,7 @@
 namespace App\Manager\Http\Controllers;
 
 use App\Core\Common\OrderConst;
+use App\Core\Common\FoodStatusValue;
 use App\Core\Common\OrderStatusValue;
 use App\Core\Events\Customer2CashierPusher;
 use App\Core\Events\PaymentDonePusher;
@@ -18,11 +19,11 @@ class CashierController extends Controller
 	public function index($storeId) {
 		return view('frontend/cashier3/index', [
 			'storeId' => $storeId,
-			'WaiterToWaiterChannel' => OrderConst::WaiterToWaiterChannel,
-			'Customer2Order' => OrderConst::Customer2Order,
-			'Order2Cashier' => OrderConst::Order2Cashier,
-			'Order2Kitchen' => OrderConst::Order2Kitchen,
-			'Order2Other' => OrderConst::Order2Other
+            'WaiterToWaiterChannel' => OrderConst::WaiterToWaiterChannel,
+            'Customer2Order' => OrderConst::Customer2Order,
+            'Order2Cashier' => OrderConst::Order2Cashier,
+            'Order2Kitchen' => OrderConst::Order2Kitchen,
+            'Order2Other' => OrderConst::Order2Other
 		]);
 	}
 

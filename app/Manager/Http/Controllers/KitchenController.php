@@ -151,7 +151,8 @@ class KitchenController extends Controller
         ->update(['cooked' => $cooked]);
 
         if (true) {
-            event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, 0, 0));
+            $rollback = 0;
+            event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
             event(new FoodStatusEvent($access_token,$orderId,$storeId,$location_id,$order_detail_id,$cooked,$status));
         }
         return $time;

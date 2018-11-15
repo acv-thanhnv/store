@@ -78,6 +78,7 @@ module.exports = __webpack_require__(74);
 
 var storeId = $('#config').attr('storeId');
 var rootPath = $('#config').attr('rootPath');
+
 var Customer2Order = $('#config').attr('Customer2Order');
 var WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel');
 
