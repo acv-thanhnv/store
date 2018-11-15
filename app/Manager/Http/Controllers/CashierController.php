@@ -3,6 +3,7 @@
 namespace App\Manager\Http\Controllers;
 
 use App\Core\Common\OrderConst;
+use App\Core\Common\FoodStatusValue;
 use App\Core\Common\OrderStatusValue;
 use App\Core\Events\Customer2CashierPusher;
 use App\Core\Events\PaymentDonePusher;
@@ -16,7 +17,14 @@ use Illuminate\Support\Facades\DB;
 class CashierController extends Controller
 {
 	public function index($storeId) {
-		return view('frontend/cashier3/index', ['storeId' => $storeId]);
+		return view('frontend/cashier3/index', [
+			'storeId' => $storeId,
+            'WaiterToWaiterChannel' => OrderConst::WaiterToWaiterChannel,
+            'Customer2Order' => OrderConst::Customer2Order,
+            'Order2Cashier' => OrderConst::Order2Cashier,
+            'Order2Kitchen' => OrderConst::Order2Kitchen,
+            'Order2Other' => OrderConst::Order2Other
+		]);
 	}
 
 	public function test(Request $request) {
@@ -45,20 +53,22 @@ class CashierController extends Controller
 					'before_status' => $beforeStatus
 				]
 			);
-		}
 
-		$orderDetails = DB::table('store_order')
-            ->join('store_location', 'store_order.location_id', '=','store_location.id')
-            ->join('store_type_location', 'store_location.type_location_id', '=','store_type_location.id')
-            ->join('store_order_status', 'store_order_status.value', '=','store_order.status')
-            ->select('store_order.id', 'store_order.status', 'store_order.access_token', 'store_order.store_id', 'store_order.datetime_order', 'store_order.datetime_update', 'store_order.location_id', 'store_location.name as table_name', 'store_order.priority', 'store_type_location.name as type_name', 'store_order_status.name as status_name')
-            ->where('store_order.store_id',$storeId)
-            ->where('store_order.access_token',$access_token)
-            ->get();
+			$orderDetails = DB::table('store_order')
+			->join('store_location', 'store_order.location_id', '=','store_location.id')
+			->join('store_type_location', 'store_location.type_location_id', '=','store_type_location.id')
+			->join('store_order_status', 'store_order_status.value', '=','store_order.status')
+			->select('store_order.id', 'store_order.status', 'store_order.access_token', 'store_order.store_id', 'store_order.datetime_order', 'store_order.datetime_update', 'store_order.location_id', 'store_location.name as table_name', 'store_order.priority', 'store_type_location.name as type_name', 'store_order_status.name as status_name')
+			->where('store_order.store_id',$storeId)
+			->where('store_order.id',$orderId)
+			->get();
+
+			event(new Other2OrderManagerPusher($storeId, $orderDetails[0], null) );
+		}
 
 		if ($res) {
 			event(new PaymentDonePusher($storeId, $listOrderId, $beforeStatus));
-			event(new Other2OrderManagerPusher($storeId,$orderDetails[0],null));
+			/*event(new Other2OrderManagerPusher($storeId,$orderDetails[0],null));*/
 		}
 		return $res;
 	}

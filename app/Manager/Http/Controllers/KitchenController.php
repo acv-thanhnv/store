@@ -151,7 +151,8 @@ class KitchenController extends Controller
         ->update(['cooked' => $cooked]);
 
         if (true) {
-            event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, 0, 0));
+            $rollback = 0;
+            event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
             event(new FoodStatusEvent($access_token,$orderId,$storeId,$location_id,$order_detail_id,$cooked,$status));
         }
         return $time;
@@ -212,9 +213,11 @@ class KitchenController extends Controller
     public function index($storeId) {
         return view('frontend/chef3/index', [
             'storeId' => $storeId,
-            'Order2Kitchen' => OrderConst::Order2Kitchen,
             'WaiterToWaiterChannel' => OrderConst::WaiterToWaiterChannel,
-            'Customer2Order' => OrderConst::Customer2Order
+            'Customer2Order' => OrderConst::Customer2Order,
+            'Order2Cashier' => OrderConst::Order2Cashier,
+            'Order2Kitchen' => OrderConst::Order2Kitchen,
+            'Order2Other' => OrderConst::Order2Other
         ]);
     }
 
