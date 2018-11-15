@@ -227,8 +227,8 @@
             $(row_order_detail).find('.food_status').addClass('food_status_'+data.foodStatus);
         });
         //order event
-        var OrderEventName = "{{\App\Core\Common\OrderConst::Customer2Order}}";
-        var order_channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\OrderConst::Customer2Order)}}';
+        var OrderEventName = "{{\App\Core\Common\OrderConst::Other2Order}}";
+        var order_channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\OrderConst::Other2Order)}}';
         var order_channel = pusher.subscribe(order_channel_name);
         order_channel.bind(OrderEventName, function(data){
             console.log(data);

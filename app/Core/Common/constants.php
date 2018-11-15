@@ -82,6 +82,7 @@ class OrderConst{
     
     const OrderChannelToCashier      = "customer2cashier";
     
+    const Other2Order                = 'other2order';
     
     const NewOrderToOrderManager     = "new-order-to-order-manager";
     
