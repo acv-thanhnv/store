@@ -215,6 +215,7 @@ $im:!important;
     background  : #E81E1E;
     border-color:#E81E1E;
   }
+  color:white $im;
   background: #E99336 $im;
 }
 .entities_item:hover{
@@ -249,6 +250,15 @@ $im:!important;
   font-weight: bold;
   background: #4874E5;
   border-radius: 3px;
+}
+.order-header{
+  margin-right: 0px;
+  margin-left: 0px;
+}
+#table-id,#floor-id{
+  color:#4b8bab;
+  font-size: 15px;
+  font-weight: bold;
 }
 @media only screen and (max-width: 768px) {
 }

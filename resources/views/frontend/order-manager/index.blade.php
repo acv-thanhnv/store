@@ -223,6 +223,7 @@
             var row_order = $('.entities-row-order[data-order-id="'+data.orderId+'"]').next();
             var row_order_detail = $(row_order).find('.row-order-detail[order-detail-id="'+data.idDetail+'"]');
             $(row_order_detail).find('.food_status').text(data.foodStatusName);
+            $(row_order_detail).find('.cooked').text('/'+data.cooked);
             $(row_order_detail).find('.food_status').addClass('food_status_'+data.foodStatus);
         });
         //order event
@@ -234,9 +235,17 @@
             if(data.order.status=='{{\App\Core\Common\OrderStatusValue::NoDone}}'){
                 notify('Warning','warning','Bàn '+data.order.location_id+' có order mới','#F27022','#BA7237');
             }
-            //get order and append
-            if(data.order.location_id==idTable && idStore == data.idStore){
-                genOrderRealtime(data.order,data.result);
+            //nếu tình trạng là thanh toán thì ẩn order đó đi, ko phai thi append bth
+            if(data.order.status=='{{\App\Core\Common\OrderStatusValue::Pay}}'){
+                //an order detail di
+                $('.entities-row-order[data-order-id="'+data.order.id+'"]').next().remove();
+                //an order di
+                $('.entities-row-order[data-order-id="'+data.order.id+'"]').remove();
+            }else{
+                //get order and append
+                if(data.order.location_id==idTable && idStore == data.idStore){
+                    genOrderRealtime(data.order,data.result);
+                }
             }
         });
     }
@@ -499,6 +508,9 @@
                     if(itemDetail.has_update===1){
                         $(rowDetail).find(".has_change").css('display','block');
                     }
+                    if(itemDetail.cooked>0){
+                        $(rowDetail).find(".cooked").text('/'+itemDetail.cooked);
+                    }
                     $(rowDetail).find(".food_status").text(itemDetail.status_name);
                     $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
                     $(rowDetail).find(".food_status").attr('food-status',itemDetail.status);
@@ -539,6 +551,9 @@
                     $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
                     if(itemDetail.has_update===1){
                         $(rowDetail).find(".has_change").css('display','block');
+                    }
+                    if(itemDetail.cooked>0){
+                        $(rowDetail).find(".cooked").text('/'+itemDetail.cooked);
                     }
                     $(rowDetail).find(".food_status").text(itemDetail.status_name);
                     $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
@@ -612,6 +627,11 @@
             }
             $(rowDetail).find(".food_status").text(itemDetail.status_name);
             $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
+            //nếu đã nấu lớn hơn 0 thì hiện cooked
+            if(itemDetail.cooked>0){
+                console.log("cooked");
+                $(rowDetail).find(".cooked").text('/'+itemDetail.cooked);
+            }
             $(rowDetail).find(".food_status").attr('food-status',itemDetail.status);
             $(rowDetail).find(".delete-order-detail").attr('data-order-detail',itemDetail.id);
             $(row_order_detail).append($(rowDetail));
