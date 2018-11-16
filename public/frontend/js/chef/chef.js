@@ -301,7 +301,7 @@ function loadWaiterTable() {
 			var priority = result.orders[i].priority;
 			var floor = result.orders[i].floor;
 			if (result.details[i].length != 0) {
-				if (priority !== 'Normal') output += '<tr class="t-header vip ' + storeId + '-' + id + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ ' + id + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + name + ' ' + floor + '</span> </button> </td> </tr>';else output += '<tr class="t-header normal ' + storeId + '-' + id + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ ' + id + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + name + ' ' + floor + '</span> </button> </td> </tr>';
+				if (priority !== 'Normal') output += '<tr class="t-header vip ' + storeId + '-' + id + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span status="+"><i class="fa fa-plus-circle" aria-hidden="true"></i></span> HĐ ' + id + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + name + ' ' + floor + '</span> </button> </td> </tr>';else output += '<tr class="t-header normal ' + storeId + '-' + id + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span status="+"><i class="fa fa-plus-circle" aria-hidden="true"></i></span> HĐ ' + id + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + name + ' ' + floor + '</span> </button> </td> </tr>';
 				output += '<tr class="hidden t-header-child ' + storeId + '-' + id + '"> <th style="width: 25%">Tên món</th> <th style="width: 15%">SL</th> <th style="width: 40%">Trạng thái</th> <th style="width: 20%"></th> </tr>';
 				for (var j in result.details[i]) {
 					var foodId = result.details[i][j].id;
@@ -406,12 +406,14 @@ $(document).on("click", ".rollback", function (e) {
 });
 
 $(document).on("click", ".order-detail", function (e) {
-	if ($(this).find("span:first").text() !== '-') {
+	if ($(this).find("span:first").attr('status') !== '-') {
 		$(this).parents('tr').nextUntil('tr.t-header').removeClass('hidden');
-		$(this).find("span:first").text('-');
+		$(this).find("span:first").attr('status', '-');
+		$(this).find("span:first").html('<i class="fa fa-minus" aria-hidden="true"></i>');
 	} else {
 		$(this).parents('tr').nextUntil('tr.t-header').addClass('hidden');
-		$(this).find("span:first").text('+');
+		$(this).find("span:first").attr('status', '+');
+		$(this).find("span:first").html('<i class="fa fa-plus-circle" aria-hidden="true"></i>');
 	}
 });
 
