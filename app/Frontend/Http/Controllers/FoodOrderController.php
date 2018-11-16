@@ -212,6 +212,7 @@ class FoodOrderController extends Controller
         $order["description"]     = $request->description;
         $order["status"]          = 0;
         $order["datetime_order"]  = CommonHelper::dateNow(); 
+        $order["datetime_update"] = CommonHelper::dateNow(); 
         if($orderId===null){
             //create new order
             $orderId                  = SDB::table('store_order')

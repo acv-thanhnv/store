@@ -155,13 +155,14 @@ class FoodController extends Controller
 
     public function newOrder(Request $request)
     {
-        $Order["datetime_order"] = CommonHelper::dateNow();
-        $Order["store_id"]       = $request->idStore;
-        $Order["location_id"]    = $request->idTable;
-        $Order["status"]         = OrderStatusValue::NoDone;
-        $idOrder                 = SDB::table('store_order')->insertGetId($Order);
-        $Order["id"]             = $idOrder;
-        $Order["status_name"]    = CommonHelper::getOrderStatusName($Order["status"]);              
+        $Order["datetime_order"]  = CommonHelper::dateNow();
+        $Order["datetime_update"] = CommonHelper::dateNow();
+        $Order["store_id"]        = $request->idStore;
+        $Order["location_id"]     = $request->idTable;
+        $Order["status"]          = OrderStatusValue::NoDone;
+        $idOrder                  = SDB::table('store_order')->insertGetId($Order);
+        $Order["id"]              = $idOrder;
+        $Order["status_name"]     = CommonHelper::getOrderStatusName($Order["status"]);              
         return $Order;
     }
 

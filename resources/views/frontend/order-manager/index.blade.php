@@ -232,7 +232,7 @@
         order_channel.bind(OrderEventName, function(data){
             //nếu có order mới thì hiện thông báo
             if(data.order.status=='{{\App\Core\Common\OrderStatusValue::NoDone}}'){
-                notify('Warning','warning','Bàn'+data.order.location_id+' có order mới','#F27022','#BA7237');
+                notify('Warning','warning','Bàn '+data.order.location_id+' có order mới','#F27022','#BA7237');
             }
             //get order and append
             if(data.order.location_id==idTable && idStore == data.idStore){
@@ -942,7 +942,7 @@
             icon: icon,
             showHideTransition: 'plain',
             allowToastClose: true,
-            hideAfter: 2000,
+            hideAfter: 5000,
             bgColor:bgColor,
             stack: 5,
             position: 'top-right',
