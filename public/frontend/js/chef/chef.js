@@ -177,6 +177,7 @@ function loadQueueTable() {
 			var foodName = result[i].name;
 			var quantity = result[i].quantity;
 			output += '<tr id="queue-' + storeId + '-' + foodId + '"><td class="food food-left">' + foodName + '</td><td>' + quantity + '</td></tr>';
+			if (quantity === 0) $('#queue-' + storeId + '-' + foodId).addClass('hidden');else $('#queue-' + storeId + '-' + foodId).removeClass('hidden');
 		}
 		output += "</tbody> <tfoot></tfoot> </table> </div> </div>";
 		$('#food-queue-table').html(output);
@@ -194,7 +195,9 @@ function loadOrderListTable() {
 				var foodId = result.details[i][j].id;
 				var foodName = result.details[i][j].name;
 				var quantity = result.details[i][j].quantity;
-				if (priority !== 'Normal') output += '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="vip foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td>#HĐ ' + orderId + '</td> <td><span class="badge badge-secondary">' + priority + '</span></td> <td>' + quantity + '</td> </tr>';else output += '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="normal foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td>#HĐ ' + orderId + '</td> <td></td> <td>' + quantity + '</td> </tr>';
+				var cooked = result.details[i][j].cooked;
+				var pending = quantity - cooked;
+				if (priority !== 'Normal') output += '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="vip foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td>#HĐ ' + orderId + '</td> <td><span class="badge badge-secondary">' + priority + '</span></td> <td>' + pending + '</td> </tr>';else output += '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="normal foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td>#HĐ ' + orderId + '</td> <td></td> <td>' + pending + '</td> </tr>';
 			}
 		}
 		output += "</tbody> <tfoot></tfoot> </table>";
