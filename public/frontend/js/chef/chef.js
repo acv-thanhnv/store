@@ -158,6 +158,11 @@ function updateQueueTable(foodId, push) {
 	$('#queue-' + storeId + '-' + foodId + ' td').eq(1).html(parseInt(tmp) + push);
 }
 
+function updateOrderListTable(orderId, foodId, push) {
+	var tmp = $('#foodlist-' + storeId + '-' + orderId + '-' + foodId + ' td').eq(3).html();
+	$('#foodlist-' + storeId + '-' + orderId + '-' + foodId + ' td').eq(3).html(parseInt(tmp) + push);
+}
+
 function loadQueueTable() {
 	loadJSON(rootPath + '/api/v1/store/' + storeId + '/chef_queue.json', function (response) {
 		var result = JSON.parse(response);
@@ -496,6 +501,7 @@ waiter2waiter.bind(WaiterToWaiterChannel, function (res) {
 		};
 		pushToloadRollbackTable(obj);
 		updateQueueTable(foodId, -push);
+		updateOrderListTable(orderId, foodId, -push);
 		if (quantity != cooked) {
 			$(detect + ' td').eq(1).html(cooked + '/' + quantity);
 			$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button>');
@@ -507,6 +513,7 @@ waiter2waiter.bind(WaiterToWaiterChannel, function (res) {
 		if (!$('.foodline.' + storeId + '-' + orderId).not('.hidden')[0]) $('.' + storeId + '-' + orderId).addClass('hidden');
 	} else {
 		updateQueueTable(foodId, push);
+		updateOrderListTable(orderId, foodId, push);
 		if ($(detect)[0]) {
 			if (quantity != cooked) {
 				$(detect + ' td').eq(1).html(cooked + '/' + quantity);
