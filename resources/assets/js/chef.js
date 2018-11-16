@@ -102,6 +102,8 @@ function loadQueueTable() {
 			var foodName = result[i].name
 			var quantity = result[i].quantity
 			output+='<tr id="queue-'+storeId+'-'+foodId+'"><td class="food food-left">'+foodName+'</td><td>'+quantity+'</td></tr>'
+			if (quantity===0) $('#queue-'+storeId+'-'+foodId).addClass('hidden')
+				else $('#queue-'+storeId+'-'+foodId).removeClass('hidden')
 		}
 		output+="</tbody> <tfoot></tfoot> </table> </div> </div>"
 		$('#food-queue-table').html(output)
