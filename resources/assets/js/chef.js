@@ -124,7 +124,7 @@ function loadOrderListTable() {
 }
 
 function pushToloadRollbackTable(obj) {
-	var current = $('#rollback-body').html();
+	var current = $('#rollback-body').html()
 	var newRow = '<tr id="rollback-'+storeId+'-'+obj.orderId+'-'+obj.foodId+'-'+obj.time+'" storeId="'+storeId+'" orderId="'+obj.orderId+'" foodId="'+obj.foodId+'" quantity="'+obj.quantity+'" push="'+obj.push+'" time="'+obj.time+'"> <td>'+obj.foodName+'</td> <td> <button type="button" class="btn btn-primary">#HĐ '+obj.orderId+'</button> </td> <td>'+obj.quantity+'</td> <td> <button type="button" class="btn btn-primary">Chuyển: <span class="badge badge-secondary">'+obj.push+'</span></button> </td> <td> <button class="btn btn-success"><i class="fa fa-undo rollback"></i></button> </td> </tr>'
 	current = newRow + current;
 	$('#rollback-body').html(current)
@@ -342,10 +342,14 @@ function pushToWaiterTable(result) {
 		if ( $(this).find("span:first").attr('status') !== '-' ) {
 			$(this).parents('tr').nextUntil('tr.t-header').removeClass('hidden')
 			$(this).find("span:first").attr('status', '-')
+			$(this).removeClass('btn-primary')
+			$(this).addClass('btn-danger')
 			$(this).find("span:first").html('<i class="fa fa-minus" aria-hidden="true"></i>')
 		} else {
 			$(this).parents('tr').nextUntil('tr.t-header').addClass('hidden')
 			$(this).find("span:first").attr('status', '+')
+			$(this).removeClass('btn-danger')
+			$(this).addClass('btn-primary')
 			$(this).find("span:first").html('<i class="fa fa-plus-circle" aria-hidden="true"></i>')
 		}
 	})

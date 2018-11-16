@@ -409,10 +409,14 @@ $(document).on("click", ".order-detail", function (e) {
 	if ($(this).find("span:first").attr('status') !== '-') {
 		$(this).parents('tr').nextUntil('tr.t-header').removeClass('hidden');
 		$(this).find("span:first").attr('status', '-');
+		$(this).removeClass('btn-primary');
+		$(this).addClass('btn-danger');
 		$(this).find("span:first").html('<i class="fa fa-minus" aria-hidden="true"></i>');
 	} else {
 		$(this).parents('tr').nextUntil('tr.t-header').addClass('hidden');
 		$(this).find("span:first").attr('status', '+');
+		$(this).removeClass('btn-danger');
+		$(this).addClass('btn-primary');
 		$(this).find("span:first").html('<i class="fa fa-plus-circle" aria-hidden="true"></i>');
 	}
 });

@@ -77,7 +77,7 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->where('store_order.store_id',$storeId)
         ->whereIn('store_order.status',[OrderStatusValue::Process,OrderStatusValue::Done])
         ->orderBy('store_location.type_location_id', 'desc')
-        ->orderBy('store_order.datetime_update', 'asc')
+        /*->orderBy('store_order.datetime_update', 'asc')*/
         ->orderBy('store_order.datetime_order', 'asc')
         ->get();
         return $listOrder;
@@ -124,7 +124,7 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->where('store_order.store_id',$storeId)
         ->whereIn('store_order.status',[OrderStatusValue::Process,OrderStatusValue::Done])
         ->orderBy('store_location.type_location_id', 'desc')
-        ->orderBy('store_order.datetime_update', 'asc')
+        /*->orderBy('store_order.datetime_update', 'asc')*/
         ->orderBy('store_order.datetime_order', 'asc')
         ->get();
         return $location;
