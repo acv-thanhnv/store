@@ -2,6 +2,11 @@
   padding: 0px;
 }
 
+.badge {
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
 .sticky {
   position: -webkit-sticky;
   /* Safari */

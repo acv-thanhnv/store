@@ -183,7 +183,7 @@ function pushToloadRollbackTable(obj) {
 
 function loadCashierTable() {
 	loadJSON(rootPath + '/api/v1/store/' + storeId + '/cashier.json', function (response) {
-		var output = '<table id="bang-thu-ngan" class="table table-hover red-blue-table" data-toggle="table" data-search="true" responsive hover> <thead> <tr> <th style="width: 5%"></th> <th style="width: 10%">Hóa đơn</th> <th style="width: 20%">Vị trí</th> <th style="width: 10%">Tổng tiền</th> <th style="width: 10%">Thuế suất</th> <th style="width: 15%">Chiết khấu</th> <th style="width: 15%">Thành tiền</th> <th style="width: 15%"></th> </tr> </thead> <tbody>';
+		var output = '<table id="bang-thu-ngan" class="table table-hover red-blue-table" data-toggle="table" data-search="true" responsive hover> <thead> <tr> <th class="sticky" style="width: 5%"></th> <th class="sticky" style="width: 10%">Hóa đơn</th> <th class="sticky" style="width: 20%">Vị trí</th> <th class="sticky" style="width: 10%">Tổng tiền</th> <th class="sticky" style="width: 10%">Thuế suất</th> <th class="sticky" style="width: 15%">Chiết khấu</th> <th class="sticky" style="width: 15%">Thành tiền</th> <th class="sticky" style="width: 15%"></th> </tr> </thead> <tbody>';
 		var result = JSON.parse(response);
 		for (var i in result.orders) {
 			var id = result.orders[i].id;
