@@ -89,7 +89,7 @@ class FoodOrderController extends Controller
                         ->paginate($total);
         }
         foreach($arrFood as $obj){
-            $obj->price = number_format($obj->price);
+            $obj->format_price = number_format($obj->price);
             //check avatar
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
@@ -212,6 +212,7 @@ class FoodOrderController extends Controller
         $order["description"]     = $request->description;
         $order["status"]          = 0;
         $order["datetime_order"]  = CommonHelper::dateNow(); 
+        $order["datetime_update"] = CommonHelper::dateNow(); 
         if($orderId===null){
             //create new order
             $orderId                  = SDB::table('store_order')
@@ -284,7 +285,7 @@ class FoodOrderController extends Controller
         //call event send to Order
         event(new Other2OrderManagerPusher($idStore,$order,$arrOrderDetail));
         //call pusher when order, status food change
-        event(new OrderStatusPusherEvent($request->access_token,$orderId,$arrOrderDetail));
+        event(new OrderStatusPusherEvent($request->access_token,$orderId,$arrOrderDetail,null,OrderStatusValue::NoDone));
         //call event bind table color
         event(new TableEvent($idStore,$request->table));
         return $orderId;

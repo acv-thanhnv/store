@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 
 interface FoodServiceInterface
 {
-    public function getFoodByStoreId($storeId);
 
     public function getFoodByMenuId($menuId,$storeId);
 

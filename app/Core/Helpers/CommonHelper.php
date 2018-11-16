@@ -23,6 +23,17 @@ class CommonHelper
             Log::error($message);
         }
     }
+    //get Image Src
+    public static function getImageSrc($image)
+    {
+        $src;
+        if($image==NULL){
+            $src = url('/')."/common_images/no-store.png";
+        }else{
+            $src = CommonHelper::getImageUrl($image);
+        }
+        return $src;
+    }
     //get Image Url
     public static function getImageUrl($imageUri,$diskLocalName = "public")
     {

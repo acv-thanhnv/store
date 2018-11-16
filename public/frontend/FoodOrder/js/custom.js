@@ -101,7 +101,8 @@ function buildFood(url,idStore,page,menu_id,key,orderKey,price){
 					$(row).find(".view-detail").attr('src',obj.src);
 					$(row).find(".block2").attr('data-id',obj.id);
 					$(row).find(".food-items-name").text(obj.name);
-					$(row).find(".food-items-price").text(obj.price);
+					$(row).find(".food-items-price").text(obj.format_price);
+					$(row).find(".food-items-price").attr('price',obj.price);
 					$(food).append($(row));
 				});
 			}
@@ -114,7 +115,7 @@ function buildFood(url,idStore,page,menu_id,key,orderKey,price){
 	});
 }
 //add item to cart
-$("body").on("click",".add_to_cart",function(e){
+$(document).on("click",".add_to_cart",function(e){
 	e.preventDefault();
 	//check local storage
 	if (typeof(Storage) !== "undefined") {
@@ -123,7 +124,7 @@ $("body").on("click",".add_to_cart",function(e){
     	var entities_id = $(parent).parent("div.block2").data("id");
     	var food_content = $(parent).siblings("div.food-content");
     	var name = $(food_content).find("a.food-items-name").text();
-    	var price = parseInt($(food_content).find("span.food-items-price").text());
+    	var price = parseInt($(food_content).find("span.food-items-price").attr('price'));
     	//set time out for cart
 		var time = new Date().getTime();
 		localStorage.time = time;
@@ -430,7 +431,7 @@ function Order(url,idStore,access_token){
 			},
 			success: function (data) {
 				$('.js-panel-cart').removeClass('show-header-cart');//close cart
-				notify('Success','success','You order have been updated!','#2AB143');
+				notify('Success','success','Order của bạn đã được gửi đi chế biến thành công!','#2AB143');
 				//set table fixed
 				var table = $('#table').val();
 				$("#table").prop("disabled",true);//disable if user have order
@@ -495,6 +496,7 @@ function checkAlert(){
 //show food by menu
 function getFoodByMenu(idStore,url){
 	$(document).on("click",'.menu-items',function(e){
+		window.scrollTo(0,0);
 		e.preventDefault();
 		_menu_id = $(this).data("filter");
 		_page    =1;
@@ -574,7 +576,7 @@ function notify(headingContent,icon,content,bgColor){
 	    icon: icon,
 	    showHideTransition: 'plain',
 	    allowToastClose: true,
-	    hideAfter: 2000,
+	    hideAfter: 5000,
 	    bgColor:bgColor,
 	    stack: 5,
 	    position: 'top-right',
