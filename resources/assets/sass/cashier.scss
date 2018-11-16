@@ -5,6 +5,16 @@
 
 //Quang
 //================================================
+.badge {
+	display: inline-block !important;
+	vertical-align: middle !important;
+}
+.sticky {
+	position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    z-index: 9999 !important;
+}
 .hidden {
 	display: none
 }
