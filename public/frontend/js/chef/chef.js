@@ -171,12 +171,12 @@ function updateOrderListTable(orderId, foodId, push) {
 function loadQueueTable() {
 	loadJSON(rootPath + '/api/v1/store/' + storeId + '/chef_queue.json', function (response) {
 		var result = JSON.parse(response);
-		var output = '<table id="food-queue-table" class="table table-hover red-blue-table" data-search="false" data-toggle="table"> <thead> <tr> <th style="width: 90%" data-field="name">Tên món</th> <th style="width: 10%" data-field="quantity">Hàng chờ</th> </tr> </thead> <tbody>';
+		var output = '<table id="food-queue-table" class="table table-hover red-blue-table" data-search="false" data-toggle="table"> <thead> <tr> <th style="width: 90%" data-field="name">Tên món</th> <th style="width: 10%" data-field="quantity">SL</th> </tr> </thead> <tbody>';
 		for (var i in result) {
 			var foodId = result[i].id;
 			var foodName = result[i].name;
 			var quantity = result[i].quantity;
-			output += '<tr id="queue-' + storeId + '-' + foodId + '"><td>' + foodName + '</td><td>' + quantity + '</td></tr>';
+			output += '<tr id="queue-' + storeId + '-' + foodId + '"><td class="food food-left">' + foodName + '</td><td>' + quantity + '</td></tr>';
 		}
 		output += "</tbody> <tfoot></tfoot> </table> </div> </div>";
 		$('#food-queue-table').html(output);
