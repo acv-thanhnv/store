@@ -14,7 +14,8 @@ $(document).ready(function(){
 	loadWaiterTable()
 	loadRollbackTable()
 	loadOrderListTable()
-});
+	loadQueueTable()
+})
 
 function pushToOrderListTable(result) {
 	var output=''
@@ -74,6 +75,31 @@ function removeFromWaiterTable(result) {
 } else {
 	$('.'+storeId+'-'+orderId).addClass('hidden')
 }
+}
+
+function updateQueueTable(foodId, push) {
+	let tmp = $('#queue-'+storeId+'-'+foodId+' td').eq(1).html()
+	$('#queue-'+storeId+'-'+foodId+' td').eq(1).html(parseInt(tmp)+push)
+}
+
+function updateOrderListTable(orderId, foodId, push) {
+	let tmp = $('#foodlist-'+storeId+'-'+orderId+'-'+foodId+' td').eq(3).html()
+	$('#foodlist-'+storeId+'-'+orderId+'-'+foodId+' td').eq(3).html(parseInt(tmp)+push)
+}
+
+function loadQueueTable() {
+	loadJSON(rootPath+'/api/v1/store/'+storeId+'/chef_queue.json', function(response) {
+		var result = JSON.parse(response)
+		var output='<table id="food-queue-table" class="table table-hover red-blue-table" data-search="false" data-toggle="table"> <thead> <tr> <th style="width: 90%" data-field="name">Tên món</th> <th style="width: 10%" data-field="quantity">Hàng chờ</th> </tr> </thead> <tbody>'
+		for (var i in result) {
+			var foodId = result[i].id
+			var foodName = result[i].name
+			var quantity = result[i].quantity
+			output+='<tr id="queue-'+storeId+'-'+foodId+'"><td>'+foodName+'</td><td>'+quantity+'</td></tr>'
+		}
+		output+="</tbody> <tfoot></tfoot> </table> </div> </div>"
+		$('#food-queue-table').html(output)
+	})
 }
 
 function loadOrderListTable() {
@@ -401,6 +427,8 @@ waiter2waiter.bind(WaiterToWaiterChannel, function(res) {
 			push: push
 		}
 		pushToloadRollbackTable(obj)
+		updateQueueTable(foodId, -push)
+		updateOrderListTable(orderId,foodId,-push)
 		if (quantity!=cooked) {
 			$(detect+' td').eq(1).html(cooked+'/'+quantity)
 			$(detect+' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button>')
@@ -412,6 +440,8 @@ waiter2waiter.bind(WaiterToWaiterChannel, function(res) {
 		}
 		if (!$('.foodline.'+storeId+'-'+orderId).not('.hidden')[0]) $('.'+storeId+'-'+orderId).addClass('hidden')
 	} else {
+		updateQueueTable(foodId,push)
+		updateOrderListTable(orderId,foodId,push)
 		if ($(detect)[0]) {
 			if (quantity!=cooked) {
 				$(detect+' td').eq(1).html(cooked+'/'+quantity)
