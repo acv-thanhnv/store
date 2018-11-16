@@ -235,9 +235,17 @@
             if(data.order.status=='{{\App\Core\Common\OrderStatusValue::NoDone}}'){
                 notify('Warning','warning','Bàn '+data.order.location_id+' có order mới','#F27022','#BA7237');
             }
-            //get order and append
-            if(data.order.location_id==idTable && idStore == data.idStore){
-                genOrderRealtime(data.order,data.result);
+            //nếu tình trạng là thanh toán thì ẩn order đó đi, ko phai thi append bth
+            if(data.order.status=='{{\App\Core\Common\OrderStatusValue::Pay}}'){
+                //an order detail di
+                $('.entities-row-order[data-order-id="'+data.order.id+'"]').next().remove();
+                //an order di
+                $('.entities-row-order[data-order-id="'+data.order.id+'"]').remove();
+            }else{
+                //get order and append
+                if(data.order.location_id==idTable && idStore == data.idStore){
+                    genOrderRealtime(data.order,data.result);
+                }
             }
         });
     }
