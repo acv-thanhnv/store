@@ -652,6 +652,8 @@
 				cart_items = [];//set biến cart items về rỗng
 				cart_total = 0;
 				$("#table").prop("disabled",false);//enable user choose table
+				//thông báo order đã được thanh toán thành công
+				notify('Success','success','Order của bạn đã được thanh toán thành công! Hi vọng bạn hài lòng với bữa ăn','#437F2C');
         	}else{
 				localStorage.removeItem(cart_items);
 				cart_items = data.arrOrder;

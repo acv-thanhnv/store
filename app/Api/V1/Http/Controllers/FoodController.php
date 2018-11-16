@@ -232,13 +232,20 @@ class FoodController extends Controller
                             ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
                             ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
                             ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
+                            ->orderBy('store_order_detail.id','asc')
                             ->where('order_id',$orderId)
                             ->get();
+        //mảng những món ăn chưa hoàn thành được gửi đi để chế biến
+        $arrOrderToOther = Array();
         foreach($arrOrderDetail as $obj){
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
             }else{
                 $obj->src = CommonHelper::getImageUrl($obj->image);
+            }
+            //nếu món đó chưa hoàn thành thì thêm vào mảng
+            if($obj->status!=FoodStatusValue::Done){
+                $arrOrderToOther[] = $obj;
             }
         }
         //Đếm xem trong bàn đó có order nào chưa xác nhận ko
@@ -251,7 +258,7 @@ class FoodController extends Controller
         //call event get status 
         event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrderDetail,0,OrderStatusValue::Process));
         //call event send to chef
-        event(new Order2Other($idStore,$arrOrder[0],$arrOrderDetail));
+        event(new Order2Other($idStore,$arrOrder[0],$arrOrderToOther));
         //convert values into json
         $result              = new DataResultCollection();
         $result->status      = SDBStatusCode::OK;
