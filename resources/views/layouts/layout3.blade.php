@@ -16,7 +16,6 @@
     <link rel="stylesheet" type="text/css" href="css/lib/jquery-confirm.css">
     <!--Toast css-->
     <link rel="stylesheet" type="text/css" href="css/toast.css">
-    <link rel="shortcut icon" href="{{ asset('common_images/favicon.ico') }}">
 
     @yield('css')
     
