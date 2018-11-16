@@ -205,5 +205,7 @@
     <script src="frontend/Customer/js/ias.js"></script>
     <!-- Active JS -->
     <script src="frontend/Customer/js/active.js"></script>
+    <!--Queue Ajax-->
+    <script src="frontend/js/AjaxQueue.js"></script>
     @stack("js")
 </body>
