@@ -221,7 +221,6 @@
         var food_channel = pusher.subscribe(food_channel_name);
         food_channel.bind(FoodEventName, function(data){
             var row_order = $('.entities-row-order[data-order-id="'+data.orderId+'"]').next();
-            console.log(row_order);
             var row_order_detail = $(row_order).find('.row-order-detail[order-detail-id="'+data.idDetail+'"]');
             $(row_order_detail).find('.food_status').text(data.foodStatusName);
             $(row_order_detail).find('.food_status').addClass('food_status_'+data.foodStatus);
@@ -231,7 +230,10 @@
         var order_channel_name = '{{\App\Core\Helpers\CommonHelper::getOrderEventName($idStore,\App\Core\Common\OrderConst::Other2Order)}}';
         var order_channel = pusher.subscribe(order_channel_name);
         order_channel.bind(OrderEventName, function(data){
-            console.log(data);
+            //nếu có order mới thì hiện thông báo
+            if(data.order.status=='{{\App\Core\Common\OrderStatusValue::NoDone}}'){
+                notify('Warning','warning','Bàn '+data.order.location_id+' có order mới','#F27022','#BA7237');
+            }
             //get order and append
             if(data.order.location_id==idTable && idStore == data.idStore){
                 genOrderRealtime(data.order,data.result);
@@ -810,7 +812,7 @@
                 type: 'POST',
                 data: {objOrder: objOrder,idTable:idTable},
                 success: function (data) {
-                    notify('Success','success','Order was successfully send to chef !','#398717','#2F6227');
+                    notify('Success','success','Order đã được gửi thành công cho bếp !','#398717','#2F6227');
                     if(parseInt(data.numberTable)===0){
                         $('*[location-id="'+idTable+'"]').removeClass('have-update').addClass('have-order');
                     }
@@ -821,7 +823,7 @@
                 }
             })
         }else{
-            notify('Warning','warning','Nothing to send to chef !','#E99551','#F4AD32');
+            notify('Warning','warning','Không có món nào để gửi cho bếp, cập nhập order để gửi !','#E99551','#F4AD32');
         }
     });
 
@@ -886,16 +888,16 @@
                     text    : 'OK',
                     btnClass: 'btn btn-primary',
                     action  : function (){
-                        //xóa dòng hiện tại đi
-                        $(row).remove();
-                        //đếm số item còn lại của order sau khi xóa
-                        var number_row_detail = $(entities_row).find('.row-order-detail').length;
-                        //nếu số item còn lại của order bằng ko thì hiện no data
-                        if(number_row_detail==0){
-                            $(entities_row).find('.no-data').removeClass('dis-none');
-                        }
                         //kiểm tra xem món đó đã được thêm vào DB chưa, nếu chưa thì chỉ cần remove dòng
                         if(typeof(idOrderDetail)==='undefined'){
+                            //xóa dòng hiện tại đi
+                            $(row).remove();
+                            //đếm số item còn lại của order sau khi xóa
+                            var number_row_detail = $(entities_row).find('.row-order-detail').length;
+                            //nếu số item còn lại của order bằng ko thì hiện no data
+                            if(number_row_detail==0){
+                                $(entities_row).find('.no-data').removeClass('dis-none');
+                            }
                             notify('Success','success','This food item was successfully deleted !','#398717','#2F6227');
                         }else{
                             $.ajax({
@@ -903,7 +905,19 @@
                                 type: 'GET',
                                 data: {idOrderDetail: idOrderDetail,orderId:orderId},
                                 success: function (data) {
-                                    notify('Success','success','This food item was successfully deleted !','#398717','#2F6227');
+                                    if(data.status =='{{\App\Core\Common\SDBStatusCode::OK}}'){
+                                        //xóa dòng hiện tại đi
+                                        $(row).remove();
+                                        //đếm số item còn lại của order sau khi xóa
+                                        var number_row_detail = $(entities_row).find('.row-order-detail').length;
+                                        //nếu số item còn lại của order bằng ko thì hiện no data
+                                        if(number_row_detail==0){
+                                            $(entities_row).find('.no-data').removeClass('dis-none');
+                                        }
+                                        notify('Success','success','This food item was successfully deleted !','#398717','#2F6227');
+                                    }else{
+                                        notify('Error','error','Lỗi! Bạn không thể xóa món ăn đã nấu xong!','#B42727','#A34242');
+                                    }
                                 },
                                 error: function (xhr, ajaxOptions, thrownError) {
                                     console.log('Error ' + xhr.status + ' | ' + thrownError);
@@ -928,7 +942,7 @@
             icon: icon,
             showHideTransition: 'plain',
             allowToastClose: true,
-            hideAfter: 2000,
+            hideAfter: 5000,
             bgColor:bgColor,
             stack: 5,
             position: 'top-right',

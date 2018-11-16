@@ -80,7 +80,8 @@ class HomeController extends Controller
             }
             //custom distance
             if($obj->distance_in_km<1){
-                $obj->distance_in_km = (sprintf('%.1f',$obj->distance_in_km)*1000)." Meters";
+                $obj->distance_in_km = (int) (($obj->distance_in_km)*1000);
+                $obj->distance_in_km = $obj->distance_in_km.' Meters';
             }else{
                 $obj->distance_in_km = sprintf('%.1f',$obj->distance_in_km) ." Km";
             }
@@ -92,24 +93,27 @@ class HomeController extends Controller
         return ResponseHelper::JsonDataResult($result);
     }
     public function Home()
-    {
-        $store = SDB::table("store_store")
-                        ->select()
-                        ->orderBy("priority","desc")
-                        ->take(10)
-                        ->get();
+    {   
+        //lấy ra cửa hàng trên map
+        $map    = SDB::table("store_store")
+                    ->select()
+                    ->get();
+        //lấy ra những cửa hàng nổi bật để chạy trên  map
+        $store  = SDB::table('store_store')
+                    ->orderBy('priority','desc')
+                    ->take(10)
+                    ->get();
         foreach ($store as $obj) {
-            if($obj->avatar==NULL){
-                 $obj->src = url('/')."/common_images/no-store.png";
-            }else{
-                $obj->src = CommonHelper::getImageUrl($obj->avatar);
-            }
+            $obj->src = CommonHelper::getImageSrc($obj->avatar);
+        }
+        foreach($map as $obj){
+            $obj->src = CommonHelper::getImageSrc($obj->avatar);
         }
         
         $limit = CutomerConst::limit;
         $paginate = SDB::table("store_store")->paginate(5);
         $paginate = json_encode($paginate);
-        $map = json_encode($store); 
+        $map = json_encode($map); 
         return view("frontend.index",[
             "map"      => $map,
             "store"    => $store,

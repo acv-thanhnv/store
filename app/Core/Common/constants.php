@@ -9,15 +9,16 @@
 namespace App\Core\Common;
 class SDBStatusCode
 {
-    const OK = 'OK';
-    const DataNull = 'DataNull';
-    const Excep = 'Excep';
-    const ApiError = 'ApiError';
-    const WebError = 'WebError';
-    const ACLNotPass = 'ACLNotPass';
+    const OK             = 'OK';
+    const Error          = 'Error';
+    const DataNull       = 'DataNull';
+    const Excep          = 'Excep';
+    const ApiError       = 'ApiError';
+    const WebError       = 'WebError';
+    const ACLNotPass     = 'ACLNotPass';
     const ApiAuthNotPass = 'ApiAuthNotPass';
-    const PDOExceoption = 'PDOExceoption';
-    const ValidateError = 'ValidateError';
+    const PDOExceoption  = 'PDOExceoption';
+    const ValidateError  = 'ValidateError';
 }
 
 class FoodConst
@@ -124,7 +125,7 @@ class StorageDisk{
     const diskLocalName = "public";
 }
 class CutomerConst{
-    const limit      = 5;
+    const limit      = 12;
     const numberMenu = 5;
     const hour       = 2;
 }

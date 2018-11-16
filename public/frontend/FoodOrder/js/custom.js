@@ -431,7 +431,7 @@ function Order(url,idStore,access_token){
 			},
 			success: function (data) {
 				$('.js-panel-cart').removeClass('show-header-cart');//close cart
-				notify('Success','success','You order have been updated!','#2AB143');
+				notify('Success','success','Order của bạn đã được gửi đi chế biến thành công!','#2AB143');
 				//set table fixed
 				var table = $('#table').val();
 				$("#table").prop("disabled",true);//disable if user have order
@@ -576,7 +576,7 @@ function notify(headingContent,icon,content,bgColor){
 	    icon: icon,
 	    showHideTransition: 'plain',
 	    allowToastClose: true,
-	    hideAfter: 2000,
+	    hideAfter: 5000,
 	    bgColor:bgColor,
 	    stack: 5,
 	    position: 'top-right',
