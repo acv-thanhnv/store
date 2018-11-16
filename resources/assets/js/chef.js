@@ -79,12 +79,18 @@ function removeFromWaiterTable(result) {
 
 function updateQueueTable(foodId, push) {
 	let tmp = $('#queue-'+storeId+'-'+foodId+' td').eq(1).html()
-	$('#queue-'+storeId+'-'+foodId+' td').eq(1).html(parseInt(tmp)+push)
+	tmp = parseInt(tmp)+parseInt(push)
+	if (tmp<0) tmp=0
+	$('#queue-'+storeId+'-'+foodId+' td').eq(1).html(tmp)
+	if (tmp===0) $('#queue-'+storeId+'-'+foodId+' td').addClass('hidden')
+		else $('#queue-'+storeId+'-'+foodId+' td').removeClass('hidden')
 }
 
 function updateOrderListTable(orderId, foodId, push) {
 	let tmp = $('#foodlist-'+storeId+'-'+orderId+'-'+foodId+' td').eq(3).html()
-	$('#foodlist-'+storeId+'-'+orderId+'-'+foodId+' td').eq(3).html(parseInt(tmp)+push)
+	tmp = parseInt(tmp)+parseInt(push)
+	if (tmp<0) tmp=0
+	$('#foodlist-'+storeId+'-'+orderId+'-'+foodId+' td').eq(3).html(tmp)
 }
 
 function loadQueueTable() {
