@@ -5,6 +5,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.0.3/css/tableexport.min.css">
 @endsection
 
+@section('title')
+Thu ngân
+@endsection
+
 @section('content')
 
 <div id="config" class="hidden"

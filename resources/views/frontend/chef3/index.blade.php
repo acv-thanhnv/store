@@ -4,6 +4,10 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css" rel="stylesheet" />
 @endsection
 
+@section('title')
+Nhà bếp
+@endsection
+
 @section('content')
 
 <div id="config" class="hidden"

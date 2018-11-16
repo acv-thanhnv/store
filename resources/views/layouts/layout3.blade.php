@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Danh mục Order</title><!--<base href="./">-->
+    <title>@yield('title')</title><!--<base href="./">-->
     <base href="{{asset('')}}">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="icon" type="image/x-icon" href=""><!-- No Cache index -->
@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="css/lib/jquery-confirm.css">
     <!--Toast css-->
     <link rel="stylesheet" type="text/css" href="css/toast.css">
+
     @yield('css')
     
 
