@@ -2,17 +2,19 @@
 
 namespace App\Manager\Http\Controllers;
 
-use App\Core\Common\OrderConst;
 use App\Core\Common\FoodStatusValue;
+use App\Core\Common\OrderConst;
 use App\Core\Common\OrderStatusValue;
+use App\Core\Dao\SDB;
 use App\Core\Events\Customer2CashierPusher;
+use App\Core\Events\OrderStatusPusherEvent;
+use App\Core\Events\Other2OrderManagerPusher;
 use App\Core\Events\PaymentDonePusher;
 use App\Core\Events\RollbackCashierPusher;
-use App\Core\Events\Other2OrderManagerPusher;
-
-use Illuminate\Http\Request; 
-use Pusher\Pusher;
+use App\Core\Helpers\CommonHelper;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Pusher\Pusher;
 
 class CashierController extends Controller
 {
@@ -59,11 +61,13 @@ class CashierController extends Controller
 			->join('store_type_location', 'store_location.type_location_id', '=','store_type_location.id')
 			->join('store_order_status', 'store_order_status.value', '=','store_order.status')
 			->select('store_order.id', 'store_order.status', 'store_order.access_token', 'store_order.store_id', 'store_order.datetime_order', 'store_order.datetime_update', 'store_order.location_id', 'store_location.name as table_name', 'store_order.priority', 'store_type_location.name as type_name', 'store_order_status.name as status_name')
-			->where('store_order.store_id',$storeId)
 			->where('store_order.id',$orderId)
 			->get();
-
+			$access_token = $orderDetails[0]->access_token;
+			//event ẩn order ở order đi
 			event(new Other2OrderManagerPusher($storeId, $orderDetails[0], null) );
+			//event clear local storage của cus
+            event(new OrderStatusPusherEvent($access_token,$orderId,null,1,null));
 		}
 
 		if ($res) {
@@ -88,7 +92,26 @@ class CashierController extends Controller
 		->where('order_id', $orderId)
 		->delete();
 
-		if ($res&&$res2) event(new RollbackCashierPusher($storeId));
+		$arrOrder = SDB::table('store_order')
+					->where('id',$orderId)
+					->select('access_token')
+					->get();
+		$arrOrderDetail = SDB::table('store_order_detail')
+                    ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
+                    ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
+                    ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
+                    ->where('store_order_detail.order_id',$orderId)
+                    ->get();
+        foreach($arrOrderDetail as $obj){
+            $obj->price = number_format($obj->price);
+            $obj->src = CommonHelper::getImageSrc($obj->image);
+        }
+
+		if ($res&&$res2){
+			event(new RollbackCashierPusher($storeId));
+			//call pusher when order, status food change
+        	event(new OrderStatusPusherEvent($arrOrder[0]->access_token,$orderId,$arrOrderDetail,null,OrderStatusValue::NoDone));
+		} 
 		return $res;
 	}
 }
