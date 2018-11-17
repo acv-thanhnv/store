@@ -30,7 +30,7 @@
         height: 32px;
         padding: 0px 2px;
         display: -webkit-box;
-        background-color: #DE2943;
+        background-color: #a71313eb;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;

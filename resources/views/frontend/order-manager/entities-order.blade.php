@@ -20,8 +20,10 @@
     padding:0px 25px;
 }
 .entities-row-order{
+    font-size: 15px;
+    font-weight: bold;
     background: #a9dffa;
-    color: white;
+    color: #FFFFFF;
     margin-right: 0px;
     margin-left: 0px;
     border-radius: 4px;
