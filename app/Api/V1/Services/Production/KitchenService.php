@@ -148,7 +148,6 @@ class KitchenService extends BaseService implements KitchenServiceInterface
     {
         $storeId = $request->storeId;
         $queue = SDB::table('store_order')
-        ->join('store_order_status', 'store_order_status.id', '=','store_order.status')
         ->join('store_order_detail', 'store_order_detail.order_id', '=','store_order.id')
         ->join('store_entities', 'store_entities.id', '=','store_order_detail.entities_id')
         ->selectRaw('store_entities.id, store_entities.name, sum(quantity-cooked) as quantity')

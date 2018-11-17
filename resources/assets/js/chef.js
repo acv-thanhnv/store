@@ -10,7 +10,7 @@ const Order2Other = $('#config').attr('Order2Other')
 $(document).ready(function(){
 	$("#header-left a").click(function(){
 		$(this).tab('show')
-	});
+	})
 	loadWaiterTable()
 	loadRollbackTable()
 	loadOrderListTable()
@@ -81,17 +81,19 @@ function updateQueueTable(foodId, push) {
 	let tmp = $('#queue-'+storeId+'-'+foodId+' td').eq(1).html()
 	tmp = parseInt(tmp)+parseInt(push)
 	if (tmp<0) tmp=0
-	$('#queue-'+storeId+'-'+foodId+' td').eq(1).html(tmp)
-	if (tmp===0) $('#queue-'+storeId+'-'+foodId+' td').addClass('hidden')
-		else $('#queue-'+storeId+'-'+foodId+' td').removeClass('hidden')
-}
+		$('#queue-'+storeId+'-'+foodId+' td').eq(1).html(tmp)
+	if (tmp===0) $('#queue-'+storeId+'-'+foodId).addClass('hidden')
+		else $('#queue-'+storeId+'-'+foodId).removeClass('hidden')
+	}
 
 function updateOrderListTable(orderId, foodId, push) {
 	let tmp = $('#foodlist-'+storeId+'-'+orderId+'-'+foodId+' td').eq(3).html()
 	tmp = parseInt(tmp)+parseInt(push)
 	if (tmp<0) tmp=0
-	$('#foodlist-'+storeId+'-'+orderId+'-'+foodId+' td').eq(3).html(tmp)
-}
+		$('#foodlist-'+storeId+'-'+orderId+'-'+foodId+' td').eq(3).html(tmp)
+	if (tmp===0) $('#foodlist-'+storeId+'-'+orderId+'-'+foodId).addClass('hidden')
+		else $('#foodlist-'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
+	}
 
 function loadQueueTable() {
 	loadJSON(rootPath+'/api/v1/store/'+storeId+'/chef_queue.json', function(response) {
@@ -104,7 +106,7 @@ function loadQueueTable() {
 			output+='<tr id="queue-'+storeId+'-'+foodId+'"><td class="food food-left">'+foodName+'</td><td>'+quantity+'</td></tr>'
 			if (quantity===0) $('#queue-'+storeId+'-'+foodId).addClass('hidden')
 				else $('#queue-'+storeId+'-'+foodId).removeClass('hidden')
-		}
+			}
 		output+="</tbody> <tfoot></tfoot> </table> </div> </div>"
 		$('#food-queue-table').html(output)
 	})
@@ -123,7 +125,7 @@ function loadOrderListTable() {
 				var foodName = result.details[i][j].name
 				var quantity = result.details[i][j].quantity
 				var cooked = result.details[i][j].cooked
-				var pending = quantity-cooked;
+				var pending = quantity-cooked
 				if (priority!=='Normal') output+='<tr id="foodlist-'+storeId+'-'+orderId+'-'+foodId+'" class="vip foodlist foodlist-'+storeId+'-'+orderId+'"> <td class="food food-left"><span>'+foodName+'</span></td> <td>#HĐ '+orderId+'</td> <td><span class="badge badge-secondary">'+priority+'</span></td> <td>'+pending+'</td> </tr>'
 					else output+='<tr id="foodlist-'+storeId+'-'+orderId+'-'+foodId+'" class="normal foodlist foodlist-'+storeId+'-'+orderId+'"> <td class="food food-left"><span>'+foodName+'</span></td> <td>#HĐ '+orderId+'</td> <td></td> <td>'+pending+'</td> </tr>'
 				}
@@ -403,7 +405,7 @@ function searchFor() {
 var pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
 	cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 	encrypted: true
-});
+})
 
 var order2kitchen = pusher.subscribe(md5(storeId)+'-'+Order2Kitchen);
 order2kitchen.bind(Order2Other, function(res) {

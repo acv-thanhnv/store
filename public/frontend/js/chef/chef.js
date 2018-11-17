@@ -158,7 +158,7 @@ function updateQueueTable(foodId, push) {
 	tmp = parseInt(tmp) + parseInt(push);
 	if (tmp < 0) tmp = 0;
 	$('#queue-' + storeId + '-' + foodId + ' td').eq(1).html(tmp);
-	if (tmp === 0) $('#queue-' + storeId + '-' + foodId + ' td').addClass('hidden');else $('#queue-' + storeId + '-' + foodId + ' td').removeClass('hidden');
+	if (tmp === 0) $('#queue-' + storeId + '-' + foodId).addClass('hidden');else $('#queue-' + storeId + '-' + foodId).removeClass('hidden');
 }
 
 function updateOrderListTable(orderId, foodId, push) {
@@ -166,6 +166,7 @@ function updateOrderListTable(orderId, foodId, push) {
 	tmp = parseInt(tmp) + parseInt(push);
 	if (tmp < 0) tmp = 0;
 	$('#foodlist-' + storeId + '-' + orderId + '-' + foodId + ' td').eq(3).html(tmp);
+	if (tmp === 0) $('#foodlist-' + storeId + '-' + orderId + '-' + foodId).addClass('hidden');else $('#foodlist-' + storeId + '-' + orderId + '-' + foodId).removeClass('hidden');
 }
 
 function loadQueueTable() {
@@ -471,7 +472,7 @@ function searchFor() {
 	}
 }
 
-var pusher = new Pusher("4f5dd81b5671af6c6fb2", {
+var pusher = new Pusher("120973d888acaaed6fef", {
 	cluster: "ap1",
 	encrypted: true
 });
