@@ -658,6 +658,14 @@
 				localStorage.removeItem(cart_items);
 				cart_items = data.arrOrder;
 				cart_total = data.arrOrder.length;
+				//nếu có roll back thì lưu lại table và orderId
+				if(data.has_rollBack=='{{\App\Core\Common\OrderConst::has_rollBack}}'){
+					localStorage.orderId = data.order.id;//set orderId
+					localStorage.table = data.order.location_id;//set table for local
+					//set table fixed
+					$('#table').val(data.order.location_id);
+					$("#table").prop("disabled",true);//disable if user have order
+				}
 				//change total items of cart
 				$(".js-show-cart").attr("data-notify",cart_total);
 				localStorage.cart_items = JSON.stringify(cart_items);

@@ -89,6 +89,7 @@ class FoodController extends Controller
             $obj->arrOrder = SDB::table('store_order as order')
                             ->where('order.location_id',$obj->id)
                             ->where('order.store_id',$idStore)
+                            ->where('status','!=',OrderStatusValue::Pay)
                             ->orderby('order.id','asc')
                             ->get();
 
@@ -256,7 +257,7 @@ class FoodController extends Controller
                                 ->select('id')
                                 ->get();
         //call event get status 
-        event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrderDetail,0,OrderStatusValue::Process));
+        event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrderDetail,0,null,OrderStatusValue::Process));
         //call event send to chef
         event(new Order2Other($idStore,$arrOrder[0],$arrOrderToOther));
         //convert values into json
