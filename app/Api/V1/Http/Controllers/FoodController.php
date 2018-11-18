@@ -142,11 +142,8 @@ class FoodController extends Controller
                             ->select('food.*')
                             ->paginate(FoodConst::foodPerPage);
             foreach ($arrFood as $obj) {
-                if($obj->image==NULL){
-                    $obj->src = url('/')."/common_images/no-store.png";
-                }else{
-                    $obj->src = CommonHelper::getImageUrl($obj->image);
-                }
+                $obj->src = CommonHelper::getImageSrc($obj->image);
+                $obj->price  = number_format($obj->price);
             }
             $result->data = $arrFood;
             $result->tab  = 'menu';

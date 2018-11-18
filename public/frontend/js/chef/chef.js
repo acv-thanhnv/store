@@ -472,7 +472,7 @@ function searchFor() {
 	}
 }
 
-var pusher = new Pusher("120973d888acaaed6fef", {
+var pusher = new Pusher("d324b061e4d331b3792a", {
 	cluster: "ap1",
 	encrypted: true
 });

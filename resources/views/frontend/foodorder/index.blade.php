@@ -575,6 +575,8 @@
 <script src="https://js.pusher.com/4.3/pusher.min.js"></script>
 <!--Toast JS-->
 <script type="text/javascript" src="js/toast.js"></script>
+<!--Number Format-->
+<script src="js/jquery.number.min.js"></script>
 <!--Custom JS-->
 <script src="frontend/FoodOrder/js/custom.js"></script>
 <script type="text/javascript">

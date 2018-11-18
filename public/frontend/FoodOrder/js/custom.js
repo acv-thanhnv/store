@@ -185,7 +185,7 @@ function sendItem(obj){
 			$(row).find('.btn-num-product-down').addClass('disabled');
 		}
 		$(row).find(".header-cart-item-img img").attr("src",item.src);
-		$(row).find(".header-cart-item-info").text(item.price);
+		$(row).find(".header-cart-item-info").text($.number(item.price, 0, ',' ));
 		$(row).find(".wrap-num-product").attr('data-id',item.entities_id);
 		$(row).find(".progress-bar").text(item.status_name);
 		$(row).find(".cooked").attr('data-cooked',item.cooked);
@@ -390,7 +390,7 @@ function cal_total(data){
 		var total = price*quantity;
 		total_money += total;
 	});
-	$(".total-money").text("Total: "+total_money+' đ');
+	$(".total-money").text("Total: "+$.number(total_money, 0, ',' )+' đ');
 }
 //function order
 function Order(url,idStore,access_token){
