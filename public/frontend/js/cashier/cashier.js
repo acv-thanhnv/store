@@ -588,7 +588,7 @@ $(document).on("click", ".rollback", function (e) {
 	});
 });
 
-var pusher = new Pusher("d324b061e4d331b3792a", {
+var pusher = new Pusher("120973d888acaaed6fef", {
 	cluster: "ap1",
 	encrypted: true
 });

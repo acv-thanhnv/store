@@ -39,8 +39,8 @@ console.log(test456)*/
 
 $(document).ready(function(){
 	$("#header-left a").click(function(){
-		$(this).tab('show');
-	});
+		$(this).tab('show')
+	})
 
 	loadCashierTable()
 	loadRollbackTable()
@@ -48,7 +48,7 @@ $(document).ready(function(){
 
 function loadJSON(file, callback) {   
 
-	var xobj = new XMLHttpRequest();
+	var xobj = new XMLHttpRequest()
 	xobj.overrideMimeType("application/json");
     xobj.open('GET', file, true); // Replace 'my_data' with the path to your file
     xobj.onreadystatechange = function () {
