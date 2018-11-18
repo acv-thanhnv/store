@@ -4,6 +4,7 @@ namespace App\Core\Events;
 
 use App\Core\Common\FoodStatusValue;
 use App\Core\Common\OrderConst;
+use App\Core\Common\OrderStatusValue;
 use App\Core\Common\TableConst;
 use App\Core\Dao\SDB;
 use App\Core\Helpers\CommonHelper;
@@ -31,9 +32,10 @@ class TableEvent implements ShouldBroadcast
         $arrTable = SDB::table('store_order')
                     ->where('location_id',$idTable)
                     ->where('store_id',$idStore)
+                    ->where('status','!=',OrderStatusValue::Pay)
                     ->select('id','status')
                     ->get();
-        //nếu bàn đó ko còn order nào thì hiện bàn trống
+        //nếu bàn đó ko còn order nào, hoặc là đã thanh toán hết thì hiện bàn trống
         if(count($arrTable)==0){
             $color = TableConst::noOrder;
         }else{

@@ -272,7 +272,7 @@ class FoodOrderController extends Controller
                     ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
                     ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
                     ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
-                    ->where('order_id',$orderId)
+                    ->where('store_order_detail.order_id',$orderId)
                     ->get();
         foreach($arrOrderDetail as $obj){
             $obj->price = number_format($obj->price);
@@ -285,7 +285,7 @@ class FoodOrderController extends Controller
         //call event send to Order
         event(new Other2OrderManagerPusher($idStore,$order,$arrOrderDetail));
         //call pusher when order, status food change
-        event(new OrderStatusPusherEvent($request->access_token,$orderId,$arrOrderDetail,null,OrderStatusValue::NoDone));
+        event(new OrderStatusPusherEvent($request->access_token,$order,$arrOrderDetail,null,null));
         //call event bind table color
         event(new TableEvent($idStore,$request->table));
         return $orderId;

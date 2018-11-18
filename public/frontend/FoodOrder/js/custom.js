@@ -214,6 +214,7 @@ $(document).on("click",".js-show-cart",function(){
 	//show alert if isset change
 	checkAlert();
 	if (localStorage.cart_items) {
+		$('.no-cart-items').css('display', 'none');
 		cart_items = JSON.parse(localStorage.cart_items);
 		sendItem(cart_items);
 		cal_total(cart_items);
@@ -324,7 +325,7 @@ function deleteCartItem(url){
 								cart_total--;
 								$(".js-show-cart").attr("data-notify",cart_total);
 								notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
-								if(cart_total===0){
+								if(cart_total==0){
 									$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
 									localStorage.removeItem('hasAlert');
 									hideAlert();
@@ -354,6 +355,11 @@ function deleteCartItem(url){
 							cal_total(cart_items);
 							localStorage.cart_items = JSON.stringify(cart_items);
 							cart_total--;
+							if(cart_total==0){
+								$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
+								localStorage.removeItem('hasAlert');
+								hideAlert();
+							}
 							$(".js-show-cart").attr("data-notify",cart_total);
 							notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
 						}
