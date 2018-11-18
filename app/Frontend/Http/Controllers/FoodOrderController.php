@@ -285,7 +285,7 @@ class FoodOrderController extends Controller
         //call event send to Order
         event(new Other2OrderManagerPusher($idStore,$order,$arrOrderDetail));
         //call pusher when order, status food change
-        event(new OrderStatusPusherEvent($request->access_token,$orderId,$arrOrderDetail,null,null,OrderStatusValue::NoDone));
+        event(new OrderStatusPusherEvent($request->access_token,$order,$arrOrderDetail,null,null));
         //call event bind table color
         event(new TableEvent($idStore,$request->table));
         return $orderId;

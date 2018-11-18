@@ -644,6 +644,11 @@
         channel.bind(eventName, function(data){
         	//nếu ở order xóa order thì clear all local storage
         	if(data.has_delete==1){
+        		//xóa giỏ hàng, đưa về rỗng, kể cả lúc khách đang mở giỏ hàng
+        		$('.header-cart-wrapitem').empty();
+        		$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
+        		$(".total-money").text("Total: 0 đ");
+        		$(".btn-pay").addClass('disabled');
         		$(".js-show-cart").attr("data-notify",0);
 				localStorage.removeItem('cart_items');
 				localStorage.removeItem('time');
@@ -660,11 +665,13 @@
 				cart_total = data.arrOrder.length;
 				//nếu có roll back thì lưu lại table và orderId
 				if(data.has_rollBack=='{{\App\Core\Common\OrderConst::has_rollBack}}'){
-					localStorage.orderId = data.order.id;//set orderId
-					localStorage.table = data.order.location_id;//set table for local
 					//set table fixed
 					$('#table').val(data.order.location_id);
+					$('#table').trigger('change');
+					localStorage.orderId = data.order.id;//set orderId
+					localStorage.table = data.order.location_id;//set table for local
 					$("#table").prop("disabled",true);//disable if user have order
+					$('.btn-pay').removeClass('disabled');
 				}
 				//change total items of cart
 				$(".js-show-cart").attr("data-notify",cart_total);

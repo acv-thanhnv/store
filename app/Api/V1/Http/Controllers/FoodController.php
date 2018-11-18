@@ -257,7 +257,7 @@ class FoodController extends Controller
                                 ->select('id')
                                 ->get();
         //call event get status 
-        event(new OrderStatusPusherEvent($access_token,$orderId,$arrOrderDetail,0,null,OrderStatusValue::Process));
+        event(new OrderStatusPusherEvent($access_token,$arrOrder[0],$arrOrderDetail,0,null));
         //call event send to chef
         event(new Order2Other($idStore,$arrOrder[0],$arrOrderToOther));
         //convert values into json

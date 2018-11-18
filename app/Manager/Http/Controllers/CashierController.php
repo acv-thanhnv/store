@@ -70,7 +70,7 @@ class CashierController extends Controller
 			//call event bind table color
         	event(new TableEvent($storeId,$location_id));
 			//event clear local storage của cus
-            event(new OrderStatusPusherEvent($access_token,$orderId,null,1,null,null));
+            event(new OrderStatusPusherEvent($access_token,$orderId,null,1,null));
 		}
 
 		if ($res) {
@@ -95,10 +95,11 @@ class CashierController extends Controller
 		->where('order_id', $orderId)
 		->delete();
 
-		$arrOrder = SDB::table('store_order')
-					->where('id',$orderId)
-					->select('access_token','id','location_id')
-					->get();
+		$arrOrder = SDB::table('store_order as order')
+                            ->join('store_order_status as status','status.value','=','order.status')
+                            ->where('order.id',$orderId)
+                            ->select('order.*','status.name as status_name')
+                            ->get();
 		$arrOrderDetail = SDB::table('store_order_detail')
                     ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
                     ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
@@ -106,14 +107,17 @@ class CashierController extends Controller
                     ->where('store_order_detail.order_id',$orderId)
                     ->get();
         foreach($arrOrderDetail as $obj){
-            $obj->price = number_format($obj->price);
             $obj->src = CommonHelper::getImageSrc($obj->image);
         }
 
 		if ($res&&$res2){
 			event(new RollbackCashierPusher($storeId));
 			//call pusher when order, status food change
-        	event(new OrderStatusPusherEvent($arrOrder[0]->access_token,$arrOrder[0],$arrOrderDetail,null,OrderConst::has_rollBack,OrderStatusValue::NoDone));
+        	event(new OrderStatusPusherEvent($arrOrder[0]->access_token,$arrOrder[0],$arrOrderDetail,null,OrderConst::has_rollBack));
+        	//call event send to Order
+        	event(new Other2OrderManagerPusher($storeId,$arrOrder[0],$arrOrderDetail));
+        	//call event bind table color
+        	event(new TableEvent($storeId,$arrOrder[0]->location_id));
 		} 
 		return $res;
 	}

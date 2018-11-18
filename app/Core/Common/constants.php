@@ -120,7 +120,7 @@ class EntityProperty{
 class TableConst{
     const TablePerPage    = 12;
     const TableColorEvent = 'table_color_event';
-    const noOrder         = '#4242ef';
+    const noOrder         = '#256f93';
     const haveOrder       = '#EA3232';
     const Done            = '#EEA045';
 }
