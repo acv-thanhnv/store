@@ -118,7 +118,7 @@
 					</div>
 				</div>
 				<div class="ln_solid"></div>
-				<div class="form-group">
+				<div class="form-group" style="text-align: right">
 					<div>
 						<button class="btn btn-primary" type="reset">Reset</button>
 						<button type="button" class="btn btn-success add">Submit</button>
@@ -132,6 +132,28 @@
 @endsection
 @push("js")
 <script type="text/javascript">
+	//upload image 
+	function handleFileSelect(event) {
+		var input = this;
+		if (input.files && input.files.length) {
+			var reader = new FileReader();
+			this.enabled = false
+			reader.onload = (function (e) {
+				$("#preview").html(['<img id="OpenImgUpload" class="thumb" src="', e.target.result, '" title="Avatar"/><span class="fa remove_img_preview" title="remove"></span>'].join(''))
+			});
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+	$('#file').change(handleFileSelect);
+	$('#preview').on('click', '.remove_img_preview', function () {
+		$("#OpenImgUpload").attr("src","common_images/no-store.png");
+		$("#file").val("");
+		$(".remove_img_preview").css("visibility","hidden");
+	});
+	//Open dialog box for upload when click on image
+	$(document).on("click",'#OpenImgUpload',function(e){
+		$('#file').trigger('click');
+	});
 	//set gender
 	$(document).ready(function(){
 		var label =$('input[name=gender]:checked').parent("label");
@@ -153,23 +175,7 @@
 		//remove class unckecked
 		$('input[name=gender]:not(:checked)').parent("label").removeClass('btn-primary').addClass("btn-default");
 	});
-	//upload image 
-	function handleFileSelect(event) {
-		var input = this;
-		if (input.files && input.files.length) {
-			var reader = new FileReader();
-			this.enabled = false
-			reader.onload = (function (e) {
-				$("#preview").html(['<img class="thumb" src="', e.target.result, '" title="Avatar"/><span class="fa remove_img_preview" title="remove"></span>'].join(''))
-			});
-			reader.readAsDataURL(input.files[0]);
-		}
-	}
-	$('#file').change(handleFileSelect);
-	$('#preview').on('click', '.remove_img_preview', function () {
-		$("#preview").empty()
-		$("#file").val("");
-	});
+
 	//submit add 
 	$(".add").click(function(){
 		var formData = new FormData($('#form_add')[0]);

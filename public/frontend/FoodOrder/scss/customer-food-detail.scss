@@ -1,0 +1,27 @@
+.hide-modal{
+	position: absolute;
+	top     : 2%;
+	right   : 2%;
+}
+.slide-image{
+	height: 240px;
+	min-height: 240px;
+}
+.iziModal-wrap{
+	width: 300px;
+}
+//custom payment of modal cart payment
+.modal-cart-payment{
+	.div1,.div2,.div3{
+		margin-left : auto;
+		margin-right: auto;
+		text-align: center;
+	}
+	.div2 .js-addcart-detail{
+		margin-left : auto;
+		margin-right: auto;
+		text-align-last: center;
+		height: 50px;
+		min-width: 50px;
+	}
+}

@@ -43,7 +43,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -155,7 +155,7 @@ return [
          * Application Services Providers...
          */
         App\Core\Providers\AppServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Core\Providers\BroadcastServiceProvider::class,
         App\Core\Providers\EventServiceProvider::class,
         App\Core\Providers\RouteServiceProvider::class,
         //Excecl : add at 20180718
@@ -184,17 +184,21 @@ return [
          * API
          */
         App\Api\V1\Providers\RouteServiceProvider::class,
+        App\Api\V1\Providers\ApiServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
          /**
           * Backend
           */
-        App\Backend\Providers\UserServiceProvider::class,
         App\Backend\Providers\RouteServiceProvider::class,
         App\Backend\Providers\BackendServiceProvider::class,
         /**
          * FrontEnd
          */
         App\Frontend\Providers\RouteServiceProvider::class,
+        /**
+         * Manager
+         */
+        App\Manager\Providers\RouteServiceProvider::class,
         /**
          * ImageResize
          */
@@ -247,7 +251,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

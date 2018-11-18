@@ -9,6 +9,7 @@
 				<td><img class="img" src="" alt="Avatar"></td>
 				<td class="name"></td>
 				<td class="email"></td>
+                <td class="store"></td>
 				<td class="role"></td>
 				<td class="active"></td>
 				<td>
@@ -22,6 +23,6 @@
 					</a>
 				</td>
 			</tr>
-		</tbody>	
+		</tbody>
 	</table>
 </div>

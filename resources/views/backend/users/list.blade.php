@@ -16,7 +16,7 @@
 		margin-top: 10px;
 	}
 	.img{
-		width: 50px; 
+		width: 50px;
 		height: 50px;
 	}
 	.img{
@@ -61,6 +61,7 @@
                         <th class="column-title">Image </th>
                         <th class="column-title">Name </th>
                         <th class="column-title">Email </th>
+                        <th class="column-title">Store </th>
                         <th class="column-title">Role </th>
                         <th class="column-title">Active </th>
                         <th class="column-title">Edit </th>
@@ -149,7 +150,6 @@
 	//function edit
 	$(document).on('click', '.edit', function(event) {
 	  	$('#modal-edit').iziModal('open',event);
-	  	$('#modal-profile').iziModal('resetProgress');
 	});
 	$('#modal-edit').iziModal(
 	{
@@ -176,7 +176,6 @@
 		radius         :15,
 		transitionIn   :"bounceInDown",
 		transitionOut  :"bounceOutUp",
-		arrowKeys      :true,
 		iframe         : true,
 		iframeWidth    :400,
 		iframeURL      :""
@@ -268,7 +267,7 @@
 			});
 		}
 	});
-	//function alert 
+	//function alert
 	function alert(type)
 	{
 		$.toast({
@@ -280,7 +279,7 @@
 		    hideAfter: 2000,
 		    stack: 5,
 		    position: 'top-right',
-		    textAlign: 'left', 
+		    textAlign: 'left',
 		    loader: true,
 		    loaderBg: '#9EC600',
 		});
@@ -306,6 +305,7 @@
 			$(row).find('.img').data("id",obj.id);
 		 	$(row).find('.name').html(obj.name);
 		 	$(row).find('.email').html(obj.email);
+            $(row).find('.store').html(obj.store_name);
 		 	$(row).find('.role').html(obj.role);
 		 	if(obj.is_active===1){
 		 		$(row).find('.active').html("Có");
@@ -326,7 +326,7 @@
 		$('#pagination-demo').twbsPagination({
 			totalPages            : totalPages,
 			visiblePages          : 5,
-			hideOnlyOnePage       :true,	
+			hideOnlyOnePage       :true,
 			initiateStartPageClick:false,
 			onPageClick:function(event,page){
 				$("#check-all").prop('checked',false);//set check-all = false
