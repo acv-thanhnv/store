@@ -151,30 +151,7 @@ function loadRollbackTable() {
 	});
 }
 
-/*function loadRollbackTable() {
-	var output='<table id="roll-back" class="table table-hover red-blue-table"> <thead> <tr> <th style="width: 40%" data-field="invoice">Hóa đơn</th> <th style="width: 30%" data-field="location">Bàn</th> <th style="width: 30%"></th> </tr> </thead> <tbody id="rollback-body">'
-	let cashierRollback = localStorage.getObj('cashierRollback')
-	if (cashierRollback!= null) {
-		let a = cashierRollback
-		for (var i=a.length-1;i>=0;i--) {
-			if (a[i]) output+='<tr id="rollback-'+storeId+'-'+a[i].orderId+'" orderId="'+a[i].orderId+'"> <td> <button type="button" class="btn btn-primary">#HĐ '+a[i].orderId+'</button> </td> <td> <button type="button" class="btn btn-primary">'+a[i].locationName+'</button> </td> <td> <button class="btn btn-success rollback"><i class="fa fa-undo"></i></button> </td> </tr>'
-		}
-}
-output+='</tbody> <tfoot></tfoot> </table>'
-$('#rollback-thanh-toan').html(output)
-}*/
-
-/*function pushToloadRollbackTable(obj) {
-	let cashierRollback = localStorage.getItem("cashierRollback")
-	cashierRollback = [...cashierRollback, obj]
-	localStorage.setItem("cashierRollback", cashierRollback)
-	var current = $('#rollback-body').html()
-	var newRow = '<tr id="rollback-'+storeId+'-'+obj.orderId+'"> <td> <button type="button" class="btn btn-primary">#HĐ '+obj.orderId+'</button> </td> <td> <button type="button" class="btn btn-primary">'+obj.locationName+'</button> </td> <td> <button class="btn btn-success"><i class="fa fa-undo rollback"></i></button> </td> </tr>'
-	current = current + newRow
-	$('#rollback-body').html(current)
-}*/
-
-function pushToloadRollbackTable(obj) {
+function pushToRollbackTable(obj) {
 	var current = $('#rollback-body').html();
 	var newRow = '<tr id="rollback-' + storeId + '-' + obj.orderId + '" orderId="' + obj.orderId + '" status="' + obj.status + '"> <td> <button type="button" class="btn btn-primary">#HĐ ' + obj.orderId + '</button> </td> <td> <button class="btn btn-success rollback"><i class="fa fa-undo"></i></button> </td> </tr>';
 	current = current + newRow;
@@ -433,13 +410,16 @@ $(document).on("change", ".discount", function (e) {
 
 $(document).on("click", ".payment", function (e) {
 	var listOrderId = [];
-	var status = $(this).parents('table').attr('status');
+	var listBeforeStatus = [];
+	var beforeStatus = $(this).parents('table').attr('status');
 	var orderId = $(this).parents('table').attr('orderId');
 	listOrderId.push(orderId);
+	listBeforeStatus.push(beforeStatus);
+
 	var formData = {
 		storeId: storeId,
 		listOrderId: listOrderId,
-		beforeStatus: status
+		listBeforeStatus: listBeforeStatus
 	};
 
 	$('#hd' + orderId).modal('toggle');
@@ -456,28 +436,36 @@ $(document).on("click", ".payment", function (e) {
 });
 
 $(document).on("click", "#thanh-toan-tat-ca", function (e) {
+	var listBeforeStatus = [];
+	var listOrderId = [];
 	for (var i in paymentAll) {
-		var currentInvoices = paymentAll[i].orderId;
-		var status = paymentAll[i].status;
-		currentInvoices = JSON.parse('[' + currentInvoices + ']');
-		var formData = {
-			storeId: storeId,
-			listOrderId: currentInvoices,
-			beforeStatus: status
-		};
-		console.log(formData);
-		$.ajax({
-			type: 'POST',
-			url: rootPath + '/payment-done',
-			data: formData
-		}).done(function (result) {
-			console.log(result);
-			$('#payment-right').html('');
-			$('#invoice-id').html('');
-		}).fail(function () {
-			console.log('false');
-		});
+		listOrderId.push(paymentAll[i].orderId);
 	}
+
+	for (var i in listOrderId) {
+		var beforeStatus = $('#order-' + storeId + '-' + listOrderId[i]).attr('status');
+		listBeforeStatus.push(beforeStatus);
+	}
+
+	listBeforeStatus = JSON.parse('[' + listBeforeStatus + ']');
+	var formData = {
+		storeId: storeId,
+		listOrderId: listOrderId,
+		listBeforeStatus: listBeforeStatus
+	};
+
+	console.log(formData);
+	$.ajax({
+		type: 'POST',
+		url: rootPath + '/payment-done',
+		data: formData
+	}).done(function (result) {
+		console.log(result);
+		$('#payment-right').html('');
+		$('#invoice-id').html('');
+	}).fail(function () {
+		console.log('false');
+	});
 	paymentAll = [];
 });
 
@@ -588,7 +576,7 @@ $(document).on("click", ".rollback", function (e) {
 	});
 });
 
-var pusher = new Pusher("d324b061e4d331b3792a", {
+var pusher = new Pusher("4f5dd81b5671af6c6fb2", {
 	cluster: "ap1",
 	encrypted: true
 });
@@ -601,31 +589,32 @@ order2chef.bind(Order2Other, function (res) {
 var cashier2cashier = pusher.subscribe(md5(storeId) + '-cashier2cashier');
 cashier2cashier.bind('payment-done', function (res) {
 	var listOrderId = res.listOrderId;
+	var listBeforeStatus = res.status;
 	var status = res.status;
 	for (var i in listOrderId) {
-		/*let locationName = $('#order-'+storeId+'-'+listOrderId[i]).attr('location')*/
 		var obj = {
 			orderId: listOrderId[i],
-			/*locationName: locationName,*/
-			status: status
+			status: listBeforeStatus[i]
 		};
 		console.log(obj);
 		$('#order-' + storeId + '-' + listOrderId[i]).addClass('hidden');
-		/*SaveDataToLocalStorage(obj)*/
-		pushToloadRollbackTable(obj);
+		pushToRollbackTable(obj);
 	}
 });
 
 cashier2cashier.bind('rollback-payment', function (res) {
 	var orderId = res.orderId;
 	/*$('#rollback-'+storeId+'-'+orderId).addClass('hidden')*/
-	$('#order-' + storeId + '-' + orderId).removeClass('hidden');
-	var obj = {
-		storeId: storeId,
-		orderId: orderId
-		/*RemoveDataFromLocalStorage(obj)*/
-	};loadCashierTable();
-	loadRollbackTable();
+	if ($('#order-' + storeId + '-' + orderId)[0]) {
+		$('#order-' + storeId + '-' + orderId).removeClass('hidden');
+	} else {
+		loadCashierTable();
+	}
+	if ($('#rollback-' + storeId + '-' + orderId)[0]) {
+		$('#rollback-' + storeId + '-' + orderId).addClass('hidden');
+	} else {
+		loadRollbackTable();
+	}
 });
 
 function SaveDataToLocalStorage(obj) {
