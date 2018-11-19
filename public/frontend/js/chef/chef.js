@@ -108,10 +108,10 @@ function pushToOrderListTable(result) {
 		var foodName = result.foodDetails[i].name;
 		var quantity = result.foodDetails[i].quantity;
 		var foodStatus = result.foodDetails[i].status;
-		var cooked = 0;
+		var cooked = result.foodDetails[i].cooked;
 		$('#foodlist-' + storeId + '-' + orderId + '-' + foodId).removeClass('hidden');
 		if ($('#foodlist-' + storeId + '-' + orderId + '-' + foodId)[0]) {
-			$('#foodlist-' + storeId + '-' + orderId + '-' + foodId + ' td').eq(3).html(quantity);
+			$('#foodlist-' + storeId + '-' + orderId + '-' + foodId + ' td').eq(3).html(quantity - cooked);
 		} else {
 			if (priority !== 'Normal') {
 				output = '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="vip foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td>#HĐ ' + orderId + '</td> <td><span class="badge badge-secondary">' + priority + '</span></td> <td>' + quantity + '</td> </tr>';
@@ -178,11 +178,16 @@ function loadQueueTable() {
 		var result = JSON.parse(response);
 		var output = '<table id="food-queue-table" class="table table-hover red-blue-table" data-search="false" data-toggle="table"> <thead> <tr> <th style="width: 90%" data-field="name">Tên món</th> <th style="width: 10%" data-field="quantity">SL</th> </tr> </thead> <tbody>';
 		for (var i in result) {
+			console.log(result);
 			var foodId = result[i].id;
 			var foodName = result[i].name;
 			var quantity = result[i].quantity;
-			output += '<tr id="queue-' + storeId + '-' + foodId + '"><td class="food food-left">' + foodName + '</td><td>' + quantity + '</td></tr>';
-			if (quantity === 0) $('#queue-' + storeId + '-' + foodId).addClass('hidden');else $('#queue-' + storeId + '-' + foodId).removeClass('hidden');
+			quantity = parseInt(quantity);
+			if (quantity === 0) {
+				output += '<tr id="queue-' + storeId + '-' + foodId + '" class="hidden"><td class="food food-left">' + foodName + '</td><td>' + quantity + '</td></tr>';
+			} else {
+				output += '<tr id="queue-' + storeId + '-' + foodId + '"><td class="food food-left">' + foodName + '</td><td>' + quantity + '</td></tr>';
+			}
 		}
 		output += "</tbody> <tfoot></tfoot> </table> </div> </div>";
 		$('#food-queue-table').html(output);
@@ -483,6 +488,9 @@ var pusher = new Pusher("4f5dd81b5671af6c6fb2", {
 
 var order2kitchen = pusher.subscribe(md5(storeId) + '-' + Order2Kitchen);
 order2kitchen.bind(Order2Other, function (res) {
+	/*console.log('start')
+ console.log(res)
+ console.log('end')*/
 	pushToOrderListTable(res);
 	pushToWaiterTable(res);
 	/*for (var i in res.foodDetails) {
