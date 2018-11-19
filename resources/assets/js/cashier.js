@@ -377,7 +377,7 @@ $(document).on("click","#thanh-toan-tat-ca",function(e){
 		listOrderId: listOrderId,
 		listBeforeStatus: listBeforeStatus
 	}
-	
+
 	console.log(formData)
 	$.ajax({
 		type:'POST',
@@ -517,11 +517,12 @@ order2chef.bind(Order2Other, function(res) {
 var cashier2cashier = pusher.subscribe(md5(storeId)+'-cashier2cashier')
 cashier2cashier.bind('payment-done', function(res) {
 	var listOrderId = res.listOrderId
+	var listBeforeStatus = res.status
 	let status = res.status
 	for (var i in listOrderId) {
 		let obj = {
 			orderId: listOrderId[i],
-			status: status
+			status: listBeforeStatus[i]
 		}
 		console.log(obj)
 		$('#order-'+storeId+'-'+listOrderId[i]).addClass('hidden')
@@ -532,14 +533,16 @@ cashier2cashier.bind('payment-done', function(res) {
 cashier2cashier.bind('rollback-payment', function(res) {
 	var orderId = res.orderId
 	/*$('#rollback-'+storeId+'-'+orderId).addClass('hidden')*/
-	$('#order-'+storeId+'-'+orderId).removeClass('hidden')
-	let obj = {
-		storeId: storeId,
-		orderId: orderId
+	if ($('#order-'+storeId+'-'+orderId)[0]) {
+		$('#order-'+storeId+'-'+orderId).removeClass('hidden')
+	} else {
+		loadCashierTable()
 	}
-	/*RemoveDataFromLocalStorage(obj)*/
-	loadCashierTable()
-	loadRollbackTable()
+	if ($('#rollback-'+storeId+'-'+orderId)[0]) {
+		$('#rollback-'+storeId+'-'+orderId).addClass('hidden')
+	} else {
+		loadRollbackTable()
+	}
 })
 
 function SaveDataToLocalStorage(obj)

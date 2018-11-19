@@ -36,12 +36,14 @@ class CashierController extends Controller
 		->whereIn('store_order.id', $listOrderId)
 		->update(['store_order.status' => OrderStatusValue::Pay ]);
 
+		$i=0;
+
 		for ($i=0; $i<count($listOrderId); $i++) {
 			$rollback = DB::table('store_rollback_cashier')->insert(
 				[
 					'store_id' => $storeId,
-					'order_id' => $listOrderId[i],
-					'before_status' => $listBeforeStatus[i]
+					'order_id' => $listOrderId[$i],
+					'before_status' => $listBeforeStatus[$i]
 				]
 			);
 
@@ -51,7 +53,7 @@ class CashierController extends Controller
 			->join('store_order_status', 'store_order_status.value', '=','store_order.status')
 			->select('store_order.id', 'store_order.status', 'store_order.access_token', 'store_order.store_id', 'store_order.datetime_order', 'store_order.datetime_update', 'store_order.location_id', 'store_location.name as table_name', 'store_order.priority', 'store_type_location.name as type_name', 'store_order_status.name as status_name')
 			->where('store_order.store_id',$storeId)
-			->where('store_order.id',$orderId)
+			->where('store_order.id',$listOrderId[$i])
 			->get();
 
 			event(new Other2OrderManagerPusher($storeId, $orderDetails[0], null) );
