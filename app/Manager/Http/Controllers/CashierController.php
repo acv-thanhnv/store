@@ -30,15 +30,6 @@ class CashierController extends Controller
 		]);
 	}
 
-	public function test(Request $request) {
-		$storeId = $request->storeId;
-		$orderId = $request->orderId;
-		event(new Customer2CashierPusher(
-			$storeId,
-			$orderId
-		));
-	}
-
 	public function paymentDoneByOrder(Request $request) {
 		$storeId      = $request->storeId;
 		$listOrderId  = $request->listOrderId;
@@ -74,7 +65,7 @@ class CashierController extends Controller
 		}
 
 		if ($res) {
-			event(new PaymentDonePusher($storeId, $listOrderId, $beforeStatus));
+			event(new PaymentDonePusher($storeId, $listOrderId, $listBeforeStatus));
 			/*event(new Other2OrderManagerPusher($storeId,$orderDetails[0],null));*/
 		}
 		return $res;

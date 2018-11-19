@@ -154,6 +154,10 @@ function removeFromWaiterTable(result) {
 }
 
 function updateQueueTable(foodId, push) {
+	console.log('start');
+	console.log(foodId);
+	console.log(push);
+	console.log('end');
 	var tmp = $('#queue-' + storeId + '-' + foodId + ' td').eq(1).html();
 	tmp = parseInt(tmp) + parseInt(push);
 	if (tmp < 0) tmp = 0;
@@ -481,6 +485,13 @@ var order2kitchen = pusher.subscribe(md5(storeId) + '-' + Order2Kitchen);
 order2kitchen.bind(Order2Other, function (res) {
 	pushToOrderListTable(res);
 	pushToWaiterTable(res);
+	/*for (var i in res.foodDetails) {
+ 	let foodId = res.foodDetails[i].entities_id
+ 	let quantity = res.foodDetails[i].quantity
+ 	let cooked = res.foodDetails[i].cooked
+ 	updateQueueTable(foodId, quantity-cooked)
+ }*/
+	loadQueueTable();
 });
 
 var customer2order = pusher.subscribe(md5(storeId) + '-' + Customer2Order);
