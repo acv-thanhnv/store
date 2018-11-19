@@ -66,6 +66,9 @@ class LoggingConst
 }
 class OrderConst{
 
+    const has_delete                 = 'yes';
+
+    const has_rollBack               = 'yes';
 
     const CashierChannelToCashier    = "cashier2cashier";
     
@@ -117,7 +120,7 @@ class EntityProperty{
 class TableConst{
     const TablePerPage    = 12;
     const TableColorEvent = 'table_color_event';
-    const noOrder         = 'blue';
+    const noOrder         = '#256f93';
     const haveOrder       = '#EA3232';
     const Done            = '#EEA045';
 }
