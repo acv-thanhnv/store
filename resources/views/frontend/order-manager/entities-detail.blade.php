@@ -70,6 +70,8 @@
         padding-left: 5px;
     }
     .num-product-up,.num-product-down{
+        display: flex;
+        align-items: center;
         width: 20px;
         height: 20px;
     }

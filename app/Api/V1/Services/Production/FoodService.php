@@ -117,6 +117,7 @@ class FoodService extends BaseService implements FoodServiceInterface
                 ->join ('store_entities','o_detail.entities_id','=','store_entities.id')
                 ->join('store_order_detail_status as s_detail','s_detail.value','=','o_detail.status')
                 ->select('o_detail.*','store_entities.name','store_entities.image','store_entities.price','s_detail.status_name','o_detail.cooked')
+                ->orderBy('o_detail.id','asc')
                 ->where('o_detail.order_id','=', $order_detail->id)
                 ->get();
             foreach($order_detail ->detail as $foodItem){
