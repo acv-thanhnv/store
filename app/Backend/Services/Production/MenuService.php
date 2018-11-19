@@ -40,7 +40,7 @@ class MenuService extends BaseService implements MenuServiceInterface
     }
     public function editMenu($obj)
     {
-        SDB::table("store_menu")->where("id",$obj->id)->update(["name" => $obj->name,"description"=> $obj->description]);
+        SDB::table("store_menu")->where("id",$obj->id)->update(["name" => $obj->name,"description"=> $obj->description,'priority' => $obj->priority]);
     }
     public function deleteMenu($id)
     {

@@ -34,6 +34,8 @@
     <script src="https://js.pusher.com/4.3/pusher.min.js"></script>
     <!--Jquery confirm -->
     <script src="js/lib/jquery-confirm.js"></script>
+    <!--Number Format-->
+    <script src="js/jquery.number.min.js"></script>
     <!--Toast JS-->
     <script type="text/javascript" src="js/toast.js"></script>
     @yield('javascript')

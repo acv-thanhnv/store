@@ -446,6 +446,7 @@
                     var itemOrderTemp = $('#entities-order-template').contents().clone();
                     var row_id        = $(itemOrderTemp)[1];
                     $(row_id).attr("data-order-id",data.id);
+                    $(row_id).attr("old-status",data.status);
                     $(itemOrderTemp).find('.entities_order_id').text(data.id);
                     $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', data.id);
                     $(itemOrderTemp).find('.entities_order_time').text(data.datetime_order);
@@ -487,6 +488,7 @@
             var row_id = $(itemOrderTemp)[1];
             var row = $(itemOrderTemp)[3];//order detail
             $(row_id).attr("data-order-id",obj.id);
+            $(row_id).attr("old-status",obj.status);
             $(itemOrderTemp).find('.entities_order_id').text(obj.id);
             $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', obj.id);
             $(itemOrderTemp).find('.entities_order_time').text(obj.datetime_order);
@@ -504,7 +506,7 @@
                     $(rowDetailId).attr('order-detail-id',itemDetail.id);
                     $(rowDetailId).attr('entities-id',itemDetail.entities_id);
                     $(rowDetail).find(".order_detail_name").text(itemDetail.name);
-                    $(rowDetail).find(".order_detail_price").text(itemDetail.price);
+                    $(rowDetail).find(".order_detail_price").text($.number(itemDetail.price,0, ','));
                     $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
                     $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
                     $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
@@ -548,7 +550,7 @@
                     $(rowDetailId).attr('order-detail-id',itemDetail.id);
                     $(rowDetailId).attr('entities-id',itemDetail.entities_id);
                     $(rowDetail).find(".order_detail_name").text(itemDetail.name);
-                    $(rowDetail).find(".order_detail_price").text(itemDetail.price);
+                    $(rowDetail).find(".order_detail_price").text($.number(itemDetail.price,0, ','));
                     $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
                     $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
                     $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
@@ -569,6 +571,7 @@
             var itemOrderTemp = $('#entities-order-template').contents().clone();
             var row_id = $(itemOrderTemp)[1];
             $(row_id).attr("data-order-id",order.id);
+            $(row_id).attr("old-status",order.status);
             $(itemOrderTemp).find('.entities_order_id').text(order.id);
             $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', order.id);
             $(itemOrderTemp).find('.entities_order_time').text(order.datetime_order);
@@ -585,12 +588,15 @@
                 $(rowDetailId).attr('order-detail-id',itemDetail.id);
                 $(rowDetailId).attr('entities-id',itemDetail.entities_id);
                 $(rowDetail).find(".order_detail_name").text(itemDetail.name);
-                $(rowDetail).find(".order_detail_price").text(itemDetail.price);
+                $(rowDetail).find(".order_detail_price").text($.number(itemDetail.price, 0, ',' ));
                 $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
                 $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
                 $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
                 if(itemDetail.has_update===1){
                     $(rowDetail).find(".has_change").css('display','block');
+                }
+                if(itemDetail.cooked>0){
+                    $(rowDetail).find(".cooked").text('/'+itemDetail.cooked);
                 }
                 $(rowDetail).find(".food_status").text(itemDetail.status_name);
                 $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
@@ -621,7 +627,7 @@
             $(rowDetailId).attr('order-detail-id',itemDetail.id);
             $(rowDetailId).attr('entities-id',itemDetail.entities_id);
             $(rowDetail).find(".order_detail_name").text(itemDetail.name);
-            $(rowDetail).find(".order_detail_price").text(itemDetail.price);
+            $(rowDetail).find(".order_detail_price").text($.number(itemDetail.price,0, ',' ));
             $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
             $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
             $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
@@ -784,7 +790,7 @@
                         //add id detail =null for row
                         $(rowDetailId).attr('order-detail-id',"");
                         $(rowDetail).find(".order_detail_name").text(objFood.entities_name);
-                        $(rowDetail).find(".order_detail_price").text(objFood.entities_price);
+                        $(rowDetail).find(".order_detail_price").text($.number(objFood.entities_price,0, ',' ));
                         $(rowDetail).find(".img-detail").attr("src",objFood.entities_image);
                         $(rowDetail).find(".quantity-detail").val(1);
                         $(rowDetail).find(".quantity-detail").attr('data-num_product',1);

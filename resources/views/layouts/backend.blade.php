@@ -121,9 +121,9 @@
                                  <ul class="nav child_menu">
                                     <li><a href="{{route('getTypeTable')}}">Table Type</a>
                                     </li>
+                                    <li><a href="{{route('getFloor')}}">Floor</a></li>
                                     <li><a href="{{route('getTable')}}">Table</a>
                                     </li>
-                                    <li><a href="{{route('getFloor')}}">Floor</a></li>
                                     <li><a href="{{route('editStore')}}">My Store</a>
                                     </li>
                                 </ul>

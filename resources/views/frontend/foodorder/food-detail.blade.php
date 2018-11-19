@@ -25,6 +25,9 @@
 		box-shadow: none;
 		opacity: .65;
 	}
+	.item_price,.js-name-detail,.js-addcart-detail{
+		font-family: "Times New Roman", Times, serif;
+	}
 	</style>
 </head>
 <body>
@@ -90,7 +93,7 @@
 									</div>
 
 									<button class="flex-c-m stext-101 cl0 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
-										Add to cart
+										Chọn món
 									</button>
 								</div>
 							</div>	
