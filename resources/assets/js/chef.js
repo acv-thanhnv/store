@@ -30,10 +30,10 @@ function pushToOrderListTable(result) {
 		let foodName = result.foodDetails[i].name
 		let quantity = result.foodDetails[i].quantity
 		let foodStatus = result.foodDetails[i].status
-		let cooked = 0
+		let cooked = result.foodDetails[i].cooked
 		$('#foodlist-'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
 		if ($('#foodlist-'+storeId+'-'+orderId+'-'+foodId)[0]) {
-			$('#foodlist-'+storeId+'-'+orderId+'-'+foodId+' td').eq(3).html(quantity)
+			$('#foodlist-'+storeId+'-'+orderId+'-'+foodId+' td').eq(3).html(quantity-cooked)
 		} else {
 			if (priority!=='Normal') {
 				output='<tr id="foodlist-'+storeId+'-'+orderId+'-'+foodId+'" class="vip foodlist foodlist-'+storeId+'-'+orderId+'"> <td class="food food-left"><span>'+foodName+'</span></td> <td>#HĐ '+orderId+'</td> <td><span class="badge badge-secondary">'+priority+'</span></td> <td>'+quantity+'</td> </tr>'
@@ -417,6 +417,9 @@ var pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
 
 var order2kitchen = pusher.subscribe(md5(storeId)+'-'+Order2Kitchen);
 order2kitchen.bind(Order2Other, function(res) {
+	/*console.log('start')
+	console.log(res)
+	console.log('end')*/
 	pushToOrderListTable(res)
 	pushToWaiterTable(res)
 	/*for (var i in res.foodDetails) {
