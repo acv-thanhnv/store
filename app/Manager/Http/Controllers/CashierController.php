@@ -1,29 +1,31 @@
 <?php
 
 namespace App\Manager\Http\Controllers;
-
-use App\Core\Common\OrderConst;
 use App\Core\Common\FoodStatusValue;
+use App\Core\Common\OrderConst;
 use App\Core\Common\OrderStatusValue;
+use App\Core\Dao\SDB;
 use App\Core\Events\Customer2CashierPusher;
+use App\Core\Events\OrderStatusPusherEvent;
+use App\Core\Events\Other2OrderManagerPusher;
 use App\Core\Events\PaymentDonePusher;
 use App\Core\Events\RollbackCashierPusher;
-use App\Core\Events\Other2OrderManagerPusher;
-
-use Illuminate\Http\Request; 
-use Pusher\Pusher;
+use App\Core\Events\TableEvent;
+use App\Core\Helpers\CommonHelper;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Pusher\Pusher;
 
 class CashierController extends Controller
 {
 	public function index($storeId) {
 		return view('frontend/cashier3/index', [
 			'storeId' => $storeId,
-            'WaiterToWaiterChannel' => OrderConst::WaiterToWaiterChannel,
-            'Customer2Order' => OrderConst::Customer2Order,
-            'Order2Cashier' => OrderConst::Order2Cashier,
-            'Order2Kitchen' => OrderConst::Order2Kitchen,
-            'Order2Other' => OrderConst::Order2Other
+			'WaiterToWaiterChannel' => OrderConst::WaiterToWaiterChannel,
+			'Customer2Order' => OrderConst::Customer2Order,
+			'Order2Cashier' => OrderConst::Order2Cashier,
+			'Order2Kitchen' => OrderConst::Order2Kitchen,
+			'Order2Other' => OrderConst::Order2Other
 		]);
 	}
 
@@ -39,6 +41,7 @@ class CashierController extends Controller
 		$i=0;
 
 		for ($i=0; $i<count($listOrderId); $i++) {
+			$orderId = $listOrderId[$i];
 			$rollback = DB::table('store_rollback_cashier')->insert(
 				[
 					'store_id' => $storeId,
@@ -56,7 +59,15 @@ class CashierController extends Controller
 			->where('store_order.id',$listOrderId[$i])
 			->get();
 
+			$location_id  = $orderDetails[0]->location_id;
+			$access_token = $orderDetails[0]->access_token;
+
+			//event ẩn order ở order đi
 			event(new Other2OrderManagerPusher($storeId, $orderDetails[0], null) );
+			//call event bind table color
+			event(new TableEvent($storeId,$location_id));
+			//event clear local storage của cus
+			event(new OrderStatusPusherEvent($access_token,$orderId,null,1,null));
 		}
 
 		if ($res) {
@@ -81,7 +92,31 @@ class CashierController extends Controller
 		->where('order_id', $orderId)
 		->delete();
 
-		if ($res&&$res2) event(new RollbackCashierPusher($storeId));
+		$arrOrder = SDB::table('store_order as order')
+		->join('store_order_status as status','status.value','=','order.status')
+		->where('order.id',$orderId)
+		->select('order.*','status.name as status_name')
+		->get();
+
+		$arrOrderDetail = SDB::table('store_order_detail')
+		->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
+		->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
+		->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
+		->where('store_order_detail.order_id',$orderId)
+		->get();
+		foreach($arrOrderDetail as $obj){
+			$obj->src = CommonHelper::getImageSrc($obj->image);
+		}
+
+		if ($res&&$res2) {
+			event(new RollbackCashierPusher($storeId));
+			//call pusher when order, status food change
+			event(new OrderStatusPusherEvent($arrOrder[0]->access_token,$arrOrder[0],$arrOrderDetail,null,OrderConst::has_rollBack));
+        	//call event send to Order
+			event(new Other2OrderManagerPusher($storeId,$arrOrder[0],$arrOrderDetail));
+        	//call event bind table color
+			event(new TableEvent($storeId,$arrOrder[0]->location_id));
+		}
 		return $res;
 	}
 }
