@@ -27,30 +27,21 @@ class CashierController extends Controller
 		]);
 	}
 
-	public function test(Request $request) {
-		$storeId = $request->storeId;
-		$orderId = $request->orderId;
-		event(new Customer2CashierPusher(
-			$storeId,
-			$orderId
-		));
-	}
-
 	public function paymentDoneByOrder(Request $request) {
 		$storeId = $request->storeId;
 		$listOrderId = $request->listOrderId;
-		$beforeStatus = $request->beforeStatus;
+		$listBeforeStatus = $request->listBeforeStatus;
 		$res = DB::table('store_order')
 		->where('store_order.store_id', $storeId)
 		->whereIn('store_order.id', $listOrderId)
 		->update(['store_order.status' => OrderStatusValue::Pay ]);
 
-		foreach ($listOrderId as $orderId) {
+		for ($i=0; $i<count($listOrderId); $i++) {
 			$rollback = DB::table('store_rollback_cashier')->insert(
 				[
 					'store_id' => $storeId,
-					'order_id' => $orderId,
-					'before_status' => $beforeStatus
+					'order_id' => $listOrderId[i],
+					'before_status' => $listBeforeStatus[i]
 				]
 			);
 
@@ -67,7 +58,7 @@ class CashierController extends Controller
 		}
 
 		if ($res) {
-			event(new PaymentDonePusher($storeId, $listOrderId, $beforeStatus));
+			event(new PaymentDonePusher($storeId, $listOrderId, $listBeforeStatus));
 			/*event(new Other2OrderManagerPusher($storeId,$orderDetails[0],null));*/
 		}
 		return $res;
