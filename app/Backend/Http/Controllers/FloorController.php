@@ -27,7 +27,7 @@ class FloorController
         $this->floorService   = $floorService;
     }
     public function getMyFloor(Request $request){
-        $storeId = 1;
+        $storeId = CommonHelper::getStoreId();;
         $floor= $this->floorService->getMyFloor($storeId);
         $result = new DataResultCollection();
         $result->status = SDBStatusCode::OK;

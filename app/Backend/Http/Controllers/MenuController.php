@@ -42,6 +42,7 @@ class MenuController
         $validator          = Validator::make($request->all(),$rule);
         $obj["store_id"]    = CommonHelper::getStoreId();
         $obj["name"]        = $request->name;
+        $obj["priority"]        = $request->priority;
         $obj["description"] = $request->description;
         if(!$validator->fails()){
             $this->service->addMenu($obj);
@@ -72,6 +73,7 @@ class MenuController
             $obj->id          = $request->id;
             $obj->name        = $request->name;
             $obj->description = $request->description;
+            $obj->priority    = $request->priority;
             $this->service->editMenu($obj);
             $result->status   = SDBStatusCode::OK;
             $result->message  = 'Success';
