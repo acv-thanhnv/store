@@ -115,10 +115,18 @@ function pushToOrderListTable(result) {
 		} else {
 			if (priority !== 'Normal') {
 				output = '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="vip foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td>#HĐ ' + orderId + '</td> <td><span class="badge badge-secondary">' + priority + '</span></td> <td>' + quantity + '</td> </tr>';
-				$('#order-list').find('.vip:last').after(output);
+				if ($('#order-list').find('.vip:last')[0]) {
+					$('#order-list').find('.vip:last').after(output);
+				} else {
+					loadOrderListTable();
+				}
 			} else {
 				output = '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="normal foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td>#HĐ ' + orderId + '</td> <td></td> <td>' + quantity + '</td> </tr>';
-				$('#order-list').find('.normal:last').after(output);
+				if ($('#order-list').find('.normal:last')[0]) {
+					$('#order-list').find('.normal:last').after(output);
+				} else {
+					loadOrderListTable();
+				}
 			}
 		}
 		if (foodStatus == 2) $('#foodlist-' + storeId + '-' + orderId + '-' + foodId).addClass('hidden');else $('#foodlist-' + storeId + '-' + orderId + '-' + foodId).removeClass('hidden');
