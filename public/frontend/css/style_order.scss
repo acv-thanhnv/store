@@ -5,6 +5,7 @@ $im:!important;
 }
 
 .navbar {
+  border-radius: 0px;
   margin-bottom: 10px;
 }
 
@@ -75,7 +76,7 @@ $im:!important;
   }
   .content-left {
     width: 100%;
-    background-color: #F0F8FF;
+    background-color: #ebebeb;
     overflow-y: auto;
     overflow-x: hidden;
     margin-right: 5px;
@@ -139,9 +140,6 @@ $im:!important;
   .header-right {
     width: 100%;
     background-color: #0090da;
-    .nav-tabs {
-      padding-top: 4px;
-    }
     .dropdown-menu .line {
       border: solid 0.5px grey;
       opacity: 0.5;
@@ -152,12 +150,10 @@ $im:!important;
     }
   }
   .content-right {
-    box-shadow: -5px 0px 5px #B3B3B3;
     width: 100%;
     background-color: white;
     overflow-y: auto;
     overflow-x: hidden;
-    margin-right: 5px;
     min-height: calc(100vh - 46px);
     max-height: calc(100vh - 46px);
 
@@ -177,7 +173,6 @@ $im:!important;
   }
 }
 .content-right{
-  padding: 0px 10px;
   .order-header{
     padding    : 5px 10px;
     color      : white;
