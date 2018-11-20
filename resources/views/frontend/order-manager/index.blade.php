@@ -226,7 +226,7 @@
             var row_order = $('.entities-row-order[data-order-id="'+data.orderId+'"]').next();
             var row_order_detail = $(row_order).find('.row-order-detail[order-detail-id="'+data.idDetail+'"]');
             $(row_order_detail).find('.food_status').text(data.foodStatusName);
-            $(row_order_detail).find('.cooked').text('/'+data.cooked);
+            $(row_order_detail).find('.cooked').text(data.cooked+' /');
             $(row_order_detail).find('.food_status').addClass('food_status_'+data.foodStatus);
         });
         //order event
@@ -514,7 +514,7 @@
                         $(rowDetail).find(".has_change").css('display','block');
                     }
                     if(itemDetail.cooked>0){
-                        $(rowDetail).find(".cooked").text('/'+itemDetail.cooked);
+                        $(rowDetail).find(".cooked").text(itemDetail.cooked+' /');
                     }
                     $(rowDetail).find(".food_status").text(itemDetail.status_name);
                     $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
@@ -558,7 +558,7 @@
                         $(rowDetail).find(".has_change").css('display','block');
                     }
                     if(itemDetail.cooked>0){
-                        $(rowDetail).find(".cooked").text('/'+itemDetail.cooked);
+                        $(rowDetail).find(".cooked").text(itemDetail.cooked+' /');
                     }
                     $(rowDetail).find(".food_status").text(itemDetail.status_name);
                     $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
@@ -596,7 +596,7 @@
                     $(rowDetail).find(".has_change").css('display','block');
                 }
                 if(itemDetail.cooked>0){
-                    $(rowDetail).find(".cooked").text('/'+itemDetail.cooked);
+                    $(rowDetail).find(".cooked").text(itemDetail.cooked+' /');
                 }
                 $(rowDetail).find(".food_status").text(itemDetail.status_name);
                 $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
@@ -639,7 +639,7 @@
             //nếu đã nấu lớn hơn 0 thì hiện cooked
             if(itemDetail.cooked>0){
                 console.log("cooked");
-                $(rowDetail).find(".cooked").text('/'+itemDetail.cooked);
+                $(rowDetail).find(".cooked").text(itemDetail.cooked+' /');
             }
             $(rowDetail).find(".food_status").attr('food-status',itemDetail.status);
             $(rowDetail).find(".delete-order-detail").attr('data-order-detail',itemDetail.id);

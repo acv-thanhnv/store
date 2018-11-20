@@ -158,7 +158,7 @@
 		<div class="header-cart flex-col-l p-l-15">
 			<div class="header-cart-title flex-w flex-sb-m p-b-8">
 				<span class="mtext-103 cl2">
-					Your Cart
+					Your Cart <i class="fa fa-shopping-cart"></i>
 				</span>
 
 				<div class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-cart">
