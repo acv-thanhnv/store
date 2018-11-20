@@ -10,44 +10,36 @@
         {{--================================= Left ===========================--}}
         <div class="wraper-left col-sm-6 nopad">
 
-            <div id="left-nav-tabs" class="header-left">
-                <ul class="nav nav-tabs">
-                    <li class="active tab_table tab-search" data-tab='table'>
-                        <a href="#home" data-toggle="tab">Table/Floor</a>
-                    </li>
-                    <li class="tab_menu tab-search" data-tab='menu'>
-                        <a href="#menu" data-toggle="tab">Menu</a>
-                    </li>
-
-                    <li class="col-md-7 col-sm-6">
-                        <form action="#" method="#" role="search">
-                            <div class="input-group">
-                                <input class="form-control" placeholder="Search . . ." name="srch-term"
-                                       id="ed-srch-term" type="text">
-                                <div class="input-group-btn">
-                                    <button type="submit" id="searchbtn">
-                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </li>
-
-                </ul>
+            <div id="left-nav-tabs" class="header-left row">
+                <div class="col-md-5">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item ">
+                            <a class="nav-link active" data-toggle="tab" href="#home">Table/Floor</a>
+                        </li>
+                        <li class="nav-item tab_menu tab-search">
+                            <a class="nav-link" data-toggle="tab" href="#menu">Menu</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-7 search-form">
+                        <input class="form-control" placeholder="&#xF002; Tìm kiếm bàn/món ăn..." style="font-family:Arial, FontAwesome" name="srch-term"
+                        id="ed-srch-term" type="text">
+                        <button type="submit" class="btn btn-primary" id="searchbtn">
+                            <i class="fa fa-mail-forward"></i>
+                        </button>
+                </div>
             </div>
             <div class="tab-content content-left">
-                <div id="home" class="tab-pane fade in active">
+                <div id="home" class="tab-pane active">
                     <div class="room">
-                        <nav class="navbar navbar-inverse">
                             <div class="container-fluid">
-                                <ul class="nav navbar-nav" id="floors">
-                                    <li class="item-floor active_floor"><a href="javascript:void(0);" item-floor-id="">All</a></li>
+                                <ul  id="floors">
+                                    <li class="item-floor li-floor active_floor"><a href="javascript:void(0);" class="getTable" item-floor-id="">All</a></li>
                                     {{--content floor--}}
                                 </ul>
                                 {{--content floor include--}}
                                 @include('frontend.order-manager.floors')
                             </div>
-                        </nav>
                     </div>
 
                     <div id="table-list" class="row">
@@ -353,12 +345,28 @@
 
     function genFloors(data) {
         var itemFloor = $('#floors');
-        data.data.forEach(function (obj) {
-            var itemFloorTemp = $('#floors-template').contents().clone();
-            $(itemFloorTemp).find('a').text(obj.name);
-            $(itemFloorTemp).find('a').attr('item-floor-id', obj.id);
-            $(itemFloor).append($(itemFloorTemp));
-        })
+        var numberFloor = '{{\App\Core\Common\OrderConst::numberFloor}}';
+        var length = data.data.length;
+        console.log(numberFloor);
+        if(length<numberFloor){
+            numberFloor = length;
+        }
+        for(var i=0; i<numberFloor;i++){
+            var li_floor = $('#floors-template').contents().clone()[1];
+            $(li_floor).find('a').text(data.data[i].name);
+            $(li_floor).find('a').attr('item-floor-id', data.data[i].id);
+            $(itemFloor).append($(li_floor));
+        }
+        if(length>=numberFloor){
+            var dropdown_floor = $('#floors-template').contents().clone()[3];
+            console.log(dropdown_floor);
+            for(var i=numberFloor;i<length;i++){
+                var li_floor = '<li class="li-floor"><a class="dropdown-item getTable" item-floor-id="'+data.data[i].id+'"href="javascript:void(0);">'+data.data[i].name+'</a></li>';
+                var dropdown_li = $(dropdown_floor).contents()[3];
+                $(dropdown_li).append($(li_floor));
+            }
+            $(itemFloor).append($(dropdown_floor));
+        }
     }
 
     //======================GET TABLE============================
@@ -408,15 +416,13 @@
             $(itemTable).append($(itemTableTemp));
         })
     }
-
     //======================GET TABLE BY FLOOR============================
-    $(document).on('click', '.item-floor', function () {
+    $(document).on('click', '.li-floor', function (e) {
         $('.item-floor').removeClass('active_floor');
         $(this).addClass('active_floor');
-        idFloor = $(this).find('a').attr('item-floor-id');
+        idFloor = $(this).find('.getTable').attr('item-floor-id');
         getTable(idFloor);
     })
-
     //======================click table=========================
     $(document).on("click", ".wrap-table", function () {
         idTable = $(this).find(".table-name").attr('item-table-id');

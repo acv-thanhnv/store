@@ -66,6 +66,8 @@ class LoggingConst
 }
 class OrderConst{
 
+    const numberFloor                = 5;
+
     const has_delete                 = 'yes';
 
     const has_rollBack               = 'yes';
