@@ -197,12 +197,12 @@ function loadCashierTable() {
 				output += '<tr> <td class="food">' + name + '</td> <td>' + price.toLocaleString('us') + '</td> <td>' + quantity + '</td> <td>' + total.toLocaleString('us') + '</td> </tr>';
 			}
 			output += '</tbody> <tfoot>';
-			output += '<tr> <td colspan="2"></td> <td class="ta-right"> Phụ phí: </td> <td>' + locationFee.toLocaleString('us') + '</td> </tr>';
-			output += '<tr> <td colspan="2"></td> <td class="ta-right"> Tổng tiền: </td> <td>' + (sum + locationFee).toLocaleString('us') + '</td> </tr>';
+			output += '<tr> <td colspan="2"></td> <td class="ta-right"> Phụ phí: </td> <td>' + parseInt(locationFee).toLocaleString('us') + '</td> </tr>';
+			output += '<tr> <td colspan="2"></td> <td class="ta-right"> Tổng tiền: </td> <td>' + parseInt(sum + locationFee).toLocaleString('us') + '</td> </tr>';
 			output += '<tr class="tax"> <td colspan="2"></td> <td class="ta-right"> Thuế: </td> <td>' + tax + '</td> </tr>';
 			output += '<tr class="discount"> <td colspan="2"></td> <td class="ta-right"> Chiết khấu: </td> <td>' + discount + '</td> </tr>';
-			output += '<tr class="total"> <td colspan="2"></td> <td class="ta-right"> Thành tiền: </td> <td>' + ((sum + locationFee) * 1.1).toLocaleString('us') + '</td> </tr>';
-			output += '<tr> <td colspan="4"> <div class="col-xs-12"> <div class="panel-group"> <div class=""> <div> <div class="btn-group pull-left"> <button class="btn btn-primary btn-lg pdf">In hóa đơn</button> </div> <div class="btn-group pull-center"> <button class="btn btn-primary btn-lg payment">Thanh toán: ' + ((sum + locationFee) * 1.1).toLocaleString('us') + '</button> </div> <div class="btn-group pull-right"> <button class="btn btn-primary btn-lg excel">Xuất ra Excel</button> </div> </div> </div> </div> </div> </td> </tr>';
+			output += '<tr class="total"> <td colspan="2"></td> <td class="ta-right"> Thành tiền: </td> <td>' + parseInt((sum + locationFee) * 1.1).toLocaleString('us') + '</td> </tr>';
+			output += '<tr> <td colspan="4"> <div class="col-xs-12"> <div class="panel-group"> <div class=""> <div> <div class="btn-group pull-left"> <button class="btn btn-primary btn-lg pdf">In hóa đơn</button> </div> <div class="btn-group pull-center"> <button class="btn btn-primary btn-lg payment">Thanh toán: ' + parseInt((sum + locationFee) * 1.1).toLocaleString('us') + '</button> </div> <div class="btn-group pull-right"> <button class="btn btn-primary btn-lg excel">Xuất ra Excel</button> </div> </div> </div> </div> </div> </td> </tr>';
 			output += '</tfoot></table>';
 			output += '</div> </div> </div>';
 		}
@@ -505,7 +505,7 @@ $(document).on("click", "#in-tat-ca", function (e) {
 		output += '</tbody> <tfoot>';
 		output += '<tr> <td colspan="2"></td> <td class="ta-right"> Phụ phí: </td> <td>' + locationFee.toLocaleString('us') + '</td> </tr>';
 		output += '<tr> <td colspan="2"></td> <td class="ta-right"> Tổng tiền: </td> <td>' + (sum + locationFee).toLocaleString('us') + '</td> </tr>';
-		output += '<tr class="total"> <td colspan="2"></td> <td class="ta-right"> Thành tiền: </td> <td>' + thanhTien.toLocaleString('us') + '</td> </tr>';
+		output += '<tr class="total"> <td colspan="2"></td> <td class="ta-right"> Thành tiền: </td> <td>' + parseInt(thanhTien).toLocaleString('us') + '</td> </tr>';
 		output += '</tfoot></table>';
 		$('#multi-payments').html(output);
 		html2canvas($('#multi-payment')[0], {
