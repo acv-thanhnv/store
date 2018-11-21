@@ -32,6 +32,7 @@ class FoodService extends BaseService implements FoodServiceInterface
                 ->where('store_location.floor_id','=',$floor->id)
                 ->get();
         }
+        dd($list);
         return $list;
     }
     //====================get food===============
