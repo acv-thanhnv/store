@@ -76,6 +76,7 @@ class FoodService extends BaseService implements FoodServiceInterface
     {
         $list = SDB::table('store_floor')
             ->where('store_id', $idStore)
+            ->orderby('name','asc')
             ->get();
         return $list;
     }
@@ -89,12 +90,14 @@ class FoodService extends BaseService implements FoodServiceInterface
                 ->join('store_floor', 'store_location.floor_id','=', 'store_floor.id')
                 ->where('store_floor.store_id', $idStore)
                 ->where('store_location.floor_id', $idFloor)
+                ->orderby('location_name','asc')
                 ->get();
         }else {
             $list = SDB::table('store_location')
                 ->join('store_floor','store_location.floor_id','=','store_floor.id')
                 ->select('store_location.*','store_floor.name as floor_name')
                 ->where('store_floor.store_id', $idStore)
+                ->orderby('store_location.name','asc')
                 ->get();
         }
         return $list;

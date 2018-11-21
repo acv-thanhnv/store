@@ -11,7 +11,7 @@
     <link href="frontend/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('backend/template1/modal/css/iziModal.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/toast.css')}}">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!--Jquery confirm -->
     <link rel="stylesheet" type="text/css" href="css/lib/jquery-confirm.css">
     <!--Toast css-->

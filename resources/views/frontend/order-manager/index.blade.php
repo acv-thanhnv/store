@@ -6,27 +6,26 @@
     <link href="{{ asset('frontend/css/style_order.css') }}" rel="stylesheet">
 @endsection
 @section('content')
-    <div class="wraper">
+    <div class="wraper row">
         {{--================================= Left ===========================--}}
         <div class="wraper-left col-sm-6 nopad">
-
             <div id="left-nav-tabs" class="header-left row">
                 <div class="col-md-5">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item ">
-                            <a class="nav-link active" data-toggle="tab" href="#home">Table/Floor</a>
+                        <li class="nav-item">
+                            <a class="nav-link active" data-tab='table' data-toggle="tab" href="#home">Table/Floor</a>
                         </li>
-                        <li class="nav-item tab_menu tab-search">
-                            <a class="nav-link" data-toggle="tab" href="#menu">Menu</a>
+                        <li class="nav-item tab_menu tab-search" data-tab='menu'>
+                            <a class="nav-link" data-tab='menu' data-toggle="tab" href="#menu">Menu</a>
                         </li>
                     </ul>
                 </div>
                 <div class="col-md-7 search-form">
                         <input class="form-control" placeholder="&#xF002; Tìm kiếm bàn/món ăn..." style="font-family:Arial, FontAwesome" name="srch-term"
                         id="ed-srch-term" type="text">
-                        <button type="submit" class="btn btn-primary" id="searchbtn">
+                        <span id="searchbtn">
                             <i class="fa fa-mail-forward"></i>
-                        </button>
+                        </span>
                 </div>
             </div>
             <div class="tab-content content-left">
@@ -34,7 +33,7 @@
                     <div class="room">
                             <div class="container-fluid">
                                 <ul  id="floors">
-                                    <li class="item-floor li-floor active_floor"><a href="javascript:void(0);" class="getTable" item-floor-id="">All</a></li>
+                                    <li class="item-floor li-floor active_floor"><a href="javascript:void(0);" class="getTable" item-floor-id="">Tất cả</a></li>
                                     {{--content floor--}}
                                 </ul>
                                 {{--content floor include--}}
@@ -50,105 +49,75 @@
                 </div>
                 <div id="menu" class="tab-pane fade">
                     <div class="category">
-                        <nav class="navbar navbar-inverse">
                             <div class="container-fluid">
-                                <ul class="nav navbar-nav" id="entity-menu">
-                                    <li class="item-menu"><a href="javascript:void(0);" item-menu-id="*">All</a></li>
+                                <ul  id="entity-menu">
+                                    <li class="item-menu active_menu li-menu"><a href="javascript:void(0);" class="getMenu" item-menu-id="*">Tất cả</a></li>
                                     {{--content menu--}}
 
                                 </ul>
                                 {{--content menu include--}}
                                 @include('frontend.order-manager.menu')
                             </div>
-                        </nav>
-
                     </div>
 
-
-                    <div id="list-entities">
+                    <div id="list-entities" class="row">
                         {{--content entities--}}
                     </div>
                     {{--content entities include--}}
                     @include('frontend.order-manager.entities')
                 </div>
             </div>
-
         </div>
-
-    </div>
-
-    </div>
-    {{--================================= Right ===========================--}}
-    <div class="wraper-right col-sm-6">
-        <div class="header-right">
-            <ul class="nav nav-tabs">
-                <li class="active">
-                    <a href="#"><span id="table-id">Bàn</span>/<span id="floor-id">Tầng</span></a>
-                </li>
-                <li>
-                    <a href="#" class="fa fa-plus new_order"> New Order</a>
-                </li>
-                <li style="float: right; margin-right: 10px;">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span
-                                    class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" style="top:43px;right:-10px;">
-                            <li><a id="move_table" class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal"><span
-                                            class="glyphicon glyphicon-retweet"></span> Chuyển Bàn</a></li>
-                            <li class="line"></li>
-                            <li><a id="merge_table" class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal2"><span
-                                            class="glyphicon glyphicon-link" aria-hidden="true"></span> Ghép Bàn</a>
-                            </li>
-                            <li class="line"></li>
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> Liên Hệ Thu Ngân
-                                </a>
-                            </li>
-                        </ul>
+        
+        {{--================================= Right ===========================--}}
+        <div class="wraper-right col-sm-6">
+            <div class="header-right row">
+                <div class="col-md-8">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item ">
+                            <a class="nav-link active" data-toggle="tab" href="#order">
+                                <span id="table-id">Bàn</span> / <span id="floor-id">Tầng</span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" data-toggle="tab" href="#request">Request</a>
+                        </li>
+                        <li class="nav-item new_order">
+                            <a class="nav-link">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-content content-right">
+                <div id="order" class="tab-pane active">
+                    <div class="row order-header">
+                        <div class="col-md-1 order-id">
+                            <i class="fa fa-sort-numeric-asc"></i>
+                        </div>
+                        <div class="col-md-4 order-date">
+                            <i class="fa fa-clock-o"></i> Datetime
+                        </div>
+                        <div class="col-md-4 order-status">
+                            <i class="fa fa-newspaper-o"></i> Status
+                        </div>
+                        <div class="col-md-3 order-action">
+                            <i class="fa fa-slideshare"></i> Action
+                        </div>
                     </div>
-                </li>
-            </ul>
-
-        </div>
-        <div class="content-right">
-                <div class="row order-header">
-                    <div class="col-md-1 order-id">Id</div>
-                    <div class="col-md-4 order-date">Datetime</div>
-                    <div class="col-md-4 order-status">Status</div>
-                    <div class="col-md-3 order-action">Action</div>
+                    <div id="entities-order">
+                    </div>
                 </div>
-                <div id="entities-order">
+                <div id="request" class="tab-pane fade">
+                    Tab request
                 </div>
-
-            {{--content entities-order include--}}
-            @include('frontend.order-manager.entities-order')
-            @include('frontend.order-manager.entities-detail')
-
-            {{--<div class="table table-hover" id="tbl_list_order_detail" style="display: block">--}}
-                {{--<div class="wrap_order_detail_header">--}}
-                {{--<div class="order_detail_header">--}}
-                    {{--<div class="order_detail_image text-center">Image</div>--}}
-                    {{--<div class="order_detail_name text-center">Name</div>--}}
-                    {{--<div class="order_detail_price text-center">Price</div>--}}
-                    {{--<div class="order_detail_quantity text-center">Quantity</div>--}}
-                    {{--<div class="order_detail_subtotal text-center">Subtotal</div>--}}
-                    {{--<div class="order_detail_action text-center">Action</div>--}}
-                {{--</div>--}}
-                {{--</div>--}}
-                {{--<div id="entities-detail">--}}
-                {{--//content entities-detail--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--//content entities-detail include--}}
-            {{--@include('frontend.order-manager.entities-detail')--}}
-
+            </div>
         </div>
-        @include('frontend.order-manager.table_manager')
-
     </div>
-    </div>
+@include('frontend.order-manager.entities-order')
+@include('frontend.order-manager.entities-detail')
+@include('frontend.order-manager.table_manager')
 @endsection
 @section('javascript')
 <script src="{{asset('frontend/js/order.js')}}"></script>
@@ -263,12 +232,26 @@
 
     function genMenuList(data) {
         var itemMenu = $('#entity-menu');
-        data.data.forEach(function (obj) {
-            var itemMenuTemp = $('#entity-menu-template').contents().clone();
-            $(itemMenuTemp).find('a').text(obj.name);
-            $(itemMenuTemp).find('a').attr('item-menu-id', obj.id);
-            $(itemMenu).append($(itemMenuTemp));
-        })
+        var numberMenu = '{{\App\Core\Common\OrderConst::numberMenu}}';
+        var length = data.data.length;
+        if(length<numberMenu){
+            numberMenu = length;
+        }
+        for(var i=0; i<numberMenu;i++){
+            var li_menu = $('#entity-menu-template').contents().clone()[1];
+            $(li_menu).find('a').text(data.data[i].name);
+            $(li_menu).find('a').attr('item-menu-id', data.data[i].id);
+            $(itemMenu).append($(li_menu));
+        }
+        if(length>numberMenu){
+            var dropdown_menu = $('#entity-menu-template').contents().clone()[3];
+            for(var i=numberMenu;i<length;i++){
+                var li_menu = '<li class="li-menu"><a class="dropdown-item getMenu" item-menu-id="'+data.data[i].id+'"href="javascript:void(0);">'+data.data[i].name+'</a></li>';
+                var dropdown_li = $(dropdown_menu).contents()[3];
+                $(dropdown_li).append($(li_menu));
+            }
+            $(itemMenu).append($(dropdown_menu));
+        }
     }
 
     //========================GET ENTITIES==========================
@@ -292,13 +275,16 @@
         $(listItem).empty();
         data.data.forEach(function (obj) {
             var listItemTemp = $('#list-entities-template').contents().clone();
-            $(listItemTemp).find('.entities_item').attr('entities-id', obj.id);
+            var title = $(listItemTemp)[1];
+            $(listItemTemp).find('.food-image').attr('alt', obj.name);
+            $(listItemTemp).find('.food-image').attr('src', obj.src);
+            $(title).attr('title', obj.name);
             $(listItemTemp).find('.entities_item').attr('entities-name', obj.name);
             $(listItemTemp).find('.entities_item').attr('entities-image', obj.src);
             $(listItemTemp).find('.entities_item').attr('entities-price', obj.price);
             $(listItemTemp).find('img').attr('src', obj.src);
-            $(listItemTemp).find('h6').text(obj.name);
-            $(listItemTemp).find('h5').text(obj.price);
+            $(listItemTemp).find('.food-items-name').text(obj.name);
+            $(listItemTemp).find('.food-items-price').text(obj.price);
 
             $(listItem).append($(listItemTemp));
         })
@@ -306,8 +292,11 @@
 
     //=====================GET ENTITIES BY MENU==========================
     //Click menu
-    $(document).on('click', '.item-menu', function () {
-        var idMenu = $(this).find('a').attr('item-menu-id');
+    $(document).on('click', '.li-menu', function () {
+        var idMenu = $(this).find('.getMenu').attr('item-menu-id');
+        $('.item-menu').removeClass('active_menu');
+        $('.li-menu').removeClass('active_menu');
+        $(this).addClass('active_menu');
         getEntitiesByMenu(idMenu, idStore);
     })
 
@@ -347,7 +336,6 @@
         var itemFloor = $('#floors');
         var numberFloor = '{{\App\Core\Common\OrderConst::numberFloor}}';
         var length = data.data.length;
-        console.log(numberFloor);
         if(length<numberFloor){
             numberFloor = length;
         }
@@ -359,7 +347,6 @@
         }
         if(length>=numberFloor){
             var dropdown_floor = $('#floors-template').contents().clone()[3];
-            console.log(dropdown_floor);
             for(var i=numberFloor;i<length;i++){
                 var li_floor = '<li class="li-floor"><a class="dropdown-item getTable" item-floor-id="'+data.data[i].id+'"href="javascript:void(0);">'+data.data[i].name+'</a></li>';
                 var dropdown_li = $(dropdown_floor).contents()[3];
@@ -419,6 +406,7 @@
     //======================GET TABLE BY FLOOR============================
     $(document).on('click', '.li-floor', function (e) {
         $('.item-floor').removeClass('active_floor');
+        $('.li-floor').removeClass('active_floor');
         $(this).addClass('active_floor');
         idFloor = $(this).find('.getTable').attr('item-floor-id');
         getTable(idFloor);
@@ -644,7 +632,6 @@
             $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
             //nếu đã nấu lớn hơn 0 thì hiện cooked
             if(itemDetail.cooked>0){
-                console.log("cooked");
                 $(rowDetail).find(".cooked").text(itemDetail.cooked+' /');
             }
             $(rowDetail).find(".food_status").attr('food-status',itemDetail.status);
@@ -721,7 +708,7 @@
     $(document).on('click','#searchbtn',function(e){
         e.preventDefault();
         var key = $("#ed-srch-term").val();
-        var tab = $(".tab-search.active").data('tab');
+        var tab = $(".nav-link.active").data('tab');
         $.ajax({
             url: '{{route("OrderSearch")}}',
             type: 'GET',
@@ -744,7 +731,7 @@
     $(document).on('click','.add_food',function(){
         $(this).find('.fa-plus').toggleClass('fa-minus');
         //show order tail
-        $(this).parents('.entities-row-order').next('.entities-row-detail').toggleClass('show');
+        $(this).parents('.entities-row-order').next('.entities-row-detail').toggleClass('show_detail');
         //add class to show which row is active
         $(this).parents('.entities-row-order').toggleClass('row_active');
     });

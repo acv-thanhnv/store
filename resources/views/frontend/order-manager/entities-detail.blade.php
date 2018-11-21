@@ -80,13 +80,22 @@
     }
     /* food status*/
     .food_status_0{
-        background-color: #337ab7;
+        color           : #004085;
+        background-color: #bfdbf9;
+        border-color    : #b8daff;
+        padding         : .5rem 0.6rem;
     }
     .food_status_1{
-        background-color: #5bc0de;
+        padding         : .5rem 0.6rem;
+        color           : #856404;
+        background-color: #f1e1af;
+        border-color    : #ffeeba;
     }
     .food_status_2{
-        background-color: #5cb85c;
+        color           : #155724;
+        background-color: #a7e6b6;
+        padding         : .5rem 0.6rem;
+        border-color    : #c3e6cb;
     }
     /* image css*/
     .order_detail_image{
@@ -100,7 +109,7 @@
     }
     .cooked{
         position: absolute;
-        top: -18px;
+        top: -20px;
         left: 26px;
         color: green;
         font-weight: bold;
@@ -116,7 +125,7 @@
                 <h5 class="name-detail"></h5>
             </div>
             <div class="col-md-2">
-                <span class="label food_status"></span>
+                <span class="badge badge-pill food_status"></span>
             </div>
             <div class="col-md-2 order_detail_price"></div>
             <div class="col-md-2 order_detail_quantity">
@@ -124,10 +133,9 @@
                 <span class="num-product-down"><i class="fa fa-minus"></i></span>
                 <input type="number" class="quantity-detail form-control text-center" value="1">
                 <span class="num-product-up"><i class="fa fa-plus"></i></span>
-                <span class="fa fa-star-o has_change"></span>
             </div>
             <div class="col-md-1 order_detail_action">
-                <button class="btn btn-danger btn-sm delete-order-detail"><i class="glyphicon glyphicon-trash"></i>
+                <button class="btn btn-danger btn-sm delete-order-detail"><i class="fa fa-trash-o"></i>
                 </button>
             </div>
         </div>
