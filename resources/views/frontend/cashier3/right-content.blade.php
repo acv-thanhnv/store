@@ -1,25 +1,18 @@
 <div class="row">
 	<div class="col-md-12 w-100">
 		<button class="btn btn-danger btn-lg">Mã đơn:
-			<center><span id="invoice-id" class="badge badge-secondary"></span></center>
+			<center>
+				<span id="invoice-id" class="badge badge-light">
+					< trống >
+				</span>
+			</center>
 		</button>
 		<div id="invoice-id-status" class="hidden"></div>
 		<div id="multi-payments"></div>
 
-		<!-- <button class="btn-group-cashier btn btn-danger btn-lg">Tổng tiền:
-			<span class="badge badge-secondary">100,000,000</span>
-		</button> -->
-		<!-- <button class="btn-group-cashier btn btn-danger">Thuế suất:
-			<span class="badge badge-secondary">15%</span>
-		</button>
-		<button class="btn-group-cashier btn btn-danger">Chiết khấu:
-			<span class="badge badge-secondary">5%</span>
-		</button> -->
 		<br>
 		<br>
 		<center>
-			<!-- <textarea name="" id="total" rows="2"></textarea>
-			<br> -->
 			<img src="/frontend/img/maid.png" style="height: 90%;width:90%" alt="">
 		</center>
 		<br>
