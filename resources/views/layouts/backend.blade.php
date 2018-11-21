@@ -49,9 +49,9 @@
             font-weight: bold;
         }
         #preview .thumb {
-            width : 300px;
+            width : 250px;
             min-height: 100px;
-            height: 200px;
+            height: 120px;
             margin: 0.2em -0.7em 0 0;
             border-radius: 20px;
             box-shadow: 5px 5px 2px 5px #D7C7C7;
@@ -71,6 +71,9 @@
         #preview .remove_img_preview:before {
             content:"\f057";
         }
+        .dis-none{
+            display: none;
+        }
     </style>
 </head>
 <?php
@@ -86,7 +89,6 @@
                 </div>
 
                 <div class="clearfix"></div>
-
                 <!-- menu profile quick info -->
                 <div class="profile clearfix">
                     <div class="profile_pic">
@@ -112,22 +114,16 @@
                                     <li>
                                         <a href="{{route('dashboardIndex')}}">Dashboard</a>
                                     </li>
-                                        <?php }?>
-                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('dashboardWaiter')==true){ ?>
-                                    <li><a href="{{route('dashboardWaiter')}}">Waiter</a></li><?php }?>
-                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('dashboardChef')==true){ ?>
-                                    <li><a href="{{route('dashboardChef')}}">Chef</a></li><?php }?>
-                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('dashboardClosedOrder')==true){ ?>
-                                    <li><a href="{{route('dashboardClosedOrder')}}">Closed order</a></li><?php }?>
-                                        <?php if(\App\Core\Helpers\AuthHelper::IsAccess('dashboardHistoryOrder')==true){ ?>
-                                    <li><a href="{{route('dashboardHistoryOrder')}}">History order</a></li><?php }?>
+                                    <?php }?>
                                 </ul>
                             </li>
                             <li><a><i class="fa fa-book"></i> Cửa hàng <span class="fa fa-chevron-down"></span></a>
                                  <ul class="nav child_menu">
-                                    <li><a href="{{route('getTable')}}">Table</a>
+                                    <li><a href="{{route('getTypeTable')}}">Table Type</a>
                                     </li>
                                     <li><a href="{{route('getFloor')}}">Floor</a></li>
+                                    <li><a href="{{route('getTable')}}">Table</a>
+                                    </li>
                                     <li><a href="{{route('editStore')}}">My Store</a>
                                     </li>
                                 </ul>
@@ -139,7 +135,7 @@
                                         <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getType')==true){ ?>
                                     <li><a href="{{route('getType')}}">Mẫu món ăn</a></li><?php }?>
                                         <?php if(\App\Core\Helpers\AuthHelper::IsAccess('getFood')==true){ ?>
-                                    <li><a href="{{route('getFood')}}">Món ăn</a></li>
+                                    <li><a href="{{route('getFoodManager')}}">Món ăn</a></li>
                                         <?php }?>
                                 </ul>
                             </li>
@@ -157,7 +153,9 @@
                                 <ul class="nav child_menu">
                                     <li><a href="{{route('getListStore')}}">List Store</a>
                                     </li>
-
+                                    
+                                    <li><a href="{{route('addStoreManager')}}">Add Store</a>
+                                    </li>
                                 </ul>
                             </li>
 

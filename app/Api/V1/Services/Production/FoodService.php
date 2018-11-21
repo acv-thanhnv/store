@@ -9,9 +9,11 @@
 namespace App\Api\V1\Services\Production;
 
 use App\Api\V1\Services\Interfaces\FoodServiceInterface;
+use App\Core\Common\FoodConst;
 use App\Core\Common\OrderConst;
 use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
+use App\Core\Common\TableConst;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
 use App\Core\Events\OrderChefPusherEvent;
@@ -26,7 +28,7 @@ class FoodService extends BaseService implements FoodServiceInterface
     {
         $list = SDB::table('store_floor')
             ->where('store_floor.store_id','=',$storeId)
-            ->get();
+            ->paginate(TableConst::TablePerPage);
         foreach ($list as $floor){
             $floor->location = SDB::table('store_location')
                 ->where('store_location.floor_id','=',$floor->id)
@@ -35,24 +37,29 @@ class FoodService extends BaseService implements FoodServiceInterface
         dd($list);
         return $list;
     }
-    //====================get food===============
-    public function getFoodByStoreId($storeId = null)
-    {
-        $list = SDB::table("view_entity_infor")
-            ->where("store_id", $storeId)
-            ->select('*')
-            ->get();
-        return $this->buildFoodListByStoreId($list, $storeId);
-    }
 
     //===================get food by menu========================
     public function getFoodByMenuId($menuId = null, $storeId = null)
     {
-        $list = SDB::table("view_entity_infor")
-            ->whereRaw("? IS NOT NULL AND store_id = ?  AND (? IS NULL OR ? ='' OR ? = menu_id)", [$storeId, $storeId, $menuId, $menuId, $menuId])
-            ->select('*')
-            ->get();
-        return $this->buildFoodListByMenu($list, $menuId, $storeId);
+        if($menuId=='*'){
+            $list = SDB::table("store_entities as en")
+                    ->join('store_menu as menu','menu.id','=','en.menu_id')
+                    ->where('menu.store_id',$storeId)
+                    ->select('en.*')
+                    ->paginate(FoodConst::foodPerPage);
+        }else{
+            $list = SDB::table("store_entities as en")
+                    ->join('store_menu as menu','menu.id','=','en.menu_id')
+                    ->where('menu.store_id',$storeId)
+                    ->where('menu.id',$menuId)
+                    ->select('en.*')
+                    ->paginate(FoodConst::foodPerPage);
+        }
+        foreach($list as $obj){
+            $obj->src = CommonHelper::getImageSrc($obj->image);
+            $obj->price = number_format($obj->price);
+        }
+        return $list;
     }
 
     //===================get menu========================
@@ -110,16 +117,13 @@ class FoodService extends BaseService implements FoodServiceInterface
             $order_detail ->detail = SDB::table('store_order_detail as o_detail')
                 ->join ('store_entities','o_detail.entities_id','=','store_entities.id')
                 ->join('store_order_detail_status as s_detail','s_detail.value','=','o_detail.status')
-                ->select('o_detail.*','store_entities.name','store_entities.image','store_entities.price','s_detail.status_name')
+                ->select('o_detail.*','store_entities.name','store_entities.image','store_entities.price','s_detail.status_name','o_detail.cooked')
+                ->orderBy('o_detail.id','asc')
                 ->where('o_detail.order_id','=', $order_detail->id)
                 ->get();
             foreach($order_detail ->detail as $foodItem){
                 //check avatar
-                if($foodItem->image==NULL){
-                    $foodItem->src = url('/')."/common_images/no-store.png";
-                }else{
-                    $foodItem->src = CommonHelper::getImageUrl($foodItem->image);
-                }
+                $foodItem->src = CommonHelper::getImageSrc($foodItem->image);
             }
         };
         return $order;
@@ -147,7 +151,7 @@ class FoodService extends BaseService implements FoodServiceInterface
         $result = array();
         if (!empty($listEntity)) {
             foreach ($listEntity as $itemEntity) {
-                $itemEntity->image = CommonHelper::getImageUrl($itemEntity->image);
+                $itemEntity->src = CommonHelper::getImageUrl($itemEntity->image);
                 $itemEntity->price = number_format($itemEntity->price);
                 $foods = $itemEntity;
                 $foods->props = array();

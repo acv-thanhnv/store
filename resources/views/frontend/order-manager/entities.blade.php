@@ -13,24 +13,24 @@
         height: 160px;
         border: 1px solid #9d9d9d;
         border-radius: 5px;
-        box-shadow: 2px -2px 2px #9d9d9d;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 4px 15px 0 rgba(0, 0, 0, 0.19);
     }
     .product_image {
         width: 100%;
-        height: 80px;
+        height: 105px;
         background-color: rgba(115, 110, 37, 0.56);
-        border-bottom: 3px solid #90111A;
     }
     .product_image img{
         width: 100%;
         height: 100%;
     }
     .product_name {
+        color: white;
         width: 100%;
-        height: 56px;
+        height: 32px;
         padding: 0px 2px;
         display: -webkit-box;
-        background-color: #dff0d8;
+        background-color: #a71313eb;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
@@ -38,16 +38,13 @@
     .product_name h6{
         height: 38px;
         font-weight: bold;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
+        white-space: nowrap; 
         overflow: hidden;
+        text-overflow: ellipsis;
     }
     .product_price {
         width: 100%;
-        height: 20px;
         padding: 4px 4px;
-        background-color: #608060;
     }
     .product_price h5{
         height: 20px;

@@ -150,7 +150,9 @@
                 if (wS > (hT+hH-wH)){
                     _page++;
                     if(_page<=_numberPage){
-                        Ajax(center.lat,center.lng,key,unit,_page);
+                        $.when( Ajax(center.lat,center.lng,key,unit,_page)).done(function( x ) {
+                          
+                        });
                     }
                 }
             });
@@ -199,7 +201,7 @@
 		var c_temp = $(".closest-res");
 		data.forEach(function(obj) {
 			var row = $("#closest-template").contents().clone();
-			$(row).find(".res-link").attr("href","{{route('Order')}}?storeId="+obj.id);
+			$(row).find(".res-link").attr("href","{{route('Order')}}?idStore="+obj.id);
             $(row).find(".post-distance a").text(obj.distance_in_km);
 			$(row).find(".res-images").attr("src",obj.src);
 			$(row).find(".res-name").text(obj.name);
@@ -209,17 +211,16 @@
 	}
     //function ajax
     function Ajax(lat,lng,key,unit,page){
-        $.ajax({
+        jQuery.ajaxQueue({
             type: 'GET',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             url: "{{route('ClosestStore')}}",
             data: {lat:lat,lng:lng,key:key,unit:unit,page:page},
-            success: function (result) {
-                    _numberPage = result.numberPage;
-                    buildList(result.arrStore);
-            }
+        }).done(function( result ) {
+            _numberPage = result.numberPage;
+            buildList(result.arrStore);
         });
     }
     //load more when scroll

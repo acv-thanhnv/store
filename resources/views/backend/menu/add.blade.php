@@ -33,9 +33,17 @@
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Menu Name </label>
-						<input type="text" autofocus="" name="name" class="form-control has-feedback-left" id="name"
+						<input type="text" name="name" class="form-control has-feedback-left" id="name"
 						placeholder="Add Menu Name...">
 						<span class="fa fa-linux form-control-feedback left" aria-hidden="true"></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
+						<label>Priority </label>
+						<input type="number" name="priority" class="form-control has-feedback-left" id="priority"
+						placeholder="Priority...">
+						<span class="fa fa-level-up form-control-feedback left" aria-hidden="true"></span>
 					</div>
 				</div>
 				<div class="form-group">
@@ -46,7 +54,7 @@
 						<span class="fa fa-pencil form-control-feedback left" aria-hidden="true"></span>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group" style="text-align: right">
 					<div>
 						<button class="btn btn-primary" type="reset">Reset</button>
 						<button type="button" class="btn btn-success add">Add</button>
@@ -64,13 +72,14 @@
 	$(".add").click(function(){
 		var name        = $("#name").val();
 		var description = $("#description").val();
+		var priority    = $("#priority").val();
         $.ajax({
         	type: 'POST',
         	headers: {
         		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         	},
         	url: "{{route('postAddMenu')}}",
-        	data:{name:name,description:description},
+        	data:{name:name,description:description,priority:priority},
         	success: function (result) {
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
         			//call parent and close modal

@@ -14,14 +14,14 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Support\Facades\DB;
 
-class Customer2OrderManagerPusher implements ShouldBroadcast
+class Other2OrderManagerPusher implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $result;
     public $idStore;
     public $order;
-    public function __construct($idStore,$order, $arrOrderDetail)
+    public function __construct($idStore,$order,$arrOrderDetail)
     {
         $this->result      = $arrOrderDetail;
         $this->idStore     = $idStore;
@@ -35,7 +35,7 @@ class Customer2OrderManagerPusher implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::Customer2Order;
+        return OrderConst::Other2Order;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -44,6 +44,6 @@ class Customer2OrderManagerPusher implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->idStore,OrderConst::Customer2Order));
+        return new Channel(CommonHelper::getOrderEventName($this->idStore,OrderConst::Other2Order));
     }
 }

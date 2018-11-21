@@ -23,6 +23,17 @@ class CommonHelper
             Log::error($message);
         }
     }
+    //get Image Src
+    public static function getImageSrc($image)
+    {
+        $src;
+        if($image==NULL){
+            $src = url('/')."/common_images/no-store.png";
+        }else{
+            $src = CommonHelper::getImageUrl($image);
+        }
+        return $src;
+    }
     //get Image Url
     public static function getImageUrl($imageUri,$diskLocalName = "public")
     {
@@ -89,7 +100,7 @@ class CommonHelper
         return base_path().'/resources/export_templates/';
     }
     public static function getOrderEventName($storeId,$orderChannel){
-        $hash = md5 ($storeId);
+        $hash = md5($storeId);
         return $hash."-".$orderChannel;
     }
 
@@ -197,13 +208,9 @@ class CommonHelper
         $status_name;
         switch ($status) {
             case 1:
-                $status_name = 'Chờ xác nhận';
-                break;
-
-            case 2:
                 $status_name = 'Đang chế biến';
                 break;
-            case 3:
+            case 2:
                 $status_name = 'Đã hoàn thành';
                 break;
             default:

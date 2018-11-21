@@ -68,6 +68,7 @@
                             <input type="checkbox" id="check-all" class="flat">
                         </th>
                         <th class="column-title">Name </th>
+                        <th class="column-title">Priority </th>
                         <th class="column-title">Description </th>
                         <th class="column-title">Edit </th>
                         <th class="column-title">Delete </th>
@@ -81,6 +82,7 @@
 								<input type="checkbox" value="{{$obj->id}}">
 							</td>
 							<td>{{$obj->name}}</td>
+							<td>{{$obj->priority}}</td>
 							<td>{{$obj->description}}</td>
 							<td>
 								<button type="button" class="btn btn-primary edit round" data-id="{{$obj->id}}">
@@ -132,9 +134,9 @@
 		title          : 'Menu',
 		subtitle       :'Add',
 		width          : 700,
-		iframeHeight   : 300,
+		iframeHeight   : 380,
 		headerColor    :"#405467",
-		icon           :"fa fa-user",
+		icon           :"fa fa-life-ring",
 		iconColor      :"#ECF0F1",
 		fullscreen     :true,
 		arrowKeys      :true,
@@ -172,9 +174,9 @@
 		title          : 'Menu',
 		subtitle       :'Edit',
 		width          : 700,
-		iframeHeight   : 300,
+		iframeHeight   : 380,
 		headerColor    :"#405467",
-		icon           :"fa fa-user",
+		icon           :"fa fa-life-ring",
 		iconColor      :"#ECF0F1",
 		fullscreen     :true,
 		arrowKeys      :true,
@@ -298,7 +300,7 @@
 			"columnDefs": [
                 { 
                     "orderable": false ,
-                    "targets": [0,3,4]
+                    "targets": [0,4,5]
                 }
             ],
             order: []

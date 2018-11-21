@@ -9,9 +9,11 @@ use App\Core\Common\OrderStatusValue;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
-use App\Core\Events\Customer2OrderManagerPusher;
+use App\Core\Events\FoodStatusEvent;
 use App\Core\Events\OrderPusherEvent;
 use App\Core\Events\OrderStatusPusherEvent;
+use App\Core\Events\Other2OrderManagerPusher;
+use App\Core\Events\TableEvent;
 use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
@@ -33,6 +35,11 @@ class FoodOrderController extends Controller
     {
         $this->foodService = $foodService;
         $this->menuService = $menuService;
+    }
+
+    public function TestEvent()
+    {
+        event(new FoodStatusEvent('1bb4373b2f7642c2d0f0d88326e7a787',192,2,null,565,1,FoodStatusValue::Done));
     }
 
     public function getOrder(Request $request)
@@ -82,6 +89,7 @@ class FoodOrderController extends Controller
                         ->paginate($total);
         }
         foreach($arrFood as $obj){
+            $obj->format_price = number_format($obj->price);
             //check avatar
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
@@ -179,6 +187,7 @@ class FoodOrderController extends Controller
                     ->paginate($total);
         }
         foreach($arrFood as $obj){
+            $obj->price = number_format($obj->price);
             //check avatar
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
@@ -202,7 +211,8 @@ class FoodOrderController extends Controller
         $cart_items               = $request->cart_items;
         $order["description"]     = $request->description;
         $order["status"]          = 0;
-        $order["datetime_order"]  = CommonHelper::dateNow();  
+        $order["datetime_order"]  = CommonHelper::dateNow(); 
+        $order["datetime_update"] = CommonHelper::dateNow(); 
         if($orderId===null){
             //create new order
             $orderId                  = SDB::table('store_order')
@@ -243,21 +253,16 @@ class FoodOrderController extends Controller
             $order_detail['quantity']        = $obj['quantity'];
             $order_detail['status']          = FoodStatusValue::NoDone;
             $order_detail['has_update']      = 1;
-            $cart_items[$key]['status_name'] = CommonHelper::getFoodStatusName(1);
-            $cart_items[$key]['status']      = FoodStatusValue::NoDone;
             //nếu món ăn đó đã được order rồi thì cập nhập số lượng cũng như tình trạng món
             if(isset($obj["id"])){
                 //nếu món đó đã tồn tại và đang chế biến hoặc hoàn thành
                 SDB::table('store_order_detail')
                 ->where('id',$obj['id'])
-                ->where('status','>=',FoodStatusValue::Process)
                 ->update([
                     'quantity'   => $obj['quantity'],
                     'status'     => FoodStatusValue::NoDone,
                     'has_update' => 1
                 ]);
-                //set update for item
-                $cart_items[$key]['has_update'] = 1;
             }else{
                 //ngược lại thì insert mới 
                 SDB::table('store_order_detail')->insert($order_detail);
@@ -267,9 +272,10 @@ class FoodOrderController extends Controller
                     ->join('store_entities','store_order_detail.entities_id','=','store_entities.id')
                     ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
                     ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
-                    ->where('order_id',$orderId)
+                    ->where('store_order_detail.order_id',$orderId)
                     ->get();
         foreach($arrOrderDetail as $obj){
+            $obj->price = number_format($obj->price);
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
             }else{
@@ -277,9 +283,11 @@ class FoodOrderController extends Controller
             }
         }
         //call event send to Order
-        event(new Customer2OrderManagerPusher($idStore,$order,$arrOrderDetail));
+        event(new Other2OrderManagerPusher($idStore,$order,$arrOrderDetail));
         //call pusher when order, status food change
-        event(new OrderStatusPusherEvent($request->access_token,$orderId,$arrOrderDetail));
+        event(new OrderStatusPusherEvent($request->access_token,$order,$arrOrderDetail,null,null));
+        //call event bind table color
+        event(new TableEvent($idStore,$request->table));
         return $orderId;
     }
     public function FoodDetail(Request $request)
@@ -289,6 +297,7 @@ class FoodOrderController extends Controller
             ->where('id',$entities_id)
             ->get();
         foreach($foodDetail as $obj){
+            $obj->price = number_format($obj->price);
             //check avatar
             if($obj->image==NULL){
                 $obj->src = url('/')."/common_images/no-store.png";
@@ -315,19 +324,25 @@ class FoodOrderController extends Controller
                     ->get();
         $Process = 0;//variable count food was processed
         $NoDone  = 0;//variable count food not done
-        foreach($arrOrderDetail as $obj){
-            //check status of food, nếu ko có món nào là đang chờ xác nhận thì status của order chuyển theo món
-            switch ($obj->status) {
-                case FoodStatusValue::Process:
-                    $Process ++;
-                    break;
-                default:
-                    $NoDone++;
-            }
-            if($obj->image==NULL){
-                $obj->src = url('/')."/common_images/no-store.png";
-            }else{
-                $obj->src = CommonHelper::getImageUrl($obj->image);
+        //nếu người dùng xóa món,order trống thì tình trạng là chưa xác nhận
+        if(count($arrOrderDetail)==0){
+            $NoDone++;
+        }else{
+            foreach($arrOrderDetail as $obj){
+                //check status of food, nếu ko có món nào là đang chờ xác nhận thì status của order chuyển theo món
+                switch ($obj->status) {
+                    case FoodStatusValue::Process:
+                        $Process ++;
+                        break;
+                    default:
+                        $NoDone++;
+                }
+                $obj->price = number_format($obj->price);
+                if($obj->image==NULL){
+                    $obj->src = url('/')."/common_images/no-store.png";
+                }else{
+                    $obj->src = CommonHelper::getImageUrl($obj->image);
+                }
             }
         }
         if($NoDone>0){//nếu order đó có món ăn chưa xác nhận thì order status là chưa xác nhận
@@ -345,6 +360,8 @@ class FoodOrderController extends Controller
                         ->get();
         $idStore = $arrOrder[0]->store_id;
         //call event send to Order
-        event(new Customer2OrderManagerPusher($idStore,$arrOrder[0],$arrOrderDetail));
+        event(new Other2OrderManagerPusher($idStore,$arrOrder[0],$arrOrderDetail));
+        //call event bind table color
+        event(new TableEvent($idStore,$arrOrder[0]->location_id));
     }
 }

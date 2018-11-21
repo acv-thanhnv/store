@@ -1,4 +1,12 @@
 const storeId = $('#config').attr('storeId')
+const rootPath = $('#config').attr('rootPath')
+
+const Customer2Order = $('#config').attr('Customer2Order')
+const WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel')
+
+const Order2Kitchen = $('#config').attr('Order2Kitchen')
+const Order2Cashier = $('#config').attr('Order2Cashier')
+const Order2Other = $('#config').attr('Order2Other')
 
 var paymentAll = []
 
@@ -31,8 +39,8 @@ console.log(test456)*/
 
 $(document).ready(function(){
 	$("#header-left a").click(function(){
-		$(this).tab('show');
-	});
+		$(this).tab('show')
+	})
 
 	loadCashierTable()
 	loadRollbackTable()
@@ -40,7 +48,7 @@ $(document).ready(function(){
 
 function loadJSON(file, callback) {   
 
-	var xobj = new XMLHttpRequest();
+	var xobj = new XMLHttpRequest()
 	xobj.overrideMimeType("application/json");
     xobj.open('GET', file, true); // Replace 'my_data' with the path to your file
     xobj.onreadystatechange = function () {
@@ -53,15 +61,14 @@ function loadJSON(file, callback) {
 }
 
 function loadRollbackTable() {
-	loadJSON('http://store.dev/api/v1/store/'+storeId+'/rollback_cashier.json', function(response) {
-		var output='<table id="roll-back" class="table table-hover red-blue-table"> <thead> <tr> <th style="width: 70%" data-field="invoice">Hóa đơn</th> <th style="width: 30%"></th> </tr> </thead> <tbody id="rollback-body">'
+	loadJSON(rootPath+'/api/v1/store/'+storeId+'/rollback_cashier.json', function(response) {
+		var output='<table id="roll-back" class="table table-hover red-blue-table"> <thead> <tr> <th class="sticky" style="width: 70%" data-field="invoice">Hóa đơn</th> <th class="sticky" style="width: 30%"></th> </tr> </thead> <tbody id="rollback-body">'
 		var result = JSON.parse(response)
 		console.log(result)
 		for (var i in result)
 		{
 			var orderId = result[i].order_id
 			var beforeStatus = result[i].before_status
-			console.log(beforeStatus)
 			output+='<tr id="rollback-'+storeId+'-'+orderId+'" orderId="'+orderId+'" status="'+beforeStatus+'"> <td> <button type="button" class="btn btn-primary">#HĐ '+orderId+'</button> </td> <td> <button class="btn btn-success rollback"><i class="fa fa-undo"></i></button> </td> </tr>'
 		}
 		output+='</tbody> <tfoot></tfoot> </table>'
@@ -69,30 +76,7 @@ function loadRollbackTable() {
 	})
 }
 
-/*function loadRollbackTable() {
-	var output='<table id="roll-back" class="table table-hover red-blue-table"> <thead> <tr> <th style="width: 40%" data-field="invoice">Hóa đơn</th> <th style="width: 30%" data-field="location">Bàn</th> <th style="width: 30%"></th> </tr> </thead> <tbody id="rollback-body">'
-	let cashierRollback = localStorage.getObj('cashierRollback')
-	if (cashierRollback!= null) {
-		let a = cashierRollback
-		for (var i=a.length-1;i>=0;i--) {
-			if (a[i]) output+='<tr id="rollback-'+storeId+'-'+a[i].orderId+'" orderId="'+a[i].orderId+'"> <td> <button type="button" class="btn btn-primary">#HĐ '+a[i].orderId+'</button> </td> <td> <button type="button" class="btn btn-primary">'+a[i].locationName+'</button> </td> <td> <button class="btn btn-success rollback"><i class="fa fa-undo"></i></button> </td> </tr>'
-		}
-}
-output+='</tbody> <tfoot></tfoot> </table>'
-$('#rollback-thanh-toan').html(output)
-}*/
-
-/*function pushToloadRollbackTable(obj) {
-	let cashierRollback = localStorage.getItem("cashierRollback")
-	cashierRollback = [...cashierRollback, obj]
-	localStorage.setItem("cashierRollback", cashierRollback)
-	var current = $('#rollback-body').html()
-	var newRow = '<tr id="rollback-'+storeId+'-'+obj.orderId+'"> <td> <button type="button" class="btn btn-primary">#HĐ '+obj.orderId+'</button> </td> <td> <button type="button" class="btn btn-primary">'+obj.locationName+'</button> </td> <td> <button class="btn btn-success"><i class="fa fa-undo rollback"></i></button> </td> </tr>'
-	current = current + newRow
-	$('#rollback-body').html(current)
-}*/
-
-function pushToloadRollbackTable(obj) {
+function pushToRollbackTable(obj) {
 	var current = $('#rollback-body').html()
 	var newRow = '<tr id="rollback-'+storeId+'-'+obj.orderId+'" orderId="'+obj.orderId+'" status="'+obj.status+'"> <td> <button type="button" class="btn btn-primary">#HĐ '+obj.orderId+'</button> </td> <td> <button class="btn btn-success rollback"><i class="fa fa-undo"></i></button> </td> </tr>'
 	current = current + newRow
@@ -100,8 +84,8 @@ function pushToloadRollbackTable(obj) {
 }
 
 function loadCashierTable() {
-	loadJSON('http://store.dev/api/v1/store/'+storeId+'/cashier.json', function(response) {
-		var output='<table id="bang-thu-ngan" class="table table-hover red-blue-table" data-toggle="table" data-search="true" responsive hover> <thead> <tr> <th style="width: 5%"></th> <th style="width: 10%">Hóa đơn</th> <th style="width: 20%">Vị trí</th> <th style="width: 10%">Tổng tiền</th> <th style="width: 10%">Thuế suất</th> <th style="width: 15%">Chiết khấu</th> <th style="width: 15%">Thành tiền</th> <th style="width: 15%"></th> </tr> </thead> <tbody>';
+	loadJSON(rootPath+'/api/v1/store/'+storeId+'/cashier.json', function(response) {
+		var output='<table id="bang-thu-ngan" class="table table-hover red-blue-table" data-toggle="table" data-search="true" responsive hover> <thead> <tr> <th class="sticky-under" style="width: 5%"></th> <th class="sticky-under" style="width: 10%">Hóa đơn</th> <th class="sticky-under" style="width: 20%">Vị trí</th> <th class="sticky-under" style="width: 10%">Tổng tiền</th> <th class="sticky-under" style="width: 10%">Thuế suất</th> <th class="sticky-under" style="width: 15%">Chiết khấu</th> <th class="sticky-under" style="width: 15%">Thành tiền</th> <th class="sticky-under" style="width: 15%"></th> </tr> </thead> <tbody>'
 		var result = JSON.parse(response)
 		for (var i in result.orders)
 		{
@@ -112,12 +96,12 @@ function loadCashierTable() {
 			var status = result.orders[i].status
 			var locationFee = result.orders[i].locationFee
 			var total = parseInt(sum) + parseInt(locationFee)
-			output+='<tr id="order-'+storeId+'-'+id+'" status="'+status+'" orderId="'+id+'" location="'+name+'" tax="10" discount="0" total="'+total+'" payment="'+(sum*1.1)+'"> <td><input class="checkbox" type="checkbox" value="#HĐ '+id+'"></td> <td>#HĐ '+id+'</td> <td> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">'+name+' '+floor+'</span></button> </td> <td class="money">'+parseInt(total).toLocaleString('us')+'</td> <td><input class="tax" type="number" value="10" min="0"></td> <td><input class="discount" type="number" value="0" min="0"></td> <td class="total">'+(total*1.1).toLocaleString('us')+'</td> <td> <button class="btn btn-success" data-toggle="modal" data-target="#hd'+id+'"><i class="fa fa-eye"></i></button> </td> </tr>'
+			output+='<tr id="order-'+storeId+'-'+id+'" status="'+status+'" orderId="'+id+'" location="'+name+'" tax="10" discount="0" total="'+total+'" payment="'+(sum*1.1)+'"> <td><input class="checkbox" type="checkbox" value="#HĐ '+id+'"></td> <td>#HĐ '+id+'</td> <td> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">'+name+' '+floor+'</span></button> </td> <td class="money">'+parseInt(total).toLocaleString('us')+'</td> <td><input class="tax" type="number" value="10" min="0"></td> <td><input class="discount" type="number" value="0" min="0"></td> <td class="total">'+parseInt(total*1.1).toLocaleString('us')+'</td> <td> <button class="btn btn-success" data-toggle="modal" data-target="#hd'+id+'"><i class="fa fa-eye"></i></button> </td> </tr>'
 		}
 		output+="</tbody> <tfoot></tfoot> </table>"
 		$('#thu-ngan').html(output)
 		output=''
-		for (var i in result.details)
+		for (var i in result.orders)
 		{
 			var orderId = result.orders[i].id
 			var locationFee = result.orders[i].locationFee
@@ -140,12 +124,12 @@ function loadCashierTable() {
 				output+='<tr> <td class="food">'+name+'</td> <td>'+price.toLocaleString('us')+'</td> <td>'+quantity+'</td> <td>'+total.toLocaleString('us')+'</td> </tr>'
 			}
 			output+='</tbody> <tfoot>'
-			output+='<tr> <td colspan="2"></td> <td class="ta-right"> Phụ phí: </td> <td>'+locationFee.toLocaleString('us')+'</td> </tr>'
-			output+='<tr> <td colspan="2"></td> <td class="ta-right"> Tổng tiền: </td> <td>'+(sum+locationFee).toLocaleString('us')+'</td> </tr>'
+			output+='<tr> <td colspan="2"></td> <td class="ta-right"> Phụ phí: </td> <td>'+parseInt(locationFee).toLocaleString('us')+'</td> </tr>'
+			output+='<tr> <td colspan="2"></td> <td class="ta-right"> Tổng tiền: </td> <td>'+parseInt(sum+locationFee).toLocaleString('us')+'</td> </tr>'
 			output+='<tr class="tax"> <td colspan="2"></td> <td class="ta-right"> Thuế: </td> <td>'+tax+'</td> </tr>'
 			output+='<tr class="discount"> <td colspan="2"></td> <td class="ta-right"> Chiết khấu: </td> <td>'+discount+'</td> </tr>'
-			output+='<tr class="total"> <td colspan="2"></td> <td class="ta-right"> Thành tiền: </td> <td>'+((sum+locationFee)*1.1).toLocaleString('us')+'</td> </tr>'
-			output+='<tr> <td colspan="4"> <div class="col-xs-12"> <div class="panel-group"> <div class=""> <div> <div class="btn-group pull-left"> <button class="btn btn-primary btn-lg pdf">In hóa đơn</button> </div> <div class="btn-group pull-center"> <button class="btn btn-primary btn-lg payment">Thanh toán: '+((sum+locationFee)*1.1).toLocaleString('us')+'</button> </div> <div class="btn-group pull-right"> <button class="btn btn-primary btn-lg excel">Xuất ra Excel</button> </div> </div> </div> </div> </div> </td> </tr>'
+			output+='<tr class="total"> <td colspan="2"></td> <td class="ta-right"> Thành tiền: </td> <td>'+parseInt((sum+locationFee)*1.1).toLocaleString('us')+'</td> </tr>'
+			output+='<tr> <td colspan="4"> <div class="col-xs-12"> <div class="panel-group"> <div class=""> <div> <div class="btn-group pull-left"> <button class="btn btn-primary btn-lg pdf">In hóa đơn</button> </div> <div class="btn-group pull-center"> <button class="btn btn-primary btn-lg payment">Thanh toán: '+parseInt((sum+locationFee)*1.1).toLocaleString('us')+'</button> </div> <div class="btn-group pull-right"> <button class="btn btn-primary btn-lg excel">Xuất ra Excel</button> </div> </div> </div> </div> </div> </td> </tr>'
 			output+='</tfoot></table>'
 			output+= '</div> </div> </div>'
 		}
@@ -350,20 +334,23 @@ $(document).on("change",".discount",function(e){
 
 $(document).on("click",".payment",function(e){
 	let listOrderId = []
-	let status = $(this).parents('table').attr('status')
+	let listBeforeStatus = []
+	let beforeStatus = $(this).parents('table').attr('status')
 	let orderId = $(this).parents('table').attr('orderId')
 	listOrderId.push(orderId)
+	listBeforeStatus.push(beforeStatus)
+
 	let formData = {
 		storeId: storeId,
 		listOrderId: listOrderId,
-		beforeStatus: status
+		listBeforeStatus: listBeforeStatus
 	}
 
 	$('#hd'+orderId).modal('toggle')
 
 	$.ajax({
 		type:'POST',
-		url:'/payment-done',
+		url:rootPath+'/payment-done',
 		data: formData
 	}).done(function(result) {
 		console.log(result)
@@ -373,28 +360,36 @@ $(document).on("click",".payment",function(e){
 })
 
 $(document).on("click","#thanh-toan-tat-ca",function(e){
-	for (let i in paymentAll) {
-		let currentInvoices = paymentAll[i].orderId
-		let status = paymentAll[i].status
-		currentInvoices = JSON.parse('[' + currentInvoices + ']')
-		let formData = {
-			storeId: storeId,
-			listOrderId: currentInvoices,
-			beforeStatus: status
-		}
-		console.log(formData)
-		$.ajax({
-			type:'POST',
-			url:'/payment-done',
-			data: formData
-		}).done(function(result) {
-			console.log(result)
-			$('#payment-right').html('')
-			$('#invoice-id').html('')
-		}).fail(function() {
-			console.log('false')
-		})
+	var listBeforeStatus = []
+	var listOrderId = []
+	for (var i in paymentAll) {
+		listOrderId.push(paymentAll[i].orderId)
 	}
+	
+	for (var i in listOrderId) {
+		let beforeStatus = $('#order-'+storeId+'-'+listOrderId[i]).attr('status')
+		listBeforeStatus.push(beforeStatus)
+	}
+	
+	listBeforeStatus = JSON.parse('[' + listBeforeStatus + ']')
+	let formData = {
+		storeId: storeId,
+		listOrderId: listOrderId,
+		listBeforeStatus: listBeforeStatus
+	}
+
+	console.log(formData)
+	$.ajax({
+		type:'POST',
+		url:rootPath+'/payment-done',
+		data: formData
+	}).done(function(result) {
+		console.log(result)
+		$('#payment-right').html('')
+		$('#invoice-id').html('')
+	}).fail(function() {
+		console.log('false')
+	})
 	paymentAll = []
 	
 })
@@ -410,7 +405,7 @@ $(document).on("click","#in-tat-ca",function(e){
 	console.log(formData)
 	$.ajax({
 		type:'POST',
-		url:'/api/v1/all-payments',
+		url:rootPath+'/api/v1/all-payments',
 		data: formData
 	}).done(function(result) {
 		console.log(result)
@@ -435,7 +430,7 @@ $(document).on("click","#in-tat-ca",function(e){
 		output+='</tbody> <tfoot>'
 		output+='<tr> <td colspan="2"></td> <td class="ta-right"> Phụ phí: </td> <td>'+locationFee.toLocaleString('us')+'</td> </tr>'
 		output+='<tr> <td colspan="2"></td> <td class="ta-right"> Tổng tiền: </td> <td>'+(sum+locationFee).toLocaleString('us')+'</td> </tr>'
-		output+='<tr class="total"> <td colspan="2"></td> <td class="ta-right"> Thành tiền: </td> <td>'+(thanhTien).toLocaleString('us')+'</td> </tr>'
+		output+='<tr class="total"> <td colspan="2"></td> <td class="ta-right"> Thành tiền: </td> <td>'+parseInt(thanhTien).toLocaleString('us')+'</td> </tr>'
 		output+='</tfoot></table>'
 		$('#multi-payments').html(output)
 		html2canvas($('#multi-payment')[0], {
@@ -499,7 +494,7 @@ $(document).on("click",".rollback",function(e){
 	$('#rollback-'+storeId+'-'+orderId).addClass('hidden')
 	$.ajax({
 		type:'POST',
-		url:'/rollback-payment',
+		url:rootPath+'/rollback-payment',
 		data: formData
 	}).done(function(result) {
 		console.log(result)
@@ -514,44 +509,40 @@ var pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
 	encrypted: true
 });
 
-var order2cashier = pusher.subscribe(md5(storeId)+'-customer2cashier');
-order2cashier.bind('new-payment', function(res) {
-})
-
-var order2chef = pusher.subscribe(md5(storeId)+'-order2chef');
-order2chef.bind('new-order', function(res) {
+var order2chef = pusher.subscribe(md5(storeId)+'-'+Order2Cashier);
+order2chef.bind(Order2Other, function(res) {
 	loadCashierTable()
 })
 
 var cashier2cashier = pusher.subscribe(md5(storeId)+'-cashier2cashier')
 cashier2cashier.bind('payment-done', function(res) {
 	var listOrderId = res.listOrderId
+	var listBeforeStatus = res.status
 	let status = res.status
 	for (var i in listOrderId) {
-		/*let locationName = $('#order-'+storeId+'-'+listOrderId[i]).attr('location')*/
 		let obj = {
 			orderId: listOrderId[i],
-			/*locationName: locationName,*/
-			status: status
+			status: listBeforeStatus[i]
 		}
 		console.log(obj)
 		$('#order-'+storeId+'-'+listOrderId[i]).addClass('hidden')
-		/*SaveDataToLocalStorage(obj)*/
-		pushToloadRollbackTable(obj)
+		pushToRollbackTable(obj)
 	}
 })
 
 cashier2cashier.bind('rollback-payment', function(res) {
 	var orderId = res.orderId
 	/*$('#rollback-'+storeId+'-'+orderId).addClass('hidden')*/
-	$('#order-'+storeId+'-'+orderId).removeClass('hidden')
-	let obj = {
-		storeId: storeId,
-		orderId: orderId
+	if ($('#order-'+storeId+'-'+orderId)[0]) {
+		$('#order-'+storeId+'-'+orderId).removeClass('hidden')
+	} else {
+		loadCashierTable()
 	}
-	/*RemoveDataFromLocalStorage(obj)*/
-	loadCashierTable()
-	loadRollbackTable()
+	if ($('#rollback-'+storeId+'-'+orderId)[0]) {
+		$('#rollback-'+storeId+'-'+orderId).addClass('hidden')
+	} else {
+		loadRollbackTable()
+	}
 })
 
 function SaveDataToLocalStorage(obj)

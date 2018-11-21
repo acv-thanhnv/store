@@ -98,7 +98,7 @@
 		<div class="wrap-header-mobile">
 			<!-- Logo moblie -->		
 			<div class="logo-mobile">
-				<a href="index.html">
+				<a href="">
 					Gem's Store
 				</a>
 			</div>
@@ -158,7 +158,7 @@
 		<div class="header-cart flex-col-l p-l-15">
 			<div class="header-cart-title flex-w flex-sb-m p-b-8">
 				<span class="mtext-103 cl2">
-					Your Cart
+					Your Cart <i class="fa fa-shopping-cart"></i>
 				</span>
 
 				<div class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-cart">
@@ -171,7 +171,7 @@
 					<ul class="header-cart-wrapitem w-full">
 					</ul>
 					<div class="alert alert-warning alert-change dis-none" style="padding: .2rem 1.25rem">
-						<strong>Warning!</strong> You just update orders, press <a class="btn btn-primary btn-sm btn-order">Order</a> to save changes 
+						<strong>Warning!</strong> Bạn vừa cập nhập giỏ hàng, click <a class="btn btn-primary btn-sm btn-order">Order</a> để cập nhập món ăn 
 					</div>
 				</div>
 				<div class="w-full cart-total p-t-5 row" style="margin-left: 0px;">
@@ -501,18 +501,16 @@
 
 					<a href="" class="block2-btn flex-c-m stext-103 cl2 bg0 bor2 hov-btn1 p-lr-15 trans-04 add_to_cart">
 						<i class="zmdi zmdi-shopping-cart cart-desktop">
-						</i> Add To Cart
+						</i> Chọn món
 					</a>
 				</div>
 
 				<div class="block2-txt flex-w flex-t p-t-14 food-content">
 					<div class="block2-txt-child1 flex-col-l">
 						<a class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6 food-items-name">
-							Esprit Ruffle Shirt
 						</a>
 
 						<span class="stext-105 cl3 food-items-price">
-							$16.64
 						</span>
 					</div>
 				</div>
@@ -577,6 +575,8 @@
 <script src="https://js.pusher.com/4.3/pusher.min.js"></script>
 <!--Toast JS-->
 <script type="text/javascript" src="js/toast.js"></script>
+<!--Number Format-->
+<script src="js/jquery.number.min.js"></script>
 <!--Custom JS-->
 <script src="frontend/FoodOrder/js/custom.js"></script>
 <script type="text/javascript">
@@ -595,6 +595,7 @@
 		var hour = '{{\App\Core\Common\CutomerConst::hour}}';
 		if(now-localStorage.time > hour*60*60*1000){
 			localStorage.clear();
+			location.reload();
 		}
 		$("#table").select2();
 		var idStore = {!! $idStore !!};
@@ -610,7 +611,10 @@
 		}
 		//show alert change
 		checkAlert();
+		//order channel name
 		var channel_name = access_token+'_'+'{{\App\Core\Common\OrderConst::OrderStatusEventName}}';
+		//food channel name
+		var food_channel_name = access_token+'_'+'{{\App\Core\Common\FoodStatusValue::FoodStatusEvent}}';
 		setTable();
 		countCart();//dem va hien thi so item trong gio hang
 		getFoodByMenu(idStore,"{{route('getFood')}}");
@@ -620,25 +624,66 @@
 		buildFood("{{route('getFood')}}",idStore,1,null,null,null);
 		lazyLoad("{{route('getFood')}}","{{route('OrderBy')}}",idStore);
 		Order("{{route('sendOrder')}}",idStore,access_token);
-		PusherEvent(channel_name);
+		PusherEvent(channel_name,food_channel_name);
 		deleteCartItem('{{route("deleteCartItem")}}');//delete item from cart
 	})
 
 	//pusher event
-	function PusherEvent(channel_name){
+	function PusherEvent(channel_name,food_channel_name){
 		var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
                 cluster: '{{env('PUSHER_APP_CLUSTER')}}',
                 encrypted: true
             });
+		//food status event
+		var food_channel = pusher.subscribe(food_channel_name);
+		var food_eventName = '{{\App\Core\Common\FoodStatusValue::FoodStatusEvent}}';
+		food_channel.bind(food_eventName,function(data){
+			FoodStatus(data.idDetail,data.cooked,data.foodStatus,data.foodStatusName);
+		});
+		//order status event
 	    var channel = pusher.subscribe(channel_name);
 	    var eventName = "{{\App\Core\Common\OrderConst::OrderStatusEventName}}";
         channel.bind(eventName, function(data){
-        	localStorage.removeItem(cart_items);
-        	cart_items = data.arrOrder;
-        	cart_total = data.arrOrder.length;
-			//change total items of cart
-			$(".js-show-cart").attr("data-notify",cart_total);
-        	localStorage.cart_items = JSON.stringify(cart_items);
+        	//nếu ở order xóa order thì clear all local storage
+        	if(data.has_delete==1){
+        		//xóa giỏ hàng, đưa về rỗng, kể cả lúc khách đang mở giỏ hàng
+        		$('.header-cart-wrapitem').empty();
+        		$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
+        		$(".total-money").text("Total: 0 đ");
+        		$(".btn-pay").addClass('disabled');
+        		$(".js-show-cart").attr("data-notify",0);
+				localStorage.removeItem('cart_items');
+				localStorage.removeItem('time');
+				localStorage.removeItem('orderId');
+				localStorage.removeItem('table');
+				cart_items = [];//set biến cart items về rỗng
+				cart_total = 0;
+				$("#table").prop("disabled",false);//enable user choose table
+				//thông báo order đã được thanh toán thành công
+				notify('Success','success','Order của bạn đã được thanh toán thành công! Hi vọng bạn hài lòng với bữa ăn','#437F2C');
+        	}else{
+				localStorage.removeItem(cart_items);
+				cart_items = data.arrOrder;
+				cart_total = data.arrOrder.length;
+				//nếu có roll back thì lưu lại table và orderId
+				if(data.has_rollBack=='{{\App\Core\Common\OrderConst::has_rollBack}}'){
+					//set table fixed
+					$('#table').val(data.order.location_id);
+					$('#table').trigger('change');
+					localStorage.orderId = data.order.id;//set orderId
+					localStorage.table = data.order.location_id;//set table for local
+					$("#table").prop("disabled",true);//disable if user have order
+					$('.btn-pay').removeClass('disabled');
+				}
+				//change total items of cart
+				$(".js-show-cart").attr("data-notify",cart_total);
+				localStorage.cart_items = JSON.stringify(cart_items);
+				//nếu order được xác nhận và chế biến
+				if(data.orderStatus=='{{\App\Core\Common\OrderStatusValue::Process}}'){
+					notify('Success','success','Món ăn của bạn đang được chế biến!','#437F2C');
+				}
+
+        	}
         });
 	}
 	//fixed cart for mobile

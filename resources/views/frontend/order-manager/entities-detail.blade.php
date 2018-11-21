@@ -70,6 +70,8 @@
         padding-left: 5px;
     }
     .num-product-up,.num-product-down{
+        display: flex;
+        align-items: center;
         width: 20px;
         height: 20px;
     }
@@ -96,6 +98,13 @@
         width: 100px;
         border-radius: 5px;
     }
+    .cooked{
+        position: absolute;
+        top: -18px;
+        left: 26px;
+        color: green;
+        font-weight: bold;
+    }
 </style>
 
     <div id="entities-detail-template" style="display: none">
@@ -111,6 +120,7 @@
             </div>
             <div class="col-md-2 order_detail_price"></div>
             <div class="col-md-2 order_detail_quantity">
+                <span class="cooked"></span>
                 <span class="num-product-down"><i class="fa fa-minus"></i></span>
                 <input type="number" class="quantity-detail form-control text-center" value="1">
                 <span class="num-product-up"><i class="fa fa-plus"></i></span>

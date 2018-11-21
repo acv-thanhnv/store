@@ -101,7 +101,8 @@ function buildFood(url,idStore,page,menu_id,key,orderKey,price){
 					$(row).find(".view-detail").attr('src',obj.src);
 					$(row).find(".block2").attr('data-id',obj.id);
 					$(row).find(".food-items-name").text(obj.name);
-					$(row).find(".food-items-price").text(obj.price);
+					$(row).find(".food-items-price").text(obj.format_price);
+					$(row).find(".food-items-price").attr('price',obj.price);
 					$(food).append($(row));
 				});
 			}
@@ -114,7 +115,7 @@ function buildFood(url,idStore,page,menu_id,key,orderKey,price){
 	});
 }
 //add item to cart
-$("body").on("click",".add_to_cart",function(e){
+$(document).on("click",".add_to_cart",function(e){
 	e.preventDefault();
 	//check local storage
 	if (typeof(Storage) !== "undefined") {
@@ -123,7 +124,7 @@ $("body").on("click",".add_to_cart",function(e){
     	var entities_id = $(parent).parent("div.block2").data("id");
     	var food_content = $(parent).siblings("div.food-content");
     	var name = $(food_content).find("a.food-items-name").text();
-    	var price = parseInt($(food_content).find("span.food-items-price").text());
+    	var price = parseInt($(food_content).find("span.food-items-price").attr('price'));
     	//set time out for cart
 		var time = new Date().getTime();
 		localStorage.time = time;
@@ -184,7 +185,7 @@ function sendItem(obj){
 			$(row).find('.btn-num-product-down').addClass('disabled');
 		}
 		$(row).find(".header-cart-item-img img").attr("src",item.src);
-		$(row).find(".header-cart-item-info").text(item.price);
+		$(row).find(".header-cart-item-info").text($.number(item.price, 0, ',' ));
 		$(row).find(".wrap-num-product").attr('data-id',item.entities_id);
 		$(row).find(".progress-bar").text(item.status_name);
 		$(row).find(".cooked").attr('data-cooked',item.cooked);
@@ -213,12 +214,13 @@ $(document).on("click",".js-show-cart",function(){
 	//show alert if isset change
 	checkAlert();
 	if (localStorage.cart_items) {
+		$('.no-cart-items').css('display', 'none');
 		cart_items = JSON.parse(localStorage.cart_items);
 		sendItem(cart_items);
 		cal_total(cart_items);
 	}
-	if(cart_items.length===0){
-		$(".total-money").text("Total: 0");
+	if(cart_items.length==0){
+		$(".total-money").text("Total: 0 đ");
 		$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
 	}
 })
@@ -298,6 +300,9 @@ function deleteCartItem(url){
 		var row = $(this).parents("li.header-cart-item");
 		var index = $(row).find(".wrap-num-product").data("id");
 		var orderId = localStorage.orderId;
+		var cart_index = cart_items.findIndex(item => item.entities_id === index);
+		var foodId = cart_items[cart_index].id;
+		var cooked = cart_items[cart_index].cooked;
 		$.confirm({
 			title         : '<p class="text-danger">Warning</p>',
 			icon          : 'fa fa-exclamation-circle',
@@ -311,25 +316,20 @@ function deleteCartItem(url){
 					text    : 'OK',
 					btnClass: 'btn btn-primary',
 					action  : function (){
-						var cart_index = cart_items.findIndex(item => item.entities_id === index);
-						$(row).remove();
-						var foodId = cart_items[cart_index].id;
-						var cooked = cart_items[cart_index].cooked;
-						cart_items.splice(cart_index,1);
-						cal_total(cart_items);
-						localStorage.cart_items = JSON.stringify(cart_items);
-						cart_total--;
-						$(".js-show-cart").attr("data-notify",cart_total);
-						notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
-						if(cart_total===0){
-						$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
-						localStorage.removeItem('hasAlert');
-						hideAlert();
-						}
 						if(typeof (foodId) !== 'undefined'){//nếu món đó đã có trong DB rồi thì mới ajax đi
-							if(cooked===0){
-								console.log(foodId);
-								console.log(cooked);
+							if(cooked===0){//neu mon do chua nau xong thi moi cho xoa
+								$(row).remove();
+								cart_items.splice(cart_index,1);
+								cal_total(cart_items);
+								localStorage.cart_items = JSON.stringify(cart_items);
+								cart_total--;
+								$(".js-show-cart").attr("data-notify",cart_total);
+								notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
+								if(cart_total==0){
+									$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
+									localStorage.removeItem('hasAlert');
+									hideAlert();
+								}
 								$.ajax({
 									type: 'POST',
 									headers: {
@@ -349,6 +349,19 @@ function deleteCartItem(url){
 							}else{
 								notify('Error','error','Sorry your food have been cooked, you cannot delete it','#DA3C3C');
 							}
+						}else{//nguoc lai thi xoa o local storage
+							$(row).remove();
+							cart_items.splice(cart_index,1);
+							cal_total(cart_items);
+							localStorage.cart_items = JSON.stringify(cart_items);
+							cart_total--;
+							if(cart_total==0){
+								$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
+								localStorage.removeItem('hasAlert');
+								hideAlert();
+							}
+							$(".js-show-cart").attr("data-notify",cart_total);
+							notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
 						}
 				}
 			},
@@ -358,7 +371,7 @@ function deleteCartItem(url){
 			}
 		}
 	});
-						})
+})
 }
 //count cart item
 function countCart(){
@@ -377,7 +390,7 @@ function cal_total(data){
 		var total = price*quantity;
 		total_money += total;
 	});
-	$(".total-money").text("Total: "+total_money);
+	$(".total-money").text("Total: "+$.number(total_money, 0, ',' )+' đ');
 }
 //function order
 function Order(url,idStore,access_token){
@@ -390,7 +403,7 @@ function Order(url,idStore,access_token){
 			cart_items = JSON.parse(localStorage.cart_items);
 		}
 		cart_items.forEach(function(obj){
-			if(obj.status ===0){
+			if(obj.status == 0){
 				cart_update.push(obj);
 			}
 		});
@@ -424,7 +437,7 @@ function Order(url,idStore,access_token){
 			},
 			success: function (data) {
 				$('.js-panel-cart').removeClass('show-header-cart');//close cart
-				notify('Success','success','You order have been updated!','#2AB143');
+				notify('Success','success','Order của bạn đã được gửi đi chế biến thành công!','#2AB143');
 				//set table fixed
 				var table = $('#table').val();
 				$("#table").prop("disabled",true);//disable if user have order
@@ -489,6 +502,7 @@ function checkAlert(){
 //show food by menu
 function getFoodByMenu(idStore,url){
 	$(document).on("click",'.menu-items',function(e){
+		window.scrollTo(0,0);
 		e.preventDefault();
 		_menu_id = $(this).data("filter");
 		_page    =1;
@@ -539,6 +553,7 @@ $(document).on("change","#sort-by",function(){
 //function filter
 function filter(idStore,url){
 	$(document).on("click",'.btn-filter',function(){
+		window.scrollTo(0,0);
 		$(".list-food").empty();
 		_sort_by = $("#sort-by").val();
 		_price   = $("#price").val();
@@ -548,6 +563,17 @@ function filter(idStore,url){
 		buildFood(url,idStore,_page,null,null,_sort_by,_price);
 	})
 }
+//function buid status food
+function FoodStatus(idDetail,cooked,status,status_name){
+	cart_items = JSON.parse(localStorage.cart_items);
+	var cart_index = cart_items.findIndex(item => item.id === idDetail);
+	cart_items[cart_index].cooked = cooked;
+	cart_items[cart_index].status = status;
+	cart_items[cart_index].status_name = status_name;
+	sendItem(cart_items);
+    localStorage.cart_items = JSON.stringify(cart_items);
+    notify('Success','success','Món '+cart_items[cart_index].name+' đã nấu xong '+cooked,'#437F2C');
+}
 //function alert notify
 function notify(headingContent,icon,content,bgColor){
 	$.toast({
@@ -556,7 +582,7 @@ function notify(headingContent,icon,content,bgColor){
 	    icon: icon,
 	    showHideTransition: 'plain',
 	    allowToastClose: true,
-	    hideAfter: 2000,
+	    hideAfter: 5000,
 	    bgColor:bgColor,
 	    stack: 5,
 	    position: 'top-right',

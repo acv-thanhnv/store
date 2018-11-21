@@ -5,6 +5,7 @@ $im:!important;
 }
 
 .navbar {
+  border-radius: 0px;
   margin-bottom: 10px;
 }
 
@@ -75,7 +76,7 @@ $im:!important;
   }
   .content-left {
     width: 100%;
-    background-color: #F0F8FF;
+    background-color: #ebebeb;
     overflow-y: auto;
     overflow-x: hidden;
     margin-right: 5px;
@@ -100,19 +101,27 @@ $im:!important;
       }
     }
     #table-list {
-      padding: 0px 10px;
+      margin-right: auto;
+      margin-left: auto;
       .wrap-table {
-        width: 70px;
-        height: 70px;
-        margin: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 75px;
+        padding:5px;
         border-radius: 10px;
         box-shadow: 3px 3px #CCCCCC;
-        background-color: #5C6FA2;
+        background-color: #256f93;
         .table-name {
-
-          color: #CCCCCC;
+          font-size: 16px;
+          font-weight: bold;
+          color: white;
         }
       }
+      .wrap-table:hover{
+        cursor: pointer;
+      };
     }
     #list-entities {
       padding: 0px 15px;
@@ -131,9 +140,6 @@ $im:!important;
   .header-right {
     width: 100%;
     background-color: #0090da;
-    .nav-tabs {
-      padding-top: 4px;
-    }
     .dropdown-menu .line {
       border: solid 0.5px grey;
       opacity: 0.5;
@@ -144,12 +150,10 @@ $im:!important;
     }
   }
   .content-right {
-    box-shadow: -5px 0px 5px #B3B3B3;
     width: 100%;
     background-color: white;
     overflow-y: auto;
     overflow-x: hidden;
-    margin-right: 5px;
     min-height: calc(100vh - 46px);
     max-height: calc(100vh - 46px);
 
@@ -169,7 +173,6 @@ $im:!important;
   }
 }
 .content-right{
-  padding: 0px 10px;
   .order-header{
     padding    : 5px 10px;
     color      : white;
@@ -207,10 +210,53 @@ $im:!important;
     background  : #E81E1E;
     border-color:#E81E1E;
   }
+  color:white $im;
   background: #E99336 $im;
 }
 .entities_item:hover{
   cursor: pointer;
+}
+.new_order{
+  color:white;
+}
+.new_order:hover{
+  background: #E94D4D $im;
+  color:white;
+}
+.no-data{
+  font-size: 15px;
+  font-weight: 500;
+}
+.dis-none{
+  display: none;
+}
+.div_table{
+  margin:10px 0px;
+  padding-left: 3px;
+}
+.item-floor a{
+  color: #ccc $im;
+}
+.active_floor{
+  a{
+    color: white $im;
+  }
+  font-size: 16px;
+  font-weight: bold;
+  background: #4874E5;
+  border-radius: 3px;
+}
+.order-header{
+  margin-right: 0px;
+  margin-left: 0px;
+}
+#table-id,#floor-id{
+  color:#4b8bab;
+  font-size: 15px;
+  font-weight: bold;
+}
+.entities_order_action{
+  text-align: center;
 }
 @media only screen and (max-width: 768px) {
 }

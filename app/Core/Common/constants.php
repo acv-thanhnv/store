@@ -9,15 +9,16 @@
 namespace App\Core\Common;
 class SDBStatusCode
 {
-    const OK = 'OK';
-    const DataNull = 'DataNull';
-    const Excep = 'Excep';
-    const ApiError = 'ApiError';
-    const WebError = 'WebError';
-    const ACLNotPass = 'ACLNotPass';
+    const OK             = 'OK';
+    const Error          = 'Error';
+    const DataNull       = 'DataNull';
+    const Excep          = 'Excep';
+    const ApiError       = 'ApiError';
+    const WebError       = 'WebError';
+    const ACLNotPass     = 'ACLNotPass';
     const ApiAuthNotPass = 'ApiAuthNotPass';
-    const PDOExceoption = 'PDOExceoption';
-    const ValidateError = 'ValidateError';
+    const PDOExceoption  = 'PDOExceoption';
+    const ValidateError  = 'ValidateError';
 }
 
 class FoodConst
@@ -65,11 +66,17 @@ class LoggingConst
 }
 class OrderConst{
 
+    const has_delete                 = 'yes';
+
+    const has_rollBack               = 'yes';
+
     const CashierChannelToCashier    = "cashier2cashier";
     
+    const RollbackPaymentEventName   = "rollback-payment";
+    
     const Customer2Order             = "customer2order";
-
-    const Order2ChefEvent            = "order2chef";
+    
+    const UpdateOrderAtKitchenEvent  = "update-order-at-kichen";
     
     const PaymentDoneEventName       = "payment-done";
     
@@ -79,14 +86,23 @@ class OrderConst{
     
     const OrderChannelToCashier      = "customer2cashier";
     
+    const Other2Order                = 'other2order';
+
+    const Order2Other                = 'order2other';
     
     const NewOrderToOrderManager     = "new-order-to-order-manager";
     
-    const OrderChannelToWaiter       = "waiter2waiter";
+    const WaiterToWaiterChannel      = "waiter2waiter";
+    
     const OrderEventName             = "order.waiter";
     
+    const OrderDeleteEvent           = 'order_delete';
     
-    const OrderChannelToChef         = "order2chef";
+    
+    const Order2Kitchen              = "order2kitchen";
+
+    const Order2Cashier              = "order2cashier";
+    
     const OrderChefEventName         = "new-order";
     
     const CustomerCashierEventName   = "new-payment";
@@ -101,11 +117,18 @@ class OrderConst{
 class EntityProperty{
     const maxField = 10;
 }
+class TableConst{
+    const TablePerPage    = 12;
+    const TableColorEvent = 'table_color_event';
+    const noOrder         = '#256f93';
+    const haveOrder       = '#EA3232';
+    const Done            = '#EEA045';
+}
 class StorageDisk{
     const diskLocalName = "public";
 }
 class CutomerConst{
-    const limit      = 5;
+    const limit      = 12;
     const numberMenu = 5;
     const hour       = 2;
 }
@@ -120,7 +143,12 @@ class OrderStatusValue{
     const Deleted = 10;
 }
 class FoodStatusValue{
-    const Done    = 2;
-    const NoDone  = 0;
-    const Process = 1;
+    const FoodStatusEvent = 'food.status';
+    const Done            = 2;
+    const NoDone          = 0;
+    const Process         = 1;
+}
+class UserValue{
+    const role_manager = 2;
+    const role_admin   = 1;
 }

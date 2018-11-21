@@ -58,13 +58,21 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
+						<label>Priority </label>
+						<input type="number" name="priority" class="form-control has-feedback-left" id="priority" value="{{$obj->priority}}" 
+						placeholder="Priority...">
+						<span class="fa fa-level-up form-control-feedback left" aria-hidden="true"></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Menu Description </label>
 						<input type="text" name="description" class="form-control has-feedback-left" value="{{$obj->description}}" id="description"
 						placeholder="Type Menu Description...">
 						<span class="fa fa-pencil form-control-feedback left" aria-hidden="true"></span>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group" style="text-align: right">
 					<div>
 						<button class="btn btn-primary" type="reset">Reset</button>
 						<button type="button" class="btn btn-success edit">Edit</button>
@@ -82,13 +90,14 @@
 		$(".edit").click(function(){
 		var name        = $("#name").val();
 		var description = $("#description").val();
+		var priority    = $("#priority").val();
         $.ajax({
         	type: 'POST',
         	headers: {
         		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         	},
         	url: "",
-        	data:{name:name,description:description},
+        	data:{name:name,description:description,priority:priority},
         	success: function (result) {
         		if (result.status == '{{App\Core\Common\SDBStatusCode::OK}}'){
         			//call parent and close modal

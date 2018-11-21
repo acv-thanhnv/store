@@ -78,6 +78,15 @@
 			text-overflow: ellipsis;
 			width: 100%;
 		}
+		#preview1 .thumb{
+			width : 300px;
+            min-height: 100px;
+            height: 214px;
+            margin: 0.2em -0.7em 0 0;
+            border-radius: 20px;
+            box-shadow: 5px 5px 2px 5px #D7C7C7;
+			/*background-image: url("common_images/no-store.png");*/
+		}
     </style>
 @endpush
 @section("content")
@@ -103,7 +112,7 @@
 				<div class="form-group">
 					<div class="col-md-10 col-sm-10 col-xs-12 form-group has-feedback">
 						<input id="file" name="image" type="file" class="form-control" />
-						<div id="preview">
+						<div id="preview1">
 							<img id="OpenImgUpload" data-src="{{$store->src}}" data-path="{{$store->avatar}}" class="thumb" title="avatar" src="{{$store->src}}">
 							<span class="fa remove_img_preview" title="remove"></span>
 						</div>
@@ -131,7 +140,7 @@
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Latitude  </label>
-						<input type="number" id="lat" class="form-control has-feedback-left" name="lat" value="{{$store->lat}}"
+						<input type="number" readonly="" id="lat" class="form-control has-feedback-left" name="lat" value="{{$store->lat}}"
 						placeholder="Latitude...">
 						<span class="fa fa-compass form-control-feedback left" aria-hidden="true"></span>
 					</div>
@@ -139,7 +148,7 @@
 				<div class="form-group">
 					<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 						<label>Longtitude   </label>
-						<input type="number" id="lng" class="form-control has-feedback-left" name="lng" value="{{$store->lng}}" 
+						<input type="number" readonly="" id="lng" class="form-control has-feedback-left" name="lng" value="{{$store->lng}}" 
 						placeholder="Longitude...">
 						<span class="fa fa-compass form-control-feedback left" aria-hidden="true"></span>
 					</div>
@@ -249,7 +258,7 @@
 		}
 	}
 	$('#file').change(handleFileSelect);
-	$('#preview').on('click', '.remove_img_preview', function () {
+	$('#preview1').on('click', '.remove_img_preview', function () {
 		var src = $("#OpenImgUpload").data("src");
 		$("#OpenImgUpload").attr('src', src);
 	});

@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Dialog</title>
+    <base href="{{asset('')}}">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<link href="{{ asset('backend/template1/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Font Awesome -->

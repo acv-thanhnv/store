@@ -1,21 +1,22 @@
 <?php
 
 namespace App\Backend\Http\Controllers;
-use App\Core\Helpers\CommonHelper;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Core\Entities\DataResultCollection;
-use App\Core\Services\Interfaces\UploadServiceInterface;
 use App\Backend\Services\Interfaces\FoodServiceInterface;
 use App\Backend\Services\Interfaces\TypeServiceInterface;
+use App\Core\Common\FoodConst;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Common\UploadConst;
-use Illuminate\Support\Facades\Storage;
+use App\Core\Entities\DataResultCollection;
+use App\Core\Helpers\CommonHelper;
 use App\Core\Helpers\ResponseHelper;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
-use Intervention\Image\ImageManagerStatic as Image;
+use App\Core\Services\Interfaces\UploadServiceInterface;
 use DateTime;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class FoodController extends Controller
 {
@@ -32,9 +33,10 @@ class FoodController extends Controller
     //Foods
     public function getFood()
     {
-        $storeId =CommonHelper::getStoreId();
+        $storeId       = CommonHelper::getStoreId();
+        $totalPerPage  = FoodConst::foodPerPage;
         $diskLocalName = "public";
-        $arrFood = $this->foodService->getFood($storeId);
+        $arrFood       = $this->foodService->getFood($storeId,$totalPerPage);
         foreach($arrFood as $obj)
         {
             $obj->arrProp = $this->foodService->getPropByFood($obj->id);

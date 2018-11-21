@@ -22,17 +22,17 @@ class Waiter2WaiterPusher implements ShouldBroadcast
     public $foodId;
     public $quantity;
     public $cooked;
-    public $clearAll;
+    public $push;
     public $rollback;
     public $time;
-    public function __construct($storeId, $orderId, $foodId, $quantity, $cooked, $clearAll, $rollback, $time)
+    public function __construct($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time)
     {
         $this->storeId = $storeId;
         $this->orderId = $orderId;
         $this->foodId = $foodId;
         $this->quantity = $quantity;
         $this->cooked = $cooked;
-        $this->clear = $clearAll;
+        $this->push = $push;
         $this->rollback = $rollback;
         $this->time = $time;
     }
@@ -44,7 +44,7 @@ class Waiter2WaiterPusher implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::UpdateOrderCooked;
+        return OrderConst::WaiterToWaiterChannel;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -53,6 +53,6 @@ class Waiter2WaiterPusher implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OrderChannelToWaiter));
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::WaiterToWaiterChannel));
     }
 }

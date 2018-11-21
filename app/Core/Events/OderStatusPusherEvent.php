@@ -24,13 +24,17 @@ class OrderStatusPusherEvent implements ShouldBroadcast
      * @return void
      */
     public $arrOrder;
-    public $orderId;
+    public $order;
+    public $has_rollBack;
     public $access_token;
-    public function __construct($access_token,$orderId,$arrOrder)
+    public $has_delete;
+    public function __construct($access_token,$order,$arrOrder,$has_delete,$has_rollBack)
     {
+        $this->has_rollBack = $has_rollBack;
         $this->arrOrder     = $arrOrder; //json array order status
-        $this->orderId      = $orderId;
+        $this->order        = $order;
         $this->access_token = $access_token;
+        $this->has_delete   = $has_delete;
     }
     /**
      * The event's broadcast name.

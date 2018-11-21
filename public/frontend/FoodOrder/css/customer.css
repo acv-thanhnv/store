@@ -102,6 +102,7 @@
     display: none !important; }
 
   .header-cart-item-name {
+    font-family: "Times New Roman", Times, serif;
     white-space: normal !important; }
 
   .header-cart-title {
@@ -512,6 +513,9 @@ body.show-header-cart {
   margin-left: auto; }
 
 .stext-275 {
+  font-family: "Times New Roman", Times, serif; }
+
+.add_to_cart, .food-items-name {
   font-family: "Times New Roman", Times, serif; }
 
 /*# sourceMappingURL=customer.css.map */
