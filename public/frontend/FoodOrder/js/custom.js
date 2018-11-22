@@ -206,6 +206,9 @@ function sendItem(obj){
 					break;
 		}
 		$(row).find(".progress-bar").css("width",percent_bar+"%");
+		if(percent_bar==100){
+			$(row).find(".progress-bar").css("background",'#28a745');
+		}
 		$(cart).append($(row));
 	});
 }

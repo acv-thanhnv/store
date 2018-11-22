@@ -113,14 +113,14 @@ class FoodService extends BaseService implements FoodServiceInterface
             ->where('store_order.store_id', $idStore)
             ->where('store_order.location_id', $idLocation)
             ->where('store_order.status','<',OrderStatusValue::Pay)
-            ->orderby('store_order.id','asc')
+            ->orderby('store_order.status','asc')
             ->get();
         foreach($order as $order_detail){
             $order_detail ->detail = SDB::table('store_order_detail as o_detail')
                 ->join ('store_entities','o_detail.entities_id','=','store_entities.id')
                 ->join('store_order_detail_status as s_detail','s_detail.value','=','o_detail.status')
                 ->select('o_detail.*','store_entities.name','store_entities.image','store_entities.price','s_detail.status_name','o_detail.cooked')
-                ->orderBy('o_detail.id','asc')
+                ->orderBy('o_detail.status','asc')
                 ->where('o_detail.order_id','=', $order_detail->id)
                 ->get();
             foreach($order_detail ->detail as $foodItem){
