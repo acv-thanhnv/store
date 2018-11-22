@@ -9,7 +9,9 @@
         width: 100%;
     }
     .order_detail_name{
-        white-space: nowrap; 
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -33,6 +35,7 @@
     }
 
     .quantity-detail {
+        margin:0 5px;
         width: 28px;
         height: 28px;
         text-align: center;
@@ -40,11 +43,15 @@
         display: inline;
     }
     .row-order-detail{
-        margin-bottom: 10px;
+        padding: 0px;  
+        height: 60px;
         display: flex;
         align-items: center;
         justify-content: center;
 
+    }
+    .row-order-detail:not(:last-child){
+        border-bottom: 1px solid #c3dffb;
     }
     .order_detail_quantity{
         padding: 0px;
@@ -72,8 +79,6 @@
     .num-product-up,.num-product-down{
         display: flex;
         align-items: center;
-        width: 20px;
-        height: 20px;
     }
     .num-product-up:hover,.num-product-down:hover{
         cursor: pointer;
@@ -108,33 +113,54 @@
         border-radius: 5px;
     }
     .cooked{
+        font-size: 16px;
         position: absolute;
-        top: -20px;
-        left: 26px;
+        top: -22px;
         color: green;
         font-weight: bold;
+    }
+    .order_detail_quantity {
+        position: relative;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .order_detail_quantity  .btn{
+        padding: .3rem .4rem;
+        border:1px solid rgba(0,0,0,.15);
+    }
+    .quantity-detail{
+        border-width: 0 1 0 1px;
+        border-style: solid;
+        border-top-color: #e1e1e1;
+        padding: 0 0 1px;
+        background-color: transparent;
+    }
+    .order_detail_id{
+        text-align: center;
     }
 </style>
 
     <div id="entities-detail-template" style="display: none">
         <div class="row-order-detail row">
-            <div class="col-md-2 order_detail_image">
-                 <img src="" alt="Image" class="img-detail"/>
+            <div class="col-md-1 col-xl-1 order_detail_id">
             </div>
-            <div class="col-md-3 order_detail_name">
+            <div class="col-md-3 col-xl-3 order_detail_name">
                 <h5 class="name-detail"></h5>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 col-xl-2 order_detail_status">
                 <span class="badge badge-pill food_status"></span>
             </div>
-            <div class="col-md-2 order_detail_price"></div>
-            <div class="col-md-2 order_detail_quantity">
+            <div class="col-md-2 order_detail_price col-xl-2" ></div>
+            <div class="col-md-2 order_detail_quantity col-xl-2">
                 <span class="cooked"></span>
-                <span class="num-product-down"><i class="fa fa-minus"></i></span>
+                <span class="num-product-down btn btn-sm"><i class="fa fa-angle-down"></i></span>
                 <input type="number" class="quantity-detail form-control text-center" value="1">
-                <span class="num-product-up"><i class="fa fa-plus"></i></span>
+                <span class="num-product-up btn btn-sm"><i class="fa fa-angle-up"></i></span>
             </div>
-            <div class="col-md-1 order_detail_action">
+            <div class="col-md-2 col-xl-2 order_detail_action">
+                <button class="btn btn-success btn-sm save-order-detail disabled"><i class="fa fa-save"></i>
+                </button>
                 <button class="btn btn-danger btn-sm delete-order-detail"><i class="fa fa-trash-o"></i>
                 </button>
             </div>

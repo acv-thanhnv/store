@@ -55,7 +55,7 @@
     }
 </style>
 <div id="list-entities-template" style="display: none;">
-    <div class="col-lg-3 col-md-4 food-item" title="Food's Name Title">
+    <div class="col-lg-4 col-xl-3 col-md-4 food-item" title="Food's Name Title">
         <!-- Block2 -->
         <div class="block2 entities_item">
             <div class="block2-pic hov-img0">

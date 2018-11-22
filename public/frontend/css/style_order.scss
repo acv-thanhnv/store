@@ -198,11 +198,12 @@ $im:!important;
     font-size  : 16px;
     font-weight: bold;
   }
+  .entities-row-order:not(:first-child){
+    border-top     : 1px solid #61befd;
+  }
   .entities-row-order{
-    padding: 15px 0px;
-    .entities_order_status_content{
-      width: 100px;
-    }
+    padding-top:15px;
+    padding-bottom: 15px;
     //css status 
     .status_0{
       color           : #004085;
@@ -222,7 +223,6 @@ $im:!important;
       padding         : .5rem 0.6rem;
       border-color    : #c3e6cb;
     }
-    border-bottom  : 1px solid #E9E9E9;
     display        : flex;
     align-items    : center;
     justify-content: center;
@@ -278,9 +278,54 @@ $im:!important;
   margin-left: 0px;
 }
 .entities_order_action{
-  text-align: center;
+  text-align: right;
 }
-@media only screen and (max-width: 768px) {
+.entities_order_action{
+  div{
+    display: inline;
+  }
+}
+.order_detail_price {
+  padding-left: 30px;
+}
+.entities_order_status_color{
+  display: none;
+}
+// custom css for tablet device
+@media only screen and (max-width: 1200px) {
+  .entities_order_status_color{
+    display: block;
+  }
+  .entities_order_status_content{
+    display: none;
+  }
+  .entities_order_action{
+    div{
+      display: block;
+    }
+    padding-left: 0px;
+    .btn{
+      width: 30px;
+      height: 30px;
+      padding: 0px;
+    }
+    .div2_action{
+      margin-top: 5px;
+    }
+  }
+  .content-right .entities-row-order{
+    padding: 5px 0px;
+  }
+  .order_detail_image{
+    display: none;
+  }
+  .order_detail_quantity {
+    display: flex;
+    justify-content: center;
+  }
+  .order_detail_status{
+    padding: 0px;
+  }
 }
 #left-nav-tabs{
   .nav-item:hover{
@@ -468,4 +513,16 @@ $im:!important;
 }
 .show_detail{
   display: block $im;
+}
+.entities_order_time {
+  text-align: center;
+}
+.header-right{
+  margin:0px;
+}
+.order-action{
+  text-align: center;
+}
+.order-date{
+  text-align: left;
 }

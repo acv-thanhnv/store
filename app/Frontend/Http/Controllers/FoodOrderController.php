@@ -48,6 +48,7 @@ class FoodOrderController extends Controller
         $arrTable     = SDB::table('store_location')
                         ->join('store_floor', 'store_location.floor_id','=', 'store_floor.id')
                         ->where('store_floor.store_id', $idStore)
+                        ->orderby('store_location.name','asc')
                         ->select('store_location.*')
                         ->get();
         $access_token = md5(CommonHelper::dateNow());
@@ -208,6 +209,7 @@ class FoodOrderController extends Controller
         $order["access_token"]    = $request->access_token;
         $order["store_id"]        = $request->idStore;
         $order["location_id"]     = $request->table;
+        $order["location_name"]   = $request->table_name;
         $cart_items               = $request->cart_items;
         $order["description"]     = $request->description;
         $order["status"]          = 0;
@@ -273,6 +275,7 @@ class FoodOrderController extends Controller
                     ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
                     ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
                     ->where('store_order_detail.order_id',$orderId)
+                    ->orderby('store_order_detail.status','desc')
                     ->get();
         foreach($arrOrderDetail as $obj){
             $obj->price = number_format($obj->price);
