@@ -123,7 +123,7 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->join('store_floor', 'store_location.floor_id', '=','store_floor.id')
         ->selectRaw('store_order.id, store_location.name as name, store_floor.name as floor, store_type_location.name as priority, store_order.datetime_order')
         ->where('store_order.store_id',$storeId)
-        ->whereIn('store_order.status',[OrderStatusValue::Process,OrderStatusValue::Done,OrderStatusValue::Pay])
+        ->whereIn('store_order.status',[OrderStatusValue::Process,OrderStatusValue::Done])
         /*->whereExists(function ($query) {
                 $query->select(SDB::raw(1))
                       ->from('store_order_detail')
