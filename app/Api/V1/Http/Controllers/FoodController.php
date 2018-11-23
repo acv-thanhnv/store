@@ -275,10 +275,10 @@ class FoodController extends Controller
         $orderId        = $request->orderId;
         $status         = SDB::table('store_order_detail')
                             ->where('id',$request->idOrderDetail)
-                            ->select('status')
+                            ->select('status','cooked')
                             ->get();
         //neu mon an da che bien roi thi khong cho xoa, ke cap cap nhap chinh mon do
-        if($status[0]->status == FoodStatusValue::Done){
+        if($status[0]->status == FoodStatusValue::Done || $status[0]->cooked>0){
             $result->status = SDBStatusCode::Error;
         }else{
             //delete food item
@@ -294,11 +294,15 @@ class FoodController extends Controller
                                 ->get();
             $Process = 0;//variable count food was processed
             $NoDone  = 0;//variable count food not done
+            $Done    = 0;//variable count food not done
             foreach($arrOrderDetail as $obj){
                 //check status of food, nếu ko có món nào là đang chờ xác nhận thì status của order chuyển theo món
                 switch ($obj->status) {
-                    case FoodStatusValue::Process:
+                    case (FoodStatusValue::Process) :
                         $Process ++;
+                        break;
+                    case (FoodStatusValue::Done) :
+                        $Done++;
                         break;
                     default:
                         $NoDone++;

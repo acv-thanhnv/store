@@ -113,10 +113,6 @@
         border-radius: 5px;
     }
     .cooked{
-        font-size: 16px;
-        position: absolute;
-        top: -22px;
-        color: green;
         font-weight: bold;
     }
     .order_detail_quantity {
@@ -139,6 +135,10 @@
     .order_detail_id{
         text-align: center;
     }
+    .order_detail_action .btn{
+        width: 30px;
+        height: 30px;
+    }
 </style>
 
     <div id="entities-detail-template" style="display: none">
@@ -153,15 +153,16 @@
             </div>
             <div class="col-md-2 order_detail_price col-xl-2" ></div>
             <div class="col-md-2 order_detail_quantity col-xl-2">
-                <span class="cooked"></span>
                 <span class="num-product-down btn btn-sm"><i class="fa fa-angle-down"></i></span>
                 <input type="number" class="quantity-detail form-control text-center" value="1">
                 <span class="num-product-up btn btn-sm"><i class="fa fa-angle-up"></i></span>
             </div>
             <div class="col-md-2 col-xl-2 order_detail_action">
-                <button class="btn btn-success btn-sm save-order-detail disabled"><i class="fa fa-save"></i>
+                <button class="btn btn-success disabled btn-sm save-order-detail">
+                    <span class="cooked">0</span>
                 </button>
-                <button class="btn btn-danger btn-sm delete-order-detail"><i class="fa fa-trash-o"></i>
+                <button class="btn btn-danger btn-sm delete-order-detail">
+                    <i class="fa fa-trash-o"></i>
                 </button>
             </div>
         </div>
