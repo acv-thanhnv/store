@@ -185,11 +185,11 @@ class KitchenController extends Controller
         ->where('entities_id', $foodId)
         ->update(['cooked' => $cooked]);
 
-        if (true) {
-            $rollback = 0;
-            event(new Other2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
-            event(new FoodStatusEvent($access_token,$orderId,$storeId,$location_id,$order_detail_id,$cooked,$status));
-        }
+        
+        $rollback = 0;
+        event(new Other2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
+        event(new FoodStatusEvent($access_token,$orderId,$storeId,$location_id,$order_detail_id,$cooked,$status));
+        
         return $time;
     }
 
