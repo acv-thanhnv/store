@@ -149,7 +149,8 @@ class KitchenController extends Controller
         if (count($res123)===0) {
             $update = DB::table('store_order')
             ->where('id', $orderId)
-            ->update(['status' => 2]);
+            ->where('status', '<', OrderStatusValue::Done)
+            ->update(['status' => OrderStatusValue::Done]);
 
             $orderDetails = DB::table('store_order')
             ->join('store_location', 'store_order.location_id', '=','store_location.id')
