@@ -286,40 +286,6 @@ function pushToWaiterTable(result) {
 		}
 	} else {
 		loadWaiterTable();
-		/*if (priority!=='Normal') output+='<tr class="t-header vip '+storeId+'-'+orderId+'"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ '+orderId+'</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-light">'+table+' '+floor+'</span> </button> </td> </tr>'
-  	else output+='<tr class="t-header normal '+storeId+'-'+orderId+'"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ '+orderId+'</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-light">'+table+' '+floor+'</span> </button> </td> </tr>'
-  		output+='<tr class="hidden t-header-child '+storeId+'-'+orderId+'"> <th style="width: 25%">Tên món</th> <th style="width: 15%">SL</th> <th style="width: 40%">Trạng thái</th> <th style="width: 20%"></th> </tr>'
-  	for (var i in result.foodDetails) {
-  		var foodId = result.foodDetails[i].entities_id
-  		var foodName = result.foodDetails[i].name
-  		var foodStatus = result.foodDetails[i].status
-  		var quantity = result.foodDetails[i].quantity
-  		var cooked = result.foodDetails[i].cooked
-  		$('.t-header.'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
-  		if ($('#'+storeId+'-'+orderId+'-'+foodId)[0]) {
-  			let text = $('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html()
-  			let index = text.indexOf('/')
-  			let substring = text.substring(index)
-  			let newText = text.replace(substring, '/'+quantity)
-  			$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html(newText)
-  			$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(2).find('span:last').text(quantity-cooked)
-  		} else {
-  			output+='<tr id="'+storeId+'-'+orderId+'-'+foodId+'" class="hidden foodline '+storeId+'-'+orderId+'" storeId="'+storeId+'" orderId="'+orderId+'" foodId="'+foodId+'" foodName="'+name+'" quantity="'+quantity+'"> <td class="food food-right">'+foodName+'</td> <td>'+cooked+'/'+quantity+'</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-light">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-light">'+(quantity-cooked)+'</span></button> </td> <td> <button cooked="'+(cooked+1)+'" push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button cooked="'+quantity+'" push="'+(quantity-cooked)+'" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button> </td> </tr>'
-  		}
-  		if (foodStatus==2) $('#'+storeId+'-'+orderId+'-'+foodId).addClass('hidden')
-  		else $('#'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
-  	}
-  		if ($('#'+storeId+'-'+orderId+'-'+foodId)[0]) {
-  		let text = $('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html()
-  		let index = text.indexOf('/')
-  		let substring = text.substring(index)
-  		let newText = text.replace(substring, '/'+quantity)
-  		$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html(newText)
-  		$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(2).find('span:last').text(quantity-cooked)
-  	} else {
-  		if (priority!=='Normal') $('#cho-cung-ung').find('.normal:first').before(output)
-  			else $('#cho-cung-ung').find('.hidden:last').after(output)
-  		}*/
 	}
 }
 

@@ -134,7 +134,7 @@ class CashierService extends BaseService implements CashierServiceInterface
         ->join('store_order', 'store_order.id', '=','store_contact_cashier.order_id')
         ->join('store_location', 'store_order.location_id', '=','store_location.id')
         ->join('store_floor', 'store_floor.id', '=','store_location.floor_id')
-        ->select('store_order.id', 'store_location.name as table', 'store_floor.name as floor')
+        ->select('store_order.id as order_id', 'store_location.name as table', 'store_floor.name as floor')
         ->where('store_contact_cashier.store_id', $storeId)
         ->get();
         return $data;
