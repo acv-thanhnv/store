@@ -12,4 +12,5 @@ interface CashierServiceInterface
     public function getInvoicesByStore3(Request $request);
     public function getRollbackCashierTable(Request $request);
     public function getAllPayment(Request $request);
+    public function getListRequestsToCashier(Request $request);
 }

@@ -8,6 +8,7 @@ use App\Core\Dao\SDB;
 use App\Core\Events\Customer2CashierPusher;
 use App\Core\Events\OrderStatusPusherEvent;
 use App\Core\Events\Other2OrderManagerPusher;
+use App\Core\Events\Other2WaiterPusher;
 use App\Core\Events\PaymentDonePusher;
 use App\Core\Events\RollbackCashierPusher;
 use App\Core\Events\TableEvent;
@@ -21,7 +22,7 @@ class CashierController extends Controller
 	public function index($storeId) {
 		return view('frontend/cashier3/index', [
 			'storeId' => $storeId,
-			'WaiterToWaiterChannel' => OrderConst::WaiterToWaiterChannel,
+			'OtherToWaiterChannel' => OrderConst::OtherToWaiterChannel,
 			'Customer2Order' => OrderConst::Customer2Order,
 			'Order2Cashier' => OrderConst::Order2Cashier,
 			'Order2Kitchen' => OrderConst::Order2Kitchen,
@@ -38,9 +39,10 @@ class CashierController extends Controller
 		->whereIn('store_order.id', $listOrderId)
 		->update(['store_order.status' => OrderStatusValue::Pay ]);
 
-		$i=0;
+		$foodId = $quantity = $cooked = $push = $rollback = $time = 0;
+		event(new Other2WaiterPusher($storeId, $listOrderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
 
-		for ($i=0; $i<count($listOrderId); $i++) {
+        for ($i=0; $i<count($listOrderId); $i++) {
 			$orderId = $listOrderId[$i];
 			$rollback = DB::table('store_rollback_cashier')->insert(
 				[
@@ -81,11 +83,17 @@ class CashierController extends Controller
 		$storeId = $request->storeId;
 		$orderId = $request->orderId;
 		$status = $request->status;
+		$listOrderId = [];
+		array_push($listOrderId, $orderId);
 
 		$res = DB::table('store_order')
 		->where('store_id', $storeId)
 		->where('id', $orderId)
 		->update(['status' => $status ]);
+
+		$foodId = $quantity = $cooked = $push = $time = 0;
+		$rollback = 1;
+		event(new Other2WaiterPusher($storeId, $listOrderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
 
 		$res2 = DB::table('store_rollback_cashier')
 		->where('store_id', $storeId)

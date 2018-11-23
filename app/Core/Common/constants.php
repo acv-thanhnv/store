@@ -92,7 +92,7 @@ class OrderConst{
     
     const NewOrderToOrderManager     = "new-order-to-order-manager";
     
-    const WaiterToWaiterChannel      = "waiter2waiter";
+    const OtherToWaiterChannel      = "other2waiter";
     
     const OrderEventName             = "order.waiter";
     

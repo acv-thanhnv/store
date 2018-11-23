@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-md-12 w-100">
-		<button class="btn btn-danger btn-lg">Mã đơn:
+		<button class="btn btn-danger btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> Mã đơn
 			<center>
 				<span id="invoice-id" class="badge badge-light">
 					< trống >
@@ -17,11 +17,11 @@
 		</center>
 		<br>
 		<button id="in-tat-ca" class="btn-group-cashier btn btn-danger btn-lg">
-			In hóa đơn
+			<i class="fa fa-print" aria-hidden="true"></i> In hóa đơn
 		</button>
 		<br>
 		<button id="thanh-toan-tat-ca" class="btn-group-cashier btn btn-primary btn-lg">
-			Thanh toán:
+			<i class="fa fa-money" aria-hidden="true"></i> Thanh toán
 			<br>
 			<span id="payment-right"></span>
 		</button>

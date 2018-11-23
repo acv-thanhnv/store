@@ -13,7 +13,7 @@ Nhà bếp
 <div id="config" class="hidden"
 storeId="{{ $storeId }}"
 rootPath="{{ config('app.url') }}"
-WaiterToWaiterChannel="{{ $WaiterToWaiterChannel }}"
+OtherToWaiterChannel="{{ $OtherToWaiterChannel }}"
 Customer2Order="{{$Customer2Order}}"
 
 Order2Kitchen="{{ $Order2Kitchen }}"

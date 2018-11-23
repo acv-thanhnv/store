@@ -8,7 +8,7 @@ use App\Core\Common\OrderConst;
 use App\Core\Events\FoodStatusEvent;
 use App\Core\Events\Order2ChefPusher;
 use App\Core\Events\Other2OrderManagerPusher;
-use App\Core\Events\Waiter2WaiterPusher;
+use App\Core\Events\Other2WaiterPusher;
 use App\Core\Helpers\CommonHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -88,7 +88,7 @@ class KitchenController extends Controller
         ->where('store_order.access_token',$access_token)
         ->get();
 
-        event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
+        event(new Other2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
         event(new Other2OrderManagerPusher($storeId, $orderDetails[0], $foodDetails) );
         event(new FoodStatusEvent($access_token,$orderId,$storeId,$location_id,$order_detail_id,$cooked,$status));
 
@@ -186,7 +186,7 @@ class KitchenController extends Controller
 
         if (true) {
             $rollback = 0;
-            event(new Waiter2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
+            event(new Other2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
             event(new FoodStatusEvent($access_token,$orderId,$storeId,$location_id,$order_detail_id,$cooked,$status));
         }
         return $time;
@@ -247,7 +247,7 @@ class KitchenController extends Controller
     public function index($storeId) {
         return view('frontend/chef3/index', [
             'storeId' => $storeId,
-            'WaiterToWaiterChannel' => OrderConst::WaiterToWaiterChannel,
+            'OtherToWaiterChannel' => OrderConst::OtherToWaiterChannel,
             'Customer2Order' => OrderConst::Customer2Order,
             'Order2Cashier' => OrderConst::Order2Cashier,
             'Order2Kitchen' => OrderConst::Order2Kitchen,

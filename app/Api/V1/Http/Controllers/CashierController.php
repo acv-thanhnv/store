@@ -59,4 +59,9 @@ class CashierController extends Controller
 		return response()->json($data);
 	}
 
+	public function showListRequestsToCashierTable(Request $request) {
+		$data = $this->service->getListRequestsToCashier($request);
+		return response()->json($data);
+	}
+
 }

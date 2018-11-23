@@ -79,7 +79,7 @@ module.exports = __webpack_require__(72);
 var storeId = $('#config').attr('storeId');
 var rootPath = $('#config').attr('rootPath');
 var Customer2Order = $('#config').attr('Customer2Order');
-var WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel');
+var OtherToWaiterChannel = $('#config').attr('OtherToWaiterChannel');
 
 var Order2Kitchen = $('#config').attr('Order2Kitchen');
 var Order2Cashier = $('#config').attr('Order2Cashier');
@@ -502,17 +502,8 @@ var pusher = new Pusher("4f5dd81b5671af6c6fb2", {
 
 var order2kitchen = pusher.subscribe(md5(storeId) + '-' + Order2Kitchen);
 order2kitchen.bind(Order2Other, function (res) {
-	/*console.log('start')
- console.log(res)
- console.log('end')*/
 	pushToOrderListTable(res);
 	pushToWaiterTable(res);
-	/*for (var i in res.foodDetails) {
- 	let foodId = res.foodDetails[i].entities_id
- 	let quantity = res.foodDetails[i].quantity
- 	let cooked = res.foodDetails[i].cooked
- 	updateQueueTable(foodId, quantity-cooked)
- }*/
 	loadQueueTable();
 });
 
@@ -522,60 +513,77 @@ customer2order.bind(Customer2Order, function (res) {
 	removeFromWaiterTable(res);
 });
 
-var waiter2waiter = pusher.subscribe(md5(storeId) + '-' + WaiterToWaiterChannel);
-waiter2waiter.bind(WaiterToWaiterChannel, function (res) {
-	console.log(res);
-	var time = res.time;
-	var orderId = res.orderId;
+var other2waiter = pusher.subscribe(md5(storeId) + '-' + OtherToWaiterChannel);
+other2waiter.bind(OtherToWaiterChannel, function (res) {
 	var foodId = res.foodId;
-	var quantity = res.quantity;
 	var rollback = res.rollback;
-	var cooked = res.cooked;
-	var push = res.push;
-	var cooked1 = parseInt(cooked) + 1;
-	var detectOrder = '.' + storeId + '-' + orderId;
-	var detect = '#' + storeId + '-' + orderId + '-' + foodId;
-	var detectRollback = '#rollback-' + storeId + '-' + orderId + '-' + foodId + '-' + time;
-	var foodName = $(detect).attr('foodName');
-	if (!rollback) {
-		var obj = {
-			storeId: storeId,
-			orderId: orderId,
-			time: time,
-			quantity: quantity,
-			foodName: foodName,
-			foodId: foodId,
-			push: push
-		};
-		pushToloadRollbackTable(obj);
-		updateQueueTable(foodId, -push);
-		updateOrderListTable(orderId, foodId, -push);
-		if (quantity != cooked) {
-			$(detect + ' td').eq(1).html(cooked + '/' + quantity);
-			$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-light">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-light">' + (quantity - cooked) + '</span></button>');
-			$(detect + ' td').eq(4).html('<button push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button>');
-		} else {
-			$(detect).addClass('hidden');
-			$('#foodlist-' + storeId + '-' + orderId + '-' + foodId).addClass('hidden');
-		}
-		if (!$('.foodline.' + storeId + '-' + orderId).not('.hidden')[0]) $('.' + storeId + '-' + orderId).addClass('hidden');
-	} else {
-		updateQueueTable(foodId, push);
-		updateOrderListTable(orderId, foodId, push);
-		if ($(detect)[0]) {
+	if (parseInt(foodId) != 0) {
+		console.log(res);
+		var time = res.time;
+		var orderId = res.orderId;
+		var quantity = res.quantity;
+		var cooked = res.cooked;
+		var push = res.push;
+		var cooked1 = parseInt(cooked) + 1;
+		var detectOrder = '.' + storeId + '-' + orderId;
+		var detect = '#' + storeId + '-' + orderId + '-' + foodId;
+		var detectRollback = '#rollback-' + storeId + '-' + orderId + '-' + foodId + '-' + time;
+		var foodName = $(detect).attr('foodName');
+		if (!rollback) {
+			var obj = {
+				storeId: storeId,
+				orderId: orderId,
+				time: time,
+				quantity: quantity,
+				foodName: foodName,
+				foodId: foodId,
+				push: push
+			};
+			pushToloadRollbackTable(obj);
+			console.log(obj);
+			updateQueueTable(foodId, -push);
+			updateOrderListTable(orderId, foodId, -push);
 			if (quantity != cooked) {
 				$(detect + ' td').eq(1).html(cooked + '/' + quantity);
 				$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-light">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-light">' + (quantity - cooked) + '</span></button>');
 				$(detect + ' td').eq(4).html('<button push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button>');
+			} else {
+				$(detect).addClass('hidden');
+				$('#foodlist-' + storeId + '-' + orderId + '-' + foodId).addClass('hidden');
 			}
-			$(detect).removeClass('hidden');
-			$('.t-header-child.' + storeId + '-' + orderId).removeClass('hidden');
-			$('.t-header.' + storeId + '-' + orderId).removeClass('hidden');
+			if (!$('.foodline.' + storeId + '-' + orderId).not('.hidden')[0]) $('.' + storeId + '-' + orderId).addClass('hidden');
 		} else {
-			loadWaiterTable();
+			updateQueueTable(foodId, push);
+			updateOrderListTable(orderId, foodId, push);
+			if ($(detect)[0]) {
+				if (quantity != cooked) {
+					$(detect + ' td').eq(1).html(cooked + '/' + quantity);
+					$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-light">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-light">' + (quantity - cooked) + '</span></button>');
+					$(detect + ' td').eq(4).html('<button push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button>');
+				}
+				$(detect).removeClass('hidden');
+				$('.t-header-child.' + storeId + '-' + orderId).removeClass('hidden');
+				$('.t-header.' + storeId + '-' + orderId).removeClass('hidden');
+			} else {
+				loadWaiterTable();
+			}
+		}
+	} else {
+		var orderId = res.orderId;
+		if (rollback) {
+			if ($("tr[id^='rollback-" + storeId + "-" + res.orderId[i] + "']")[0]) {
+				for (var i in res.orderId) {
+					$("tr[id^='rollback-" + storeId + "-" + res.orderId[i] + "']").removeClass('hidden');
+				}
+			} else {
+				loadRollbackTable();
+			}
+		} else {
+			for (var i in res.orderId) {
+				$("tr[id^='rollback-" + storeId + "-" + res.orderId[i] + "']").addClass('hidden');
+			}
 		}
 	}
-	/*loadRollbackTable()*/
 });
 
 /***/ })

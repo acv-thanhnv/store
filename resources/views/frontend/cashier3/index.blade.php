@@ -14,7 +14,7 @@ Thu ngân
 <div id="config" class="hidden"
 storeId="{{ $storeId }}"
 rootPath="{{ config('app.url') }}"
-WaiterToWaiterChannel="{{ $WaiterToWaiterChannel }}"
+OtherToWaiterChannel="{{ $OtherToWaiterChannel }}"
 Customer2Order="{{$Customer2Order}}"
 
 Order2Kitchen="{{ $Order2Kitchen }}"
@@ -33,6 +33,11 @@ Order2Other="{{ $Order2Other }}"
 					</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link" id="support-tab" data-toggle="tab" href="#support-table" role="tab" aria-controls="support-table" aria-selected="false">
+						<strong>Khách gọi</strong>
+					</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" id="undo-tab" data-toggle="tab" href="#undo-table" role="tab" aria-controls="undo-table" aria-selected="false">
 						<strong>Lịch sử / Hoàn tác</strong>
 					</a>
@@ -46,12 +51,16 @@ Order2Other="{{ $Order2Other }}"
 
 			<!-- Tab panes -->
 			<div class="tab-content">
-				<div class="tab-pane fade show active" id="cashier-table" role="tabpanel" aria-labelledby="cashier-tab">
-					
+				<div class="tab-pane fade show active" id="cashier-table" role="tabpanel" aria-labelledby="cashier-tab">	
 				</div>
+
+				<div class="tab-pane fade" id="support-table" role="tabpanel" aria-labelledby="support-tab">
+				support	
+				</div>
+
 				<div id="invoices-details"></div>
-				<div class="tab-pane fade" id="undo-table" role="tabpanel" aria-labelledby="undo-tab">
-					
+
+				<div class="tab-pane fade" id="undo-table" role="tabpanel" aria-labelledby="undo-tab">	
 				</div>
 			</div>
 
@@ -79,6 +88,11 @@ Order2Other="{{ $Order2Other }}"
 
 @endsection
 @section('javascript')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.0/xlsx.core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.0.3/js/tableexport.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.39/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 <script src="{{ asset('frontend/js/cashier/cashier.js') }}"></script>

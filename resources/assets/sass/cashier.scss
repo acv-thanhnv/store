@@ -2,6 +2,8 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none; 
   margin: 0; 
+  text-align:right !important;
+  display:inline-block;
 }
 
 ::-webkit-scrollbar { 
@@ -194,7 +196,7 @@ li.nav-item {
 
 	.md-form>input {
 		height: 41px;
-		width: 702px;
+		width: 592px;
 	}
 
 	input {
@@ -202,6 +204,13 @@ li.nav-item {
 		height: 18px;
 	}
 
+	input.checkbox {
+		height: 14px;	
+	}
+
+	input.tax, input.discount {
+		height: 22px;		
+	}
 
 	table, th, tr, td {
 		text-align: center;
@@ -240,7 +249,7 @@ li.nav-item {
 				max-width: 210px !important;
 			}
 			.md-form>input {
-				width: 494px;
+				width: 386px;
 			}
 		}
 
