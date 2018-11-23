@@ -32,6 +32,7 @@ $(document).ready(function(){
 	})
 	loadCashierTable()
 	loadRollbackTable()
+	loadSupportTable()
 })
 
 function loadJSON(file, callback) {   
@@ -71,7 +72,7 @@ function loadSupportTable() {
 		console.log(result)
 		for (var i in result)
 		{
-			let orderId = result[i].order_id
+			let orderId = result[i].orderId
 			let table = result[i].table
 			let floor = result[i].floor
 			output+='<tr id="support-'+storeId+'-'+orderId+'" orderId="'+orderId+'"> <td><span class="badge badge-dark">'+orderId+'</span> </td> <td><span class="badge badge-dark">'+table+' '+floor+'</span></td> </tr>'

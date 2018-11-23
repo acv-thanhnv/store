@@ -17,4 +17,5 @@ mix.js('resources/assets/js/app.js', 'public/js')
    .sass('resources/assets/sass/chef.scss', 'public/frontend/css')
    .js('resources/assets/js/cashier.js', 'public/frontend/js/cashier')
    .sass('resources/assets/sass/cashier.scss', 'public/frontend/css')
+   .sass('public/frontend/css/style_order.scss', 'public/frontend/css')
    ;
