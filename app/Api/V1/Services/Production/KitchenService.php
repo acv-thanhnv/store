@@ -5,6 +5,7 @@ namespace App\Api\V1\Services\Production;
 use App\Api\V1\Services\Interfaces\KitchenServiceInterface;
 use App\Core\Common\OrderConst;
 use App\Core\Common\OrderStatusValue;
+use App\Core\Common\FoodStatusValue;
 use App\Core\Common\SDBStatusCode;
 use App\Core\Dao\SDB;
 use App\Core\Entities\DataResultCollection;
@@ -122,10 +123,16 @@ class KitchenService extends BaseService implements KitchenServiceInterface
         ->join('store_floor', 'store_location.floor_id', '=','store_floor.id')
         ->selectRaw('store_order.id, store_location.name as name, store_floor.name as floor, store_type_location.name as priority, store_order.datetime_order')
         ->where('store_order.store_id',$storeId)
-        ->whereIn('store_order.status',[OrderStatusValue::Process,OrderStatusValue::Done])
+        ->whereIn('store_order.status',[OrderStatusValue::Process,OrderStatusValue::Done,OrderStatusValue::Pay])
+        /*->whereExists(function ($query) {
+                $query->select(SDB::raw(1))
+                      ->from('store_order_detail')
+                      ->where('store_order.id', 'store_order_detail.order_id')
+                      ->whereIn('store_order_detail.status', [FoodStatusValue::NoDone, FoodStatusValue::Process])
+                      ;
+            })*/
         ->orderBy('store_location.type_location_id', 'desc')
         ->orderBy('store_order.datetime_update', 'asc')
-        /*->orderBy('store_order.datetime_order', 'asc')*/
         ->get();
         return $location;
     }
