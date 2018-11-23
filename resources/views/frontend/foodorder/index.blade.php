@@ -679,7 +679,8 @@
 				$(".js-show-cart").attr("data-notify",cart_total);
 				localStorage.cart_items = JSON.stringify(cart_items);
 				//nếu order được xác nhận và chế biến
-				if(data.orderStatus=='{{\App\Core\Common\OrderStatusValue::Process}}'){
+				console.log(data.order.status);
+				if(data.order.status=='{{\App\Core\Common\OrderStatusValue::Process}}'){
 					notify('Success','success','Món ăn của bạn đang được chế biến!','#437F2C');
 				}
 

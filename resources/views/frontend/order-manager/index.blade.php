@@ -529,6 +529,7 @@
     }
 
     function genOrderRealtime(order,obj){
+        console.log(obj);
         var itemOrder        = $('#entities-order');
         var row_order        = $('.entities-row-order[data-order-id="'+order.id+'"]');
         var row_order_detail = $('.entities-row-order[data-order-id="'+order.id+'"]').next();

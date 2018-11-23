@@ -257,6 +257,8 @@ class FoodController extends Controller
         event(new OrderStatusPusherEvent($access_token,$arrOrder[0],$arrOrderDetail,0,null));
         //call event send to chef
         event(new Order2Other($idStore,$arrOrder[0],$arrOrderToOther));
+        //call event send to Order
+        event(new Other2OrderManagerPusher($idStore,$arrOrder[0],$arrOrderDetail));
         //convert values into json
         $result              = new DataResultCollection();
         $result->status      = SDBStatusCode::OK;

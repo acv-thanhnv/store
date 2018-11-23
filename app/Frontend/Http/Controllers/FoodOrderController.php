@@ -274,7 +274,7 @@ class FoodOrderController extends Controller
                     ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
                     ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
                     ->where('store_order_detail.order_id',$orderId)
-                    ->orderby('store_order_detail.status','desc')
+                    ->orderby('store_order_detail.status','asc')
                     ->get();
         foreach($arrOrderDetail as $obj){
             $obj->price = number_format($obj->price);
