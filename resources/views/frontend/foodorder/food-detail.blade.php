@@ -25,7 +25,7 @@
 		box-shadow: none;
 		opacity: .65;
 	}
-	.item_price,.js-name-detail,.js-addcart-detail{
+	.item_price,.js-name-detail,.js-addcart-detail,.item_description{
 		font-family: "Times New Roman", Times, serif;
 	}
 	</style>
@@ -34,12 +34,12 @@
 <!-- Modal1 -->
 <div class="wrap-modal1 js-modal1">
 	<div class="container">
-		<div class="bg0 p-t-50 p-b-30 p-lr-15-lg how-pos3-parent">
+		<div class="bg0 p-t-30 p-lr-15-lg how-pos3-parent">
 			<button class="hide-modal">
 				<img src="frontend/FoodOrder/images/icon-close2.png" alt="CLOSE">
 			</button>
 			<div class="row">
-				<div class="col-md-6 col-lg-7">
+				<div class="col-md-6 col-lg-7 p-t-9">
 					<div class="p-l-25 p-r-30 p-lr-0-lg">
 						<div class="wrap-slick3 flex-sb flex-w">
 							<div class="wrap-slick3-dots"></div>
@@ -71,7 +71,7 @@
 							{{$foodDetail->price}} Đồng
 						</span>
 						<!--Detail-->
-						<p class="stext-102 cl3 p-t-23 item_description">
+						<p class="mtext-106 cl3 p-t-15 item_description">
 							{{$foodDetail->description}}
 						</p>
 						

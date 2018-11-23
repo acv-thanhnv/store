@@ -127,6 +127,19 @@ class CashierService extends BaseService implements CashierServiceInterface
         return $data;
     }
 
+    public function getListRequestsToCashier(Request $request)
+    {
+        $storeId = $request->storeId;
+        $data = SDB::table('store_contact_cashier')
+        ->join('store_order', 'store_order.id', '=','store_contact_cashier.order_id')
+        ->join('store_location', 'store_order.location_id', '=','store_location.id')
+        ->join('store_floor', 'store_floor.id', '=','store_location.floor_id')
+        ->select('store_order.id', 'store_location.name as table', 'store_floor.name as floor')
+        ->where('store_contact_cashier.store_id', $storeId)
+        ->get();
+        return $data;
+    }
+
     public function getAllPayment(Request $request) {
         $storeId = $request->storeId;
         $listOrderId = $request->listOrderId;

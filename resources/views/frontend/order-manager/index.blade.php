@@ -6,48 +6,39 @@
     <link href="{{ asset('frontend/css/style_order.css') }}" rel="stylesheet">
 @endsection
 @section('content')
-    <div class="wraper">
+    <div class="wraper row">
         {{--================================= Left ===========================--}}
         <div class="wraper-left col-sm-6 nopad">
-
-            <div id="left-nav-tabs" class="header-left">
-                <ul class="nav nav-tabs">
-                    <li class="active tab_table tab-search" data-tab='table'>
-                        <a href="#home" data-toggle="tab">Table/Floor</a>
-                    </li>
-                    <li class="tab_menu tab-search" data-tab='menu'>
-                        <a href="#menu" data-toggle="tab">Menu</a>
-                    </li>
-
-                    <li class="col-md-7 col-sm-6">
-                        <form action="#" method="#" role="search">
-                            <div class="input-group">
-                                <input class="form-control" placeholder="Search . . ." name="srch-term"
-                                       id="ed-srch-term" type="text">
-                                <div class="input-group-btn">
-                                    <button type="submit" id="searchbtn">
-                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </li>
-
-                </ul>
+            <div id="left-nav-tabs" class="header-left row">
+                <div class="col-md-7 col-lg-6">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-tab='table' data-toggle="tab" href="#home">Table/Floor</a>
+                        </li>
+                        <li class="nav-item tab_menu tab-search" data-tab='menu'>
+                            <a class="nav-link" data-tab='menu' data-toggle="tab" href="#menu">Menu</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-5 col-lg-6 search-form">
+                        <input class="form-control" placeholder="&#xF002; Tìm kiếm bàn/món ăn..." style="font-family:Arial, FontAwesome" name="srch-term"
+                        id="ed-srch-term" type="text">
+                        <span id="searchbtn">
+                            <i class="fa fa-mail-forward"></i>
+                        </span>
+                </div>
             </div>
             <div class="tab-content content-left">
-                <div id="home" class="tab-pane fade in active">
+                <div id="home" class="tab-pane active">
                     <div class="room">
-                        <nav class="navbar navbar-inverse">
                             <div class="container-fluid">
-                                <ul class="nav navbar-nav" id="floors">
-                                    <li class="item-floor active_floor"><a href="javascript:void(0);" item-floor-id="">All</a></li>
+                                <ul  id="floors">
+                                    <li class="item-floor li-floor active_floor"><a href="javascript:void(0);" class="getTable" item-floor-id="">Tất cả</a></li>
                                     {{--content floor--}}
                                 </ul>
                                 {{--content floor include--}}
                                 @include('frontend.order-manager.floors')
                             </div>
-                        </nav>
                     </div>
 
                     <div id="table-list" class="row">
@@ -58,105 +49,75 @@
                 </div>
                 <div id="menu" class="tab-pane fade">
                     <div class="category">
-                        <nav class="navbar navbar-inverse">
                             <div class="container-fluid">
-                                <ul class="nav navbar-nav" id="entity-menu">
-                                    <li class="item-menu"><a href="javascript:void(0);" item-menu-id="*">All</a></li>
+                                <ul  id="entity-menu">
+                                    <li class="item-menu active_menu li-menu"><a href="javascript:void(0);" class="getMenu" item-menu-id="*">Tất cả</a></li>
                                     {{--content menu--}}
 
                                 </ul>
                                 {{--content menu include--}}
                                 @include('frontend.order-manager.menu')
                             </div>
-                        </nav>
-
                     </div>
 
-
-                    <div id="list-entities">
+                    <div id="list-entities" class="row">
                         {{--content entities--}}
                     </div>
                     {{--content entities include--}}
                     @include('frontend.order-manager.entities')
                 </div>
             </div>
-
         </div>
-
-    </div>
-
-    </div>
-    {{--================================= Right ===========================--}}
-    <div class="wraper-right col-sm-6">
-        <div class="header-right">
-            <ul class="nav nav-tabs">
-                <li class="active">
-                    <a href="#"><span id="table-id">Bàn</span>/<span id="floor-id">Tầng</span></a>
-                </li>
-                <li>
-                    <a href="#" class="fa fa-plus new_order"> New Order</a>
-                </li>
-                <li style="float: right; margin-right: 10px;">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span
-                                    class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" style="top:43px;right:-10px;">
-                            <li><a id="move_table" class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal"><span
-                                            class="glyphicon glyphicon-retweet"></span> Chuyển Bàn</a></li>
-                            <li class="line"></li>
-                            <li><a id="merge_table" class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal2"><span
-                                            class="glyphicon glyphicon-link" aria-hidden="true"></span> Ghép Bàn</a>
-                            </li>
-                            <li class="line"></li>
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> Liên Hệ Thu Ngân
-                                </a>
-                            </li>
-                        </ul>
+        
+        {{--================================= Right ===========================--}}
+        <div class="wraper-right col-sm-6">
+            <div class="header-right row">
+                <div class="col-md-10" style="padding: 0px">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item ">
+                            <a class="nav-link active" data-toggle="tab" href="#order">
+                                <span id="table-id">Bàn</span> / <span id="floor-id">Tầng</span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" data-toggle="tab" href="#request">Request</a>
+                        </li>
+                        <li class="nav-item new_order">
+                            <a class="nav-link">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-content content-right">
+                <div id="order" class="tab-pane active">
+                    <div class="row order-header">
+                        <div class="col-md-1 col-xl-1 order-id"> 
+                            <i class="fa fa-sort-numeric-asc"></i>
+                        </div>
+                        <div class="col-md-4 col-xl-4 order-date">
+                            <i class="fa fa-clock-o"></i> Datetime
+                        </div>
+                        <div class="col-md-4 col-xl-3 order-status">
+                            <i class="fa fa-newspaper-o"></i> Status
+                        </div>
+                        <div class="col-md-3 col-xl-4 order-action">
+                            <i class="fa fa-slideshare"></i> Action
+                        </div>
                     </div>
-                </li>
-            </ul>
-
-        </div>
-        <div class="content-right">
-                <div class="row order-header">
-                    <div class="col-md-1 order-id">Id</div>
-                    <div class="col-md-4 order-date">Datetime</div>
-                    <div class="col-md-4 order-status">Status</div>
-                    <div class="col-md-3 order-action">Action</div>
+                    <div id="entities-order">
+                    </div>
                 </div>
-                <div id="entities-order">
+                <div id="request" class="tab-pane fade">
+                    Tab request
                 </div>
-
-            {{--content entities-order include--}}
-            @include('frontend.order-manager.entities-order')
-            @include('frontend.order-manager.entities-detail')
-
-            {{--<div class="table table-hover" id="tbl_list_order_detail" style="display: block">--}}
-                {{--<div class="wrap_order_detail_header">--}}
-                {{--<div class="order_detail_header">--}}
-                    {{--<div class="order_detail_image text-center">Image</div>--}}
-                    {{--<div class="order_detail_name text-center">Name</div>--}}
-                    {{--<div class="order_detail_price text-center">Price</div>--}}
-                    {{--<div class="order_detail_quantity text-center">Quantity</div>--}}
-                    {{--<div class="order_detail_subtotal text-center">Subtotal</div>--}}
-                    {{--<div class="order_detail_action text-center">Action</div>--}}
-                {{--</div>--}}
-                {{--</div>--}}
-                {{--<div id="entities-detail">--}}
-                {{--//content entities-detail--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--//content entities-detail include--}}
-            {{--@include('frontend.order-manager.entities-detail')--}}
-
+            </div>
         </div>
-        @include('frontend.order-manager.table_manager')
-
     </div>
-    </div>
+@include('frontend.order-manager.entities-order')
+@include('frontend.order-manager.entities-detail')
+@include('frontend.order-manager.table_manager')
 @endsection
 @section('javascript')
 <script src="{{asset('frontend/js/order.js')}}"></script>
@@ -184,6 +145,7 @@
     var name_food_Proccess = '{{\App\Core\Helpers\CommonHelper::getFoodStatusName(1)}}';
 
     $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip(); 
         getMenuList(idStore);
         getEntitiesByMenu('*',idStore);
         getFloors(idStore);
@@ -236,7 +198,7 @@
         order_channel.bind(OrderEventName, function(data){
             //nếu có order mới thì hiện thông báo
             if(data.order.status=='{{\App\Core\Common\OrderStatusValue::NoDone}}'){
-                notify('Warning','warning','Bàn '+data.order.location_id+' có order mới','#F27022','#BA7237');
+                notify('Warning','warning',data.order.location_name+' có order mới','#F27022','#BA7237');
             }
             //nếu tình trạng là thanh toán thì ẩn order đó đi, ko phai thi append bth
             if(data.order.status=='{{\App\Core\Common\OrderStatusValue::Pay}}'){
@@ -271,12 +233,26 @@
 
     function genMenuList(data) {
         var itemMenu = $('#entity-menu');
-        data.data.forEach(function (obj) {
-            var itemMenuTemp = $('#entity-menu-template').contents().clone();
-            $(itemMenuTemp).find('a').text(obj.name);
-            $(itemMenuTemp).find('a').attr('item-menu-id', obj.id);
-            $(itemMenu).append($(itemMenuTemp));
-        })
+        var numberMenu = '{{\App\Core\Common\OrderConst::numberMenu}}';
+        var length = data.data.length;
+        if(length<numberMenu){
+            numberMenu = length;
+        }
+        for(var i=0; i<numberMenu;i++){
+            var li_menu = $('#entity-menu-template').contents().clone()[1];
+            $(li_menu).find('a').text(data.data[i].name);
+            $(li_menu).find('a').attr('item-menu-id', data.data[i].id);
+            $(itemMenu).append($(li_menu));
+        }
+        if(length>numberMenu){
+            var dropdown_menu = $('#entity-menu-template').contents().clone()[3];
+            for(var i=numberMenu;i<length;i++){
+                var li_menu = '<li class="li-menu"><a class="dropdown-item getMenu" item-menu-id="'+data.data[i].id+'"href="javascript:void(0);">'+data.data[i].name+'</a></li>';
+                var dropdown_li = $(dropdown_menu).contents()[3];
+                $(dropdown_li).append($(li_menu));
+            }
+            $(itemMenu).append($(dropdown_menu));
+        }
     }
 
     //========================GET ENTITIES==========================
@@ -300,13 +276,17 @@
         $(listItem).empty();
         data.data.forEach(function (obj) {
             var listItemTemp = $('#list-entities-template').contents().clone();
-            $(listItemTemp).find('.entities_item').attr('entities-id', obj.id);
+            var title = $(listItemTemp)[1];
+            $(listItemTemp).find('.food-image').attr('alt', obj.name);
+            $(listItemTemp).find('.food-image').attr('src', obj.src);
+            $(title).attr('title', obj.name);
             $(listItemTemp).find('.entities_item').attr('entities-name', obj.name);
+            $(listItemTemp).find('.entities_item').attr('entities-id', obj.id);
             $(listItemTemp).find('.entities_item').attr('entities-image', obj.src);
             $(listItemTemp).find('.entities_item').attr('entities-price', obj.price);
             $(listItemTemp).find('img').attr('src', obj.src);
-            $(listItemTemp).find('h6').text(obj.name);
-            $(listItemTemp).find('h5').text(obj.price);
+            $(listItemTemp).find('.food-items-name').text(obj.name);
+            $(listItemTemp).find('.food-items-price').text(obj.price);
 
             $(listItem).append($(listItemTemp));
         })
@@ -314,8 +294,11 @@
 
     //=====================GET ENTITIES BY MENU==========================
     //Click menu
-    $(document).on('click', '.item-menu', function () {
-        var idMenu = $(this).find('a').attr('item-menu-id');
+    $(document).on('click', '.li-menu', function () {
+        var idMenu = $(this).find('.getMenu').attr('item-menu-id');
+        $('.item-menu').removeClass('active_menu');
+        $('.li-menu').removeClass('active_menu');
+        $(this).addClass('active_menu');
         getEntitiesByMenu(idMenu, idStore);
     })
 
@@ -353,12 +336,26 @@
 
     function genFloors(data) {
         var itemFloor = $('#floors');
-        data.data.forEach(function (obj) {
-            var itemFloorTemp = $('#floors-template').contents().clone();
-            $(itemFloorTemp).find('a').text(obj.name);
-            $(itemFloorTemp).find('a').attr('item-floor-id', obj.id);
-            $(itemFloor).append($(itemFloorTemp));
-        })
+        var numberFloor = '{{\App\Core\Common\OrderConst::numberFloor}}';
+        var length = data.data.length;
+        if(length<numberFloor){
+            numberFloor = length;
+        }
+        for(var i=0; i<numberFloor;i++){
+            var li_floor = $('#floors-template').contents().clone()[1];
+            $(li_floor).find('a').text(data.data[i].name);
+            $(li_floor).find('a').attr('item-floor-id', data.data[i].id);
+            $(itemFloor).append($(li_floor));
+        }
+        if(length>=numberFloor){
+            var dropdown_floor = $('#floors-template').contents().clone()[3];
+            for(var i=numberFloor;i<length;i++){
+                var li_floor = '<li class="li-floor"><a class="dropdown-item getTable" item-floor-id="'+data.data[i].id+'"href="javascript:void(0);">'+data.data[i].name+'</a></li>';
+                var dropdown_li = $(dropdown_floor).contents()[3];
+                $(dropdown_li).append($(li_floor));
+            }
+            $(itemFloor).append($(dropdown_floor));
+        }
     }
 
     //======================GET TABLE============================
@@ -408,15 +405,14 @@
             $(itemTable).append($(itemTableTemp));
         })
     }
-
     //======================GET TABLE BY FLOOR============================
-    $(document).on('click', '.item-floor', function () {
+    $(document).on('click', '.li-floor', function (e) {
         $('.item-floor').removeClass('active_floor');
+        $('.li-floor').removeClass('active_floor');
         $(this).addClass('active_floor');
-        idFloor = $(this).find('a').attr('item-floor-id');
+        idFloor = $(this).find('.getTable').attr('item-floor-id');
         getTable(idFloor);
     })
-
     //======================click table=========================
     $(document).on("click", ".wrap-table", function () {
         idTable = $(this).find(".table-name").attr('item-table-id');
@@ -450,8 +446,10 @@
                     $(itemOrderTemp).find('.entities_order_id').text(data.id);
                     $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', data.id);
                     $(itemOrderTemp).find('.entities_order_time').text(data.datetime_order);
-                    $(itemOrderTemp).find('.entities_order_status_content').text(data.status_name);
+                    $(itemOrderTemp).find('.entities_order_status_color').addClass("status_"+data.status);
                     $(itemOrderTemp).find('.entities_order_status_content').addClass("status_"+data.status);
+                    $(itemOrderTemp).find('.entities_order_status_content').text(data.status_name);
+                    $(itemOrderTemp).find('.entities_order_status_color').attr("order-status",data.status);
                     $(itemOrderTemp).find('.entities_order_status_content').attr("order-status",data.status);
                     $(itemOrderTemp).find('.no-data').removeClass('dis-none');
                     $(itemOrder).append($(itemOrderTemp));
@@ -481,7 +479,6 @@
     function genOrderbyLocation(data) {
         var itemOrder = $('#entities-order');
         $(itemOrder).empty();
-
         data.data.forEach(function (obj) {
             //set entities-order
             var itemOrderTemp = $('#entities-order-template').contents().clone();
@@ -493,12 +490,15 @@
             $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', obj.id);
             $(itemOrderTemp).find('.entities_order_time').text(obj.datetime_order);
             $(itemOrderTemp).find('.entities_order_status_content').text(obj.status_name);
+            $(itemOrderTemp).find('.entities_order_status_color').attr('order-status',obj.status);
             $(itemOrderTemp).find('.entities_order_status_content').attr('order-status',obj.status);
+            $(itemOrderTemp).find('.entities_order_status_color').addClass("status_"+obj.status);
             $(itemOrderTemp).find('.entities_order_status_content').addClass("status_"+obj.status);
             $(itemOrder).append($(itemOrderTemp));
             if(obj.detail.length==0){
                 $(row).find('.no-data').removeClass('dis-none');
             }else{
+                var i = 1;
                 obj.detail.forEach(function(itemDetail){
                     var rowDetail = $("#entities-detail-template").contents().clone();
                     //append data
@@ -507,7 +507,7 @@
                     $(rowDetailId).attr('entities-id',itemDetail.entities_id);
                     $(rowDetail).find(".order_detail_name").text(itemDetail.name);
                     $(rowDetail).find(".order_detail_price").text($.number(itemDetail.price,0, ','));
-                    $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
+                    $(rowDetail).find(".order_detail_id").text(i);
                     $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
                     $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
                     if(itemDetail.has_update===1){
@@ -522,6 +522,7 @@
                     $(rowDetail).find(".delete-order-detail").attr('data-order-detail',itemDetail.id);
                     $(row).attr('order-id',obj.id); 
                     $(row).append($(rowDetail));
+                    i++;
                 });
             }
         })
@@ -533,15 +534,18 @@
         var row_order_detail = $('.entities-row-order[data-order-id="'+order.id+'"]').next();
         $(row_order_detail).empty();
         if(row_order_detail.length!=0){//neu co thi cap nhap order
-            var order_status = $(row_order).find('.entities_order_status_content').attr('order-status');
+            var order_status = $(row_order).find('.entities_order_status_color').attr('order-status');
             //update status and status name of order
-            $(row_order).find('.entities_order_status_content').text(order.status_name);
+            $(row_order).find('.entities_order_status_color').attr('order-status',order.status);
             $(row_order).find('.entities_order_status_content').attr('order-status',order.status);
+            $(row_order).find('.entities_order_status_content').text(order.status_name);
+            $(row_order).find('.entities_order_status_color').removeClass('status_0 status_1 status_2').addClass('status_'+order.status);
             $(row_order).find('.entities_order_status_content').removeClass('status_0 status_1 status_2').addClass('status_'+order.status);
             //nếu ko có item nào trong order thì hiện nodata ngược lại thì append data
             if(obj.length==0){
                 $(row_order_detail).html('<span class="no-data"><i class="fa fa-minus-circle"></i> No data found!</span>');
             }else{
+                var i = 1;
                 obj.forEach(function(itemDetail){
                     var rowDetail = $("#entities-detail-template").contents().clone();
                     //append data
@@ -551,7 +555,7 @@
                     $(rowDetailId).attr('entities-id',itemDetail.entities_id);
                     $(rowDetail).find(".order_detail_name").text(itemDetail.name);
                     $(rowDetail).find(".order_detail_price").text($.number(itemDetail.price,0, ','));
-                    $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
+                    $(rowDetail).find(".order_detail_id").text(i);
                     $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
                     $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
                     if(itemDetail.has_update===1){
@@ -565,6 +569,7 @@
                     $(rowDetail).find(".food_status").attr('food-status',itemDetail.status);
                     $(rowDetail).find(".delete-order-detail").attr('data-order-detail',itemDetail.id);
                     $(row_order_detail).append($(rowDetail));
+                    i++;
                 });
             }
         }else {//ko thi append order moi
@@ -575,11 +580,13 @@
             $(itemOrderTemp).find('.entities_order_id').text(order.id);
             $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', order.id);
             $(itemOrderTemp).find('.entities_order_time').text(order.datetime_order);
-            $(itemOrderTemp).find('.entities_order_status_content').text(order.status_name);
+            $(itemOrderTemp).find('.entities_order_status_color').addClass("status_"+order.status);
             $(itemOrderTemp).find('.entities_order_status_content').addClass("status_"+order.status);
+            $(itemOrderTemp).find('.entities_order_status_content').text(order.status_name);
+            $(itemOrderTemp).find('.entities_order_status_color').attr("order-status",order.status);
             $(itemOrderTemp).find('.entities_order_status_content').attr("order-status",order.status);
             $(itemOrder).append($(itemOrderTemp));
-
+            var i = 0;
             obj.forEach(function(itemDetail){
                 var rowDetail = $("#entities-detail-template").contents().clone();
                 //append data
@@ -589,7 +596,7 @@
                 $(rowDetailId).attr('entities-id',itemDetail.entities_id);
                 $(rowDetail).find(".order_detail_name").text(itemDetail.name);
                 $(rowDetail).find(".order_detail_price").text($.number(itemDetail.price, 0, ',' ));
-                $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
+                $(rowDetail).find(".order_detail_id").text(i);
                 $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
                 $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
                 if(itemDetail.has_update===1){
@@ -605,6 +612,7 @@
                 var row = $(itemOrderTemp)[3]; 
                 $(row).attr('order-id',order.id);
                 $(row).append($(rowDetail));
+                i++;
             });
         }
     }
@@ -614,11 +622,14 @@
         var row_order        = $('.entities-row-order[data-order-id="'+order.id+'"]');
         var row_order_detail = $('.entities-row-order[data-order-id="'+order.id+'"]').next();
         $(row_order_detail).empty();
-        var order_status = $(row_order).find('.entities_order_status_content').attr('order-status');
+        var order_status = $(row_order).find('.entities_order_status_color').attr('order-status');
         //update status and status name of order
-        $(row_order).find('.entities_order_status_content').text(order.status_name);
+        $(row_order).find('.entities_order_status_color').attr('order-status',order.status);
         $(row_order).find('.entities_order_status_content').attr('order-status',order.status);
+        $(row_order).find('.entities_order_status_content').text(order.status_name);
+        $(row_order).find('.entities_order_status_color').removeClass(' status_0 status_2').addClass('status_1');
         $(row_order).find('.entities_order_status_content').removeClass(' status_0 status_2').addClass('status_1');
+        var i =1;
         obj.forEach(function(itemDetail){
             var rowDetail = $("#entities-detail-template").contents().clone();
             //append data
@@ -628,8 +639,8 @@
             $(rowDetailId).attr('entities-id',itemDetail.entities_id);
             $(rowDetail).find(".order_detail_name").text(itemDetail.name);
             $(rowDetail).find(".order_detail_price").text($.number(itemDetail.price,0, ',' ));
-            $(rowDetail).find(".img-detail").attr("src",itemDetail.src);
-            $(rowDetail).find(".quantity-detail").val(itemDetail.quantity);
+            $(rowDetail).find(".order_detail_id").text(i);
+            i++;
             $(rowDetail).find(".quantity-detail").attr('data-num_product',itemDetail.quantity);
             if(itemDetail.has_update===1){
                 $(rowDetail).find(".has_change").css('display','block');
@@ -638,7 +649,6 @@
             $(rowDetail).find(".food_status").addClass('food_status_'+itemDetail.status);
             //nếu đã nấu lớn hơn 0 thì hiện cooked
             if(itemDetail.cooked>0){
-                console.log("cooked");
                 $(rowDetail).find(".cooked").text(itemDetail.cooked+' /');
             }
             $(rowDetail).find(".food_status").attr('food-status',itemDetail.status);
@@ -661,13 +671,13 @@
             num_product--;
             $(this).next('.quantity-detail').val(num_product);
             //khi thay đổi thì order chuyển về trạng thái chưa xác nhận để order biết cập nhập
-            $(this).parents('.entities-row-detail').prev('.entities-row-order').find('.entities_order_status_content').removeClass('status_1 status_2').addClass('status_0').attr('order-status',status_order_noDone).text(name_order_noDone);
+            $(this).parents('.entities-row-detail').prev('.entities-row-order').find('.entities_order_status_color').attr('order-status',status_order_noDone);
             //chuyển trạng thái của món ăn về chưa xác nhận
             $(this).parents('.row-order-detail').find('.food_status').removeClass('food_status_2 food_status_1').addClass('food_status_0').attr('food-status',status_food_noDone).text(name_food_noDone);
             if(typeof(order_detail_id) !== "undefined" && num_product!=old_num_product){//kiem tra neu co order detail thi hien ngoi sao thay doi
-                $(this).siblings(".has_change").css('display','block');
+                $(this).parents('.row-order-detail').find('.save-order-detail').removeClass('disabled');
             }else{
-                $(this).siblings(".has_change").css('display','none');
+                $(this).parents('.row-order-detail').find('.save-order-detail').addClass('disabled');
             }
         }
     });
@@ -679,13 +689,13 @@
         var order_detail_id = $(this).parents('.row-order-detail').attr('order-detail-id');
         $(this).prev('.quantity-detail').val(num_product);
         //khi thay đổi thì order chuyển về trạng thái chưa xác nhận để order biết cập nhập
-        $(this).parents('.entities-row-detail').prev('.entities-row-order').find('.entities_order_status_content').removeClass('status_1 status_2').addClass('status_0').attr('order-status',status_order_noDone).text(name_order_noDone);
+        $(this).parents('.entities-row-detail').prev('.entities-row-order').find('.entities_order_status_color').attr('order-status',status_order_noDone);
         //chuyển trạng thái của món ăn về chưa xác nhận
         $(this).parents('.row-order-detail').find('.food_status').removeClass('food_status_2 food_status_1').addClass('food_status_0').attr('food-status',status_food_noDone).text(name_food_noDone);
         if(typeof(order_detail_id) !== "undefined" && num_product!=old_num_product){//kiem tra neu co order detail thi hien ngoi sao thay doi
-            $(this).next(".has_change").css('display','block');
+            $(this).parents('.row-order-detail').find('.save-order-detail').removeClass('disabled');
         }else{
-            $(this).next(".has_change").css('display','none');
+            $(this).parents('.row-order-detail').find('.save-order-detail').addClass('disabled');
         }
     });
 
@@ -696,13 +706,13 @@
         if(num_product>0){
             $(this).val(num_product);
             //khi thay đổi thì order chuyển về trạng thái chưa xác nhận để order biết cập nhập
-            $(this).parents('.entities-row-detail').prev('.entities-row-order').find('.entities_order_status_content').removeClass('status_1 status_2').addClass('status_0').attr('order-status',status_order_noDone).text(name_order_noDone);
+            $(this).parents('.entities-row-detail').prev('.entities-row-order').find('.entities_order_status_color').attr('order-status',status_order_noDone);
             //chuyển trạng thái của món ăn về chưa xác nhận
             $(this).parents('.row-order-detail').find('.food_status').removeClass('food_status_2 food_status_1').addClass('food_status_0').attr('food-status',status_food_noDone).text(name_food_noDone);
             if(typeof(order_detail_id) !== "undefined" && num_product!=old_num_product){//kiem tra neu co order detail thi hien ngoi sao thay doi
-                $(this).siblings(".has_change").css('display','block');
+                $(this).parents('.row-order-detail').find('.save-order-detail').removeClass('disabled');
             }else{
-                $(this).siblings(".has_change").css('display','none');
+                $(this).parents('.row-order-detail').find('.save-order-detail').addClass('disabled');
             }
         }else {
             notify('Error','error','Sorry, your number product must larger than 1!','#AA3131','#792A2A');
@@ -715,7 +725,7 @@
     $(document).on('click','#searchbtn',function(e){
         e.preventDefault();
         var key = $("#ed-srch-term").val();
-        var tab = $(".tab-search.active").data('tab');
+        var tab = $(".nav-link.active").data('tab');
         $.ajax({
             url: '{{route("OrderSearch")}}',
             type: 'GET',
@@ -736,11 +746,22 @@
     })
     //======================add food=========================
     $(document).on('click','.add_food',function(){
-        $(this).find('.fa-plus').toggleClass('fa-minus');
-        //show order tail
-        $(this).parents('.entities-row-order').next('.entities-row-detail').toggleClass('show');
-        //add class to show which row is active
-        $(this).parents('.entities-row-order').toggleClass('row_active');
+        var row_order = $(this).parents('.entities-row-order');
+        //ẩn hết tất cả các detail đang mở
+        $('.entities-row-detail.show_detail').removeClass('show_detail');
+        //nếu dòng đó đang được chọn thì chọn lần nữa là ẩn detail đi
+        if($(this).parents('.entities-row-order').hasClass('row_active')){
+            $(row_order).removeClass('row_active');
+            $(this).find('.fa-plus').removeClass('fa-minus');
+        }else{
+            $('.entities-row-order').removeClass('row_active');
+            $('.add_food .fa-plus').removeClass('fa-minus');
+            $(this).find('.fa-plus').addClass('fa-minus');
+            //show order tail
+            $(this).parents('.entities-row-order').next('.entities-row-detail').addClass('show_detail');
+            //add class to show which row is active
+            $(this).parents('.entities-row-order').addClass('row_active');
+        }
     });
 
     $(document).on('click','.entities_item',function(){
@@ -756,52 +777,53 @@
         var num_row_active = $('.entities-row-order.row_active').length;//lấy số dòng đang được chọn để thêm
         //nếu bàn chưa được chọn hoặc bạn được chọn nhưng chưa chọn order
         if(typeof(idTable)==='undefined' ||num_row_active==0){
-            notify('Warning','warning','Please choose order to add !','#E99551','#F4AD32');
+            notify('Warning','warning','Vui lòng chọn order để thêm món !','#E99551','#F4AD32');
         }else{
+            var orderId = $('.entities-row-order.row_active').attr('data-order-id');
             $('.entities-row-order.row_active').each(function(){
                 //remove nodata row
                 $(this).next('.entities-row-detail').find('.no-data').addClass('dis-none');
                 //Chuyển trạng thái của order về chưa xác nhận
-                $(this).find('.entities_order_status_content').removeClass('status_1 status_2').addClass('status_0').attr('order-status',status_order_noDone).text(name_order_noDone);
+                $(this).find('.entities_order_status_color').attr('order-status',status_order_noDone);
                 var row_detail = $(this).next('.entities-row-detail');
-                //duyet vao mang cac mon an chi tiet, neu co mon do roi thi tang so luong
-                $(row_detail).each(function(){
-                    var numRow = $(this).find('.row-order-detail[entities-id="'+objFood.entities_id+'"]');
-                    if(numRow.length>0){// neu tim thay mon do thi tang so luong
-                        //lay so luong cua mon an hien tai ve
-                        var numProduct = $(numRow).find('.quantity-detail').val();
-                        //Lay order detail id cua mon do
-                        var order_detail_id = $(numRow).attr('order-detail-id');
-                        if(typeof(order_detail_id) !== "undefined" && order_detail_id!=""){
-                        //nếu món đó đã được order rồi thì hiện thay đổi  và cập nhập trạng thái của món đó
-                            $(numRow).find(".has_change").css('display','block');
+                var i = $(row_detail).find('.row-order-detail').length;
+                var numRow = $(row_detail).find('.row-order-detail[entities-id="'+objFood.entities_id+'"]');
+                if(numRow.length>0){// neu tim thay mon do thi tang so luong
+                    //lay so luong cua mon an hien tai ve
+                    var numProduct = $(numRow).find('.quantity-detail').val();
+                    //Lay order detail id cua mon do
+                    var order_detail_id = $(numRow).attr('order-detail-id');
+                    if(typeof(order_detail_id) !== "undefined" && order_detail_id!=""){
+                    //nếu món đó đã được order rồi thì hiện thay đổi  và cập nhập trạng thái của món đó
+                        $(numRow).find(".save-order-detail").removeClass('disabled');
 
-                            //chuyển trạng thái của món ăn về chưa xác nhận
-                            $(numRow).find('.food_status').removeClass('food_status_2 food_status_1').addClass('food_status_0').attr('food-status',status_food_noDone).text(name_food_noDone);
-                        }
-                        //tang so luong cua mon len 1
-                        numProduct++;
-                        $(numRow).find('.quantity-detail').val(numProduct);
-                    }else{//nguoc lai thi them mon vao
-                        var rowDetail = $("#entities-detail-template").contents().clone();
-                        //append data
-                        var rowDetailId = $(rowDetail)[1];
-                        $(rowDetailId).attr('entities-id',objFood.entities_id);
-                        //add id detail =null for row
-                        $(rowDetailId).attr('order-detail-id',"");
-                        $(rowDetail).find(".order_detail_name").text(objFood.entities_name);
-                        $(rowDetail).find(".order_detail_price").text($.number(objFood.entities_price,0, ',' ));
-                        $(rowDetail).find(".img-detail").attr("src",objFood.entities_image);
-                        $(rowDetail).find(".quantity-detail").val(1);
-                        $(rowDetail).find(".quantity-detail").attr('data-num_product',1);
-                        $(rowDetail).find(".food_status").text(objFood.status_name);
-                        $(rowDetail).find(".food_status").addClass('food_status_'+objFood.status);
-                        $(rowDetail).find(".food_status").attr('food-status',objFood.status);
-                        //nếu là món mới thì hiện sao để thông báo là có thay đổi
-                        $(rowDetail).find(".has_change").css('display','block');
-                        $(this).append($(rowDetail));
+                        //chuyển trạng thái của món ăn về chưa xác nhận
+                        $(numRow).find('.food_status').removeClass('food_status_2 food_status_1').addClass('food_status_0').attr('food-status',status_food_noDone).text(name_food_noDone);
                     }
-                });
+                    //tang so luong cua mon len 1
+                    numProduct++;
+                    $(numRow).find('.quantity-detail').val(numProduct);
+                }else{//nguoc lai thi them mon vao
+                    i++;
+                    var rowDetail = $("#entities-detail-template").contents().clone();
+                    //append data
+                    var rowDetailId = $(rowDetail)[1];
+                    $(rowDetailId).attr('entities-id',objFood.entities_id);
+                    //add id detail =null for row
+                    $(rowDetailId).attr('order-detail-id',"");
+                    $(rowDetail).find(".order_detail_name").text(objFood.entities_name);
+                    $(rowDetail).find(".order_detail_id").text(i);
+                    $(rowDetail).find(".order_detail_price").text($.number(objFood.entities_price,0, ',' ));
+                    $(rowDetail).find(".quantity-detail").val(1);
+                    $(rowDetail).find(".quantity-detail").attr('data-num_product',1);
+                    $(rowDetail).find(".food_status").text(objFood.status_name);
+                    $(rowDetail).find(".food_status").addClass('food_status_'+objFood.status);
+                    $(rowDetail).find(".save-order-detail").removeClass('disabled');
+                    $(rowDetail).find(".food_status").attr('food-status',objFood.status);
+                    //nếu là món mới thì hiện sao để thông báo là có thay đổi
+                    $(rowDetail).find(".has_change").css('display','block');
+                    $(row_detail).append($(rowDetail));
+                }
             });
         }
     });
@@ -809,7 +831,7 @@
     //======================send order=========================
     $(document).on('click','.send_order',function(){
         var orderId          = parseInt($(this).parents('.entities_order_action').siblings('.entities_order_id').text());
-        var status_order     = parseInt($(this).parents('.entities-row-order').find('.entities_order_status_content').attr('order-status'));
+        var status_order     = parseInt($(this).parents('.entities-row-order').find('.entities_order_status_color').attr('order-status'));
         var rowDetail        = $(this).parents('.entities-row-order').next('.entities-row-detail');
         var objOrder         = {};
         objOrder.orderId     = orderId;
@@ -884,7 +906,7 @@
                                     $(row).remove();
                                     notify('Success','success','Order đã được xóa thành công!','#398717','#2F6227');
                                 }else{
-                                    notify('Error','error','Lỗi! Bạn không thể xóa order đã có món nấu xong!','#B42727','#A34242');
+                                    notify('Error','error','Bạn không thể xóa order đã có món nấu xong!','#B42727','#A34242');
                                 }
                             }
                         })
@@ -903,56 +925,44 @@
         var orderId       = $(this).parents('.entities-row-detail').attr('order-id');
         var entities_row  = $(this).parents('.entities-row-detail');
         var row           = $(this).parents('.row-order-detail');
+        var name          = $(this).parents('.row-order-detail').find('.order_detail_name').text();
         $.confirm({
-            title         : '<p class="text-danger">Warning</p>',
+            title         : '<p class="text-danger">Xác nhận xóa món</p>',
             icon          : 'fa fa-exclamation-circle',
-            boxWidth      : '30%',
-            useBootstrap  : false,
+            useBootstrap  : true,
+            columnClass   : 'col-md-6 col-xl-6',
             type          : "red",
             closeIcon     : true,
             closeIconClass: 'fa fa-close',
-            content       : "Are You Sure? This Food Item Will Be Deleted!",
+            content       : 'Bạn có chắc chắn muốn hủy món <b>'+name+'</b> không?',
             buttons       : {
                 Save: {
                     text    : 'OK',
                     btnClass: 'btn btn-primary',
                     action  : function (){
-                        //kiểm tra xem món đó đã được thêm vào DB chưa, nếu chưa thì chỉ cần remove dòng
-                        if(typeof(idOrderDetail)==='undefined'){
-                            //xóa dòng hiện tại đi
-                            $(row).remove();
-                            //đếm số item còn lại của order sau khi xóa
-                            var number_row_detail = $(entities_row).find('.row-order-detail').length;
-                            //nếu số item còn lại của order bằng ko thì hiện no data
-                            if(number_row_detail==0){
-                                $(entities_row).find('.no-data').removeClass('dis-none');
-                            }
-                            notify('Success','success','This food item was successfully deleted !','#398717','#2F6227');
-                        }else{
-                            $.ajax({
-                                url: '{{route("deleteFoodOrderDetail")}}',
-                                type: 'GET',
-                                data: {idOrderDetail: idOrderDetail,orderId:orderId},
-                                success: function (data) {
-                                    if(data.status =='{{\App\Core\Common\SDBStatusCode::OK}}'){
-                                        //xóa dòng hiện tại đi
-                                        $(row).remove();
-                                        //đếm số item còn lại của order sau khi xóa
-                                        var number_row_detail = $(entities_row).find('.row-order-detail').length;
-                                        //nếu số item còn lại của order bằng ko thì hiện no data
-                                        if(number_row_detail==0){
-                                            $(entities_row).find('.no-data').removeClass('dis-none');
-                                        }
-                                        notify('Success','success','This food item was successfully deleted !','#398717','#2F6227');
-                                    }else{
-                                        notify('Error','error','Lỗi! Bạn không thể xóa món ăn đã nấu xong!','#B42727','#A34242');
+                        $.ajax({
+                            url: '{{route("deleteFoodOrderDetail")}}',
+                            type: 'GET',
+                            data: {idOrderDetail: idOrderDetail,orderId:orderId},
+                            success: function (data) {
+                                if(data.status =='{{\App\Core\Common\SDBStatusCode::OK}}'){
+                                    //xóa dòng hiện tại đi
+                                    $(row).remove();
+                                    //đếm số item còn lại của order sau khi xóa
+                                    var number_row_detail = $(entities_row).find('.row-order-detail').length;
+                                    //nếu số item còn lại của order bằng ko thì hiện no data
+                                    if(number_row_detail==0){
+                                        $(entities_row).find('.no-data').removeClass('dis-none');
                                     }
-                                },
-                                error: function (xhr, ajaxOptions, thrownError) {
-                                    console.log('Error ' + xhr.status + ' | ' + thrownError);
+                                    notify('Success','success','Món ăn đã được xóa thành công !','#398717','#2F6227');
+                                }else{
+                                    notify('Error','error','Bạn không thể xóa món ăn đã nấu xong!','#B42727','#A34242');
                                 }
-                            })
-                        }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                console.log('Error ' + xhr.status + ' | ' + thrownError);
+                            }
+                        })
                     }
                 },
                 cancel: {

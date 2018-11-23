@@ -60,26 +60,26 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 71);
+/******/ 	return __webpack_require__(__webpack_require__.s = 72);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 71:
+/***/ 72:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(72);
+module.exports = __webpack_require__(73);
 
 
 /***/ }),
 
-/***/ 72:
+/***/ 73:
 /***/ (function(module, exports, __webpack_require__) {
 
 var storeId = $('#config').attr('storeId');
 var rootPath = $('#config').attr('rootPath');
 var Customer2Order = $('#config').attr('Customer2Order');
-var WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel');
+var OtherToWaiterChannel = $('#config').attr('OtherToWaiterChannel');
 
 var Order2Kitchen = $('#config').attr('Order2Kitchen');
 var Order2Cashier = $('#config').attr('Order2Cashier');
@@ -114,14 +114,14 @@ function pushToOrderListTable(result) {
 			$('#foodlist-' + storeId + '-' + orderId + '-' + foodId + ' td').eq(3).html(quantity - cooked);
 		} else {
 			if (priority !== 'Normal') {
-				output = '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="vip foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td>#HĐ ' + orderId + '</td> <td><span class="badge badge-secondary">' + priority + '</span></td> <td>' + quantity + '</td> </tr>';
+				output = '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="vip foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td><span class="badge badge-dark">' + orderId + '</span></td> <td><span class="badge badge-light">' + priority + '</span></td> <td>' + quantity + '</td> </tr>';
 				if ($('#order-list').find('.vip:last')[0]) {
 					$('#order-list').find('.vip:last').after(output);
 				} else {
 					loadOrderListTable();
 				}
 			} else {
-				output = '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="normal foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td>#HĐ ' + orderId + '</td> <td></td> <td>' + quantity + '</td> </tr>';
+				output = '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="normal foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td><span class="badge badge-dark">' + orderId + '</span></td> <td></td> <td>' + quantity + '</td> </tr>';
 				if ($('#order-list').find('.normal:last')[0]) {
 					$('#order-list').find('.normal:last').after(output);
 				} else {
@@ -192,9 +192,15 @@ function loadQueueTable() {
 			var quantity = result[i].quantity;
 			quantity = parseInt(quantity);
 			if (quantity === 0) {
-				output += '<tr id="queue-' + storeId + '-' + foodId + '" class="hidden"><td class="food food-left">' + foodName + '</td><td>' + quantity + '</td></tr>';
+				output += '<tr id="queue-' + storeId + '-' + foodId + '" class="hidden"><td class="food food-left">' + foodName + '</td>';
 			} else {
-				output += '<tr id="queue-' + storeId + '-' + foodId + '"><td class="food food-left">' + foodName + '</td><td>' + quantity + '</td></tr>';
+				output += '<tr id="queue-' + storeId + '-' + foodId + '"><td class="food food-left">' + foodName + '</td>';
+			}
+			if (i != 0) {
+				output += '<td>' + quantity + '</td></tr>';
+			} else {
+				// output+='<td><h3><span class="badge badge-danger">'+quantity+'</span></h3></td></tr>'
+				output += '<td>' + quantity + '</td></tr>';
 			}
 		}
 		output += "</tbody> <tfoot></tfoot> </table> </div> </div>";
@@ -205,7 +211,7 @@ function loadQueueTable() {
 function loadOrderListTable() {
 	loadJSON(rootPath + '/api/v1/store/' + storeId + '/chef_order_detail.json', function (response) {
 		var result = JSON.parse(response);
-		var output = '<table id="order-list" class="table table-hover red-blue-table" data-search="true" data-toggle="table"> <thead> <tr> <th class="sticky" style="width: 55%" data-field="name">Tên món</th> <th class="sticky" style="width: 20%" data-field="id" data-sortable="true">Hóa đơn</th> <th class="sticky" style="width: 15%" data-field="priority" data-sortable="true">VIP</th> <th class="sticky" style="width: 10%" data-field="quantity">SL</th> </tr> </thead> <tbody id="order-list-table-body">';
+		var output = '<table id="order-list" class="table table-hover red-blue-table" data-search="true" data-toggle="table"> <thead> <tr> <th class="sticky" style="width: 55%" data-field="name">Tên món</th> <th class="sticky" style="width: 20%" data-field="id" data-sortable="true">HĐ</th> <th class="sticky" style="width: 15%" data-field="priority" data-sortable="true">VIP</th> <th class="sticky" style="width: 10%" data-field="quantity">SL</th> </tr> </thead> <tbody id="order-list-table-body">';
 		for (var i in result.orders) {
 			var orderId = result.orders[i].id;
 			var priority = result.orders[i].priority;
@@ -215,7 +221,7 @@ function loadOrderListTable() {
 				var quantity = result.details[i][j].quantity;
 				var cooked = result.details[i][j].cooked;
 				var pending = quantity - cooked;
-				if (priority !== 'Normal') output += '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="vip foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td>#HĐ ' + orderId + '</td> <td><span class="badge badge-secondary">' + priority + '</span></td> <td>' + pending + '</td> </tr>';else output += '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="normal foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td>#HĐ ' + orderId + '</td> <td></td> <td>' + pending + '</td> </tr>';
+				if (priority !== 'Normal') output += '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="vip foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td><span class="badge badge-dark">' + orderId + '</span></td> <td><span class="badge badge-light">' + priority + '</span></td> <td>' + pending + '</td> </tr>';else output += '<tr id="foodlist-' + storeId + '-' + orderId + '-' + foodId + '" class="normal foodlist foodlist-' + storeId + '-' + orderId + '"> <td class="food food-left"><span>' + foodName + '</span></td> <td><span class="badge badge-dark">' + orderId + '</span></td> <td></td> <td>' + pending + '</td> </tr>';
 			}
 		}
 		output += "</tbody> <tfoot></tfoot> </table>";
@@ -225,7 +231,7 @@ function loadOrderListTable() {
 
 function pushToloadRollbackTable(obj) {
 	var current = $('#rollback-body').html();
-	var newRow = '<tr id="rollback-' + storeId + '-' + obj.orderId + '-' + obj.foodId + '-' + obj.time + '" storeId="' + storeId + '" orderId="' + obj.orderId + '" foodId="' + obj.foodId + '" quantity="' + obj.quantity + '" push="' + obj.push + '" time="' + obj.time + '"> <td>' + obj.foodName + '</td> <td> <button type="button" class="btn btn-primary">#HĐ ' + obj.orderId + '</button> </td> <td>' + obj.quantity + '</td> <td> <button type="button" class="btn btn-primary">Chuyển: <span class="badge badge-secondary">' + obj.push + '</span></button> </td> <td> <button class="btn btn-success"><i class="fa fa-undo rollback"></i></button> </td> </tr>';
+	var newRow = '<tr id="rollback-' + storeId + '-' + obj.orderId + '-' + obj.foodId + '-' + obj.time + '" storeId="' + storeId + '" orderId="' + obj.orderId + '" foodId="' + obj.foodId + '" quantity="' + obj.quantity + '" push="' + obj.push + '" time="' + obj.time + '"> <td>' + obj.foodName + '</td> <td> <button type="button" class="btn btn-primary">#HĐ ' + obj.orderId + '</button> </td> <td>' + obj.quantity + '</td> <td> <button type="button" class="btn btn-primary">Chuyển: <span class="badge badge-light">' + obj.push + '</span></button> </td> <td> <button class="btn btn-success"><i class="fa fa-undo rollback"></i></button> </td> </tr>';
 	current = newRow + current;
 	$('#rollback-body').html(current);
 }
@@ -241,10 +247,10 @@ function loadRollbackTable() {
 			var quantity = result[i].quantity;
 			var push = result[i].push;
 			var time = result[i].time;
-			output += '<tr id="rollback-' + storeId + '-' + orderId + '-' + foodId + '-' + time + '" storeId="' + storeId + '" orderId="' + orderId + '" foodId="' + foodId + '" quantity="' + quantity + '" push="' + push + '" time="' + time + '"> <td>' + foodName + '</td> <td> <button type="button" class="btn btn-primary">#HĐ ' + orderId + '</button> </td> <td>' + quantity + '</td> <td> <button type="button" class="btn btn-primary">Chuyển: <span class="badge badge-secondary">' + push + '</span></button> </td> <td> <button class="btn btn-success"><i class="fa fa-undo rollback"></i></button> </td> </tr>';
+			output += '<tr id="rollback-' + storeId + '-' + orderId + '-' + foodId + '-' + time + '" storeId="' + storeId + '" orderId="' + orderId + '" foodId="' + foodId + '" quantity="' + quantity + '" push="' + push + '" time="' + time + '"> <td>' + foodName + '</td> <td> <button type="button" class="btn btn-primary">#HĐ ' + orderId + '</button> </td> <td>' + quantity + '</td> <td> <button type="button" class="btn btn-primary">Chuyển: <span class="badge badge-light">' + push + '</span></button> </td> <td> <button class="btn btn-success"><i class="fa fa-undo rollback"></i></button> </td> </tr>';
 		}
 		output += "</tbody> <tfoot></tfoot> </table>";
-		$('#hoan-tac').html(output);
+		$('#undo-table').html(output);
 	});
 }
 
@@ -272,7 +278,7 @@ function pushToWaiterTable(result) {
 					$('#' + storeId + '-' + orderId + '-' + foodId + ' td').eq(1).html(newText);
 					$('#' + storeId + '-' + orderId + '-' + foodId + ' td').eq(2).find('span:last').text(quantity - cooked);
 				} else {
-					output += '<tr id="' + storeId + '-' + orderId + '-' + foodId + '" class="hidden foodline ' + storeId + '-' + orderId + '" storeId="' + storeId + '" orderId="' + orderId + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '"> <td class="food food-right">' + foodName + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td> <td> <button cooked="' + (cooked + 1) + '" push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
+					output += '<tr id="' + storeId + '-' + orderId + '-' + foodId + '" class="hidden foodline ' + storeId + '-' + orderId + '" storeId="' + storeId + '" orderId="' + orderId + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '"> <td class="food food-right">' + foodName + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-light">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-light">' + (quantity - cooked) + '</span></button> </td> <td> <button cooked="' + (cooked + 1) + '" push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button cooked="' + quantity + '" push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
 				}
 				if (foodStatus == 2) $('#' + storeId + '-' + orderId + '-' + foodId).addClass('hidden');else $('#' + storeId + '-' + orderId + '-' + foodId).removeClass('hidden');
 			}
@@ -280,8 +286,8 @@ function pushToWaiterTable(result) {
 		}
 	} else {
 		loadWaiterTable();
-		/*if (priority!=='Normal') output+='<tr class="t-header vip '+storeId+'-'+orderId+'"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ '+orderId+'</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">'+table+' '+floor+'</span> </button> </td> </tr>'
-  	else output+='<tr class="t-header normal '+storeId+'-'+orderId+'"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ '+orderId+'</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">'+table+' '+floor+'</span> </button> </td> </tr>'
+		/*if (priority!=='Normal') output+='<tr class="t-header vip '+storeId+'-'+orderId+'"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ '+orderId+'</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-light">'+table+' '+floor+'</span> </button> </td> </tr>'
+  	else output+='<tr class="t-header normal '+storeId+'-'+orderId+'"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span>+</span>#HĐ '+orderId+'</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-light">'+table+' '+floor+'</span> </button> </td> </tr>'
   		output+='<tr class="hidden t-header-child '+storeId+'-'+orderId+'"> <th style="width: 25%">Tên món</th> <th style="width: 15%">SL</th> <th style="width: 40%">Trạng thái</th> <th style="width: 20%"></th> </tr>'
   	for (var i in result.foodDetails) {
   		var foodId = result.foodDetails[i].entities_id
@@ -298,7 +304,7 @@ function pushToWaiterTable(result) {
   			$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(1).html(newText)
   			$('#'+storeId+'-'+orderId+'-'+foodId+' td').eq(2).find('span:last').text(quantity-cooked)
   		} else {
-  			output+='<tr id="'+storeId+'-'+orderId+'-'+foodId+'" class="hidden foodline '+storeId+'-'+orderId+'" storeId="'+storeId+'" orderId="'+orderId+'" foodId="'+foodId+'" foodName="'+name+'" quantity="'+quantity+'"> <td class="food food-right">'+foodName+'</td> <td>'+cooked+'/'+quantity+'</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">'+(quantity-cooked)+'</span></button> </td> <td> <button cooked="'+(cooked+1)+'" push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button cooked="'+quantity+'" push="'+(quantity-cooked)+'" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button> </td> </tr>'
+  			output+='<tr id="'+storeId+'-'+orderId+'-'+foodId+'" class="hidden foodline '+storeId+'-'+orderId+'" storeId="'+storeId+'" orderId="'+orderId+'" foodId="'+foodId+'" foodName="'+name+'" quantity="'+quantity+'"> <td class="food food-right">'+foodName+'</td> <td>'+cooked+'/'+quantity+'</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-light">'+cooked+'</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-light">'+(quantity-cooked)+'</span></button> </td> <td> <button cooked="'+(cooked+1)+'" push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button cooked="'+quantity+'" push="'+(quantity-cooked)+'" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button> </td> </tr>'
   		}
   		if (foodStatus==2) $('#'+storeId+'-'+orderId+'-'+foodId).addClass('hidden')
   		else $('#'+storeId+'-'+orderId+'-'+foodId).removeClass('hidden')
@@ -327,19 +333,19 @@ function loadWaiterTable() {
 			var priority = result.orders[i].priority;
 			var floor = result.orders[i].floor;
 			if (result.details[i].length != 0) {
-				if (priority !== 'Normal') output += '<tr class="t-header vip ' + storeId + '-' + id + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span status="+"><i class="fa fa-plus-circle" aria-hidden="true"></i></span> HĐ ' + id + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + name + ' ' + floor + '</span> </button> </td> </tr>';else output += '<tr class="t-header normal ' + storeId + '-' + id + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span status="+"><i class="fa fa-plus-circle" aria-hidden="true"></i></span> HĐ ' + id + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">' + name + ' ' + floor + '</span> </button> </td> </tr>';
+				if (priority !== 'Normal') output += '<tr class="t-header vip ' + storeId + '-' + id + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span status="+"><i class="fa fa-plus-circle" aria-hidden="true"></i></span> HĐ ' + id + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-light">' + name + ' ' + floor + '</span> </button> </td> </tr>';else output += '<tr class="t-header normal ' + storeId + '-' + id + '"> <td colspan="2"> <button type="button" class="t-header-collapse btn btn-primary order-detail"> <span status="+"><i class="fa fa-plus-circle" aria-hidden="true"></i></span> HĐ ' + id + '</button> </td> <td colspan="2"> <button type="button" class="btn btn-primary"> <span class="badge badge-light">' + name + ' ' + floor + '</span> </button> </td> </tr>';
 				output += '<tr class="hidden t-header-child ' + storeId + '-' + id + '"> <th style="width: 25%">Tên món</th> <th style="width: 15%">SL</th> <th style="width: 40%">Trạng thái</th> <th style="width: 20%"></th> </tr>';
 				for (var j in result.details[i]) {
 					var foodId = result.details[i][j].id;
 					var name = result.details[i][j].name;
 					var cooked = result.details[i][j].cooked;
 					var quantity = result.details[i][j].quantity;
-					output += '<tr id="' + storeId + '-' + id + '-' + foodId + '" class="hidden foodline ' + storeId + '-' + id + '" storeId="' + storeId + '" orderId="' + id + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '" cooked="' + cooked + '"> <td class="food food-right">' + name + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button> </td> <td> <button class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
+					output += '<tr id="' + storeId + '-' + id + '-' + foodId + '" class="hidden foodline ' + storeId + '-' + id + '" storeId="' + storeId + '" orderId="' + id + '" foodId="' + foodId + '" foodName="' + name + '" quantity="' + quantity + '" cooked="' + cooked + '"> <td class="food food-right">' + name + '</td> <td>' + cooked + '/' + quantity + '</td> <td> <button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-light">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-light">' + (quantity - cooked) + '</span></button> </td> <td> <button class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button> </td> </tr>';
 				}
 			}
 		}
 		output += "<tfoot id='tfoot-table'></tfoot> </tbody></table>";
-		$('#uu-tien').html(output);
+		$('#waiter-table').html(output);
 	});
 }
 
@@ -496,17 +502,8 @@ var pusher = new Pusher("4f5dd81b5671af6c6fb2", {
 
 var order2kitchen = pusher.subscribe(md5(storeId) + '-' + Order2Kitchen);
 order2kitchen.bind(Order2Other, function (res) {
-	/*console.log('start')
- console.log(res)
- console.log('end')*/
 	pushToOrderListTable(res);
 	pushToWaiterTable(res);
-	/*for (var i in res.foodDetails) {
- 	let foodId = res.foodDetails[i].entities_id
- 	let quantity = res.foodDetails[i].quantity
- 	let cooked = res.foodDetails[i].cooked
- 	updateQueueTable(foodId, quantity-cooked)
- }*/
 	loadQueueTable();
 });
 
@@ -516,60 +513,77 @@ customer2order.bind(Customer2Order, function (res) {
 	removeFromWaiterTable(res);
 });
 
-var waiter2waiter = pusher.subscribe(md5(storeId) + '-' + WaiterToWaiterChannel);
-waiter2waiter.bind(WaiterToWaiterChannel, function (res) {
-	console.log(res);
-	var time = res.time;
-	var orderId = res.orderId;
+var other2waiter = pusher.subscribe(md5(storeId) + '-' + OtherToWaiterChannel);
+other2waiter.bind(OtherToWaiterChannel, function (res) {
 	var foodId = res.foodId;
-	var quantity = res.quantity;
 	var rollback = res.rollback;
-	var cooked = res.cooked;
-	var push = res.push;
-	var cooked1 = parseInt(cooked) + 1;
-	var detectOrder = '.' + storeId + '-' + orderId;
-	var detect = '#' + storeId + '-' + orderId + '-' + foodId;
-	var detectRollback = '#rollback-' + storeId + '-' + orderId + '-' + foodId + '-' + time;
-	var foodName = $(detect).attr('foodName');
-	if (!rollback) {
-		var obj = {
-			storeId: storeId,
-			orderId: orderId,
-			time: time,
-			quantity: quantity,
-			foodName: foodName,
-			foodId: foodId,
-			push: push
-		};
-		pushToloadRollbackTable(obj);
-		updateQueueTable(foodId, -push);
-		updateOrderListTable(orderId, foodId, -push);
-		if (quantity != cooked) {
-			$(detect + ' td').eq(1).html(cooked + '/' + quantity);
-			$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button>');
-			$(detect + ' td').eq(4).html('<button push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button>');
-		} else {
-			$(detect).addClass('hidden');
-			$('#foodlist-' + storeId + '-' + orderId + '-' + foodId).addClass('hidden');
-		}
-		if (!$('.foodline.' + storeId + '-' + orderId).not('.hidden')[0]) $('.' + storeId + '-' + orderId).addClass('hidden');
-	} else {
-		updateQueueTable(foodId, push);
-		updateOrderListTable(orderId, foodId, push);
-		if ($(detect)[0]) {
+	if (parseInt(foodId) != 0) {
+		console.log(res);
+		var time = res.time;
+		var orderId = res.orderId;
+		var quantity = res.quantity;
+		var cooked = res.cooked;
+		var push = res.push;
+		var cooked1 = parseInt(cooked) + 1;
+		var detectOrder = '.' + storeId + '-' + orderId;
+		var detect = '#' + storeId + '-' + orderId + '-' + foodId;
+		var detectRollback = '#rollback-' + storeId + '-' + orderId + '-' + foodId + '-' + time;
+		var foodName = $(detect).attr('foodName');
+		if (!rollback) {
+			var obj = {
+				storeId: storeId,
+				orderId: orderId,
+				time: time,
+				quantity: quantity,
+				foodName: foodName,
+				foodId: foodId,
+				push: push
+			};
+			pushToloadRollbackTable(obj);
+			console.log(obj);
+			updateQueueTable(foodId, -push);
+			updateOrderListTable(orderId, foodId, -push);
 			if (quantity != cooked) {
 				$(detect + ' td').eq(1).html(cooked + '/' + quantity);
-				$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-secondary">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-secondary">' + (quantity - cooked) + '</span></button>');
+				$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-light">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-light">' + (quantity - cooked) + '</span></button>');
 				$(detect + ' td').eq(4).html('<button push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button>');
+			} else {
+				$(detect).addClass('hidden');
+				$('#foodlist-' + storeId + '-' + orderId + '-' + foodId).addClass('hidden');
 			}
-			$(detect).removeClass('hidden');
-			$('.t-header-child.' + storeId + '-' + orderId).removeClass('hidden');
-			$('.t-header.' + storeId + '-' + orderId).removeClass('hidden');
+			if (!$('.foodline.' + storeId + '-' + orderId).not('.hidden')[0]) $('.' + storeId + '-' + orderId).addClass('hidden');
 		} else {
-			loadWaiterTable();
+			updateQueueTable(foodId, push);
+			updateOrderListTable(orderId, foodId, push);
+			if ($(detect)[0]) {
+				if (quantity != cooked) {
+					$(detect + ' td').eq(1).html(cooked + '/' + quantity);
+					$(detect + ' td').eq(2).html('<button type="button" class="btn btn-primary btn-sm">Đã nấu: <span class="badge badge-light">' + cooked + '</span></button> <button type="button" class="btn-group-kitchen btn btn-danger btn-sm">Đang nấu: <span class="badge badge-light">' + (quantity - cooked) + '</span></button>');
+					$(detect + ' td').eq(4).html('<button push="1" class="btn btn-warning push-food-1"><i class="fa fa-angle-right"></i></button> <button push="' + (quantity - cooked) + '" class="btn-group-kitchen btn btn-danger push-food-all"><i class="fa fa-angle-double-right"></i></button>');
+				}
+				$(detect).removeClass('hidden');
+				$('.t-header-child.' + storeId + '-' + orderId).removeClass('hidden');
+				$('.t-header.' + storeId + '-' + orderId).removeClass('hidden');
+			} else {
+				loadWaiterTable();
+			}
+		}
+	} else {
+		var orderId = res.orderId;
+		if (rollback) {
+			if ($("tr[id^='rollback-" + storeId + "-" + res.orderId[i] + "']")[0]) {
+				for (var i in res.orderId) {
+					$("tr[id^='rollback-" + storeId + "-" + res.orderId[i] + "']").removeClass('hidden');
+				}
+			} else {
+				loadRollbackTable();
+			}
+		} else {
+			for (var i in res.orderId) {
+				$("tr[id^='rollback-" + storeId + "-" + res.orderId[i] + "']").addClass('hidden');
+			}
 		}
 	}
-	/*loadRollbackTable()*/
 });
 
 /***/ })

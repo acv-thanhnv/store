@@ -66,6 +66,10 @@ class LoggingConst
 }
 class OrderConst{
 
+    const numberFloor                = 5;
+
+    const numberMenu                 = 5;
+
     const has_delete                 = 'yes';
 
     const has_rollBack               = 'yes';
@@ -92,7 +96,7 @@ class OrderConst{
     
     const NewOrderToOrderManager     = "new-order-to-order-manager";
     
-    const WaiterToWaiterChannel      = "waiter2waiter";
+    const OtherToWaiterChannel      = "other2waiter";
     
     const OrderEventName             = "order.waiter";
     

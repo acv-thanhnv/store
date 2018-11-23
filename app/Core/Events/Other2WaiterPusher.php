@@ -13,7 +13,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class Waiter2WaiterPusher implements ShouldBroadcast
+class Other2WaiterPusher implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -44,7 +44,7 @@ class Waiter2WaiterPusher implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return OrderConst::WaiterToWaiterChannel;
+        return OrderConst::OtherToWaiterChannel;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -53,6 +53,6 @@ class Waiter2WaiterPusher implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::WaiterToWaiterChannel));
+        return new Channel(CommonHelper::getOrderEventName($this->storeId,OrderConst::OtherToWaiterChannel));
     }
 }

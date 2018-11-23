@@ -679,7 +679,7 @@
 				$(".js-show-cart").attr("data-notify",cart_total);
 				localStorage.cart_items = JSON.stringify(cart_items);
 				//nếu order được xác nhận và chế biến
-				if(data.orderStatus=='{{\App\Core\Common\OrderStatusValue::Process}}'){
+				if(data.order.status=='{{\App\Core\Common\OrderStatusValue::Process}}'){
 					notify('Success','success','Món ăn của bạn đang được chế biến!','#437F2C');
 				}
 
@@ -734,6 +734,7 @@
 		transitionOut  :"bounceOutUp",
 		arrowKeys      :true,
 		iframe         :true,
+		iframeHeight   : 300,
 		iframeURL      :""
 	});
 	//prevent scroll when cart is opened

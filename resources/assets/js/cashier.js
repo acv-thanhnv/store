@@ -2,7 +2,7 @@ const storeId = $('#config').attr('storeId')
 const rootPath = $('#config').attr('rootPath')
 
 const Customer2Order = $('#config').attr('Customer2Order')
-const WaiterToWaiterChannel = $('#config').attr('WaiterToWaiterChannel')
+const OtherToWaiterChannel = $('#config').attr('OtherToWaiterChannel')
 
 const Order2Kitchen = $('#config').attr('Order2Kitchen')
 const Order2Cashier = $('#config').attr('Order2Cashier')
@@ -26,24 +26,13 @@ Storage.prototype.getObj = function(key) {
 		else return
 	}
 
-/*let newObj = {
-	storeId: "1",
-	orderId: "39"
-}
-
-RemoveDataFromLocalStorage(newObj)
-
-var test456 = localStorage.getItem('cashierRollback')
-// test456 = String(test456).replace(/,/g, '').slice(0, -15).replace(/""/g, '","')
-console.log(test456)*/
-
 $(document).ready(function(){
 	$("#header-left a").click(function(){
 		$(this).tab('show')
 	})
-
 	loadCashierTable()
 	loadRollbackTable()
+	loadSupportTable()
 })
 
 function loadJSON(file, callback) {   
@@ -72,7 +61,24 @@ function loadRollbackTable() {
 			output+='<tr id="rollback-'+storeId+'-'+orderId+'" orderId="'+orderId+'" status="'+beforeStatus+'"> <td> <button type="button" class="btn btn-primary">#HĐ '+orderId+'</button> </td> <td> <button class="btn btn-success rollback"><i class="fa fa-undo"></i></button> </td> </tr>'
 		}
 		output+='</tbody> <tfoot></tfoot> </table>'
-		$('#rollback-thanh-toan').html(output)
+		$('#undo-table').html(output)
+	})
+}
+
+function loadSupportTable() {
+	loadJSON(rootPath+'/api/v1/store/'+storeId+'/customer2cashier.json', function(response) {
+		var output='<table id="support" class="table table-hover red-blue-table"> <thead> <tr> <th class="sticky" style="width: 50%" data-field="invoice">Hóa đơn</th> <th class="sticky" style="width: 50%">Vị trí</th> </tr> </thead> <tbody id="rollback-body">'
+		var result = JSON.parse(response)
+		console.log(result)
+		for (var i in result)
+		{
+			let orderId = result[i].orderId
+			let table = result[i].table
+			let floor = result[i].floor
+			output+='<tr id="support-'+storeId+'-'+orderId+'" orderId="'+orderId+'"> <td><span class="badge badge-dark">'+orderId+'</span> </td> <td><span class="badge badge-dark">'+table+' '+floor+'</span></td> </tr>'
+		}
+		output+='</tbody> <tfoot></tfoot> </table>'
+		$('#support-table').html(output)
 	})
 }
 
@@ -85,7 +91,7 @@ function pushToRollbackTable(obj) {
 
 function loadCashierTable() {
 	loadJSON(rootPath+'/api/v1/store/'+storeId+'/cashier.json', function(response) {
-		var output='<table id="bang-thu-ngan" class="table table-hover red-blue-table" data-toggle="table" data-search="true" responsive hover> <thead> <tr> <th class="sticky-under" style="width: 5%"></th> <th class="sticky-under" style="width: 10%">Hóa đơn</th> <th class="sticky-under" style="width: 20%">Vị trí</th> <th class="sticky-under" style="width: 10%">Tổng tiền</th> <th class="sticky-under" style="width: 10%">Thuế suất</th> <th class="sticky-under" style="width: 15%">Chiết khấu</th> <th class="sticky-under" style="width: 15%">Thành tiền</th> <th class="sticky-under" style="width: 15%"></th> </tr> </thead> <tbody>'
+		var output='<table id="bang-thu-ngan" class="table table-hover red-blue-table" data-toggle="table" data-search="true" responsive hover> <thead> <tr> <th class="sticky-under" style="width: 5%"></th> <th class="sticky-under" style="width: 10%">Hóa đơn</th> <th class="sticky-under" style="width: 20%">Vị trí</th> <th class="sticky-under" style="width: 10%">Tổng tiền</th> <th class="sticky-under" style="width: 15%">Thuế suất</th> <th class="sticky-under" style="width: 15%">Chiết khấu</th> <th class="sticky-under" style="width: 15%">Thành tiền</th> <th class="sticky-under" style="width: 10%"></th> </tr> </thead> <tbody>'
 		var result = JSON.parse(response)
 		for (var i in result.orders)
 		{
@@ -96,10 +102,10 @@ function loadCashierTable() {
 			var status = result.orders[i].status
 			var locationFee = result.orders[i].locationFee
 			var total = parseInt(sum) + parseInt(locationFee)
-			output+='<tr id="order-'+storeId+'-'+id+'" status="'+status+'" orderId="'+id+'" location="'+name+'" tax="10" discount="0" total="'+total+'" payment="'+(sum*1.1)+'"> <td><input class="checkbox" type="checkbox" value="#HĐ '+id+'"></td> <td>#HĐ '+id+'</td> <td> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">'+name+' '+floor+'</span></button> </td> <td class="money">'+parseInt(total).toLocaleString('us')+'</td> <td><input class="tax" type="number" value="10" min="0"></td> <td><input class="discount" type="number" value="0" min="0"></td> <td class="total">'+parseInt(total*1.1).toLocaleString('us')+'</td> <td> <button class="btn btn-success" data-toggle="modal" data-target="#hd'+id+'"><i class="fa fa-eye"></i></button> </td> </tr>'
+			output+='<tr id="order-'+storeId+'-'+id+'" status="'+status+'" orderId="'+id+'" location="'+name+'" tax="10" discount="0" total="'+total+'" payment="'+(sum*1.1)+'"> <td><input class="checkbox" type="checkbox" value="#HĐ '+id+'"></td> <td><span class="badge badge-dark">'+id+'</span> <td> <button type="button" class="btn btn-primary"> <span class="badge badge-light">'+name+' '+floor+'</span></button> </td> <td class="money">'+parseInt(total).toLocaleString('us')+'</td> <td class="dec-inc"><span class="dec badge badge-dark"> <i class="fa fa-minus" aria-hidden="true"></i> </span> <input class="tax" type="number" value="10" min="0"> <span class="inc badge badge-dark"> <i class="fa fa-plus" aria-hidden="true"></i> </span></td> <td class="dec-inc"><span class="dec badge badge-dark"> <i class="fa fa-minus" aria-hidden="true"></i> </span> <input class="discount" type="number" value="0" min="0"> <span class="inc badge badge-dark"> <i class="fa fa-plus" aria-hidden="true"></i> </span></td> <td class="total">'+parseInt(total*1.1).toLocaleString('us')+'</td> <td> <button class="btn btn-success" data-toggle="modal" data-target="#hd'+id+'"><i class="fa fa-eye"></i></button> </td> </tr>'
 		}
 		output+="</tbody> <tfoot></tfoot> </table>"
-		$('#thu-ngan').html(output)
+		$('#cashier-table').html(output)
 		output=''
 		for (var i in result.orders)
 		{
@@ -111,8 +117,8 @@ function loadCashierTable() {
 			var tax = 10
 			var discount = 0
 			var status = result.orders[i].status
-			output+='<div class="modal fade" id="hd'+orderId+'" role="dialog"> <div class="modal-dialog"> <div class="modal-content">'
-			output+= '<table id="modal-'+orderId+'" storeId="'+storeId+'" orderId="'+orderId+'" status="'+status+'" class="table table-hover red-blue-table" data-toggle="table" style="margin-top: 10px;"> <thead> <tr> <th style="width: 55%">Tên món</th> <th style="width: 10%">Đơn giá</th> <th style="width: 15%">Số lượng</th> <th style="width: 20%">Thành tiền</th> </tr> </thead> <tbody>'
+			output+='<div id="hd'+orderId+'" class="modal fade" role="dialog"> <div class="modal-dialog"> <div class="modal-content">'
+			output+= '<table id="modal-'+orderId+'" storeId="'+storeId+'" orderId="'+orderId+'" status="'+status+'" class="table table-hover red-blue-table" data-toggle="table" style="margin-top: 10px;"> <thead> <tr> <th style="width: 45%">Tên món</th> <th style="width: 10%">Đơn giá</th> <th style="width: 25%">Số lượng</th> <th style="width: 20%">Thành tiền</th> </tr> </thead> <tbody>'
 			for (var j in result.details[i]) {
 				var foodId = result.details[i][j].id
 				var name = result.details[i][j].name
@@ -129,64 +135,13 @@ function loadCashierTable() {
 			output+='<tr class="tax"> <td colspan="2"></td> <td class="ta-right"> Thuế: </td> <td>'+tax+'</td> </tr>'
 			output+='<tr class="discount"> <td colspan="2"></td> <td class="ta-right"> Chiết khấu: </td> <td>'+discount+'</td> </tr>'
 			output+='<tr class="total"> <td colspan="2"></td> <td class="ta-right"> Thành tiền: </td> <td>'+parseInt((sum+locationFee)*1.1).toLocaleString('us')+'</td> </tr>'
-			output+='<tr> <td colspan="4"> <div class="col-xs-12"> <div class="panel-group"> <div class=""> <div> <div class="btn-group pull-left"> <button class="btn btn-primary btn-lg pdf">In hóa đơn</button> </div> <div class="btn-group pull-center"> <button class="btn btn-primary btn-lg payment">Thanh toán: '+parseInt((sum+locationFee)*1.1).toLocaleString('us')+'</button> </div> <div class="btn-group pull-right"> <button class="btn btn-primary btn-lg excel">Xuất ra Excel</button> </div> </div> </div> </div> </div> </td> </tr>'
+			output+='<tr> <td colspan="4"> <div class="col-xs-12"> <div class="panel-group"> <div class=""> <div> <div class="btn-group pull-left"> <button class="btn btn-primary pdf">In hóa đơn</button> </div> <div class="btn-group pull-center"> <button class="btn btn-primary payment" data-dismiss="modal" aria-label="Close">Thanh toán: <span>'+parseInt((sum+locationFee)*1.1).toLocaleString('us')+'</span></button> </div> <div class="btn-group pull-right"> <button class="btn btn-primary excel">Xuất ra Excel</button> </div> </div> </div> </div> </div> </td> </tr>'
 			output+='</tfoot></table>'
 			output+= '</div> </div> </div>'
 		}
 		$('#invoices-details').html(output)
 	})
 }
-
-/*function loadCustomer2CashierTable() {
-	loadJSON('http://store.dev/api/v1/store/'+storeId+'/customer2cashier.json', function(response) {
-		var output='<table id="bang-khach-yeu-cau-thanh-toan" status="3" class="table table-hover red-blue-table" data-toggle="table" data-search="true" responsive hover> <thead> <tr> <th style="width: 5%"></th> <th style="width: 10%">Hóa đơn</th> <th style="width: 20%">Vị trí</th> <th style="width: 10%">Tổng tiền</th> <th style="width: 10%">Thuế suất</th> <th style="width: 15%">Chiết khấu</th> <th style="width: 15%">Thành tiền</th> <th style="width: 15%"></th> </tr> </thead> <tbody>';
-		var result = JSON.parse(response);
-		for (var i in result.orders)
-		{
-			var id = result.orders[i].id
-			var name = result.orders[i].location
-			var sum = result.orders[i].sum
-			var locationFee = result.orders[i].locationFee
-			var total = parseInt(sum) + parseInt(locationFee)
-			output+='<tr id="order-'+storeId+'-'+id+'" storeId="'+storeId+'" orderId="'+id+'" location="'+name+'" tax="10" discount="0" total="'+sum+'" payment="'+(sum*1.1)+'"> <td><input class="checkbox" type="checkbox" value="#HĐ '+id+'"></td> <td>#HĐ '+id+'</td> <td> <button type="button" class="btn btn-primary"> <span class="badge badge-secondary">'+name+'</span></button> </td> <td class="money">'+parseInt(total).toLocaleString('us')+'</td> <td><input class="tax" type="number" value="10" min="0"></td> <td><input class="discount" type="number" value="0" min="0"></td> <td class="total">'+(total*1.1).toLocaleString('us')+'</td> <td> <button class="btn btn-success" data-toggle="modal" data-target="#hd'+id+'"><i class="fa fa-eye"></i></button> </td> </tr>'
-		}
-		output+="</tbody> <tfoot></tfoot> </table>"
-		$('#khach-thanh-toan').html(output)
-		output=''
-		for (var i in result.details)
-		{
-			var orderId = result.orders[i].id
-			var locationFee = result.orders[i].locationFee
-			locationFee = parseInt(locationFee)
-			var sum = result.orders[i].sum
-			sum = parseInt(sum)
-			var tax = 10
-			var discount = 0
-			output+='<div class="modal fade" id="hd'+orderId+'" role="dialog"> <div class="modal-dialog"> <div class="modal-content">'
-			output+= '<table orderId="'+orderId+'" status="3" class="table table-hover red-blue-table" data-toggle="table" style="margin-top: 10px;"> <thead> <tr> <th style="width: 55%">Tên món</th> <th style="width: 10%">Đơn giá</th> <th style="width: 15%">Số lượng</th> <th style="width: 20%">Thành tiền</th> </tr> </thead> <tbody>'
-			for (var j in result.details[i]) {
-				var foodId = result.details[i][j].id
-				var name = result.details[i][j].name
-				var price = result.details[i][j].price
-				price = parseInt(price)
-				var quantity = result.details[i][j].quantity
-				var total = result.details[i][j].total
-				total = parseInt(total)
-				output+='<tr> <td class="food">'+name+'</td> <td>'+price.toLocaleString('us')+'</td> <td>'+quantity+'</td> <td>'+total.toLocaleString('us')+'</td> </tr>'
-			}
-			output+='</tbody> <tfoot>'
-			output+='<tr> <td colspan="2"></td> <td class="ta-right"> Phụ phí: </td> <td>'+locationFee.toLocaleString('us')+'</td> </tr>'
-			output+='<tr> <td colspan="2"></td> <td class="ta-right"> Tổng tiền: </td> <td>'+(sum+locationFee).toLocaleString('us')+'</td> </tr>'
-			output+='<tr class="tax"> <td colspan="2"></td> <td class="ta-right"> Thuế: </td> <td>'+tax+'</td> </tr>'
-			output+='<tr class="discount"> <td colspan="2"></td> <td class="ta-right"> Chiết khấu: </td> <td>'+discount+'</td> </tr>'
-			output+='<tr class="total"> <td colspan="2"></td> <td class="ta-right"> Thành tiền: </td> <td>'+((sum+locationFee)*1.1).toLocaleString('us')+'</td> </tr>'
-			output+='<tr> <td colspan="4"> <div class="col-xs-12"> <div class="panel-group"> <div class=""> <div> <div class="btn-group pull-left"> <button class="btn btn-primary btn-lg">In hóa đơn</button> </div> <div class="btn-group pull-center"> <button class="btn btn-primary btn-lg payment">Thanh toán: '+((sum+locationFee)*1.1).toLocaleString('us')+'</button> </div> <div class="btn-group pull-right"> <button class="btn btn-primary btn-lg">Xuất ra Excel</button> </div> </div> </div> </div> </div> </td> </tr>'
-			output+='</tfoot></table>'
-			output+= '</div> </div> </div>'
-		}
-		$('#invoices-details-2').html(output)
-	})
-}*/
 
 document.getElementById("search").addEventListener("keyup", searchFor)
 function searchFor() {
@@ -211,7 +166,7 @@ function searchFor() {
 	}
 }
 
-/*$("#khach-thanh-toan").on('click','.checkbox',function(){
+$("#cashier-table").on('click','.checkbox',function(){
 
 	var isChecked = $(this).prop('checked');
 
@@ -219,48 +174,11 @@ function searchFor() {
 	var currentInvoices = $("#invoice-id").text();
 	var currentRow=$(this).closest("tr");
 
-	if (currentInvoices) var invoices = currentInvoices.split(",");
+	if (currentInvoices.includes('< trống >')) currentInvoices=false
+
+		if (currentInvoices) var invoices = currentInvoices.split(",");
 	else var invoices = [];
 
-	// var col1=currentRow.find("td:eq(1)").text();
-	var col1 = currentRow.attr('orderId')
-	var newValue = currentRow.attr('status')
-
-	var col2=currentRow.find("td:eq(6)").text();
-	var data=col1+"\n"+col2+"\n";
-
-	if (isChecked) {
-		invoices.push(col1);
-		
-		if (!currentTotal) currentTotal=parseInt(col2.replace(/,/g, ''));
-		else currentTotal = parseInt(currentTotal.replace(/,/g, '')) +
-			parseInt(col2.replace(/,/g, ''));
-
-	} else {
-		
-		var index = invoices.indexOf(col1);
-		if (index > -1) {
-			invoices.splice( index, 1 );
-		}
-		currentTotal = parseInt(currentTotal.split(',').join('')) -
-		parseInt(col2.split(',').join(''));
-	}
-	$("#invoice-id").text(invoices.toString());
-	$("#payment-right").text(currentTotal.toLocaleString('us'));
-})*/
-
-$("#thu-ngan").on('click','.checkbox',function(){
-
-	var isChecked = $(this).prop('checked');
-
-	var currentTotal = $("#payment-right").text();
-	var currentInvoices = $("#invoice-id").text();
-	var currentRow=$(this).closest("tr");
-
-	if (currentInvoices) var invoices = currentInvoices.split(",");
-	else var invoices = [];
-
-	/*var col1=currentRow.find("td:eq(1)").text();*/
 	var status = currentRow.attr('status')
 	var col1 = currentRow.attr('orderId')
 	var col2=currentRow.find("td:eq(6)").text()
@@ -291,46 +209,99 @@ $("#thu-ngan").on('click','.checkbox',function(){
 		currentTotal = parseInt(currentTotal.split(',').join('')) -
 		parseInt(col2.split(',').join(''));
 	}
-	$("#invoice-id").text(invoices.toString());
+	if (invoices[0]) {
+		$("#invoice-id").text(invoices.toString())
+	} else {
+		$("#invoice-id").text('< trống >')
+	}
 	$("#invoice-id-status").text(status)
 	$("#payment-right").text(currentTotal.toLocaleString('us'));
 })
 
-$(document).on("change",".tax",function(e){
-	let tax=this.value
-	$(this).parents('tr').attr('tax',tax);
-	let orderId = $(this).parents('tr').attr('orderId')
+$(document).on("click",".inc",function(e){
+	let value = $(this).parents('td').find('input').attr('value')
+	value = parseInt(value)+1
+	$(this).parents('td').find('input').attr('value', value)
+	if ($(this).parents('td').find('input').hasClass('tax')) updateTax($(this).parents('td').find('input').get(0))
+		else updateDiscount($(this).parents('td').find('input').get(0))
+	})
+
+$(document).on("click",".dec",function(e){
+	let value = $(this).parents('td').find('input').attr('value')
+	value = parseInt(value)-1
+	if (value<0) value=0
+		$(this).parents('td').find('input').attr('value', value)
+	if ($(this).parents('td').find('input').hasClass('tax')) updateTax($(this).parents('td').find('input').get(0))
+		else updateDiscount($(this).parents('td').find('input').get(0))
+	})
+
+function updateTax(inputDetected) {
+	let currentPayment = parseInt($(inputDetected).parents('tr').find('td.total').text().replace(/,/g,''))
+	let tax=inputDetected.value
+	$(inputDetected).parents('tr').attr('tax',tax);
+	let orderId = $(inputDetected).parents('tr').attr('orderId')
 	$('#hd'+orderId+' table tr.tax').find("td:eq(2)").text(tax)
-	let discount = $(this).parents('tr').attr('discount')
-	let total = $(this).parents('tr').attr('total')
+	let discount = $(inputDetected).parents('tr').attr('discount')
+	let total = $(inputDetected).parents('tr').attr('total')
 	total = parseInt(total)
 	tax = parseInt(tax)
 	discount = parseInt(discount)
 	total = total + total*(tax - discount)/100
-	total = total.toLocaleString('us')
-	$(this).parents('tr').attr('payment',total);
+	let paymentUpdated = parseInt(total)
+	total = parseInt(total).toLocaleString('us')
+	$(inputDetected).parents('tr').attr('payment',total);
 	$('#hd'+orderId+' table tr.total').find("td:eq(2)").text(total)
-	$('#hd'+orderId+' table button.payment').find("td:eq(2)").text(total)
-	$(this).parents('tr').children('.total').text(total)
+	$('#hd'+orderId+' table button.payment').find('span').text(total)
+	$(inputDetected).parents('tr').children('.total').text(total)
+	let checked = $(inputDetected).parents('tr').find('input.checkbox').prop('checked')
+	if (checked) {
+		let sumPayment = parseInt($('#payment-right').text().replace(/,/g,''))
+		console.log(sumPayment)
+		sumPayment = sumPayment - currentPayment + paymentUpdated
+		console.log(sumPayment)
+		sumPayment = sumPayment.toLocaleString('us')
+		console.log(sumPayment)
+		$('#payment-right').text(sumPayment)
+	}
+}
+
+$(document).on("change",".tax",function(e){
+	updateTax(this)
 });
 
-$(document).on("change",".discount",function(e){
-	let discount = this.value
-	$(this).parents('tr').attr('discount',discount);
-	let orderId = $(this).parents('tr').attr('orderId')
+function updateDiscount(inputDetected) {
+	let currentPayment = parseInt($(inputDetected).parents('tr').find('td.total').text().replace(/,/g,''))
+	let discount = inputDetected.value
+	$(inputDetected).parents('tr').attr('discount',discount);
+	let orderId = $(inputDetected).parents('tr').attr('orderId')
 	$('#hd'+orderId+' table tr.discount').find("td:eq(2)").text(discount)
-	let tax = $(this).parents('tr').attr('tax')
-	let total = $(this).parents('tr').attr('total')
+	let tax = $(inputDetected).parents('tr').attr('tax')
+	let total = $(inputDetected).parents('tr').attr('total')
 	total = parseInt(total)
 	tax = parseInt(tax)
 	discount = parseInt(discount)
 	total = total + total*(tax - discount)/100
-	total = total.toLocaleString('us')
-	$(this).parents('tr').attr('payment',total);
+	let paymentUpdated = parseInt(total)
+	total = parseInt(total).toLocaleString('us')
+	$(inputDetected).parents('tr').attr('payment',total);
 	$('#hd'+orderId+' table tr.total').find("td:eq(2)").text(total)
-	$('#hd'+orderId+' table button.payment').find("td:eq(2)").text(total)
-	$(this).parents('tr').children('.total').text(total)
-});
+	$('#hd'+orderId+' table button.payment').find('span').text(total)
+	$(inputDetected).parents('tr').children('.total').text(total)
+	let checked = $(inputDetected).parents('tr').find('input.checkbox').prop('checked')
+	if (checked) {
+		let sumPayment = parseInt($('#payment-right').text().replace(/,/g,''))
+		console.log(sumPayment)
+		sumPayment = sumPayment - currentPayment + paymentUpdated
+		console.log(sumPayment)
+		sumPayment = sumPayment.toLocaleString('us')
+		console.log(sumPayment)
+		$('#payment-right').text(sumPayment)
+	}
+}
+
+$(document).on("change",".discount",function(e){
+	updateDiscount(this)
+})
 
 $(document).on("click",".payment",function(e){
 	let listOrderId = []
@@ -386,7 +357,7 @@ $(document).on("click","#thanh-toan-tat-ca",function(e){
 	}).done(function(result) {
 		console.log(result)
 		$('#payment-right').html('')
-		$('#invoice-id').html('')
+		$('#invoice-id').html('< trống >')
 	}).fail(function() {
 		console.log('false')
 	})
@@ -425,7 +396,7 @@ $(document).on("click","#in-tat-ca",function(e){
 		sum = sum
 		let locationFee = result.locationFee[0].locationFee
 		locationFee = parseInt(locationFee)/1000
-		let thanhTien = $('#payment-right').text().replace(',','')
+		let thanhTien = $('#payment-right').text().replace(/,/g,'')
 		thanhTien = parseInt(thanhTien)/1000	
 		output+='</tbody> <tfoot>'
 		output+='<tr> <td colspan="2"></td> <td class="ta-right"> Phụ phí: </td> <td>'+locationFee.toLocaleString('us')+'</td> </tr>'
@@ -503,7 +474,6 @@ $(document).on("click",".rollback",function(e){
 	});
 })
 
-
 var pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
 	cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 	encrypted: true
@@ -532,7 +502,6 @@ cashier2cashier.bind('payment-done', function(res) {
 
 cashier2cashier.bind('rollback-payment', function(res) {
 	var orderId = res.orderId
-	/*$('#rollback-'+storeId+'-'+orderId).addClass('hidden')*/
 	if ($('#order-'+storeId+'-'+orderId)[0]) {
 		$('#order-'+storeId+'-'+orderId).removeClass('hidden')
 	} else {
