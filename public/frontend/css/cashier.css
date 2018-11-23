@@ -2,6 +2,8 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+  text-align: right !important;
+  display: inline-block;
 }
 
 ::-webkit-scrollbar {
@@ -215,12 +217,21 @@ tr.t-header2-child > th {
 
 .md-form > input {
   height: 41px;
-  width: 702px;
+  width: 592px;
 }
 
 input {
   width: 22px;
   height: 18px;
+}
+
+input.checkbox {
+  height: 14px;
+}
+
+input.tax,
+input.discount {
+  height: 22px;
 }
 
 table,
@@ -263,7 +274,7 @@ td {
   }
 
   .md-form > input {
-    width: 494px;
+    width: 386px;
   }
 }
 

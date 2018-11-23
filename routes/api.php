@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 Route::group(['prefix' => 'api/v1', 'name' => 'api_v1.'], function () {
 
 	//khach hang bam nut thanh toan
-	Route::get('/store/{storeId}/customer2cashier.json', 'CashierController@showInvoicesPushedByCustomer');
+	Route::get('/store/{storeId}/customer2cashier.json', 'CashierController@showListRequestsToCashierTable');
 
 	//hien thi danh sach hoa don
 	Route::get('/store/{storeId}/cashier.json', 'CashierController@showInvoicesByStore');
