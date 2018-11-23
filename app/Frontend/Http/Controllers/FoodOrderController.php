@@ -209,7 +209,6 @@ class FoodOrderController extends Controller
         $order["access_token"]    = $request->access_token;
         $order["store_id"]        = $request->idStore;
         $order["location_id"]     = $request->table;
-        $order["location_name"]   = $request->table_name;
         $cart_items               = $request->cart_items;
         $order["description"]     = $request->description;
         $order["status"]          = 0;
@@ -285,6 +284,7 @@ class FoodOrderController extends Controller
                 $obj->src = CommonHelper::getImageUrl($obj->image);
             }
         }
+        $order["location_name"]   = $request->table_name;
         //call event send to Order
         event(new Other2OrderManagerPusher($idStore,$order,$arrOrderDetail));
         //call pusher when order, status food change
