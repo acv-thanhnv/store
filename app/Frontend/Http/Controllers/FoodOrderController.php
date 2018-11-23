@@ -209,7 +209,6 @@ class FoodOrderController extends Controller
         $order["access_token"]    = $request->access_token;
         $order["store_id"]        = $request->idStore;
         $order["location_id"]     = $request->table;
-        $order["location_name"]   = $request->table_name;
         $cart_items               = $request->cart_items;
         $order["description"]     = $request->description;
         $order["status"]          = 0;
@@ -275,7 +274,7 @@ class FoodOrderController extends Controller
                     ->join('store_order_detail_status','store_order_detail_status.value','=','store_order_detail.status')
                     ->select('store_order_detail.*','store_entities.name','store_entities.image','store_entities.price','store_order_detail_status.status_name')
                     ->where('store_order_detail.order_id',$orderId)
-                    ->orderby('store_order_detail.status','desc')
+                    ->orderby('store_order_detail.status','asc')
                     ->get();
         foreach($arrOrderDetail as $obj){
             $obj->price = number_format($obj->price);
@@ -285,6 +284,7 @@ class FoodOrderController extends Controller
                 $obj->src = CommonHelper::getImageUrl($obj->image);
             }
         }
+        $order["location_name"]   = $request->table_name;
         //call event send to Order
         event(new Other2OrderManagerPusher($idStore,$order,$arrOrderDetail));
         //call pusher when order, status food change

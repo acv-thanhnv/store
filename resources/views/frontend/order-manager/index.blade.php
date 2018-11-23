@@ -448,7 +448,7 @@
                     $(itemOrderTemp).find('.entities_order_time').text(data.datetime_order);
                     $(itemOrderTemp).find('.entities_order_status_color').addClass("status_"+data.status);
                     $(itemOrderTemp).find('.entities_order_status_content').addClass("status_"+data.status);
-                    $(itemOrderTemp).find('.entities_order_status_content').text(data.name);
+                    $(itemOrderTemp).find('.entities_order_status_content').text(data.status_name);
                     $(itemOrderTemp).find('.entities_order_status_color').attr("order-status",data.status);
                     $(itemOrderTemp).find('.entities_order_status_content').attr("order-status",data.status);
                     $(itemOrderTemp).find('.no-data').removeClass('dis-none');
@@ -489,7 +489,7 @@
             $(itemOrderTemp).find('.entities_order_id').text(obj.id);
             $(itemOrderTemp).find('.entities_order_id').attr('entities_order_id', obj.id);
             $(itemOrderTemp).find('.entities_order_time').text(obj.datetime_order);
-            $(itemOrderTemp).find('.entities_order_status_content').text(obj.name);
+            $(itemOrderTemp).find('.entities_order_status_content').text(obj.status_name);
             $(itemOrderTemp).find('.entities_order_status_color').attr('order-status',obj.status);
             $(itemOrderTemp).find('.entities_order_status_content').attr('order-status',obj.status);
             $(itemOrderTemp).find('.entities_order_status_color').addClass("status_"+obj.status);
@@ -538,7 +538,7 @@
             //update status and status name of order
             $(row_order).find('.entities_order_status_color').attr('order-status',order.status);
             $(row_order).find('.entities_order_status_content').attr('order-status',order.status);
-            $(row_order).find('.entities_order_status_content').text(order.name);
+            $(row_order).find('.entities_order_status_content').text(order.status_name);
             $(row_order).find('.entities_order_status_color').removeClass('status_0 status_1 status_2').addClass('status_'+order.status);
             $(row_order).find('.entities_order_status_content').removeClass('status_0 status_1 status_2').addClass('status_'+order.status);
             //nếu ko có item nào trong order thì hiện nodata ngược lại thì append data
@@ -582,7 +582,7 @@
             $(itemOrderTemp).find('.entities_order_time').text(order.datetime_order);
             $(itemOrderTemp).find('.entities_order_status_color').addClass("status_"+order.status);
             $(itemOrderTemp).find('.entities_order_status_content').addClass("status_"+order.status);
-            $(itemOrderTemp).find('.entities_order_status_content').text(order.name);
+            $(itemOrderTemp).find('.entities_order_status_content').text(order.status_name);
             $(itemOrderTemp).find('.entities_order_status_color').attr("order-status",order.status);
             $(itemOrderTemp).find('.entities_order_status_content').attr("order-status",order.status);
             $(itemOrder).append($(itemOrderTemp));
@@ -626,7 +626,7 @@
         //update status and status name of order
         $(row_order).find('.entities_order_status_color').attr('order-status',order.status);
         $(row_order).find('.entities_order_status_content').attr('order-status',order.status);
-        $(row_order).find('.entities_order_status_content').text(order.name);
+        $(row_order).find('.entities_order_status_content').text(order.status_name);
         $(row_order).find('.entities_order_status_color').removeClass(' status_0 status_2').addClass('status_1');
         $(row_order).find('.entities_order_status_content').removeClass(' status_0 status_2').addClass('status_1');
         var i =1;
