@@ -23,11 +23,6 @@ class CashierController extends Controller
     }
 
     public function showAllPayment(Request $request) {
-    	/*$data = $this->service->getAllPayment($request);
-    	$result = new DataResultCollection();
-    	$result->status = SDBStatusCode::OK;    
-    	$result->data = $data;            
-    	return ResponseHelper::JsonDataResult($result);*/
     	$data = $this->service->getAllPayment($request);
     	return response()->json($data);
     }
