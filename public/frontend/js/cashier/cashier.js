@@ -141,14 +141,14 @@ function loadRollbackTable() {
 }
 
 function loadSupportTable() {
-	loadJSON(rootPath + '/api/v1/store/' + storeId + '/rollback_cashier.json', function (response) {
-		var output = '<table id="roll-back" class="table table-hover red-blue-table"> <thead> <tr> <th class="sticky" style="width: 50%" data-field="invoice">Hóa đơn</th> <th class="sticky" style="width: 50%">Vị trí</th> </tr> </thead> <tbody id="rollback-body">';
+	loadJSON(rootPath + '/api/v1/store/' + storeId + '/customer2cashier.json', function (response) {
+		var output = '<table id="support" class="table table-hover red-blue-table"> <thead> <tr> <th class="sticky" style="width: 50%" data-field="invoice">Hóa đơn</th> <th class="sticky" style="width: 50%">Vị trí</th> </tr> </thead> <tbody id="rollback-body">';
 		var result = JSON.parse(response);
 		console.log(result);
 		for (var i in result) {
 			var orderId = result[i].order_id;
 			var beforeStatus = result[i].before_status;
-			output += '<tr id="rollback-' + storeId + '-' + orderId + '" orderId="' + orderId + '" status="' + beforeStatus + '"> <td> <button type="button" class="btn btn-primary">#HĐ ' + orderId + '</button> </td> <td> <button class="btn btn-success rollback"><i class="fa fa-undo"></i></button> </td> </tr>';
+			output += '<tr id="support-' + storeId + '-' + orderId + '" orderId="' + orderId + '"> <td><span class="badge badge-dark">' + orderId + '</span> </td> <td> <button class="btn btn-link rollback"><i class="fa fa-undo"></i></button> </td> </tr>';
 		}
 		output += '</tbody> <tfoot></tfoot> </table>';
 		$('#support-table').html(output);
