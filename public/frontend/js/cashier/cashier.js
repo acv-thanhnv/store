@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 73);
+/******/ 	return __webpack_require__(__webpack_require__.s = 74);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 73:
+/***/ 74:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(74);
+module.exports = __webpack_require__(75);
 
 
 /***/ }),
 
-/***/ 74:
+/***/ 75:
 /***/ (function(module, exports, __webpack_require__) {
 
 var storeId = $('#config').attr('storeId');
@@ -108,6 +108,7 @@ $(document).ready(function () {
 	});
 	loadCashierTable();
 	loadRollbackTable();
+	loadSupportTable();
 });
 
 function loadJSON(file, callback) {
@@ -145,7 +146,7 @@ function loadSupportTable() {
 		var result = JSON.parse(response);
 		console.log(result);
 		for (var i in result) {
-			var orderId = result[i].order_id;
+			var orderId = result[i].orderId;
 			var table = result[i].table;
 			var floor = result[i].floor;
 			output += '<tr id="support-' + storeId + '-' + orderId + '" orderId="' + orderId + '"> <td><span class="badge badge-dark">' + orderId + '</span> </td> <td><span class="badge badge-dark">' + table + ' ' + floor + '</span></td> </tr>';

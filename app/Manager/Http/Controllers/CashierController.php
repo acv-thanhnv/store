@@ -33,7 +33,18 @@ class CashierController extends Controller
 	public function paymentDoneByOrder(Request $request) {
 		$storeId = $request->storeId;
 		$listOrderId = $request->listOrderId;
-		$listBeforeStatus = $request->listBeforeStatus;
+		/*$listBeforeStatus = $request->listBeforeStatus;*/
+		$listBeforeStatus2 = DB::table('store_order')
+		->select('store_order.status')
+		->where('store_order.store_id', $storeId)
+		->whereIn('store_order.id', $listOrderId)
+		->get()
+		;
+		$listBeforeStatus = [];
+		foreach ($listBeforeStatus2 as $obj) {
+			array_push($listBeforeStatus, $obj->status);
+		}
+
 		$res = DB::table('store_order')
 		->where('store_order.store_id', $storeId)
 		->whereIn('store_order.id', $listOrderId)
