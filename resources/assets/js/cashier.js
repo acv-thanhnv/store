@@ -32,7 +32,6 @@ $(document).ready(function(){
 	})
 	loadCashierTable()
 	loadRollbackTable()
-	loadSupportTable()
 })
 
 function loadJSON(file, callback) {   
