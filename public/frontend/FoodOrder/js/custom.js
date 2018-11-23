@@ -249,7 +249,7 @@ $(document).on('click','.btn-num-product-down', function(){
 			cal_total(cart_items);
 			localStorage.cart_items = JSON.stringify(cart_items);
 		}else {
-			notify('Error','error','Sorry, your food have beenn cooked, you cannot change quantity lower than cooked','#BE1E1E');
+			notify('Error','error','Bạn không thể giảm số lượng món nhỏ hơn số lượng món đã nấu','#BE1E1E');
 		}
 	}
 });
@@ -283,7 +283,7 @@ $(document).on("change","input.num-product",function(){
 		$(this).siblings(".btn-num-product-down").addClass('disabled');
 	}
 	if(numProduct<cooked){//check how food have been cooked, if product less than cooked, not allow
-		var message = 'Sorry but we have cooked '+cooked+' foods, so you can\'t reduct less than cooked';
+		var message = 'Món ăn của bạn đã được nấu '+cooked+' món, bạn không thể giảm ít hơn số món đã nấu';
 		notify('Error','error',message,'#C42D2D');
 		$(this).val(cart_items[cart_index].quantity);
 	}else{
@@ -327,7 +327,7 @@ function deleteCartItem(url){
 								localStorage.cart_items = JSON.stringify(cart_items);
 								cart_total--;
 								$(".js-show-cart").attr("data-notify",cart_total);
-								notify('Success','success',"You food item have been deleted successfull!",'#437F2C');
+								notify('Success','success',"Món ăn của bạn đã được xóa thành công!",'#437F2C');
 								if(cart_total==0){
 									$('.header-cart-wrapitem').html("<img src='common_images/empty_cart.gif' class='no-cart-items'>");
 									localStorage.removeItem('hasAlert');
@@ -350,7 +350,7 @@ function deleteCartItem(url){
 									}
 								})
 							}else{
-								notify('Error','error','Sorry your food have been cooked, you cannot delete it','#DA3C3C');
+								notify('Error','error','Bạn không thể xóa món ăn đã nấu xong','#DA3C3C');
 							}
 						}else{//nguoc lai thi xoa o local storage
 							$(row).remove();
