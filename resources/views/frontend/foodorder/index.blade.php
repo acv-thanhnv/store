@@ -734,6 +734,7 @@
 		transitionOut  :"bounceOutUp",
 		arrowKeys      :true,
 		iframe         :true,
+		iframeHeight   : 300,
 		iframeURL      :""
 	});
 	//prevent scroll when cart is opened

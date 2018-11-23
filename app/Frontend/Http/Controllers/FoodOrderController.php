@@ -82,7 +82,7 @@ class FoodOrderController extends Controller
                         ->where('store_menu.store_id',$idStore)
                         ->where('store_entities.name','like','%'.$key.'%')
                         ->select('store_entities.*')
-                        ->orderby('store_entities.id','desc')
+                        ->orderby('store_menu.priority','desc')
                         ->paginate($total);
         }else{
             $arrFood = SDB::table('store_entities')
@@ -296,17 +296,13 @@ class FoodOrderController extends Controller
     public function FoodDetail(Request $request)
     {
         $entities_id = $request->entities_id;
-        $foodDetail = SDB::table('store_entities')
-            ->where('id',$entities_id)
-            ->get();
+        $foodDetail  = SDB::table('store_entities')
+                        ->where('id',$entities_id)
+                        ->get();
         foreach($foodDetail as $obj){
             $obj->price = number_format($obj->price);
             //check avatar
-            if($obj->image==NULL){
-                $obj->src = url('/')."/common_images/no-store.png";
-            }else{
-                $obj->src = CommonHelper::getImageUrl($obj->image);
-            }
+            $obj->src = CommonHelper::getImageSrc($obj->image);
         }
         return view("frontend.FoodOrder.food-detail",["foodDetail" => $foodDetail[0]]);
     }
