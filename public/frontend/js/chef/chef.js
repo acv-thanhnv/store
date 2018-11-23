@@ -184,7 +184,7 @@ function updateOrderListTable(orderId, foodId, push) {
 function loadQueueTable() {
 	loadJSON(rootPath + '/api/v1/store/' + storeId + '/chef_queue.json', function (response) {
 		var result = JSON.parse(response);
-		var output = '<table id="food-queue-table" class="table table-hover red-blue-table" data-search="false" data-toggle="table"> <thead> <tr> <th style="width: 90%" data-field="name">Tên món</th> <th style="width: 10%" data-field="quantity">SL</th> </tr> </thead> <tbody>';
+		var output = '<table id="food-queue-table" class="table table-hover red-blue-table" data-search="false" data-toggle="table"> <thead> <tr> <th class="sticky" style="width: 90%" data-field="name">Tên món</th> <th class="sticky" style="width: 10%" data-field="quantity">SL</th> </tr> </thead> <tbody>';
 		for (var i in result) {
 			console.log(result);
 			var foodId = result[i].id;
