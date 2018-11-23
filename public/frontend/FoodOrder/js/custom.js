@@ -206,6 +206,9 @@ function sendItem(obj){
 					break;
 		}
 		$(row).find(".progress-bar").css("width",percent_bar+"%");
+		if(percent_bar==100){
+			$(row).find(".progress-bar").css("background",'#28a745');
+		}
 		$(cart).append($(row));
 	});
 }
@@ -396,6 +399,7 @@ function cal_total(data){
 function Order(url,idStore,access_token){
 	$(document).on("click",".btn-order",function(){
 		var table       = $("#table").val();
+		var table_name  = $('#table').select2('data')[0].text;
 		var orderId     =null;
 		var discription = null;
 		var cart_update = [];
@@ -431,6 +435,7 @@ function Order(url,idStore,access_token){
 				cart_items:cart_update,
 				idStore:idStore,
 				table:table,
+				table_name:table_name,
 				discription:discription,
 				orderId:orderId,
 				access_token:access_token
