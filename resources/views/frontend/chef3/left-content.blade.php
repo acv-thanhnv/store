@@ -1,5 +1,5 @@
 <div class="row">
-	<div id="order-list-left" class="col-md-7">
+	<div id="order-list-left" class="col-md-7" style="padding-right:4px !important; padding-left:2px !important;">
 		<table id="order-list" class="table table-hover red-blue-table" data-search="true" data-toggle="table">
 			<thead>
 				<tr>
@@ -21,6 +21,6 @@
 	<tfoot></tfoot>
 </table>
 </div>
-<div id="food-queue-table" class="col-md-5" style="position: -webkit-sticky;position: sticky; top: 0;">
+<div id="food-queue-table" class="col-md-5" style="position: -webkit-sticky;position: sticky; top: 0;padding-right:16px !important; padding-left:4px !important;">
 </div>
 </div>
