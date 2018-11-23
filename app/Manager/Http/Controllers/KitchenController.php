@@ -149,7 +149,8 @@ class KitchenController extends Controller
         if (count($res123)===0) {
             $update = DB::table('store_order')
             ->where('id', $orderId)
-            ->update(['status' => 2]);
+            ->where('status', '<', OrderStatusValue::Done)
+            ->update(['status' => OrderStatusValue::Done]);
 
             $orderDetails = DB::table('store_order')
             ->join('store_location', 'store_order.location_id', '=','store_location.id')
@@ -157,7 +158,7 @@ class KitchenController extends Controller
             ->join('store_order_status', 'store_order_status.value', '=','store_order.status')
             ->select('store_order.id', 'store_order.status', 'store_order.access_token', 'store_order.store_id', 'store_order.datetime_order', 'store_order.datetime_update', 'store_order.location_id', 'store_location.name as table_name', 'store_order.priority', 'store_type_location.name as type_name', 'store_order_status.name as status_name')
             ->where('store_order.store_id',$storeId)
-            ->where('store_order.access_token',$access_token)
+            ->where('store_order.id',$orderId)
             ->get();
 
             $foodDetails = DB::table('store_order')
@@ -166,7 +167,7 @@ class KitchenController extends Controller
             ->join('store_order_detail_status', 'store_order_detail.status', '=','store_order_detail_status.value')
             ->select('store_order_detail.id','store_order.id as order_id','store_order_detail.entities_id', 'store_order_detail.quantity', 'store_order_detail.cooked', 'store_order_detail.status', 'store_order_detail.has_update', 'store_entities.name', 'store_entities.image', 'store_entities.price', 'store_order_detail_status.status_name')
             ->where('store_order.store_id',$storeId)
-            ->where('store_order.access_token',$access_token)
+            ->where('store_order.id',$orderId)
             ->get();
 
             foreach($foodDetails as $obj){
@@ -184,11 +185,11 @@ class KitchenController extends Controller
         ->where('entities_id', $foodId)
         ->update(['cooked' => $cooked]);
 
-        if (true) {
-            $rollback = 0;
-            event(new Other2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
-            event(new FoodStatusEvent($access_token,$orderId,$storeId,$location_id,$order_detail_id,$cooked,$status));
-        }
+        
+        $rollback = 0;
+        event(new Other2WaiterPusher($storeId, $orderId, $foodId, $quantity, $cooked, $push, $rollback, $time));
+        event(new FoodStatusEvent($access_token,$orderId,$storeId,$location_id,$order_detail_id,$cooked,$status));
+        
         return $time;
     }
 

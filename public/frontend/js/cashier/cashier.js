@@ -146,10 +146,10 @@ function loadSupportTable() {
 		var result = JSON.parse(response);
 		console.log(result);
 		for (var i in result) {
-			var orderId = result[i].orderId;
+			var orderId = result[i].order_id;
 			var table = result[i].table;
 			var floor = result[i].floor;
-			output += '<tr id="support-' + storeId + '-' + orderId + '" orderId="' + orderId + '"> <td><span class="badge badge-dark">' + orderId + '</span> </td> <td><span class="badge badge-dark">' + table + ' ' + floor + '</span></td> </tr>';
+			output += '<tr id="support-' + storeId + '-' + orderId + '" orderId="' + orderId + '"> <td><span class="badge badge-dark">' + orderId + '</span> </td> <td><button type="button" class="btn btn-primary"> <span class="badge badge-light">' + table + ' ' + floor + '</span></button></td> </tr>';
 		}
 		output += '</tbody> <tfoot></tfoot> </table>';
 		$('#support-table').html(output);
@@ -542,6 +542,12 @@ $(document).on("click", ".rollback", function (e) {
 	}).fail(function () {
 		console.log('false');
 	});
+});
+
+$(document).on("click", "tr[id^='support-']", function (e) {
+	var orderId = $(this).parents('tr').attr('orderId');
+	var status = $(this).parents('tr').attr('status');
+	window.location = 'google.com';
 });
 
 var pusher = new Pusher("4f5dd81b5671af6c6fb2", {

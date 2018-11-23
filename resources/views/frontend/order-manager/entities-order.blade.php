@@ -16,7 +16,6 @@
 }
 .entities-row-detail{
     margin-top: 10px;
-    border-bottom: 1px solid #E9E9E9;
     padding:0px 10px;
 }
 .entities-row-order{
@@ -28,7 +27,7 @@
     border-radius: 4px;
 }
 .order_detail_action{
-    padding-left:10px;
+    padding-left:7px;
     padding-right: 0px;
 }
 .entities_order_status_color{
